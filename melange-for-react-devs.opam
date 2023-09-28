@@ -1,0 +1,20 @@
+opam-version: "2.0"
+synopsis: "Melange for React Developers"
+description: "Source code for Melange For React Developers Guide"
+maintainer: ["Feihong Hsu <feihong.hsu@gmail.com>"]
+authors: ["Feihong Hsu <feihong.hsu@gmail.com>"]
+license: "MIT"
+homepage: "https://github.com/melange-re/melange-for-react-devs"
+bug-reports: "https://github.com/melange-re/melange-for-react-devs"
+depends: [
+  "ocaml" {>= "4.14.0" & < "5.0.0"}
+  "reason" {>= "3.8.1" & < "4.0.0"}
+  "dune" {>= "3.8"}
+  "melange" {>= "1.0.0"}
+  "reactjs-jsx-ppx" {>= "1.0.0"}
+  "reason-react" {>= "0.11.0"}
+  "ocaml-lsp-server" {dev}
+  "dot-merlin-reader" {dev}
+  "odoc" {with-doc}
+]
+dev-repo: "git+https://github.com/melange-re/melange-for-react-devs.git"
