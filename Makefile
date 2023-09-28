@@ -35,7 +35,7 @@ build_verbose: ## Build the project
 
 .PHONY: serve
 serve: ## Serve the application with a local HTTP server
-	npm run serve
+	npx webpack serve --open --mode development --entry ./_build/default/src/$(chapter)/output/src/$(chapter)/Index.js
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
