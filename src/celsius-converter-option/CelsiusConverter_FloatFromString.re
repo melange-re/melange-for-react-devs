@@ -1,3 +1,5 @@
+// Solution to exercise 3
+
 let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
 
 let convert = celsius => 9.0 /. 5.0 *. celsius +. 32.0;
@@ -13,7 +15,13 @@ let make = () => {
   let (celsius, setCelsius) = React.useState(() => "");
 
   <div>
-    <input value=celsius onChange={evt => setCelsius(_ => getValueFromEvent(evt))} />
+    <input
+      value=celsius
+      onChange={evt => {
+        let newCelsius = getValueFromEvent(evt);
+        setCelsius(_ => newCelsius);
+      }}
+    />
     {React.string({js|°C = |js})}
     {(
        String.trim(celsius) == ""

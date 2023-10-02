@@ -7,7 +7,13 @@ let make = () => {
   let (celsius, setCelsius) = React.useState(() => "");
 
   <div>
-    <input value=celsius onChange={evt => setCelsius(_ => getValueFromEvent(evt))} />
+    <input
+      value=celsius
+      onChange={evt => {
+        let newCelsius = getValueFromEvent(evt);
+        setCelsius(_ => newCelsius);
+      }}
+    />
     {React.string({js|°C = |js})}
     {(
        celsius == ""
