@@ -1,6 +1,5 @@
 {
   "scripts": {
-    "bundle": "webpack --mode production --entry ./_build/default/src/output/src/Index.js",
     "serve": "webpack serve --open --mode development --history-api-fallback --entry ./_build/default/src/output/src/Index.js"
   },
   "dependencies": {

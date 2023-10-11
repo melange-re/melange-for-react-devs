@@ -13,33 +13,29 @@ help: ## Print this help message
 
 .PHONY: create-switch
 create-switch: ## Create opam switch
-	opam switch create . 4.14.1 -y --deps-only
+	opam switch create . 5.1.0 -y --deps-only
 
 .PHONY: init
 init: create-switch install ## Configure everything to develop this repository in local
 
 .PHONY: install
 install: ## Install development dependencies
-	npm install --legacy-peer-deps
-	opam update
-	opam install -y . --deps-only
-	opam pin -y add $(project_name).dev .
+	npm install # install JavaScript packages that the project might depend on, like `react` or `react-dom`
+	opam update # make sure that opam has the latest information about published libraries in the opam repository https://opam.ocaml.org/packages/
+	opam install -y . --deps-only --with-test # install the Melange and OCaml dependencies
+	opam exec opam-check-npm-deps # check that the versions of the JavaScript packages installed match the requirements defined by Melange libraries
 
 .PHONY: build
 build: ## Build the project
-	$(DUNE) build @react
+	$(DUNE) build
 
 .PHONY: build_verbose
 build_verbose: ## Build the project
-	$(DUNE) build --verbose @react @node
+	$(DUNE) build --verbose
 
 .PHONY: serve
 serve: ## Serve the application with a local HTTP server
 	npm run serve
-
-.PHONY: bundle
-bundle: ## Bundle the JavaScript application
-	npm run bundle
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
@@ -55,4 +51,4 @@ format-check: ## Checks if format is correct
 
 .PHONY: watch
 watch: ## Watch for the filesystem and rebuild on every change
-	$(DUNE) build --watch @react
+	$(DUNE) build --watch
