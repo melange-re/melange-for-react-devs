@@ -31,7 +31,9 @@ let make = () => {
            | None => "error"
            | Some(fahrenheit) when fahrenheit < (-128.6) => {js|Unreasonably cold🥶|js}
            | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
-           | Some(fahrenheit) => Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js| °F|js}
+           | Some(fahrenheit) =>
+             Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
+             ++ {js| °F|js}
            }
          )
      )

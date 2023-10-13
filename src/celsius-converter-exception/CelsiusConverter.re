@@ -19,7 +19,12 @@ let make = () => {
        celsius == ""
          ? {js|? °F|js}
          : (
-           switch (celsius |> float_of_string |> convert |> Js.Float.toFixedWithPrecision(~digits=2)) {
+           switch (
+             celsius
+             |> float_of_string
+             |> convert
+             |> Js.Float.toFixedWithPrecision(~digits=2)
+           ) {
            | exception _ => "error"
            | fahrenheit => fahrenheit ++ {js| °F|js}
            }
