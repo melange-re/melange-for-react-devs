@@ -4,11 +4,10 @@ let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
 
 let convert = celsius => 9.0 /. 5.0 *. celsius +. 32.0;
 
-let floatFromString = text =>
-  switch (Js.Float.fromString(text)) {
-  | value when Js.Float.isNaN(value) => None
-  | value => Some(value)
-  };
+let floatFromString = text => {
+  let value = Js.Float.fromString(text);
+  Js.Float.isNaN(value) ? None : Some(value);
+};
 
 [@react.component]
 let make = () => {
