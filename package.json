@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "serve": "webpack serve --open --mode development --history-api-fallback --entry ./_build/default/src/output/src/Index.js"
+    "serve": "webpack serve --open --mode development --entry ./_build/default/src/output/src/Index.js"
   },
   "dependencies": {
     "react": "^18.2.0",
