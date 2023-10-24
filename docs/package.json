@@ -1,0 +1,13 @@
+{
+  "name": "melange-for-react-devs-book",
+  "type": "module",
+  "devDependencies": {
+    "markdown-it-footnote": "^3.0.3",
+    "vitepress": "^1.0.0-rc.22"
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview"
+  }
+}
