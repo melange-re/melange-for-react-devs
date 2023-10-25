@@ -4,26 +4,7 @@ Our second widget will be one that takes a temperature value in Celsius and
 converts it to Fahrenheit. Create a new file in `src` called
 `CelsiusConverter.re`:
 
-```reason
-let convert = celsius => 9.0 /. 5.0 *. celsius +. 32.0;
-
-[@react.component]
-let make = () => {
-  let (celsius, setCelsius) = React.useState(() => "");
-
-  <div>
-    <input
-      value=celsius
-      onChange={evt => {
-        let newCelsius = ReactEvent.Form.target(evt)##value;
-        setCelsius(_ => newCelsius);
-      }}
-    />
-    {React.string({js|°C = |js})}
-    {React.string({js|? °F|js})}
-  </div>;
-};
-```
+<<< Snippets.re#celsius-converter-v1
 
 Inside the `input`'s `onChange` handler, we get the event target using
 `ReactEvent.Form.target`, which has the type `ReactEvent.Form.t => {_.. }`. What
@@ -38,19 +19,13 @@ But beware, because the compiler knows nothing about the types of those fields.
 For example, we could write `ReactEvent.Form.target(evt)##value + 1`, treating
 it as if it were an integer, and the compiler wouldn't complain.
 
+## Wrap functions that return Js.t
+
 Instead of trusting ourselves to always use `ReactEvent.Form.target(evt)##value`
 correctly, it's a good idea to wrap functions that return polymorphic objects
 into type-annotated helper functions. For example:
 
-<!--#prelude#
-let evt: ReactEvent.Form.t = [%mel.raw "null"];
--->
-```reason
-let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
-
-// Call it like this:
-let newValue = getValueFromEvent(evt);
-```
+<<< Snippets.re#get-value-from-event{1-2,14}
 
 The `: string` after the argument list tells the compiler that this function
 must return a `string`. Using the `getValueFromEvent` function ensures that the
@@ -61,16 +36,12 @@ body of the callback function is surrounded by braces (`{}`). OCaml functions
 are like JavaScript's arrow functions---if they contain more than one line, they
 need to be enclosed by braces.
 
-Let's change the render logic to update the Fahrenheit display:
+## Apply pipe last (|>)
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-{celsius |> float_of_string |> convert |> string_of_float |> React.string}
-```
+Let's change the render logic to update the Fahrenheit display based on the
+value of celsius:
+
+<<< Snippets.re#pipes{4}
 
 The pipe last operator (`|>`) is very handy here, allowing us to convert a
 string to float, then convert that float to another float (Celsius ->
@@ -81,89 +52,41 @@ We should probably put °F after the Fahrenheit value so that it's clear to the
 user what unit of measure they're seeing. We can do so using the string
 concatenation operator (`++`):
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-{(celsius |> float_of_string |> convert |> string_of_float) ++ {js| °F|js} |> React.string}
-```
+## String concatenation (++)
+
+<<< Snippets.re#string-concat{4-6}
+
+## Catch exception with switch
 
 However, there's a bug in this code: it will crash if you enter anything into
 the input that can't be converted to a float. We can remedy this by catching the
 exception using a `switch` expression:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-{(
-  switch (celsius |> float_of_string |> convert |> string_of_float) {
-  | exception _ => "error"
-  | fahrenheit => fahrenheit ++ {js| °F|js}
-  }
-)
-|> React.string}
-```
+<<< Snippets.re#catch-exception{4-10}
 
 The `| exception _` branch will execute if there is any exception. The
 underscore (`_`) is a wildcard, meaning it will match any exception. If we
 wanted to be specific about which exception we want to catch, we could instead
 write
 
-```
-| exception (Failure(_)) => "error"
-```
+<<< Snippets.re#catch-failure{6}
+
+## Ternary expression
 
 Right now it correctly renders "error" when you enter an invalid value, but it
 also renders "error" if the input is blank. It might be bit more user-friendly
-to instead show "? °F" like before. We can do that by wrapping the switch
+to instead show "?°F" like before. We can do that by wrapping the switch
 expression in a ternary expression:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-{(
-    celsius == ""
-      ? {js|? °F|js}
-      : (
-        switch (celsius |> float_of_string |> convert |> string_of_float) {
-        | exception _ => "error"
-        | fahrenheit => fahrenheit ++ {js| °F|js}
-        }
-      )
-  )
-  |> React.string}
-```
+<<< Snippets.re#ternary{5-12}
+
+## If-else expression
 
 The ternary expression (`condition ? a : b`) works the same as in JavaScript.
 But in OCaml, it's also shorthand for an if-else expression (`if (condition) {
 a; } else { b; }`). So we could rewrite it as this:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-{(
-  if (celsius == "") {
-    {js|? °F|js};
-  } else {
-    switch (celsius |> float_of_string |> convert |> string_of_float) {
-    | exception _ => "error"
-    | fahrenheit => fahrenheit ++ {js| °F|js}
-    };
-  }
-)
-|> React.string}
-```
+<<< Snippets.re#if-else{5-12}
 
 Unlike in JavaScript, the if-else construct is an expression and always yields a
 value. Both branches must return a value of the same type or you'll get a
@@ -172,49 +95,34 @@ code because in simple cases you can use ternary, and in more complex cases you
 can use switch. But it's a nice, familiar fallback you can rely on when you
 haven't quite gotten used to OCaml syntax yet.
 
+## Labeled argument
+
 If we enter a value with a lot of decimals in it, e.g. `21.1223456`, we'll
 get a Fahrenheit value with a lot of decimals in it as well. We can limit the
 number of decimals in the converted value using
 [Js.Float.toFixedWithPrecision](https://melange.re/v2.0.0/api/re/melange/Js/Float/index.html#val-toFixedWithPrecision):
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (celsius |> float_of_string |> convert) {
-| exception _ => "error"
-| fahrenheit => Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js| °F|js}
-};
-```
+<<< Snippets.re#fixed-precision{8,11-12}
 
 `Js.Float.toFixedWithPrecision` is a function that has one positional argument
-and one [labeled argument](../communicate-with-javascript.md#labeled-arguments).
+and one [labeled
+argument](https://melange.re/v2.0.0/communicate-with-javascript/#labeled-arguments).
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
-following chapters when we introduce [props](todo.md).
+following chapters when we introduce [props](/todo).
+
+## Partial application
 
 You might have noticed that the function chain feeding the switch expression got
 a bit shorter, from
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
 ```reason
 celsius |> float_of_string |> convert |> string_of_float
 ```
 
 to
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
 ```reason
 celsius |> float_of_string |> convert
 ```
@@ -229,17 +137,7 @@ application](https://reasonml.github.io/docs/en/function#partial-application)
 feature to create a one-argument function by writing
 `Js.Float.toFixedWithPrecision(~digits=2)`. Then our switch expression becomes
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (celsius |> float_of_string |> convert |> Js.Float.toFixedWithPrecision(~digits=2)) {
-| exception _ => "error"
-| fahrenheit => fahrenheit ++ {js| °F|js}
-}
-```
+<<< Snippets.re#partial-application{12,15}
 
 We have a working component now, but catching exceptions isn't The OCaml Way! In
 the next chapter, you'll see how to rewrite the logic using `option`.
@@ -251,14 +149,7 @@ the next chapter, you'll see how to rewrite the logic using `option`.
 <b>2.</b> It's possible to rewrite the `onChange` callback so that it contains a
 single expression:
 
-<!--#prelude#
-let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
-let (celsius, setCelsius) = React.useState(() => "");
-let _ =
--->
-```reason
-<input value=celsius onChange={evt => setCelsius(_ => getValueFromEvent(evt))} />
-```
+<<< Snippets.re#single-expression
 
 This compiles, but it now contains a hidden bug. Do you know what silent error
 might occur?
@@ -285,9 +176,10 @@ function.
 
 ## Overview
 
-- `Js.t` objects (`Js.t({..})`) can have fields of any name and type.
-    - You access fields of a `Js.t` object using the `##` operator.
-    - You can use type annotations to make the use of such objects safer.
+- `Js.t` objects (with the type `Js.t({..})`) can have fields of any name and
+  type.
+  - You access fields of a `Js.t` object using the `##` operator.
+  - You can use type annotations to make the use of such objects safer.
 - Concatenate strings using the `++` operator.
 - Switch expressions can be used to catch exceptions.
 - Ternary expressions have the same syntax as in JS. Unlike in JS, they are also
@@ -301,20 +193,13 @@ function.
 
 <b>1.</b> Changing it to `"°C = "` will result in a bit of gibberish being
 rendered: "Â°C". We can't rely on OCaml strings to [deal with Unicode
-correctly](../communicate-with-javascript.md#strings), so any string that
-contains non-ASCII text must be delimited using `{js||js}`.
+correctly](https://melange.re/v2.0.0/communicate-with-javascript/#strings), so
+any string that contains non-ASCII text must be delimited using `{js||js}`.
 
 <b>2.</b> Rewriting `onChange` the handler to use a single expression creates a
 potential problem with stale values coming from the event object:
 
-<!--#prelude#
-let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
-let (celsius, setCelsius) = React.useState(() => "");
-let _ =
--->
-```reason
-<input value=celsius onChange={evt => setCelsius(_ => getValueFromEvent(evt))} />
-```
+<<< Snippets.re#single-expression-annotated{5-6}
 
 Inside of `onChange`, we can expect the function `getValueFromEvent(evt)` to
 return the latest value of the `input`. However, we are now calling
@@ -326,9 +211,9 @@ Values with
 useState](https://reasonml.github.io/reason-react/docs/en/usestate-event-value)
 in the [ReasonReact](https://reasonml.github.io/reason-react/) docs.
 
-<b>3.</b> [Define an addFive function using partial application](https://melange.re/v2.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
+<b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v2.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
 
-<b>4.</b> [Define a function that subtracts from 10 and converts to binary](https://melange.re/v2.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nV2l0aFJhZGl4KH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v2.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nV2l0aFJhZGl4KH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
 
 -----
 
@@ -339,5 +224,5 @@ repo](https://github.com/melange-re/melange-for-react-devs).
 
 [^1]:
     See [Using Js.t
-    objects](../communicate-with-javascript.md#using-jst-objects) for more
+    objects](https://melange.re/v2.0.0/communicate-with-javascript/#using-jst-objects) for more
     details.

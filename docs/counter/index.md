@@ -10,16 +10,11 @@ project
 1. Run `make watch` to start the Melange compiler in watch mode.
 1. In another terminal window, start the webpack dev server by running `make
 watch`. As a side effect, it will open a browser tab pointed to
-[http://localhost:8080/](http://localhost:8080/).
+http://localhost:8080/.
 
 Open `src/Index.re` and you'll see this:
 
-```reason
-module App = {
-  [@react.component]
-  let make = () => <div> {React.string("welcome to my app")} </div>;
-};
-```
+<<< ./Snippets.re#app-v1
 
 This is just about the simplest component you can make, but through it, we can
 start to see some of the key differences of developing with ReasonReact:
@@ -46,27 +41,15 @@ comes from the name of the module.
 The `make` function has the type `unit => React.element`, meaning it takes `()`
 as the only argument and returns an object of type `React.element`. You'll need
 to decorate `make` with the
-[attribute](../communicate-with-javascript.md#attributes) `@react.component`.
-We'll go into the details [later](todo.md), but for now let's just say that
-`@react.component` is there to reduce boilerplate and make our code more
-readable and easier to maintain.
+[attribute](https://melange.re/v2.0.0/communicate-with-javascript/#attributes)
+`@react.component`. We'll go into the details [later](/todo), but for now
+let's just say that `@react.component` is there to reduce boilerplate and make
+our code more readable and easier to maintain.
 
 
 A little bit further down, we make use of the `App` component:
 
-<!--#prelude#
-module App = {
-  [@react.component]
-  let make = () => <div> {React.string("welcome to my app")} </div>;
-};
--->
-```reason
-let node = ReactDOM.querySelector("#root");
-switch (node) {
-| Some(root) => ReactDOM.render(<App />, root)
-| None => Js.Console.error("Failed to start React: couldn't find the #root element")
-};
-```
+<<< ./Snippets.re#use-app-component
 
 `React.querySelector("#root")` returns an `option(Dom.element)`, meaning that if
 it doesn't find the element, it returns `None`, and if it does find the element,
@@ -77,23 +60,12 @@ JavaScript construct of the same name) allows you to succinctly express:
 - If `node` is `Some(Dom.element)`, render the `App` component to the DOM
 - Otherwise if `node` is `None`, log an error message
 
-We'll talk more about `option` in the [Celsius converter chapter](celsius-converter-option.md).
+We'll talk more about `option` in the [Celsius converter chapter](/celsius-converter-option/).
 
 Let's create a counter component by creating a new file `Counter.re` inside
 `src`, with the following contents:
 
-```reason
-[@react.component]
-let make = () => {
-  let (counter, setCounter) = React.useState(() => 0);
-
-  <div>
-    <button onClick={_evt => setCounter(v => v - 1)}> {React.string("-")} </button>
-    {React.string(Int.to_string(counter))}
-    <button onClick={_evt => setCounter(v => v + 1)}> {React.string("+")} </button>
-  </div>;
-};
-```
+<<< ./Snippets.re#counter-v1
 
 This is a component with a single `useState` hook. It should look fairly
 familiar if you know about [hooks in React](https://react.dev/reference/react).
@@ -103,26 +75,7 @@ same as the name of the file.
 
 Now let's modify `App` so that it uses our new `Counter` component:
 
-<!--#prelude#
-module Counter = {
-  [@react.component]
-  let make = () => {
-    let (counter, setCounter) = React.useState(() => 0);
-
-    <div>
-      <button onClick={_evt => setCounter(v => v - 1)}> {React.string("-")} </button>
-      {React.string(Int.to_string(counter))}
-      <button onClick={_evt => setCounter(v => v + 1)}> {React.string("+")} </button>
-    </div>;
-  };
-}
--->
-```reason
-module App = {
-  [@react.component]
-  let make = () => <Counter />;
-};
-```
+<<< ./Snippets.re#app-v2
 
 To display the number of the counter, we wrote
 `{React.string(Int.to_string(counter))}`, which converts an integer to a string,
@@ -130,40 +83,16 @@ and then converts that string to `React.element`. In OCaml, there's a way
 to apply a sequence of operations over some data so that it can be
 read from left to right:
 
-<!--#prelude#
-let (counter, setCounter) = React.useState(() => 0);
-let _ =
--->
 ```reason
 {counter |> Int.to_string |> React.string}
 ```
 
-This uses the [pipe last operator](../communicate-with-javascript#pipe-last),
+This uses the [pipe last operator](https://melange.re/v2.0.0/communicate-with-javascript/#pipe-last),
 which is useful for chaining function calls.
 
 Let's add a bit of styling to the root element of `Counter`:
 
-<!--#prelude#
-let (counter, setCounter) = React.useState(() => 0);
-let _ =
--->
-```reason
-<div
-  style={ReactDOMStyle.make(
-    ~padding="1em",
-    ~display="flex",
-    ~gridGap="1em",
-    (),
-  )}>
-  <button onClick={_evt => setCounter(v => v - 1)}>
-    {React.string("-")}
-  </button>
-  <span> {counter |> Int.to_string |> React.string} </span>
-  <button onClick={_evt => setCounter(v => v + 1)}>
-    {React.string("+")}
-  </button>
-</div>;
-```
+<<< ./Snippets.re#render-with-styling{2-7}
 
 Unlike in React, the `style` prop in ReasonReact doesn't take a generic object,
 instead it takes an object of type `ReactDOMStyle.t` that is created by calling
@@ -229,7 +158,7 @@ Error: Unbound value Counter.makeProps
 For now, don't worry about what `Counter.makeProps` is or where it came
 from---just remember that you need to put the `[@react.component]` attribute
 above your `make` function if you want your component to be usable in JSX. This
-is a very common newbie mistake. See the [PPX chapter](todo.md) for more details.
+is a very common newbie mistake. See the [PPX chapter](/todo) for more details.
 
 -----
 

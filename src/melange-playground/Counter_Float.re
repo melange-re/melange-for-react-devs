@@ -1,5 +1,3 @@
-// Solution to exercise 1 of Melange Playground chapter
-
 [@react.component]
 let make = () => {
   let (counter, setCounter) = React.useState(() => 0.0);

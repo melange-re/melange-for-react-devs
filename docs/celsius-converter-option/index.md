@@ -3,43 +3,7 @@
 After all the changes we made in the last chapter, your `CelsiusConverter.re`
 might look something like this:
 
-```reason
-let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
-
-let convert = celsius => 9.0 /. 5.0 *. celsius +. 32.0;
-
-[@react.component]
-let make = () => {
-  let (celsius, setCelsius) = React.useState(() => "");
-
-  <div>
-    <input
-      value=celsius
-      onChange={evt => {
-        let newCelsius = getValueFromEvent(evt);
-        setCelsius(_ => newCelsius);
-      }}
-    />
-    {React.string({js|°C = |js})}
-    {(
-       celsius == ""
-         ? {js|? °F|js}
-         : (
-           switch (
-             celsius
-             |> float_of_string
-             |> convert
-             |> Js.Float.toFixedWithPrecision(~digits=2)
-           ) {
-           | exception _ => "error"
-           | fahrenheit => fahrenheit ++ {js| °F|js}
-           }
-         )
-     )
-     |> React.string}
-  </div>;
-};
-```
+<<< @/../src/celsius-converter-exception/CelsiusConverter.re
 
 What happens if you forget the `| exception _` branch of your switch expression?
 Your program will crash when invalid input is entered. The compiler won't warn
@@ -47,28 +11,14 @@ you to add an exception branch because it doesn't keep track of which functions
 throw exceptions. Next, we'll show you a better way which completely avoids
 functions that can fail in unexpected ways.
 
+## float_of_string_opt
+
 Refactor the switch expression to use `float_of_string_opt` instead. This
 function has the type signature `string => option(float)`. It takes a `string`
 argument and returns `Some(number)` if it succeeds and `None` if it
 fails---meaning that even if this function fails, no exception is raised.
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (celsius |> float_of_string_opt) {
-| None => "error"
-| Some(fahrenheit) =>
-  (
-    fahrenheit
-    |> convert
-    |> Js.Float.toFixedWithPrecision(~digits=2)
-  )
-  ++ {js| °F|js}
-}
-```
+<<< Snippets.re#float-of-string-opt
 
 In terms of functionality, this does exactly what the previous version did. But
 a critical difference is that if you comment out the `| None` branch, the
@@ -101,14 +51,11 @@ here and not somewhere else. You are starting to experience the power of
 [pattern matching](https://reasonml.github.io/docs/en/pattern-matching) in
 OCaml.
 
+## Option.map
+
 It's a shame we had to give up the long chain of function calls from when we
 were still using `float_of_string`:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
 ```reason
 celsius
 |> float_of_string
@@ -119,11 +66,6 @@ celsius
 Actually, we can still use a very similar chain of functions with
 `float_of_string_opt` if we make a couple of small additions:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
 ```reason
 celsius
 |> float_of_string_opt
@@ -166,60 +108,20 @@ module](https://melange.re/v2.0.0/api/re/melange/Stdlib/Option/).
 
 At this point, your switch expression might look like this:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (
-  celsius
-  |> float_of_string_opt
-  |> Option.map(convert)
-  |> Option.map(Js.Float.toFixedWithPrecision(~digits=2))
-) {
-| None => "error"
-| Some(fahrenheit) => fahrenheit ++ {js| °F|js}
-}
-```
+<<< Snippets.re#option-map
+
+## when guard
 
 What if we wanted to render a message of complaint when the temperature goes
 above 212° F (the boiling point of water) and not even bother to render the
 converted number? It could look like this:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (celsius |> float_of_string_opt |> Option.map(convert)) {
-| None => "error"
-| Some(fahrenheit) =>
-  fahrenheit > 212.0
-    ? {js|Unreasonably hot🥵|js}
-    : Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-      ++ {js| °F|js}
-}
-```
+<<< Snippets.re#inner-ternary{4-6}
 
 This works, but OCaml gives you a construct that allows you to do the float
 comparison without using a nested ternary expression:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (celsius |> float_of_string_opt |> Option.map(convert)) {
-| None => "error"
-| Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
-| Some(fahrenheit) =>
-  Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-  ++ {js| °F|js}
-}
-```
+<<< Snippets.re#when-guard{3}
 
 The [when guard](https://reasonml.github.io/docs/en/pattern-matching#when)
 allows you to add extra conditions to a switch expression branch, keeping
@@ -227,8 +129,8 @@ nesting of conditionals to a minimum and making your code more readable.
 
 Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 [create a component that can convert back and forth between Celsius and
-Fahrenheit](todo.md). But first, we'll explore [Dune, the build
-system](../build-system.md) used by Melange.
+Fahrenheit](/todo). But first, we'll explore [Dune, the build
+system](https://melange.re/v2.0.0/build-system/) used by Melange.
 
 ## Exercises
 
@@ -247,7 +149,7 @@ string to float. Hint: Use `Js.Float.isNaN`.
 ## Overview
 
 - Prefer functions that return `option` over those that throw exceptions.
-    - When the input of a switch expression is `option`, the compiler can
+  - When the input of a switch expression is `option`, the compiler can
     helpfully remind you to handle the error case.
 - `Option.map` is very useful when chaining functions that return `option`.
 - You can use a `when` guard to make your switch expression more expressive
@@ -258,76 +160,22 @@ string to float. Hint: Use `Js.Float.isNaN`.
 <b>1.</b> To prevent a space from producing 32.00 degrees Fahrenheit, just add a
 call to `String.trim` in your render logic:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-{(
-  String.trim(celsius) == ""
-    ? {js|? °F|js}
-    : (
-      switch (celsius |> float_of_string_opt |> Option.map(convert)) {
-      | None => "error"
-      | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
-      | Some(fahrenheit) =>
-        Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-        ++ {js| °F|js}
-      }
-    )
-)
-|> React.string}
-```
+<<< Snippets.re#string-trim{1-2}
 
 <b>2.</b> To render "Unreasonably cold" when the temperature is less than
 -128.6°F, you can add another `Some(fahrenheit)` branch with a `when` guard:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let _ =
--->
-```reason
-switch (celsius |> float_of_string_opt |> Option.map(convert)) {
-| None => "error"
-| Some(fahrenheit) when fahrenheit < (-128.6) => {js|Unreasonably cold🥶|js}
-| Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
-| Some(fahrenheit) =>
-  Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-  ++ {js| °F|js}
-}
-```
+<<< Snippets.re#when-guard-cold{3}
 
 <b>3.</b> To use `Js.Float.fromString` instead of `float_of_string_opt`, you can
 define a new helper function that takes a `string` and returns `option`:
 
-```reason
-let floatFromString = text => {
-  let value = Js.Float.fromString(text);
-  Js.Float.isNaN(value) ? None : Some(value);
-};
-```
+<<< Snippets.re#float-from-string
 
 Then substitute `float_of_string_opt` with `floatFromString` in your switch
 expression:
 
-<!--#prelude#
-let celsius = "1";
-let convert = x => x;
-let floatFromString = float_of_string_opt;
-let _ =
--->
-```reason
-switch (celsius |> floatFromString |> Option.map(convert)) {
-| None => "error"
-| Some(fahrenheit) when fahrenheit < (-128.6) => {js|Unreasonably cold🥶|js}
-| Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
-| Some(fahrenheit) =>
-  Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-  ++ {js| °F|js}
-}
-```
+<<< Snippets.re#switch-float-from-string{1}
 
 -----
 
