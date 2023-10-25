@@ -24,7 +24,7 @@ let make = () => {
     {React.string({js|°C = |js})}
     {(
        String.trim(celsius) == ""
-         ? {js|? °F|js}
+         ? {js|?°F|js}
          : (
            switch (celsius |> floatFromString |> Option.map(convert)) {
            | None => "error"
@@ -32,7 +32,7 @@ let make = () => {
            | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
            | Some(fahrenheit) =>
              Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-             ++ {js| °F|js}
+             ++ {js|°F|js}
            }
          )
      )

@@ -1,6 +1,6 @@
 module App = {
   [@react.component]
-  let make = () => <Counter />;
+  let make = () => <Counter_Float />;
 };
 
 let node = ReactDOM.querySelector("#root");

@@ -21,10 +21,10 @@ export default defineConfig({
         items: [
           { text: 'Intro', link: '/intro' },
           { text: 'Installation', link: '/installation' },
-          { text: 'Counter', link: '/counter' },
+          { text: 'Counter', link: '/counter/' },
           { text: 'Melange Playground', link: '/melange-playground' },
-          { text: 'Celsius Converter', link: '/celsius-converter-exception' },
-          { text: 'Celsius Converter using Option', link: '/celsius-converter-option' },
+          { text: 'Celsius Converter', link: '/celsius-converter-exception/' },
+          { text: 'Celsius Converter using Option', link: '/celsius-converter-option/' },
         ]
       }
     ],

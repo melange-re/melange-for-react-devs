@@ -55,20 +55,12 @@ cannot expect to compare an integer and a float together, unless you convert one
 of the values so that both values have the same type. To make the last line
 compile, you can change it to
 
-<!--#prelude#
-let foo = 42;
-let bar = 42.0;
--->
 ```reason
 Js.log(foo == Int.of_float(bar));
 ```
 
 Another way to fix the last line is to convert `foo` from an int to a float:
 
-<!--#prelude#
-let foo = 42;
-let bar = 42.0;
--->
 ```reason
 Js.log(Float.of_int(foo) == bar);
 ```
@@ -92,7 +84,7 @@ Js.log(Js.typeof(foo)); // prints "number"
 Js.log(Js.typeof(bar)); // prints "number"
 ```
 
-Refer to the [Melange docs](../communicate-with-javascript.md#data-types-and-runtime-representation)
+Refer to the [Melange docs](https://melange.re/v2.0.0/communicate-with-javascript/#data-types-and-runtime-representation)
 for a complete rundown of how OCaml types get translated to JavaScript types.
 
 ## Exercises
@@ -127,38 +119,22 @@ library's
 <b>1.</b> A Counter component that uses float instead of integer would look
 something like this:
 
-```reason
-[@react.component]
-let make = () => {
-  let (counter, setCounter) = React.useState(() => 0.0);
-
-  <div
-    style={ReactDOMStyle.make(
-      ~padding="1em",
-      ~display="flex",
-      ~gridGap="1em",
-      (),
-    )}>
-    <button onClick={_evt => setCounter(v => v -. 0.5)}>
-      {React.string("-")}
-    </button>
-    <span> {counter |> Float.to_string |> React.string} </span>
-    <button onClick={_evt => setCounter(v => v +. 1.5)}>
-      {React.string("+")}
-    </button>
-  </div>;
-};
-```
+<<< @/../src/melange-playground/Counter_Float.re
 
 <b>2.</b> JavaScript's `Number` type doesn't have enough precision to represent
 in64 values. They're instead represented by an array of two numbers `[high,
 low]`, where `high` is signed, `low` is unsigned.
 
-<b>3.</b> You can add two int64 values using `Int64.add`, e.g. `Int64.add(42L, 16L)`.
+<b>3.</b> You can add two int64 values using `Int64.add`, e.g.
+
+```reason
+let result = Int64.add(42L, 16L);
+Js.log(result); // prints [0,58]
+```
 
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/counter/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/melange-playground/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).
