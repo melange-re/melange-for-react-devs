@@ -41,3 +41,8 @@ JavaScript dependencies
 - `make watch`: watch for the filesystem and have Melange rebuild on every
 change
 - `make serve`: serve the application with a local HTTP server
+
+## Book
+
+The files for the book associated with this repo are in the `docs` directory.
+See `docs/README.md` for details.
