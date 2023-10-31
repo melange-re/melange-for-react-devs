@@ -13,6 +13,9 @@ export default defineConfig({
     search: {
       provider: 'local'
     },
+    editLink: {
+      pattern: 'https://github.com/melange-re/melange-for-react-devs/edit/develop/docs/:path'
+    },
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Melange', link: 'https://melange.re' },
