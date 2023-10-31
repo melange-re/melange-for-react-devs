@@ -10,6 +10,9 @@ export default defineConfig({
   title: "Melange for React Devs",
   description: "A project-based, guided introduction to Melange and its ecosystem for React developers",
   themeConfig: {
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Melange', link: 'https://melange.re' },
