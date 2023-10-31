@@ -19,7 +19,7 @@ But beware, because the compiler knows nothing about the types of those fields.
 For example, we could write `ReactEvent.Form.target(evt)##value + 1`, treating
 it as if it were an integer, and the compiler wouldn't complain.
 
-## Wrap functions that return Js.t
+## Wrap functions that return `Js.t`
 
 Instead of trusting ourselves to always use `ReactEvent.Form.target(evt)##value`
 correctly, it's a good idea to wrap functions that return polymorphic objects
@@ -36,7 +36,7 @@ body of the callback function is surrounded by braces (`{}`). OCaml functions
 are like JavaScript's arrow functions---if they contain more than one line, they
 need to be enclosed by braces.
 
-## Apply pipe last (|>)
+## Apply pipe last (`|>`)
 
 Let's change the render logic to update the Fahrenheit display based on the
 value of celsius:
@@ -48,11 +48,11 @@ string to float, then convert that float to another float (Celsius ->
 Fahrenheit), convert back to string, and finally convert the string to
 `React.element`, all in one line.
 
+## String concatenation (`++`)
+
 We should probably put °F after the Fahrenheit value so that it's clear to the
 user what unit of measure they're seeing. We can do so using the string
 concatenation operator (`++`):
-
-## String concatenation (++)
 
 <<< Snippets.re#string-concat{4-6}
 
