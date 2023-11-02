@@ -17,7 +17,7 @@ let make = () => {
     {React.string({js|°C = |js})}
     {(
        celsius == ""
-         ? {js|? °F|js}
+         ? {js|?°F|js}
          : (
            switch (
              celsius
@@ -26,7 +26,7 @@ let make = () => {
              |> Js.Float.toFixedWithPrecision(~digits=2)
            ) {
            | exception _ => "error"
-           | fahrenheit => fahrenheit ++ {js| °F|js}
+           | fahrenheit => fahrenheit ++ {js|°F|js}
            }
          )
      )

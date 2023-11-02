@@ -1,5 +1,5 @@
 install:
-	bun install
+	npm install
 
 serve:
-	bun run docs:dev
+	npm run docs:dev
