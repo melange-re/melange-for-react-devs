@@ -116,12 +116,12 @@ What if we wanted to render a message of complaint when the temperature goes
 above 212° F (the boiling point of water) and not even bother to render the
 converted number? It could look like this:
 
-<<< Snippets.re#inner-ternary{4-6}
+<<< Snippets.re#inner-ternary{5-7}
 
 This works, but OCaml gives you a construct that allows you to do the float
 comparison without using a nested ternary expression:
 
-<<< Snippets.re#when-guard{3}
+<<< Snippets.re#when-guard{4}
 
 The [when guard](https://reasonml.github.io/docs/en/pattern-matching#when)
 allows you to add extra conditions to a switch expression branch, keeping
@@ -160,12 +160,12 @@ string to float. Hint: Use `Js.Float.isNaN`.
 <b>1.</b> To prevent a space from producing 32.00 degrees Fahrenheit, just add a
 call to `String.trim` in your render logic:
 
-<<< Snippets.re#string-trim{1-2}
+<<< Snippets.re#string-trim{2-3}
 
 <b>2.</b> To render "Unreasonably cold" when the temperature is less than
 -128.6°F, you can add another `Some(fahrenheit)` branch with a `when` guard:
 
-<<< Snippets.re#when-guard-cold{3}
+<<< Snippets.re#when-guard-cold{4}
 
 <b>3.</b> To use `Js.Float.fromString` instead of `float_of_string_opt`, you can
 define a new helper function that takes a `string` and returns `option`:
@@ -175,7 +175,7 @@ define a new helper function that takes a `string` and returns `option`:
 Then substitute `float_of_string_opt` with `floatFromString` in your switch
 expression:
 
-<<< Snippets.re#switch-float-from-string{1}
+<<< Snippets.re#switch-float-from-string{2}
 
 -----
 
