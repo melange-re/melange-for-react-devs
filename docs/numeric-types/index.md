@@ -70,7 +70,9 @@ Another sweet feature is that you can hover over the variables and see their
 types. Try it out, and you'll see that `foo` has type `int` while `bar` has type
 `float`.
 
-Now type annotate `bar` with `int` and see what happens:
+The Problems pane in the bottom left corner shows error mesages when
+appropriate. At the moment, it shows `No problems`. Try type-annotating `bar`
+with `int` and see what happens:
 
 ```reason{2}
 let foo = 42; // int
@@ -79,7 +81,7 @@ Js.log(foo);
 Js.log(bar);
 ```
 
-The bottom left panel displays errors. It should say something like this:
+The Problems pane should now show something like this:
 
 ```
 Line 2, 15:
@@ -173,6 +175,30 @@ Js.log(Js.typeof(bar)); // prints "number"
 Refer to the [Melange docs](https://melange.re/v2.0.0/communicate-with-javascript/#data-types-and-runtime-representation)
 for a complete rundown of how OCaml types get translated to JavaScript types.
 
+## Widgets in the playground
+
+Melange Playground can also render ReasonReact components! Click the **Live**
+button next to the **JavaScript output** button. Now paste in the code to render
+the Counter component from the previous chapter:
+
+<<< Snippets.re#counter
+
+Note that we explicitly defined a module for the Counter component this time because we
+can't use multiple files in Melange Playground.
+
+Let's make the counter look a little more impressive. Add a new module called
+`Styles` which contains all the styles we want to use:
+
+<<< Snippets.re#styles
+
+And then update the JSX in our `make` function to use the style objects in
+`Styles`:
+
+<<< Snippets.re#render-with-styles{1-2,5,8}
+
+
+Here's the [playground link](https://melange.re/v2.0.0/playground/?language=Reason&code=bW9kdWxlIFN0eWxlcyA9IHsKICBsZXQgbWFrZSA9IFJlYWN0RE9NU3R5bGUubWFrZTsKCiAgbGV0IHJvb3QgPQogICAgbWFrZSgKICAgICAgfmZvbnRTaXplPSIyZW0iLAogICAgICB%2BcGFkZGluZz0iMWVtIiwKICAgICAgfmRpc3BsYXk9ImZsZXgiLAogICAgICB%2BZ3JpZEdhcD0iMWVtIiwKICAgICAgfmFsaWduSXRlbXM9ImNlbnRlciIsCiAgICAgICgpLAogICAgKTsKCiAgbGV0IGJ1dHRvbiA9CiAgICBtYWtlKAogICAgICB%2BZm9udFNpemU9IjFlbSIsCiAgICAgIH5ib3JkZXI9IjFweCBzb2xpZCB3aGl0ZSIsCiAgICAgIH5ib3JkZXJSYWRpdXM9IjAuNWVtIiwKICAgICAgfnBhZGRpbmc9IjAuNWVtIiwKICAgICAgKCksCiAgICApOwoKICBsZXQgbnVtYmVyID0gbWFrZSh%2BbWluV2lkdGg9IjJlbSIsIH50ZXh0QWxpZ249ImNlbnRlciIsICgpKTsKfTsKCm1vZHVsZSBDb3VudGVyID0gewogIFtAcmVhY3QuY29tcG9uZW50XQogIGxldCBtYWtlID0gKCkgPT4gewogICAgbGV0IChjb3VudGVyLCBzZXRDb3VudGVyKSA9IFJlYWN0LnVzZVN0YXRlKCgpID0%2BIDApOwoKICAgIDxkaXYgc3R5bGU9U3R5bGVzLnJvb3Q%2BCiAgICAgIDxidXR0b24gc3R5bGU9U3R5bGVzLmJ1dHRvbiBvbkNsaWNrPXtfZXZ0ID0%2BIHNldENvdW50ZXIodiA9PiB2IC0gMSl9PgogICAgICAgIHtSZWFjdC5zdHJpbmcoIi0iKX0KICAgICAgPC9idXR0b24%2BCiAgICAgIDxzcGFuIHN0eWxlPVN0eWxlcy5udW1iZXI%2BCiAgICAgICAge2NvdW50ZXIgfD4gSW50LnRvX3N0cmluZyB8PiBSZWFjdC5zdHJpbmd9CiAgICAgIDwvc3Bhbj4KICAgICAgPGJ1dHRvbiBzdHlsZT1TdHlsZXMuYnV0dG9uIG9uQ2xpY2s9e19ldnQgPT4gc2V0Q291bnRlcih2ID0%2BIHYgKyAxKX0%2BCiAgICAgICAge1JlYWN0LnN0cmluZygiKyIpfQogICAgICA8L2J1dHRvbj4KICAgIDwvZGl2PjsKICB9Owp9OwoKc3dpdGNoIChSZWFjdERPTS5xdWVyeVNlbGVjdG9yKCIjcHJldmlldyIpKSB7CnwgTm9uZSA9PiBKcy5sb2coIkZhaWxlZCB0byBzdGFydCBSZWFjdDogY291bGRuJ3QgZmluZCB0aGUgI3ByZXZpZXcgZWxlbWVudCIpCnwgU29tZShyb290KSA9PiBSZWFjdERPTS5yZW5kZXIoPENvdW50ZXIgLz4sIHJvb3QpCn07Cg%3D%3D&live=on) for the fully-styled Counter component.
+
 W00t! You are now empowered to use numbers in your OCaml programs.
 
 ## Exercises
@@ -204,12 +230,13 @@ library's
   arithmetic operators are different (they
   end with `.`) and only accept floats as inputs
 - Melange Playground is a great way to play around with short OCaml programs and
-  has the following features:
+  has many helpful features:
   - Display console output
   - Display compiled JavaScript output
-  - Display error messages when applicable
-  - Type hints on hover
-  - Share code via URL
+  - Display error messages when your code isn't compiling
+  - Show type hints on hover
+  - Share code snippets via URL
+  - Render ReasonReact components
 
 ## Solutions
 
@@ -232,6 +259,6 @@ Js.log(result); // prints [0,58]
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/melange-playground/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/numeric-types/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).
