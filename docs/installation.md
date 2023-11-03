@@ -57,8 +57,9 @@ make serve
 While `make init` is running, consider grabbing some coffee or other beverage,
 as it might take a while to fetch all the dependencies and build them. The last
 command, `make serve`, should open a tab in your default browser which points to
-http://localhost:8080/ and shows you a typical "Hello World" page. If you see
-this page, then the project was successfully installed!
+<a href="http://localhost:8080/" target="_blank" rel="noreferrer
+noopener">http://localhost:8080/</a> and shows you a typical "Hello World" page.
+If you see this page, then the project was successfully installed!
 
 ## Visual Studio Code Extension
 

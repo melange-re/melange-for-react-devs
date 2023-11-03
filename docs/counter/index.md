@@ -2,7 +2,7 @@
 
 We're going build the classic frontend starter app, the counter, using
 [ReasonReact](https://reasonml.github.io/reason-react/). If you've already
-[installed the starter project](installation.md), you can run the project now:
+[installed the starter project](/installation), you can run the project now:
 
 1. Go to the root directory of your
 [melange-for-react-devs](https://github.com/melange-re/melange-for-react-devs)
@@ -10,7 +10,8 @@ project
 1. Run `make watch` to start the Melange compiler in watch mode.
 1. In another terminal window, start the webpack dev server by running `make
 watch`. As a side effect, it will open a browser tab pointed to
-http://localhost:8080/.
+<a href="http://localhost:8080/" target="_blank" rel="noreferrer
+noopener">http://localhost:8080/</a>.
 
 Open `src/Index.re` and you'll see this:
 
