@@ -39,6 +39,7 @@ export default defineConfig({
     ],
   },
   markdown: {
+    linkify: false,
     config: (md) => {
       md.set({ typographer: true })
       md.use(markdownItFootnote)
