@@ -28,7 +28,7 @@ export default defineConfig({
           { text: 'Intro', link: '/intro' },
           { text: 'Installation', link: '/installation' },
           { text: 'Counter', link: '/counter/' },
-          { text: 'Melange Playground', link: '/melange-playground' },
+          { text: 'Numeric Types', link: '/numeric-types' },
           { text: 'Celsius Converter', link: '/celsius-converter-exception/' },
           { text: 'Celsius Converter using Option', link: '/celsius-converter-option/' },
         ]
