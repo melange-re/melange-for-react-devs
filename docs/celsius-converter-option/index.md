@@ -104,7 +104,7 @@ let map = (func, option) =>
 
 You may be interested in browsing the many other helper functions related to
 `option` in the standard library's [Option
-module](https://melange.re/v2.0.0/api/re/melange/Stdlib/Option/).
+module](https://melange.re/v2.1.0/api/re/melange/Stdlib/Option/).
 
 At this point, your switch expression might look like this:
 
@@ -130,7 +130,7 @@ nesting of conditionals to a minimum and making your code more readable.
 Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 [create a component that can convert back and forth between Celsius and
 Fahrenheit](/todo). But first, we'll explore [Dune, the build
-system](https://melange.re/v2.0.0/build-system/) used by Melange.
+system](https://melange.re/v2.1.0/build-system/) used by Melange.
 
 ## Exercises
 

@@ -100,13 +100,13 @@ haven't quite gotten used to OCaml syntax yet.
 If we enter a value with a lot of decimals in it, e.g. `21.1223456`, we'll
 get a Fahrenheit value with a lot of decimals in it as well. We can limit the
 number of decimals in the converted value using
-[Js.Float.toFixedWithPrecision](https://melange.re/v2.0.0/api/re/melange/Js/Float/index.html#val-toFixedWithPrecision):
+[Js.Float.toFixedWithPrecision](https://melange.re/v2.1.0/api/re/melange/Js/Float/index.html#val-toFixedWithPrecision):
 
 <<< Snippets.re#fixed-precision{8,11-12}
 
 `Js.Float.toFixedWithPrecision` is a function that has one positional argument
 and one [labeled
-argument](https://melange.re/v2.0.0/communicate-with-javascript/#labeled-arguments).
+argument](https://melange.re/v2.1.0/communicate-with-javascript/#labeled-arguments).
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
@@ -165,13 +165,13 @@ Js.log(addFive(10));
 ```
 
 What do you think it outputs? Run it in [Melange
-Playground](https://melange.re/v2.0.0/playground) to confirm your hypothesis.
+Playground](https://melange.re/v2.1.0/playground) to confirm your hypothesis.
 
 <b>4.</b> Use the pipe last operator (`|>`) and partial application to write a
 function that takes an integer
 argument `x`, subtracts `x` from 10, and converts that result to binary. Hint:
 Use the
-[Js.Int.toStringWithRadix](https://melange.re/v2.0.0/api/re/melange/Js/Int/#val-toStringWithRadix)
+[Js.Int.toStringWithRadix](https://melange.re/v2.1.0/api/re/melange/Js/Int/#val-toStringWithRadix)
 function.
 
 ## Overview
@@ -193,7 +193,7 @@ function.
 
 <b>1.</b> Changing it to `"°C = "` will result in a bit of gibberish being
 rendered: "Â°C". We can't rely on OCaml strings to [deal with Unicode
-correctly](https://melange.re/v2.0.0/communicate-with-javascript/#strings), so
+correctly](https://melange.re/v2.1.0/communicate-with-javascript/#strings), so
 any string that contains non-ASCII text must be delimited using `{js||js}`.
 
 <b>2.</b> Rewriting `onChange` the handler to use a single expression creates a
@@ -211,9 +211,9 @@ Values with
 useState](https://reasonml.github.io/reason-react/docs/en/usestate-event-value)
 in the [ReasonReact](https://reasonml.github.io/reason-react/) docs.
 
-<b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v2.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
+<b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
 
-<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v2.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nV2l0aFJhZGl4KH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nV2l0aFJhZGl4KH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
 
 -----
 
@@ -224,5 +224,5 @@ repo](https://github.com/melange-re/melange-for-react-devs).
 
 [^1]:
     See [Using Js.t
-    objects](https://melange.re/v2.0.0/communicate-with-javascript/#using-jst-objects) for more
+    objects](https://melange.re/v2.1.0/communicate-with-javascript/#using-jst-objects) for more
     details.
