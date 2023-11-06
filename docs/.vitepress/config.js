@@ -25,8 +25,8 @@ export default defineConfig({
       {
         text: 'Chapters',
         items: [
-          { text: 'Intro', link: '/intro' },
-          { text: 'Installation', link: '/installation' },
+          { text: 'Intro', link: '/intro/' },
+          { text: 'Installation', link: '/installation/' },
           { text: 'Counter', link: '/counter/' },
           { text: 'Numeric Types', link: '/numeric-types/' },
           { text: 'Celsius Converter', link: '/celsius-converter-exception/' },
