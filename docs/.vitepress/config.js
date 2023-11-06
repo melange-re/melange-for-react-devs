@@ -9,6 +9,7 @@ const reasonGrammar = JSON.parse(readFileSync("./reason.json"))
 export default defineConfig({
   title: "Melange for React Devs",
   description: "A project-based, guided introduction to Melange and its ecosystem for React developers",
+  base: '/',
   themeConfig: {
     search: {
       provider: 'local'
@@ -35,7 +36,7 @@ export default defineConfig({
       }
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/melange-re/melange-for-react' }
+      { icon: 'github', link: 'https://github.com/melange-re/melange-for-react-devs' }
     ],
   },
   markdown: {
