@@ -2,7 +2,7 @@
 
 We're going build the classic frontend starter app, the counter, using
 [ReasonReact](https://reasonml.github.io/reason-react/). If you've already
-[installed the starter project](/installation), you can run the project now:
+[installed the starter project](/installation/), you can run the project now:
 
 1. Go to the root directory of your
 [melange-for-react-devs](https://github.com/melange-re/melange-for-react-devs)
