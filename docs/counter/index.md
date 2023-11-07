@@ -9,7 +9,7 @@ We're going build the classic frontend starter app, the counter, using
 project
 1. Run `make watch` to start the Melange compiler in watch mode.
 1. In another terminal window, start the webpack dev server by running `make
-watch`. As a side effect, it will open a browser tab pointed to
+serve`. As a side effect, it will open a browser tab pointed to
 <a href="http://localhost:8080/" target="_blank" rel="noreferrer
 noopener">http://localhost:8080/</a>.
 
