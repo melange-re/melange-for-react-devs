@@ -44,13 +44,10 @@ jobs:
         run: |
           cd docs
           npm run docs:build
-          touch .vitepress/dist/.nojekyll
-      # - name: Upload artifact
-      #   uses: actions/upload-pages-artifact@v2
-      #   with:
-      #     path: docs/.vitepress/dist
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/.vitepress/dist
+          enable_jekyll: false
+          cname: react-book.melange.re
