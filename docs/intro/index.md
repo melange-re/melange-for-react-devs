@@ -1,5 +1,9 @@
 # Melange for React Developers
 
+::: warning
+This is a work in progress.
+:::
+
 ## Motivation
 
 This is a project-based, guided introduction to Melange and its ecosystem.

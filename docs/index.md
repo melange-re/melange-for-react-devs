@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: Get started
-      link: /intro
+      link: /intro/
     - theme: alt
       text: View on GitHub
       link: https://github.com/melange-re/melange-for-react-devs
