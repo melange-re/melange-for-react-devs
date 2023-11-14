@@ -1,2 +1,2 @@
 serve:
-	chapter=celsius-converter-option make -C ../.. serve
+	app=celsius-converter-option make -C ../.. serve

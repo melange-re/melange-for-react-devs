@@ -1,2 +1,2 @@
 serve:
-	chapter=celsius-converter-exception make -C ../.. serve
+	app=celsius-converter-exception make -C ../.. serve

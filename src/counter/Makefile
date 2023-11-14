@@ -1,2 +1,3 @@
+.PHONY: serve
 serve:
-	chapter=counter make -C ../.. serve
+	app=counter make -C ../.. serve
