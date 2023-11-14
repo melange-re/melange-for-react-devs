@@ -1,5 +1,5 @@
-;; `dirs` is a stanza to tell dune which subfolders from the current folder
-;; (where the `dune` file is) it should process. Here it is saying to include
-;; all directories that don't start with . or _, but exclude node_modules.
+; `dirs` is a stanza to tell dune which subfolders from the current folder
+; (where the `dune` file is) it should process. Here it is saying to include
+; all directories that don't start with . or _, but exclude node_modules.
 
 (dirs :standard \ node_modules)
