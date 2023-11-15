@@ -1,9 +1,7 @@
 project_name = melange-for-react-devs
 
-ifdef app
-app := $(app)
-else
-app := counter
+ifndef app
+	app := counter
 endif
 
 DUNE = opam exec -- dune
