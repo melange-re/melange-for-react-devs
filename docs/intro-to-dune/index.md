@@ -88,6 +88,10 @@ option must be changed to
 ./_build/default/src/stuff/src/Index.js
 ```
 
+For more details about where JavaScript output files end up in the build
+directory, see [JavaScript artifacts
+layout](https://melange.re/v2.1.0/build-system/#javascript-artifacts-layout).
+
 ::: info
 In this dune file, we're only concerned with building JavaScript to run in the
 browser, but if we also wanted to build JavaScript to run on Node, we'd include
