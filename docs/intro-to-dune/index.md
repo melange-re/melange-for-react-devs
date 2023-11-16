@@ -24,9 +24,9 @@ The line
 (using melange 0.1)
 ```
 
-is necessary because we have to manually enable the Melange plugin for Dune in
-order to use it. Note that the version of the Melange Dune plugin is independent
-of the version of Melange we're using.
+is necessary because we have to manually enable the Melange extension for Dune
+in order to use it. Note that the version of the Melange Dune extension is
+independent of the version of Melange we're using.
 
 Technically, `dune-project` accepts many more metadata fields, but it’s best to
 keep it minimal. Other than `name`, it makes more sense to put the rest of your
