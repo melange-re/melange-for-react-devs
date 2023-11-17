@@ -129,9 +129,9 @@ src/counter
 ## Why Makefile
 
 You might be wondering why we're using a `Makefile` instead of adding another
-npm script. In the world of OCaml, usage of [the Make build automation
-tool](https://en.wikipedia.org/wiki/Make_(software)) is pretty much ubiquitous,
-and this is not likely to change. So let's take a short detour to explain the
+npm script. In OCaml projects, usage of [the Make build automation
+tool](https://en.wikipedia.org/wiki/Make_(software)) is common, and this
+includes Melange-related projects. So let's take a short detour to explain the
 `Makefile` we just added.
 
 ## Anatomy of Makefile
