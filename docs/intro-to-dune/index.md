@@ -4,7 +4,7 @@ Depending on how you've been following along, you may have several components in
 your project. Since these components don't have much in common with each other,
 it makes sense to put them in separate, independent apps. To do that, we'll have
 to spend a little time with [Dune](https://dune.build/). Dune is a build system
-designed for OCaml projects, and it has has many [useful
+designed for OCaml projects, and it has many [useful
 features](https://melange.re/v2.1.0/build-system/#features). For our purposes,
 the feature of primary interest is its [built-in support for
 Melange](https://dune.readthedocs.io/en/stable/melange.html).
