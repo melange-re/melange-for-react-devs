@@ -1,7 +1,7 @@
 # Melange for React Developers
 
-A simple project template using [Melange](https://github.com/melange-re/melange)
-with [opam](https://opam.ocaml.org/).
+Source code for the book [Melange for React
+Developers](https://react-book.melange.re/).
 
 ## Quick Start
 
@@ -18,17 +18,29 @@ When running `make init`, you may encounter an error like this:
 ```
 [ERROR] Could not determine which packages to install for this switch:
   * Missing dependency:
-    - melange >= 1.0.0
+    - melange >= 2.0.0
     no matching version
 ```
 
 To address this, first run `opam update`, then rerun `make init`.
 
-### React
+## Serving apps
 
-React support is provided by
-[`reason-react`](https://github.com/reasonml/reason-react/). The entry
-point of the sample React app is [`src/Index.re`](src/Index.re).
+By default, running `make serve` will serve the Counter app located in
+`src/counter`. To run another app, you can `cd` into its directory and run
+`make serve` there. For example, to run the Celsius Converter app:
+
+```
+cd src/celsius-converter-option
+make serve
+```
+
+Another way is to specify the name of the app via the `app` environment variable
+before running `make serve` in the root directory, e.g.
+
+```
+app=celsius-converter-option make serve
+```
 
 ## Commands
 
@@ -38,6 +50,10 @@ are a few of the most useful ones:
 - `make init`: set up opam local switch and download OCaml, Melange and
 JavaScript dependencies
 - `make install`: install OCaml, Melange, and JavaScript dependencies
-- `make watch`: watch for the filesystem and have Melange rebuild on every
-change
-- `make serve`: serve the application with a local HTTP server
+- `make watch`: watch the filesystem and have Melange rebuild on every change
+- `make serve`: Serve an application using a local HTTP server
+
+## Book
+
+The files for the book associated with this repo are in the `docs` directory.
+See `docs/README.md` for details.

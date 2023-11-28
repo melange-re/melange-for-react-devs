@@ -1,5 +1,11 @@
 project_name = melange-for-react-devs
 
+ifdef app
+app := $(app)
+else
+app := counter
+endif
+
 DUNE = opam exec -- dune
 
 .DEFAULT_GOAL := help
@@ -34,8 +40,8 @@ build_verbose: ## Build the project
 	$(DUNE) build --verbose
 
 .PHONY: serve
-serve: ## Serve the application with a local HTTP server
-	npm run serve
+serve: ## Serve an application using a local HTTP server
+	npx webpack serve --open --mode development --entry ./_build/default/src/$(app)/output/src/$(app)/Index.js
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
@@ -50,5 +56,5 @@ format-check: ## Checks if format is correct
 	$(DUNE) build @fmt
 
 .PHONY: watch
-watch: ## Watch for the filesystem and rebuild on every change
+watch: ## Watch the filesystem and rebuild on every change
 	$(DUNE) build --watch
