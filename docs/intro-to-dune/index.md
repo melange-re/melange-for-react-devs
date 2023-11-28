@@ -266,8 +266,9 @@ File "src/counter/Counter.re", line 5, characters 2-6:
 Error: Unbound value div
 ```
 
-That's because putting `reason-react-ppx` in the `preprocess/pps` field enables
-JSX in `.re` files.
+That's because putting `reason-react-ppx` in the `preprocess/pps` field will
+transform function calls to `div` (which isn't defined anywhere) into calls to
+`React.createElement("div", ...)`.
 
 <b>3.</b> Replacing the tab in front of the `serve` rule's
 recipe with four spaces will result in a `Makefile` error:
