@@ -189,30 +189,6 @@ It should open a new tab in your default browser to <a
 href="http://localhost:8080/" target="_blank" rel="noreferrer
 noopener">http://localhost:8080/</a> and display your Counter component.
 
-## Serving a default app
-
-If you run `make serve` in the root directory, you'll get an error that looks
-something like this:
-
-```
-ERROR in main
-Module not found:
-Error: Can't resolve './_build/default/src//output/src//Index.js' in '...'
-```
-
-That's because if `app` environment variable isn't provided, the value passed to
-the `--entry` option is no longer a valid path. We can define a default value
-for `app` by putting this near the top of `Makefile`:
-
-```make
-ifndef app
-	app := counter
-endif
-```
-
-Now if you run `make serve` in the root directory, it will serve the counter
-app.
-
 :::info
 Feel to delete the `src/Index.re` and `src/dune` files. You won't need them
 anymore for this or later chapters. You can also delete the `scripts` section of
