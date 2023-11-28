@@ -1,2 +1,2 @@
 serve:
-	chapter=numeric-types make -C ../.. serve
+	app=numeric-types make -C ../.. serve
