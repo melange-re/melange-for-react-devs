@@ -63,6 +63,8 @@ Reference](https://dune.readthedocs.io/en/stable/dune-files.html#dune).
 
 ## `melange.emit` stanza
 
+<!-- Here we refer to src/dune because it hasn't been moved into
+     src/counter/dune yet -->
 Let's now take a look at the `src/dune` file:
 
 <<< @/../src/counter/dune{clj}
