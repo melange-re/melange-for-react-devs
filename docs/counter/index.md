@@ -13,7 +13,7 @@ serve`. As a side effect, it will open a browser tab pointed to
 <a href="http://localhost:8080/" target="_blank" rel="noreferrer
 noopener">http://localhost:8080/</a>.
 
-Open `src/Index.re` and you'll see this:
+Open `Index.re` and you'll see this:
 
 <<< Snippets.re#app-v1
 
@@ -71,8 +71,8 @@ We'll talk more about `option` in the [Celsius converter chapter](/celsius-conve
 
 ## The Counter component
 
-Let's create a counter component by creating a new file `Counter.re` inside
-`src`, with the following contents:
+Let's create a counter component by creating a new file `Counter.re` with the
+following contents:
 
 <<< Snippets.re#counter-v1
 
@@ -163,7 +163,7 @@ OCaml wants you to use all the variables you declare, unless they begin with
 compilation error in `Index.re`, at the place where `Counter` component is used:
 
 ```
-File "src/Index.re", line 3, characters 19-27:
+File "Index.re", line 3, characters 19-27:
 3 |   let make = () => <Counter />;
                        ^^^^^^^^^^^
 Error: Unbound value Counter.makeProps

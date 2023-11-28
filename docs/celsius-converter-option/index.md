@@ -25,7 +25,7 @@ a critical difference is that if you comment out the `| None` branch, the
 compiler will refuse to accept it:
 
 ```
-File "src/CelsiusConverter.re", lines 21-32, characters 11-10:
+File "CelsiusConverter.re", lines 21-32, characters 11-10:
 21 | ...........(
 22 |            switch (celsius |> float_of_string_opt) {
 23 |            //  | None => "error"

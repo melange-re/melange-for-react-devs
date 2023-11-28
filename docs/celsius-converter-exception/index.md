@@ -1,8 +1,7 @@
 # Celsius Converter
 
 Our second widget will be one that takes a temperature value in Celsius and
-converts it to Fahrenheit. Create a new file in `src` called
-`CelsiusConverter.re`:
+converts it to Fahrenheit. Create a new file called `CelsiusConverter.re`:
 
 <<< Snippets.re#celsius-converter-v1
 
