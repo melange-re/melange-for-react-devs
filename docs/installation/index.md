@@ -44,11 +44,11 @@ to verify that it succeeded.
 
 Let's make sure that everything works by downloading and running our project
 template
-[melange-for-react-devs](https://github.com/melange-re/melange-for-react-devs).
+[melange-for-react-devs-template](https://github.com/melange-re/melange-for-react-devs-template).
 
 ```bash
-git clone https://github.com/melange-re/melange-for-react-devs
-cd melange-for-react-devs
+git clone https://github.com/melange-re/melange-for-react-devs-template
+cd melange-for-react-devs-template
 make init
 make build
 make serve

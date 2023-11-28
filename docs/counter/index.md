@@ -5,7 +5,7 @@ We're going build the classic frontend starter app, the counter, using
 [installed the starter project](/installation/), you can run the project now:
 
 1. Go to the root directory of your
-[melange-for-react-devs](https://github.com/melange-re/melange-for-react-devs)
+[melange-for-react-devs-template](https://github.com/melange-re/melange-for-react-devs-template)
 project
 1. Run `make watch` to start the Melange compiler in watch mode.
 1. In another terminal window, start the webpack dev server by running `make
@@ -110,20 +110,21 @@ Let's add a bit of styling to the root element of `Counter`:
 Unlike in React, the `style` prop in ReasonReact doesn't take a generic object,
 instead it takes an object of type `ReactDOMStyle.t` that is created by calling
 `ReactDOMStyle.make`. This isn't a sustainable way to style our app---in the
-[order confirmation chapter](/todo), we'll see how to style using CSS classes.
+[orders chapter](/todo), we'll see how to style using CSS classes.
 
 Congratulations! You've created your first ReasonReact app and component. In
 future chapters we'll create more complex and interesting components.
 
 ## Exercises
 
-<b>1.</b> There aren't any runtime errors in our app right now. But what happens if you
-   try to remove the `| None` branch of the `switch (node)` expression?
+<b>1.</b> There aren't any runtime errors in our app right now. But what happens
+if you try to remove the `| None` branch of the `switch (node)` expression?
 
-<b>2.</b> What happens if you rename the `_evt` variable inside the button callback to
-   `evt`?
+<b>2.</b> What happens if you rename the `_evt` variable inside the button
+callback to `evt`?
 
-<b>3.</b> Comment out the `[@react.component]` attribute in `Counter.re`. What happens?
+<b>3.</b> Comment out the `[@react.component]` attribute in `Counter.re`. What
+happens?
 
 ## Overview
 
@@ -176,7 +177,7 @@ is a very common newbie mistake. See the [PPX chapter](/todo) for more details.
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/counter/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/counter/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).
 

@@ -95,7 +95,10 @@ your friends! As you type in the source editor, it will store your code in the
 `code` query string parameter of the URL. For example, here's a link to the
 snippet we started with:
 
-https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off
+<a
+href="https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off"
+target="_blank" rel="noreferrer
+noopener">https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off</a>
 
 ## Comparison operators
 
@@ -259,6 +262,6 @@ Js.log(result); // prints [0,58]
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/numeric-types/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/numeric-types/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).

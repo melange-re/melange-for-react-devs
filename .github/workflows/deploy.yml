@@ -1,7 +1,7 @@
 name: Deploy VitePress site to Pages
 
 on:
-  # Runs on pushes targeting the `develop` branch.
+  # Runs on pushes targeting the `main` branch.
   push:
     branches: [develop]
 
@@ -50,4 +50,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs/.vitepress/dist
           enable_jekyll: false
+          force_orphan: true
           cname: react-book.melange.re

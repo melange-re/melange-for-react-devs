@@ -180,6 +180,6 @@ expression:
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/develop/src/celsius-converter-option/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/celsius-converter-option/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).
