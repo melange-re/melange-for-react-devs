@@ -177,7 +177,7 @@ is a very common newbie mistake. See the [PPX chapter](/todo) for more details.
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/counter/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/counter/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).
 

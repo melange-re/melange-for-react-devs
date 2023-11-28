@@ -262,6 +262,6 @@ Js.log(result); // prints [0,58]
 -----
 
 [Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/numeric-types/)
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/numeric-types/)
 can be found in the [Melange for React Developers
 repo](https://github.com/melange-re/melange-for-react-devs).
