@@ -31,7 +31,7 @@ independent of the version of Melange we're using.
 Technically, `dune-project` accepts many more metadata fields, but it’s best to
 keep it minimal. Other than `name`, it makes more sense to put the rest of your
 project's metadata fields in your `.opam` file, which we'll cover
-[later](/todo/).
+[later](/todo).
 
 `dune-project` files use
 [S-expressions](https://en.wikipedia.org/wiki/S-expression), which might make
@@ -51,23 +51,45 @@ Basically, `dune` files tell Dune about directories, executables, libraries,
 tests, and anything else of interest. For example, here's the `dune` file inside
 the root directory of your project:
 
-<<< @/../dune{clj}
+```clj
+; `dirs` is a stanza to tell dune which subfolders from the current folder
+; (where the `dune` file is) it should process. Here it is saying to include
+; all directories that don't start with . or _, but exclude node_modules.
 
-Like `dune-project`, a `dune` file consists of one or more *stanzas*. The only
-stanza here is
-[dirs](https://dune.readthedocs.io/en/stable/dune-files.html#dirs), which tells
-Dune which directories to include in the build. Note that the stanzas accepted
-in `dune` files are not the same as the ones accepted by `dune-project`. See all
-possible `dune` stanzas in Dune's [Stanza
+(dirs :standard \ node_modules)
+
+; `melange.emit` is a Dune stanza that will produce build rules to generate
+; JavaScript files from sources using the Melange compiler
+; https://dune.readthedocs.io/en/stable/melange.html#melange-emit
+
+(melange.emit
+ ; The `target` field is used by Dune to put all JavaScript artifacts in a
+ ; specific folder inside `_build/default`
+ (target output)
+ ; Here's the list of dependencies of the stanza. In this case (being
+ ; `melange.emit`), Dune will look into those dependencies and generate rules
+ ; with JavaScript targets for the modules in those libraries as well.
+ ; Caveat: the libraries need to be specified with `(modes melange)`.
+ (libraries reason-react)
+ ; The `preprocess` field lists preprocessors which transform code before it is
+ ; compiled. melange.ppx allows to use Melange attributes [@mel. ...]
+ ; (https://melange.re/v2.0.0/communicate-with-javascript/#attributes)
+ ; reason-react-ppx allows to use JSX for ReasonReact components by using the
+ ; [@JSX] attributes from Reason: https://reasonml.github.io/docs/en/jsx
+ (preprocess
+  (pps melange.ppx reason-react-ppx))
+ ; module_systems lets you specify commonjs (the default) or es6
+ (module_systems es6))
+```
+
+Like `dune-project`, a `dune` file consists of one or more *stanzas*. The first
+stanza is [dirs](https://dune.readthedocs.io/en/stable/dune-files.html#dirs),
+which tells Dune which directories to include in the build. Note that the
+stanzas accepted in `dune` files are not the same as the ones accepted by
+`dune-project`. See all possible `dune` stanzas in Dune's [Stanza
 Reference](https://dune.readthedocs.io/en/stable/dune-files.html#dune).
 
 ## `melange.emit` stanza
-
-<!-- Here we refer to src/dune because it hasn't been moved into
-     src/counter/dune yet -->
-Let's now take a look at the `src/dune` file:
-
-<<< @/../src/counter/dune{clj}
 
 The main stanza of interest for us is
 [melange.emit](https://dune.readthedocs.io/en/stable/melange.html#melange-emit),
@@ -80,14 +102,14 @@ A note about the `target` field: It is referenced in the `serve` npm script,
 whose command is
 
 ```bash
-webpack serve --open --mode development --entry ./_build/default/src/output/src/Index.js
+webpack serve --open --mode development --entry ./_build/default/output/Index.js
 ```
 
 If you change the value of `target` to, say, `stuff`, the value of the `--entry`
 option must be changed to
 
 ```
-./_build/default/src/stuff/src/Index.js
+./_build/default/stuff/Index.js
 ```
 
 For more details about where JavaScript output files end up in the build
@@ -104,12 +126,15 @@ for an example of building for Node.
 
 ## Counter app directory
 
-Create a new directory in `src` called `counter`, which will contain a new app
-that only renders the [Counter component](/counter/). Then make sure this new
-directory contains:
+Create a new directory `src/counter`, which will contain a new app that only
+renders the [Counter component](/counter/). Then make sure this new directory
+contains:
 
-- `Counter.re` from `src`
-- `dune` file from `src`
+- `Counter.re` (move from root directory to `src/counter`)
+- `dune` file that just has a `melange.emit` stanza
+
+   <<< @/../src/counter/dune{clj}
+
 - `Index.re` to render the app to the DOM
 
   <<< @/../src/counter/Index.re
@@ -160,7 +185,7 @@ In case you're not familiar with Make, here's a breakdown of
 ## Root directory `Makefile`
 
 Currently, the `serve` rule in root directory's `Makefile` can only run the app
-in the `src` directory. We want it to be able to run the app in `src/counter`,
+in the root directory. We want it to be able to run the app in `src/counter`,
 so we need to change it:
 
 ```make
@@ -191,14 +216,37 @@ It should open a new tab in your default browser to <a
 href="http://localhost:8080/" target="_blank" rel="noreferrer
 noopener">http://localhost:8080/</a> and display your Counter component.
 
-:::info
-Feel to delete the `src/Index.re` and `src/dune` files. You won't need them
-anymore for this or later chapters. You can also delete the `scripts` section of
-your `package.json` file.
+## Cleanup
+
+Feel to delete the `Index.re` file in the root directory. You won't need it
+anymore for this or later chapters. You can also delete:
+
+- The `scripts` section of your`package.json` file
+- The `melange.emit` stanza from the `dune` file in the root directory
+
+
+## Rationale for monorepo structure
+
+Going forward, we're going to use a
+[monorepo](https://en.wikipedia.org/wiki/Monorepo) where projects are separate
+apps that are developed in their own directory. Each project directory will have
+its own `dune` file with its own `melange.emit` stanza. We want to use a
+monorepo because most projects will have very similar dependencies, so it seems
+overkill to create new `dune-project`, `.opam`, and `package.json` files[^1] for
+every single project.
+
+::: info
+
+Melange documentation's [guidelines for
+melange.emit](https://melange.re/v2.1.0/build-system/#guidelines-for-melangeemit)
+recommends you put the `melange.emit` stanza in the `dune` file in the project's
+root directory. We are no longer doing that going forward, but this is still
+great advice if your repo only contains a single app!
+
 :::
 
-Huzzah! You created a new `dune` file to build an app and a `Makefile` to
-serve that app locally. In future chapters, we'll assume that you use the same
+Huzzah! You created a new `dune` file to build an app and a `Makefile` to serve
+that app locally. In future chapters, we assume that you will use the same
 directory structure for each new app you build.
 
 ## Exercises
@@ -224,7 +272,7 @@ recipe with four spaces?
   - Which directories to include and which to exclude
   - Which directories contain code that should be transpiled to JavaScript,
     using the `melange.emit` stanza
-- Make is a build automation tool heavily used in the OCaml world
+- Make is a build automation tool commonly used in the OCaml world
   - `Makefile`s contain rules which can run commands based on the target you
     pass to the `make` command
 
@@ -232,7 +280,7 @@ recipe with four spaces?
 
 <b>1.</b> Creating a separate app for Celsius Converter, with its own `dune`,
 `Makefile`, and `Index.re` files, should look something like
-[this](https://github.com/melange-re/melange-for-react-devs/tree/develop/src/celsius-converter-option).
+[this](https://github.com/melange-re/melange-for-react-devs/tree/main/src/celsius-converter-option).
 
 <b>2.</b> Deleting `reason-react-ppx` from `src/counter/dune` will result in a
 compilation error:
@@ -262,8 +310,14 @@ character instead of space characters.
 
 -----
 
-[Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/tree/develop/src)
-can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs).
+Source code for this chapter can be found in the [Melange for React Developers
+repo](https://github.com/melange-re/melange-for-react-devs):
 
+- [Counter
+  project](https://github.com/melange-re/melange-for-react-devs/tree/main/src/counter)
+- [Celsius Converter
+  project](https://github.com/melange-re/melange-for-react-devs/tree/main/src/celsius-converter-option)
+
+[^1]: The full list of files we'd need to create for every project would
+    actually be `dune-project`, `.opam`, `package.json`, `public/index.html`,
+    and `webpack.config.js`.
