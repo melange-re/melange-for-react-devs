@@ -294,7 +294,7 @@ Error: Unbound value div
 
 That's because putting `reason-react-ppx` in the `preprocess/pps` field will
 transform function calls to `div` (which isn't defined anywhere) into calls to
-`React.createElement("div", ...)`.
+`React.createElement("div", ...)`[^2].
 
 <b>3.</b> Replacing the tab in front of the `serve` rule's
 recipe with four spaces will result in a `Makefile` error:
@@ -321,3 +321,7 @@ repo](https://github.com/melange-re/melange-for-react-devs):
 [^1]: The full list of files we'd need to create for every project would
     actually be `dune-project`, `.opam`, `package.json`, `public/index.html`,
     and `webpack.config.js`.
+
+[^2]: More details about how JSX gets translated can be found
+    [here](https://reasonml.github.io/docs/en/jsx#uncapitalized-tag) and
+    [here](https://reasonml.github.io/reason-react/docs/en/jsx#uncapitalized).
