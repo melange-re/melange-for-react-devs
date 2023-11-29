@@ -32,6 +32,7 @@ export default defineConfig({
           { text: 'Numeric Types', link: '/numeric-types/' },
           { text: 'Celsius Converter', link: '/celsius-converter-exception/' },
           { text: 'Celsius Converter using Option', link: '/celsius-converter-option/' },
+          { text: 'Introduction to Dune', link: '/intro-to-dune/' },
         ]
       }
     ],
