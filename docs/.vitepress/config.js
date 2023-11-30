@@ -56,4 +56,7 @@ export default defineConfig({
       },
     ],
   },
+  head: [
+    ['script', { defer: '', 'data-domain': 'react-book.melange.re', src: 'https://plausible.io/js/script.js' }]
+  ],
 })
