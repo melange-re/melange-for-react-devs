@@ -90,21 +90,21 @@ let toPrice = t =>
 In any case, you should strive to avoid wildcards and explicitly match all
 constructors in your switch expressions.
 
-## `fun` sugar syntax
+## A `fun` syntax for switch
 
-Incidentally, there's a sugar syntax for functions whose entire body is a switch
+There's an alternate, shorter syntax for functions whose entire body is a switch
 expression. It's called `fun`, and we can rewrite `Item.toPrice` to use it:
 
 <<< Snippets.re#to-price-fun
 
-We can also define `toEmoji` using the `fun` sugar syntax:
+We can also define `toEmoji` using the `fun` syntax:
 
 <<< Snippets.re#to-emoji
 
 Using the `fun` syntax is completely equivalent to using a switch expression,
-so it's up to your personal taste whether you want to use this sugar syntax.
+so it's up to your personal taste whether you want to use one or the other.
 
-## `Order.make`
+## `Item.make`
 
 Now we're ready to define the `make` function which will render the `Item`
 component:
