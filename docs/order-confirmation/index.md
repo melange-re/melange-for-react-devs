@@ -21,19 +21,20 @@ can also be copied over, but remember to update the value of the `app`
 environment variable to `order-confirmation`. The `.re` files can be empty for
 now.
 
-## Variant type `t`
+## Variant type `Item.t`
 
 For the time being, there are only two items you can order at Emoji Cafe, the
 sandwich or the burger. In `Item.re`, add a new type:
 
 <<< Snippets.re#type-t
 
-This is *variant type*[^1] named `t` with two *constructors*, `Sandwich` and
+This is a *variant type*[^1] named `t` with two *constructors*, `Sandwich` and
 `Burger`. In OCaml, it is customary for the primary type of a module to be
-called `t`.
+called `t`. This convention makes sense because in other modules, this type will
+be referred to as `Item.t`.
 
-The `Item` module should contain modules that help us render an item, and to do
-that, we'll need functions that can return the price and the emoji[^2] for a
+The `Item` module should contain helper functions that help us render an item,
+i.e. we'll need functions that can return the price and the emoji[^2] for a
 given item. First, add the `toPrice` function:
 
 <<< Snippets.re#to-price
@@ -43,9 +44,51 @@ If you decide to add, say, a hotdog, to the menu, you would need to:
 - Add a `Hotdog` constructor to `Order.t`
 - Add a `| Hotdog` branch to the switch expression of `Order.toPrice`
 
-Your OCaml code wouldn't compile if you just added a new constructor to
-`Item.t` without also updating `Item.toPrice`. Adding or removing constructors
-from a variant usually forces you to change relevant parts of your code.
+Your OCaml code would fail to compile if you added `Hotdog` or removed
+`Sandwich` from `Item.t` without also updating `Item.toPrice`. This is one of
+the great advantages of variant types: changing the constructors will force you
+to change the relevant parts of your code.
+
+## Wildcard in switch expressions
+
+Let's say that Madame Jellobutter decides to temporarily lower the price of
+burgers so that they're the same price as sandwiches. You could then rewrite
+`Item.toPrice` like this:
+
+```reason
+let toPrice = t =>
+  switch (t) {
+  | _ => 10.
+  };
+```
+
+The underscore (`_`) here serves as a wildcard matching any constructor.
+However, this would be a very bad idea! Now changing the constructors in
+`Item.t` would not force you to change `Item.toPrice` accordingly. A superior
+version would be:
+
+```reason
+let toPrice = t =>
+  switch (t) {
+  | Sandwich => 10.
+  | Burger => 10.
+  };
+```
+
+OCaml's pattern-matching syntax allows you to combine branches, which would
+simplify it to:
+
+
+```reason
+let toPrice = t =>
+  switch (t) {
+  | Sandwich
+  | Burger => 10.
+  };
+```
+
+In any case, you should strive to avoid wildcards and explicitly match all
+constructors in your switch expressions.
 
 ## `fun` sugar syntax
 
