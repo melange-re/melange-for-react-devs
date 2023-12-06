@@ -33,13 +33,12 @@ This is a *variant type*[^1] named `t` with two *constructors*, `Sandwich` and
 called `t`. This convention makes sense because in other modules, this type will
 be referred to as `Item.t`.
 
-The `Item` module should contain helper functions that help us render an item,
-i.e. we'll need functions that can return the price and the emoji[^2] for a
-given item. First, add the `toPrice` function:
+The `Item` module should contain helper functions that return the price and the
+emoji[^2] for a given item. First, add the `toPrice` function:
 
 <<< Snippets.re#to-price
 
-If you decide to add, say, a hotdog, to the menu, you would need to:
+If Madame Jellobutter decides to add a hotdog to the menu, you would need to:
 
 - Add a `Hotdog` constructor to `Order.t`
 - Add a `| Hotdog` branch to the switch expression of `Order.toPrice`
@@ -51,9 +50,9 @@ to change the relevant parts of your code.
 
 ## Wildcard in switch expressions
 
-Let's say that Madame Jellobutter decides to temporarily lower the price of
-burgers so that they're the same price as sandwiches. You could then rewrite
-`Item.toPrice` like this:
+If Madame Jellobutter decides to do a promotion that lowers the price of burgers
+so that they're the same price as sandwiches, you could rewrite `Item.toPrice`
+to:
 
 ```reason
 let toPrice = t =>
@@ -75,7 +74,7 @@ let toPrice = t =>
   };
 ```
 
-OCaml's pattern-matching syntax allows you to combine branches, which would
+Since OCaml's pattern-matching syntax allows you to combine branches, you can
 simplify it to:
 
 
@@ -87,8 +86,8 @@ let toPrice = t =>
   };
 ```
 
-In any case, you should strive to avoid wildcards and explicitly match all
-constructors in your switch expressions.
+In any case, you should strive to avoid wildcards. The OCaml Way is to
+explicitly match all constructors in your switch expressions.
 
 ## A `fun` syntax for switch
 
@@ -175,26 +174,40 @@ This way you can hover over `itemRows` and see that it has type
 
 ## `Index.re`
 
-Render the `Order` component inside `Index.re`:
+Render the `Order` component inside `src/order-confirmation/Index.re`:
 
 <<< Snippets.re#index
 
 Run `make serve` inside `src/order-confirmation` to see your new app in action.
+
+## `Js.Array.mapi`
+
 Open your browser's dev console, where you should see a warning:
 
 ```
 Warning: Each child in a list should have a unique "key" prop.
 ```
 
-Oops, we should've used
-[Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)[^4]
-instead so we could set the `key` prop for each `Item` component:
+Oops, we forgot the set the `key` props! One way to fix this is to use
+[Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
+instead[^4] so we can set `key` based on the index of the element:
 
 <<< Snippets.re#mapi
 
-Great, you've got a basic component now, but it looks... not so great[^5]. In
-the next chapter, we'll see how ReasonReact components can be styled with plain
-old CSS.
+The `Js.Array.mapi` function is also a binding to the `Array.map` method, but
+unlike `Js.Array.map`, it passes the element *and the index* into the callback.
+If you hover over it, you'll see that it has the type signature
+
+```
+(('a, int) => 'b, array('a)) => array('b)
+```
+
+In practice, it's common for Melange bindings do not match one-to-one to their
+JavaScript counterparts.
+
+Wunderbar! You've got a basic order confirmation component, but it looks... not
+so great[^5]. In the next chapter, we'll see how ReasonReact components can be
+styled with plain old CSS.
 
 ## Exercises
 
@@ -203,8 +216,8 @@ don't expect it to be used anywhere else (items rendered in a menu component
 would look different). Rename it to `OrderItem` and move it inside the `Order`
 module.
 
-<b>2.</b> Add another a `Hotdog` constructor to `Item.t` variant type. Update
-the `Item` module's helper functions to get your program to compile again.
+<b>2.</b> Add another constructor to `Item.t` variant type. Update the `Item`
+module's helper functions to get your program to compile again.
 
 <b>3.</b> Instead of repeatedly using `value |>
 Js.Float.toFixedWithPrecision(~digits=2)
@@ -216,19 +229,22 @@ the same thing.
 - By convention, the main type in a module is often named `t`
 - A variant is a type that has one or more constructors
   - Adding or removing constructors forces you to change the relevant parts of
-    your code
+    your code, *unless* you use wildcards when pattern-matching on a variant
+  - Using wildcards in your switch expression makes your code less adaptable to
+    change
 - The `fun` syntax helps you save a little bit of typing when you have a
   function whose entire body is a switch expression
-- Adding props to a component by adding labeled arguments to its `make` function
-- Useful array helper functions can be found in the
-  [Js.Array](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html)
-  module
+- Labeled arguments in a component's `make` function are treated as props by
+  ReasonReact.
+- The [Js.Array](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html)
+  module contains useful array functions
   - The `Js.Array.reduce` function is the binding to JavaScript's `Array.reduce`
     method
   - The `Js.Array.map` and `Js.Array.mapi` functions are both bindings to
     JavaScript's `Array.map` method
 - The `React.array` function is needed when you want to convert an array of
-  `React.element`s to a single `React.element`
+  `React.element`s to a single `React.element`, e.g. after a call to
+  `Js.Array.map`
 
 ## Solutions
 
@@ -277,13 +293,10 @@ repo](https://github.com/melange-re/melange-for-react-devs).
     children to be of type `React.element`. But React components (with uppercase
     names) can take children of any type.
 
-[^4]: Note that unlike JavaScript's [Array.map
-  method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
-  we have to use
-  [Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
-  instead of
-  [Js.Array.map](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-map)
-  if we want to use the index value.
+[^4]: Using array indexes to set keys violates [React's rules of
+    keys](https://react.dev/learn/rendering-lists#rules-of-keys), which states
+    that you shouldn't generate keys while rendering. We'll see a better way to
+    do this [later](/todo).
 
 [^5]: Madame Jellobutter was passing by and just happened to catch a glimpse of
   the unstyled component over your shoulder and puked in her mouth a little.
