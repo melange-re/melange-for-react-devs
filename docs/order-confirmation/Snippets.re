@@ -46,21 +46,6 @@ module Item = {
       </td>
     </tr>;
   // #endregion make
-
-  let makeWithClasses = (~item: t) => {
-    ignore();
-    // #region make-with-classes
-    <tr className="item">
-      <td className="emoji"> {item |> toEmoji |> React.string} </td>
-      <td className="price">
-        {item
-         |> toPrice
-         |> Js.Float.toFixedWithPrecision(~digits=2)
-         |> React.string}
-      </td>
-    </tr>;
-    // #endregion make-with-classes
-  };
 };
 
 module Order = {
@@ -95,10 +80,10 @@ module Order = {
 
     let itemRows = items |> Js.Array.map(item => <Item item />);
 
-    <table className="order">
+    <table>
       <tbody>
         {itemRows |> React.array}
-        <tr className="total">
+        <tr>
           <td> {React.string("Total")} </td>
           <td>
             {total |> Js.Float.toFixedWithPrecision(~digits=2) |> React.string}
@@ -107,27 +92,6 @@ module Order = {
       </tbody>
     </table>;
     // #endregion order-make-item-rows
-  };
-
-  let makeWithClasses = (~items: t) => {
-    let total = 0.;
-    // #region order-make-with-classes
-    <table className="order">
-      <tbody>
-        {items
-         |> Js.Array.mapi((item, index) =>
-              <Item key={"item-" ++ string_of_int(index)} item />
-            )
-         |> React.array}
-        <tr className="total">
-          <td> {React.string("Total")} </td>
-          <td>
-            {total |> Js.Float.toFixedWithPrecision(~digits=2) |> React.string}
-          </td>
-        </tr>
-      </tbody>
-    </table>;
-    // #endregion order-make-with-classes
   };
 };
 

@@ -148,7 +148,7 @@ You might have noticed that we need a call to `React.array` after the call to
 {items |> Js.Array.map(item => <Item item />) |> React.array}
 ```
 
-If we left off the call to `React.array`, we'd get this error:
+If we leave off the call to `React.array`, we'd get this error:
 
 ```
 File "src/order-confirmation/Order.re", lines 12, characters 6-12:
@@ -160,7 +160,7 @@ Error: This expression has type React.element array
 
 We get this error primarily because collections in OCaml can only contain
 elements of the same type. The `tbody` element expects children of type
-`React.element`, but the call to `Js.Array.map` returns `array(React.element)`,
+`React.element`[^3], but the call to `Js.Array.map` returns `array(React.element)`,
 which creates a type mismatch. To make the actual type match the expected type,
 we must add a call to `React.array` which turns `array(React.element)` to
 `React.element`.
@@ -187,124 +187,21 @@ Warning: Each child in a list should have a unique "key" prop.
 ```
 
 Oops, we should've used
-[Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)[^3]
+[Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)[^4]
 instead so we could set the `key` prop for each `Item` component:
 
 <<< Snippets.re#mapi
 
-You've got a basic component now, but it looks... not so great.[^4]
-
-## Style with CSS
-
-Let's add styling, but instead of using the `style` prop as we did in previous
-chapters, let's use good old CSS. First, install `style-loader` and `css-loader`
-webpack plugins:
-
-```
-npm install --save-dev css-loader style-loader
-```
-
-Add a new rule to `webpack.config.js` so that you can import .css files as
-modules:
-
-<<< @/../webpack.config.js{5-12}
-
-Add a new file
-`src/order-confirmation/item.css` and give it these styles:
-
-<<< @/../src/order-confirmation/item.css
-
-## `mel.raw` extension node
-
-In OCaml, there is no syntax to import from files, because all modules within a
-project are visible to all other modules[^5]. However, we can make use of
-JavaScript's `import` syntax by using the [mel.raw extension
-node](https://melange.re/v2.1.0/communicate-with-javascript/#generate-raw-javascript),
-which allows us to embed raw JavaScript in our OCaml code. Add the following
-code to the top of `Item.re`:
-
-```reason
-[%%mel.raw {|import "./item.css"|}];
-```
-
-The `{|` and `|}` are string delimiters which allow you to define a string that
-doesn't require you to escape characters like double-quote and newline. They are
-similar to the `{js|` and `|js}`
-delimiters we first saw in the [Celsius
-Converter](/celsius-converter-exception/#solutions) chapter, with the
-difference that they aren't JavaScript strings so they won't handle Unicode correctly.
-
-Unfortunately, in the terminal where we're running `make serve`, we see this webpack compilation error:
-
-```
-ERROR in ./_build/default/src/order-confirmation/output/src/order-confirmation/Item.js 5:0-6:1
-Module not found: Error: Can't resolve './item.css' in '/home/fhsu/work/melange-for-react-devs/_build/default/src/order-confirmation/output/src/order-confirmation'
-```
-
-## `runtime_deps` field of `melange.emit`
-
-The problem is that webpack is serving the app from the build directory at
-`_build/default/src/order-confirmation/output/src/order-confirmation`, and the
-`item.css` file isn't in the build directory.
-
-To solve this, we can use the [runtime_deps
-field](https://melange.re/v2.1.0/build-system/#handling-assets) inside
-`src/order-confirmation/dune`:
-
-```clj{7}
-(melange.emit
- (target output)
- (libraries reason-react)
- (preprocess
-  (pps melange.ppx reason-react-ppx))
- (module_systems es6)
- (runtime_deps item.css))
-```
-
-We also want to add styles for the `Order` component, so add a new file
-`src/order-confirmation/order.css` with these styles:
-
-<<< @/../src/order-confirmation/order.css
-
-To ensure that `order.css` is also copied to the build directory, we can add
-`order.css` to the value of `runtime_deps`:
-
-```clj
-(runtime_deps item.css order.css)
-```
-
-A better way is to just tell `runtime_deps` to copy all `.css` files over:
-
-```clj
-(runtime_deps (glob_files *.css))
-```
-
-## Add classes to JSX
-
-Now we can add the appropriate classes to `Item.make`'s JSX:
-
-<<< Snippets.re#make-with-classes
-
-As well as `Order.make`'s JSX:
-
-<<< Snippets.re#order-make-with-classes
-
-Finally, add a `mel.raw` extension node at the top of `Order.re`:
-
-```reason
-[%%mel.raw {|import "./order.css"|}];
-```
-
-Excelsior! Madame Jellobutter is pleased with your progress on the order
-confirmation widget. But she plans to add more options for her current menu
-items, for example she'd like to more than one type of sandwich. We'll tackle
-that in the next chapter.
+Great, you've got a basic component now, but it looks... not so great[^5]. In
+the next chapter, we'll see how ReasonReact components can be styled with plain
+old CSS.
 
 ## Exercises
 
-<b>1.</b> We used the `%%mel.raw` extension node to import CSS files as modules,
-but there is also a `%mel.raw` extension node. What happens if you use
-`%mel.raw` instead?
+<b>1.</b> The `Item` component is only used inside the `Order` component and we
+don't expect it to be used anywhere else (items rendered in a menu component
+would look different). Rename it to `OrderItem` and move it inside the `Order`
+module.
 
 <b>2.</b> Add another a `Hotdog` constructor to `Item.t` variant type. Update
 the `Item` module's helper functions to get your program to compile again.
@@ -320,45 +217,29 @@ the same thing.
 - A variant is a type that has one or more constructors
   - Adding or removing constructors forces you to change the relevant parts of
     your code
-- The `fun` sugar syntax helps you save a little bit of typing when you have a
+- The `fun` syntax helps you save a little bit of typing when you have a
   function whose entire body is a switch expression
 - Adding props to a component by adding labeled arguments to its `make` function
 - Useful array helper functions can be found in the
   [Js.Array](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html)
   module
-  - The `Js.Array.reduce` function is equivalent to JavaScript's `Array.reduce`
+  - The `Js.Array.reduce` function is the binding to JavaScript's `Array.reduce`
     method
-  - The `Js.Array.map` and `Js.Array.mapi` functions can be used in place of
-    JavaScripts `Array.map` method
+  - The `Js.Array.map` and `Js.Array.mapi` functions are both bindings to
+    JavaScript's `Array.map` method
 - The `React.array` function is needed when you want to convert an array of
   `React.element`s to a single `React.element`
-- `mel.raw` extension node is used to embed raw JavaScript in our OCaml code
-- The `runtime_deps` field of the `melange.emit` stanza is used to copy assets
-  like `.css` files into our build directory
 
 ## Solutions
 
-<b>1.</b> If we use `%mel.raw` instead of `%%mel.raw` in `Item.re`, we'll get this webpack
-compilation error:
+<b>1.</b> To move the `Item` component from the `Item` module to the
+`Order` module, you'll have to move the `Item.make` function to a submodule
+called `Order.OrderItem`. Then you'll have to prefix the references to `t`,
+`toPrice`, and `toEmoji` with `Item.` since they're now being referenced outside
+the `Item` module. After you're done, `src/order-confirmation/Order.re` should
+look something like this:
 
-```bash
-ERROR in ./_build/default/src/order-confirmation/output/src/order-confirmation/Item.js 5:9
-Module parse failed: Unexpected token (5:9)
-You may need an appropriate loader to handle this file type, currently no loaders are configured to process this file. See https://webpack.js.org/concepts#loaders
-| import * as JsxRuntime from "react/jsx-runtime";
-|
-> ((import "./item.css"));
-```
-
-So `%mel.raw` surrounds the JavaScript code you put into it because it wants to
-treat it as an expression. Whereas `%%mel.raw` treats the JavaScript it's given
-as a statement. If you change it back to `%%mel.raw`, the generated JavaScript
-will look like this:
-
-```javascript
-import "./item.css"
-;
-```
+<<< @/../src/order-confirmation/Order.re
 
 <b>2.</b> After you add a `HotDog` constructor to `Item.t`, your `Item` module
 should look something like this:
@@ -392,7 +273,11 @@ repo](https://github.com/melange-re/melange-for-react-devs).
 [^2]: Recall that the name of this restaurant is Emoji Cafe, so everything from
   the menu to the order confirmation must use emojis.
 
-[^3]: Note that unlike JavaScript's [Array.map
+[^3]: All lowercase elements like `div`, `span`, `table`, etc expect their
+    children to be of type `React.element`. But React components (with uppercase
+    names) can take children of any type.
+
+[^4]: Note that unlike JavaScript's [Array.map
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
   we have to use
   [Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
@@ -400,8 +285,6 @@ repo](https://github.com/melange-re/melange-for-react-devs).
   [Js.Array.map](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-map)
   if we want to use the index value.
 
-[^4]: Madame Jellobutter was passing by and just happened to catch a glimpse of
+[^5]: Madame Jellobutter was passing by and just happened to catch a glimpse of
   the unstyled component over your shoulder and puked in her mouth a little.
 
-[^5]: Recall that in the `Index` modules you've written so far, you've never had
-    to import any of the components you used that were defined in other files.
