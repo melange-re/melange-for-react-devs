@@ -127,16 +127,16 @@ There's a lot going on here:
 
 - The primary type of `Order` is `array(Item.t)`, which is an array of
   variants.
-- The `make` function has a single labeled argument, `~items`, of type `t`.
-  This means the `Order` component has a single prop named `items`.
+- The `Order.make` function has a single labeled argument, `~items`, of type
+  `t`. This means the `Order` component has a single prop named `items`.
 - We sum up the prices of all items using
-  [Js.Array.reduce](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-reduce).
-  This is identical to JavaScript's [Array.reduce
-  method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce),
-  except that the Melange version requires the initial value to be passed in.
+  [Js.Array.reduce](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-reduce),
+ which is the Melange binding to JavaScript's [Array.reduce
+  method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce).
+  Note that `Js.Array.reduce` requires the initial value to be passed in.
 - For each order, we render an `Item` component via
   [Js.Array.map](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-map),
-  which is equivalent to the [Array.map
+  which is the Melange binding to the [Array.map
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 - The `React.array` function has the type signature `array(React.element) =>
   React.element`, meaning it converts an array of `React.element`s to
