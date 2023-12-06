@@ -138,9 +138,40 @@ There's a lot going on here:
   [Js.Array.map](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-map),
   which is the Melange binding to the [Array.map
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
-- The `React.array` function has the type signature `array(React.element) =>
-  React.element`, meaning it converts an array of `React.element`s to
-  `React.element`. All expressions in JSX must have the type `React.element`.
+
+## `React.array`
+
+You might have noticed that we need a call to `React.array` after the call to
+`Js.Array.map`:
+
+```reason
+{items |> Js.Array.map(item => <Item item />) |> React.array}
+```
+
+If we left off the call to `React.array`, we'd get this error:
+
+```
+File "src/order-confirmation/Order.re", lines 12, characters 6-12:
+12 |         {items |> Js.Array.map(item => <Item item />)}
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: This expression has type React.element array
+       but an expression was expected of type React.element
+```
+
+We get this error primarily because collections in OCaml can only contain
+elements of the same type. The `tbody` element expects children of type
+`React.element`, but the call to `Js.Array.map` returns `array(React.element)`,
+which creates a type mismatch. To make the actual type match the expected type,
+we must add a call to `React.array` which turns `array(React.element)` to
+`React.element`.
+
+To better see what types are at play, it might make sense to refactor
+`Order.make` like so:
+
+<<< Snippets.re#order-make-item-rows{5,9}
+
+This way you can hover over `itemRows` and see that it has type
+`array(React.element)`.
 
 ## `Index.re`
 

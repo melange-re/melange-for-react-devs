@@ -87,6 +87,28 @@ module Order = {
   };
   // #endregion order
 
+  let makeWithItemRows = (~items: t) => {
+    // #region order-make-item-rows
+    let total =
+      items
+      |> Js.Array.reduce((acc, order) => acc +. Item.toPrice(order), 0.);
+
+    let itemRows = items |> Js.Array.map(item => <Item item />);
+
+    <table className="order">
+      <tbody>
+        {itemRows |> React.array}
+        <tr className="total">
+          <td> {React.string("Total")} </td>
+          <td>
+            {total |> Js.Float.toFixedWithPrecision(~digits=2) |> React.string}
+          </td>
+        </tr>
+      </tbody>
+    </table>;
+    // #endregion order-make-item-rows
+  };
+
   let makeWithClasses = (~items: t) => {
     let total = 0.;
     // #region order-make-with-classes
