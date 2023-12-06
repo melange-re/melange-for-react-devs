@@ -262,7 +262,9 @@ should look something like this:
 
 <<< Snippets.re#hotdog
 
-Of course, you may have chosen a different price for the hotdog.
+Of course, you may have chosen a different price for the hotdog. Or maybe you
+didn't add a hotdog at all, and instead added `CannedFood` (🥫) or `PotOfFood`
+(🍲). It's totally up to you!
 
 <b>3.</b> In order to create a helper function `Format.currency`, we must create
 a new module file called `Format.re` and add a `currency` function:
@@ -272,7 +274,7 @@ a new module file called `Format.re` and add a `currency` function:
 Then we can use that function like this:
 
 ```reason
-<td className="price"> {item |> toPrice |> Format.currency} </td>
+<td> {item |> toPrice |> Format.currency} </td>
 ```
 
 -----
