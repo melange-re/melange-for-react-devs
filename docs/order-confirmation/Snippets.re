@@ -94,6 +94,27 @@ module Order = {
     </table>;
     // #endregion order-make-item-rows
   };
+
+  let makeWithItemRowsLet = (~items: t) => {
+    // #region order-make-item-rows-let
+    let total =
+      items
+      |> Js.Array.reduce((acc, order) => acc +. Item.toPrice(order), 0.);
+
+    <table>
+      <tbody>
+        {let itemRows = items |> Js.Array.map(item => <Item item />);
+         itemRows |> React.array}
+        <tr>
+          <td> {React.string("Total")} </td>
+          <td>
+            {total |> Js.Float.toFixedWithPrecision(~digits=2) |> React.string}
+          </td>
+        </tr>
+      </tbody>
+    </table>;
+    // #endregion order-make-item-rows-let
+  };
 };
 
 module Index = {

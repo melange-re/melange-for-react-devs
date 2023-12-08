@@ -40,8 +40,8 @@ emoji[^2] for a given item. First, add the `toPrice` function:
 
 If Madame Jellobutter decides to add a hotdog to the menu, you would need to:
 
-- Add a `Hotdog` constructor to `Order.t`
-- Add a `| Hotdog` branch to the switch expression of `Order.toPrice`
+- Add a `Hotdog` constructor to `Item.t`
+- Add a `| Hotdog` branch to the switch expression of `Item.toPrice`
 
 Your OCaml code would fail to compile if you added `Hotdog` or removed
 `Sandwich` from `Item.t` without also updating `Item.toPrice`. This is one of
@@ -63,7 +63,7 @@ let toPrice = t =>
 
 The underscore (`_`) here serves as a wildcard matching any constructor.
 However, this would be a very bad idea! Now changing the constructors in
-`Item.t` would not force you to change `Item.toPrice` accordingly. A superior
+`Item.t` would not force you to change `Item.toPrice` accordingly. A much better
 version would be:
 
 ```reason
@@ -105,13 +105,14 @@ so it's up to your personal taste whether you want to use one or the other.
 
 ## `Item.make`
 
-Now we're ready to define the `make` function which will render the `Item`
+Now we're ready to define the `Item.make` function which will render the `Item`
 component:
 
 <<< Snippets.re#make
 
-The `make` function has a single labeled argument, `~item`, of type `Item.t`.
-This effectively means the `Item` component has a single prop named `item`.
+The `Item.make` function has a single labeled argument, `~item`, of type
+`Item.t`. This effectively means the `Item` component has a single prop named
+`item`.
 
 Note that this renders a single row of a table. We'll need another component
 to render a table containing all items in an order.
@@ -124,10 +125,10 @@ Create a new file `src/order-confirmation/Order.re` and add the following code:
 
 There's a lot going on here:
 
-- The primary type of `Order` is `array(Item.t)`, which is an array of
-  variants.
+- The primary type of the `Order` module is `array(Item.t)`, which is an array
+  of variants.
 - The `Order.make` function has a single labeled argument, `~items`, of type
-  `t`. This means the `Order` component has a single prop named `items`.
+  `Order.t`. This means the `Order` component has a single prop named `items`.
 - We sum up the prices of all items using
   [Js.Array.reduce](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-reduce),
  which is the Melange binding to JavaScript's [Array.reduce
@@ -137,10 +138,46 @@ There's a lot going on here:
   [Js.Array.map](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-map),
   which is the Melange binding to the [Array.map
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
+- There's a call to `React.array`, which we'll address in a little bit.
+
+## `Index.re`
+
+Render the `Order` component inside `src/order-confirmation/Index.re`:
+
+<<< Snippets.re#index
+
+Run `make serve` inside `src/order-confirmation` to see your new app in action.
+
+## `Js.Array.mapi`
+
+Open your browser's dev console, where you should see a warning:
+
+```
+Warning: Each child in a list should have a unique "key" prop.
+```
+
+Oops, we forgot the set the `key` props! One way to fix this is to use
+[Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
+instead[^4] so we can set `key` based on the index of the element:
+
+<<< Snippets.re#mapi
+
+The `Js.Array.mapi` function is also a binding to the `Array.map` method, but
+unlike `Js.Array.map`, it passes the element *and the index* into the callback.
+If you hover over it, you'll see that it has the type signature
+
+```
+(('a, int) => 'b, array('a)) => array('b)
+```
+
+When a JavaScript function has optional arguments, it's common to create
+[multiple OCaml functions that bind to
+it](https://melange.re/v2.1.0/communicate-with-javascript/#approach-1-multiple-external-functions).
+We'll discuss this in more detail [later](/todo).
 
 ## `React.array`
 
-You might have noticed that we need a call to `React.array` after the call to
+As mentioned before, there's a call to `React.array` after the call to
 `Js.Array.map`:
 
 ```reason
@@ -185,40 +222,45 @@ console.log(elemArray);
 console.log(elemArray);
 ```
 
-## `Index.re`
+The call to `React.array` in OCaml was erased in the JavaScript output!
 
-Render the `Order` component inside `src/order-confirmation/Index.re`:
+## Variables inside expressions
 
-<<< Snippets.re#index
+We can refactor `Order.make` once more so that `itemRows` is defined in the same
+expression where it's used:
 
-Run `make serve` inside `src/order-confirmation` to see your new app in action.
+<<< Snippets.re#order-make-item-rows-let{7-8}
 
-## `Js.Array.mapi`
+In OCaml, all blocks (delimited by `{}`) are expressions, and you can use `let`
+to define as many variables as you want inside an expression. Any variables
+defined inside a block are only visible within the block.
 
-Open your browser's dev console, where you should see a warning:
+::: tip
+When you are chaining functions and getting type mismatches, it may help to
+refactor the expression into multiple variables. For example,
 
-```
-Warning: Each child in a list should have a unique "key" prop.
-```
-
-Oops, we forgot the set the `key` props! One way to fix this is to use
-[Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
-instead[^4] so we can set `key` based on the index of the element:
-
-<<< Snippets.re#mapi
-
-The `Js.Array.mapi` function is also a binding to the `Array.map` method, but
-unlike `Js.Array.map`, it passes the element *and the index* into the callback.
-If you hover over it, you'll see that it has the type signature
-
-```
-(('a, int) => 'b, array('a)) => array('b)
+```reason
+celsius
+|> float_of_string
+|> convert
+|> Js.Float.toFixedWithPrecision(~digits=2)
 ```
 
-When a JavaScript function has optional arguments, it's common to create
-[multiple OCaml functions that bind to
-it](https://melange.re/v2.1.0/communicate-with-javascript/#approach-1-multiple-external-functions).
-We'll discuss this in more detail [later](/todo).
+could be refactored to
+
+```reason
+{
+  let celsiusFloat = float_of_string(celsius);
+  let fahrenheitValue = convert(celsiusFloat);
+  Js.Float.toFixedWidthPrecision(~digits=2, fahrenheitValue);
+}
+```
+
+Now you can hover over each intermediate value (`celsiusFloat` and
+`fahrenheitValue`) to see its type, which provides important clues as to what
+went wrong.
+
+:::
 
 -----
 
@@ -319,4 +361,3 @@ repo](https://github.com/melange-re/melange-for-react-devs).
 
 [^5]: Madame Jellobutter was passing by and just happened to catch a glimpse of
   the unstyled component over your shoulder and puked in her mouth a little.
-
