@@ -112,6 +112,8 @@ instead it takes an object of type `ReactDOMStyle.t` that is created by calling
 `ReactDOMStyle.make`. This isn't a sustainable way to style our app---in the
 [orders chapter](/todo), we'll see how to style using CSS classes.
 
+----
+
 Congratulations! You've created your first ReasonReact app and component. In
 future chapters we'll create more complex and interesting components.
 

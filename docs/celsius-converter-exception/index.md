@@ -138,8 +138,10 @@ feature to create a one-argument function by writing
 
 <<< Snippets.re#partial-application{12,15}
 
-We have a working component now, but catching exceptions isn't The OCaml Way! In
-the next chapter, you'll see how to rewrite the logic using `option`.
+-----
+
+Nice, we have a working component now, but catching exceptions isn't The OCaml
+Way! In the next chapter, you'll see how to rewrite the logic using `option`.
 
 ## Exercises
 
