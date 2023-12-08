@@ -195,6 +195,11 @@ rendered: "Â°C". We can't rely on OCaml strings to [deal with Unicode
 correctly](https://melange.re/v2.1.0/communicate-with-javascript/#strings), so
 any string that contains non-ASCII text must be delimited using `{js||js}`.
 
+::: tip
+Note that quoted string literals using the `js` identifier are specific to
+Melange and are not available in native OCaml.
+:::
+
 <b>2.</b> Rewriting `onChange` the handler to use a single expression creates a
 potential problem with stale values coming from the event object:
 
