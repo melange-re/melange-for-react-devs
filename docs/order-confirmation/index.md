@@ -215,8 +215,12 @@ If you hover over it, you'll see that it has the type signature
 (('a, int) => 'b, array('a)) => array('b)
 ```
 
-In practice, it's common for Melange bindings do not match one-to-one to their
-JavaScript counterparts.
+When a JavaScript function has optional arguments, it's common to create
+[multiple OCaml functions that bind to
+it](https://melange.re/v2.1.0/communicate-with-javascript/#approach-1-multiple-external-functions).
+We'll discuss this in more detail [later](/todo).
+
+-----
 
 Wunderbar! You've got a basic order confirmation component, but it looks... not
 so great[^5]. In the next chapter, we'll see how ReasonReact components can be
