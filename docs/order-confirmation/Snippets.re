@@ -78,7 +78,8 @@ module Order = {
       items
       |> Js.Array.reduce((acc, order) => acc +. Item.toPrice(order), 0.);
 
-    let itemRows = items |> Js.Array.map(item => <Item item />);
+    let itemRows: array(React.element) =
+      items |> Js.Array.map(item => <Item item />);
 
     <table>
       <tbody>
@@ -148,4 +149,13 @@ module ItemV2 = {
     | Burger => {js|🍔|js}
     | Hotdog => {js|🌭|js};
   // #endregion hotdog
+};
+
+let _ = {
+  // #region react-array-demo
+  let elemArray: array(React.element) =
+    [|"a", "b", "c"|] |> Js.Array.map(x => React.string(x));
+  Js.log(elemArray);
+  Js.log(React.array(elemArray));
+  // #endregion react-array-demo
 };

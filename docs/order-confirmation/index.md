@@ -167,10 +167,23 @@ we must add a call to `React.array` which turns `array(React.element)` to
 To better see what types are at play, it might make sense to refactor
 `Order.make` like so:
 
-<<< Snippets.re#order-make-item-rows{5,9}
+<<< Snippets.re#order-make-item-rows{5-6,10}
 
-This way you can hover over `itemRows` and see that it has type
-`array(React.element)`.
+In reality, `React.array` is just there to make the OCaml compiler happy---it
+doesn't actually change the the underlying JavaScript object. For example, try
+running the [following code in the
+playground](https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKHggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
+
+<<< Snippets.re#react-array-demo
+
+If you look at the JavaScript output, you'll see that the two calls to `Js.log`
+get compiled to
+
+```javascript
+console.log(elemArray);
+
+console.log(elemArray);
+```
 
 ## `Index.re`
 
