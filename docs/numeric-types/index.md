@@ -178,7 +178,7 @@ Js.log(Js.typeof(bar)); // prints "number"
 Refer to the [Melange docs](https://melange.re/v2.1.0/communicate-with-javascript/#data-types-and-runtime-representation)
 for a complete rundown of how OCaml types get translated to JavaScript types.
 
-## Widgets in the playground
+## Widgets in the Playground
 
 Melange Playground can also render ReasonReact components! Click the **Live**
 button next to the **JavaScript output** button. Now paste in the code to render

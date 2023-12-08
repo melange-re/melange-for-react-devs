@@ -5,6 +5,8 @@ converts it to Fahrenheit. Create a new file called `CelsiusConverter.re`:
 
 <<< Snippets.re#celsius-converter-v1
 
+## `Js.t` object
+
 Inside the `input`'s `onChange` handler, we get the event target using
 `ReactEvent.Form.target`, which has the type `ReactEvent.Form.t => {_.. }`. What
 is `{_.. }`? It's shorthand for the `Js.t({..})` type[^1], which consists of two

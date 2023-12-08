@@ -232,8 +232,8 @@ expression where it's used:
 <<< Snippets.re#order-make-item-rows-let{7-8}
 
 In OCaml, all blocks (delimited by `{}`) are expressions, and you can use `let`
-to define as many variables as you want inside an expression. Any variables
-defined inside a block are only visible within the block.
+to define as many variables as you want inside an expression block. Any
+variables defined inside a block are only visible within the block.
 
 ::: tip
 When you are chaining functions and getting type mismatches, it may help to
@@ -304,6 +304,7 @@ the same thing.
 - The `React.array` function is needed when you want to convert an array of
   `React.element`s to a single `React.element`, e.g. after a call to
   `Js.Array.map`
+- It's possible to define variables inside expression blocks
 
 ## Solutions
 
