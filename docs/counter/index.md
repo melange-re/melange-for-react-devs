@@ -109,8 +109,8 @@ Let's add a bit of styling to the root element of `Counter`:
 
 Unlike in React, the `style` prop in ReasonReact doesn't take a generic object,
 instead it takes an object of type `ReactDOMStyle.t` that is created by calling
-`ReactDOMStyle.make`. This isn't a sustainable way to style our app---in the
-[orders chapter](/todo), we'll see how to style using CSS classes.
+`ReactDOMStyle.make`. This isn't a sustainable way to style our app---later,
+we'll see how to [style using CSS classes](/todo).
 
 ----
 

@@ -109,7 +109,7 @@ argument](https://melange.re/v2.1.0/communicate-with-javascript/#labeled-argumen
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
-following chapters when we introduce [props](/todo).
+following chapters after we [introduce props](/order-confirmation/#item-make).
 
 ## Partial application
 
