@@ -110,8 +110,8 @@ component:
 
 <<< Snippets.re#make
 
-The `make` function has a single labeled argument, `~item`, of type `t`. This
-effectively means the `Item` component has a single prop named `item`.
+The `make` function has a single labeled argument, `~item`, of type `Item.t`.
+This effectively means the `Item` component has a single prop named `item`.
 
 Note that this renders a single row of a table. We'll need another component
 to render a table containing all items in an order.
