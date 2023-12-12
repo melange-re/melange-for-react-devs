@@ -175,7 +175,7 @@ When a JavaScript function has optional arguments, it's common to create
 it](https://melange.re/v2.1.0/communicate-with-javascript/#approach-1-multiple-external-functions).
 We'll discuss this in more detail [later](/todo).
 
-## `React.array`
+## Type transformations in JSX
 
 As mentioned before, there's a call to `React.array` after the call to
 `Js.Array.map`:
@@ -194,21 +194,20 @@ Error: This expression has type React.element array
        but an expression was expected of type React.element
 ```
 
-We get this error primarily because collections in OCaml can only contain
-elements of the same type. The `tbody` element expects children of type
-`React.element`[^3], but the call to `Js.Array.map` returns `array(React.element)`,
-which creates a type mismatch. To make the actual type match the expected type,
-we must add a call to `React.array` which turns `array(React.element)` to
-`React.element`.
+We get this error because the `tbody` element expects children of type
+`React.element`[^3], but the call to `Js.Array.map` returns
+`array(React.element)`, which creates a type mismatch. To make the actual type
+match the expected type, we must add a call to `React.array` which turns
+`array(React.element)` to `React.element`.
 
 To better see what types are at play, it might make sense to refactor
 `Order.make` like so:
 
 <<< Snippets.re#order-make-item-rows{5-6,10}
 
-In reality, `React.array` is just there to make the OCaml compiler happy---it
-doesn't actually change the the underlying JavaScript object. For example, try
-running the [following code in the
+`React.array` is a strict type transformation that doesn't actually change the
+the underlying JavaScript object. For example, try running the [following code
+in the
 playground](https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKHggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
 
 <<< Snippets.re#react-array-demo
@@ -218,49 +217,52 @@ get compiled to
 
 ```javascript
 console.log(elemArray);
-
 console.log(elemArray);
 ```
 
 The call to `React.array` in OCaml was erased in the JavaScript output!
 
-## Variables inside expressions
+Besides `React.array`, the other type transformation functions in ReasonReact
+are `React.string` (which you've already seen), `React.int`, and `React.float`.
+To see why they are necessary, consider this small example in ReactJS:
 
-We can refactor `Order.make` once more so that `itemRows` is defined in the same
-expression where it's used:
-
-<<< Snippets.re#order-make-item-rows-let{7-8}
-
-In OCaml, all blocks (delimited by `{}`) are expressions, and you can use `let`
-to define as many variables as you want inside an expression block. Any
-variables defined inside a block are only visible within the block.
-
-::: tip
-When you are chaining functions and getting type mismatches, it may help to
-refactor the expression into multiple variables. For example,
-
-```reason
-celsius
-|> float_of_string
-|> convert
-|> Js.Float.toFixedWithPrecision(~digits=2)
+```javascript
+let answer = (value > 100) ? "Too large" : value;
+return (<div> {answer} </div>);
 ```
 
-could be refactored to
+The type of `answer` is either a string or a `Number`, and for ReactJS, it's no
+problem because JavaScript is dynamically typed. However, we would run into a
+problem if we tried to directly translate this example to OCaml:
 
 ```reason
-{
-  let celsiusFloat = float_of_string(celsius);
-  let fahrenheitValue = convert(celsiusFloat);
-  Js.Float.toFixedWidthPrecision(~digits=2, fahrenheitValue);
-}
+let answer = value > 100 ? "Too large" : value;
+<div> answer </div>;
 ```
 
-Now you can hover over each intermediate value (`celsiusFloat` and
-`fahrenheitValue`) to see its type, which provides important clues as to what
-went wrong.
+We could get a compilation error like this:
 
-:::
+```
+2 |   let answer = value > 100 ? "Too large" : value;
+                                               ^^^^^
+Error: This expression has type int but an expression was expected of type
+         string
+```
+
+A value in OCaml can only be one type, regardless of which branch succeeds.
+Therefore we must use type transformation functions to "unify" the type of
+`answer` to `React.element`:
+
+```reason
+let answer: React.element =
+  value > 100 ? React.string("Too large") : React.int(value);
+<div> answer </div>;
+```
+
+Type transformation functions have another role: They limit the types we can
+pass into our JSX. For example, there's no `React.object` function, so there's
+no easy way to put an object directly into ReasonReact JSX. In ReactJS, this is
+easy to do, and it would cause your component to error out.
 
 -----
 
