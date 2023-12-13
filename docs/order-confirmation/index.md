@@ -26,7 +26,7 @@ now.
 For the time being, there are only two items you can order at Emoji Cafe, the
 sandwich or the burger. In `Item.re`, add a new type:
 
-<<< Snippets.re#type-t
+<<< Item.re#type-t
 
 This is a *variant type*[^1] named `t` with two *constructors*, `Sandwich` and
 `Burger`. In OCaml, it is customary for the primary type of a module to be
@@ -36,7 +36,7 @@ be referred to as `Item.t`.
 The `Item` module should contain helper functions that return the price and the
 emoji[^2] for a given item. First, add the `toPrice` function:
 
-<<< Snippets.re#to-price
+<<< Item.re#to-price
 
 If Madame Jellobutter decides to add a hotdog to the menu, you would need to:
 
@@ -94,11 +94,11 @@ explicitly match all constructors in your switch expressions.
 There's an alternate, shorter syntax for functions whose entire body is a switch
 expression. It's called `fun`, and we can rewrite `Item.toPrice` to use it:
 
-<<< Snippets.re#to-price-fun
+<<< Item.re#to-price-fun
 
 We can also define `toEmoji` using the `fun` syntax:
 
-<<< Snippets.re#to-emoji
+<<< Item.re#to-emoji
 
 Using the `fun` syntax is completely equivalent to using a switch expression,
 so it's up to your personal taste whether you want to use one or the other.
@@ -108,7 +108,7 @@ so it's up to your personal taste whether you want to use one or the other.
 Now we're ready to define the `Item.make` function which will render the `Item`
 component:
 
-<<< Snippets.re#make
+<<< Item.re#make
 
 The `Item.make` function has a single labeled argument, `~item`, of type
 `Item.t`. This effectively means the `Item` component has a single prop named
@@ -121,7 +121,7 @@ to render a table containing all items in an order.
 
 Create a new file `src/order-confirmation/Order.re` and add the following code:
 
-<<< Snippets.re#order
+<<< Order.re#order
 
 There's a lot going on here:
 
@@ -144,7 +144,7 @@ There's a lot going on here:
 
 Render the `Order` component inside `src/order-confirmation/Index.re`:
 
-<<< Snippets.re#index
+<<< Index.re
 
 Run `make serve` inside `src/order-confirmation` to see your new app in action.
 
@@ -160,7 +160,7 @@ Oops, we forgot the set the `key` prop! One way to fix this is to use
 [Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
 instead[^4] so we can set `key` based on the index of the element:
 
-<<< Snippets.re#mapi
+<<< Order.re#mapi
 
 The `Js.Array.mapi` function is also a binding to the `Array.map` method, but
 unlike `Js.Array.map`, it passes the element *and the index* into the callback.
@@ -198,16 +198,16 @@ We get this error because the `tbody` element expects children of type
 `React.element`[^3], but the call to `Js.Array.map` returns
 `array(React.element)`, which creates a type mismatch. To make the actual type
 match the expected type, we must add a call to `React.array` which turns
-`array(React.element)` to `React.element`.
+`array(React.element)` into `React.element`.
 
 To better see what types are at play, it might make sense to refactor
 `Order.make` like so:
 
-<<< Snippets.re#order-make-item-rows{5-6,10}
+<<< Order.re#order-make-item-rows{4-5,9}
 
 `React.array` is a strict type transformation that doesn't actually change the
-the underlying JavaScript object. For example, try running the [following code
-in the
+underlying JavaScript object. For example, try running the [following code in
+the
 playground](https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKHggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
 
 <<< Snippets.re#react-array-demo
@@ -321,7 +321,7 @@ look something like this:
 <b>2.</b> After you add a `HotDog` constructor to `Item.t`, your `Item` module
 should look something like this:
 
-<<< Snippets.re#hotdog
+<<< Item.re#hotdog
 
 Of course, you may have chosen a different price for the hotdog. Or maybe you
 didn't add a hotdog at all, and instead added `CannedFood` (🥫) or `PotOfFood`
