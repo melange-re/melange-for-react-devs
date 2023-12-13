@@ -184,7 +184,7 @@ As mentioned before, there's a call to `React.array` after the call to
 {items |> Js.Array.map(item => <Item item />) |> React.array}
 ```
 
-If we leave off the call to `React.array`, we'd get this error:
+If we leave off the call to `React.array`, we get this error:
 
 ```
 File "src/order-confirmation/Order.re", lines 12, characters 6-12:
@@ -194,8 +194,8 @@ Error: This expression has type React.element array
        but an expression was expected of type React.element
 ```
 
-We get this error because the `tbody` element expects children of type
-`React.element`[^3], but the call to `Js.Array.map` returns
+The compiler is essentially informing us that the `tbody` element expects
+children of type `React.element`[^3], but the call to `Js.Array.map` returns
 `array(React.element)`, which creates a type mismatch. To make the actual type
 match the expected type, we must add a call to `React.array` which turns
 `array(React.element)` into `React.element`.

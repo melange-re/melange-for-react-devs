@@ -31,7 +31,7 @@ teaches the language from the ground up and goes much deeper into its features.
 | Celsius Converter | Single input that converts from  Celsius to Fahrenheit | `Js.t` object, string concatenation (`++`), exception handling, ternary expression, if-else expression, labeled argument, partial application |
 | Celsius Converter using Option | The same component from the last chapter but replacing exception handling with Option | Option, `Option.map`, `when` guard |
 | Introduction to Dune | A introduction to the Dune build system | `dune-project` file, `dune` file, `melange.emit` stanza, `Makefile`, monorepo structure |
-| Order Confirmation | An order confirmation for a restaurant website | variant type, primary type of module (`t`), wildcard (`_`) in switch, `fun` syntax, `Js.Array` functions, `React.array`, define variables inside expression blocks |
+| Order Confirmation | An order confirmation for a restaurant website | variant type, primary type of module (`t`), wildcard (`_`) in switch, `fun` syntax, `Js.Array` functions, `React.array`, type transformation functions |
 
 ...and much more to come!
 
