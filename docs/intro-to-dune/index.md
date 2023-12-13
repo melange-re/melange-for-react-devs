@@ -245,6 +245,8 @@ great advice if your repo only contains a single app!
 
 :::
 
+-----
+
 Huzzah! You created a new `dune` file to build an app and a `Makefile` to serve
 that app locally. In future chapters, we assume that you will use the same
 directory structure for each new app you build.

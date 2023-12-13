@@ -5,6 +5,8 @@ converts it to Fahrenheit. Create a new file called `CelsiusConverter.re`:
 
 <<< Snippets.re#celsius-converter-v1
 
+## `Js.t` object
+
 Inside the `input`'s `onChange` handler, we get the event target using
 `ReactEvent.Form.target`, which has the type `ReactEvent.Form.t => {_.. }`. What
 is `{_.. }`? It's shorthand for the `Js.t({..})` type[^1], which consists of two
@@ -109,7 +111,7 @@ argument](https://melange.re/v2.1.0/communicate-with-javascript/#labeled-argumen
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
-following chapters when we introduce [props](/todo).
+following chapters after we [introduce props](/order-confirmation/#item-make).
 
 ## Partial application
 
@@ -138,8 +140,10 @@ feature to create a one-argument function by writing
 
 <<< Snippets.re#partial-application{12,15}
 
-We have a working component now, but catching exceptions isn't The OCaml Way! In
-the next chapter, you'll see how to rewrite the logic using `option`.
+-----
+
+Nice, we have a working component now, but catching exceptions isn't The OCaml
+Way! In the next chapter, you'll see how to rewrite the logic using `option`.
 
 ## Exercises
 

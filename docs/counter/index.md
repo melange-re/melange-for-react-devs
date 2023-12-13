@@ -13,6 +13,8 @@ serve`. As a side effect, it will open a browser tab pointed to
 <a href="http://localhost:8080/" target="_blank" rel="noreferrer
 noopener">http://localhost:8080/</a>.
 
+## The `App` component
+
 Open `Index.re` and you'll see this:
 
 <<< Snippets.re#app-v1
@@ -36,7 +38,7 @@ can be multiples modules inside a single file. For now, you just need to know
 that all components in ReasonReact are modules, and the name of the component
 comes from the name of the module.
 
-## The make function
+## The `make` function
 
 The `make` function has the type `unit => React.element`, meaning it takes `()`
 as the only argument and returns an object of type `React.element`. You'll need
@@ -77,10 +79,11 @@ following contents:
 <<< Snippets.re#counter-v1
 
 This is a component with a single `useState` hook. It should look fairly
-familiar if you know about [hooks in React](https://react.dev/reference/react).
-Note that we didn't need to manually define a module for `Counter`, because all
-source files in OCaml are automatically modules, with the name of the module
-being the same as the name of the file.
+familiar if you know about [hooks in
+React](https://react.dev/reference/react/hooks). Note that we didn't need to
+manually define a module for `Counter`, because all source files in OCaml are
+automatically modules, with the name of the module being the same as the name of
+the file.
 
 Now let's modify `App` so that it uses our new `Counter` component:
 
@@ -109,8 +112,10 @@ Let's add a bit of styling to the root element of `Counter`:
 
 Unlike in React, the `style` prop in ReasonReact doesn't take a generic object,
 instead it takes an object of type `ReactDOMStyle.t` that is created by calling
-`ReactDOMStyle.make`. This isn't a sustainable way to style our app---in the
-[orders chapter](/todo), we'll see how to style using CSS classes.
+`ReactDOMStyle.make`. This isn't a sustainable way to style our app---later,
+we'll see how to [style using CSS classes](/todo).
+
+----
 
 Congratulations! You've created your first ReasonReact app and component. In
 future chapters we'll create more complex and interesting components.
@@ -133,7 +138,7 @@ What we covered in this section:
 - How to create and run a basic ReasonReact app
 - ReasonReact components are also modules
 - OCaml has an `option` type whose value can be either `None` or `Some(_)`
-- The pipe last operator is an alternate way to invoke functions that enables
+- The pipe last operator (`|>`) is an alternate way to invoke functions that enables
   easy chaining of function calls
 - The `style` prop doesn't take generic objects
 

@@ -51,7 +51,7 @@ here and not somewhere else. You are starting to experience the power of
 [pattern matching](https://reasonml.github.io/docs/en/pattern-matching) in
 OCaml.
 
-## Option.map
+## `Option.map`
 
 It's a shame we had to give up the long chain of function calls from when we
 were still using `float_of_string`:
@@ -110,7 +110,7 @@ At this point, your switch expression might look like this:
 
 <<< Snippets.re#option-map
 
-## when guard
+## `when` guard
 
 What if we wanted to render a message of complaint when the temperature goes
 above 212° F (the boiling point of water) and not even bother to render the
@@ -126,6 +126,8 @@ comparison without using a nested ternary expression:
 The [when guard](https://reasonml.github.io/docs/en/pattern-matching#when)
 allows you to add extra conditions to a switch expression branch, keeping
 nesting of conditionals to a minimum and making your code more readable.
+
+-----
 
 Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 [create a component that can convert back and forth between Celsius and
