@@ -103,7 +103,7 @@ We can also define `toEmoji` using the `fun` syntax:
 Using the `fun` syntax is completely equivalent to using a switch expression,
 so it's up to your personal taste whether you want to use one or the other.
 
-## `Item.make`
+## Rendering an item
 
 Now we're ready to define the `Item.make` function which will render the `Item`
 component:
@@ -140,7 +140,7 @@ There's a lot going on here:
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 - There's a call to `React.array`, which we'll address in a little bit.
 
-## `Index.re`
+## Rendering an order in `Index.re`
 
 Render the `Order` component inside `src/order-confirmation/Index.re`:
 
@@ -148,7 +148,7 @@ Render the `Order` component inside `src/order-confirmation/Index.re`:
 
 Run `make serve` inside `src/order-confirmation` to see your new app in action.
 
-## `Js.Array.mapi`
+## Passing `key` prop to `Item`s
 
 Open your browser's dev console, where you should see a warning:
 
@@ -156,7 +156,7 @@ Open your browser's dev console, where you should see a warning:
 Warning: Each child in a list should have a unique "key" prop.
 ```
 
-Oops, we forgot the set the `key` props! One way to fix this is to use
+Oops, we forgot the set the `key` prop! One way to fix this is to use
 [Js.Array.mapi](https://melange.re/v2.1.0/api/re/melange/Js/Array/index.html#val-mapi)
 instead[^4] so we can set `key` based on the index of the element:
 
@@ -306,7 +306,6 @@ the same thing.
 - The `React.array` function is needed when you want to convert an array of
   `React.element`s to a single `React.element`, e.g. after a call to
   `Js.Array.map`
-- It's possible to define variables inside expression blocks
 
 ## Solutions
 
