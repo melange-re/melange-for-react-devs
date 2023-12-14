@@ -23,7 +23,7 @@ Js.log(bar);
 
 ## Melange Playground
 
-[Melange Playground](https://melange.re/v2.1.0/playground/) is an interactive
+[Melange Playground](https://melange.re/v2.2.0/playground/) is an interactive
 environment for running OCaml code and seeing its output. Paste this into the
 source code editor on the left side:
 
@@ -96,9 +96,9 @@ your friends! As you type in the source editor, it will store your code in the
 snippet we started with:
 
 <a
-href="https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off"
+href="https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off"
 target="_blank" rel="noreferrer
-noopener">https://melange.re/v2.1.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off</a>
+noopener">https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off</a>
 
 ## Comparison operators
 
@@ -175,7 +175,7 @@ Js.log(Js.typeof(foo)); // prints "number"
 Js.log(Js.typeof(bar)); // prints "number"
 ```
 
-Refer to the [Melange docs](https://melange.re/v2.1.0/communicate-with-javascript/#data-types-and-runtime-representation)
+Refer to the [Melange docs](https://melange.re/v2.2.0/communicate-with-javascript/#data-types-and-runtime-representation)
 for a complete rundown of how OCaml types get translated to JavaScript types.
 
 ## Widgets in the Playground
@@ -200,7 +200,7 @@ And then update the JSX in our `make` function to use the style objects in
 <<< Snippets.re#render-with-styles{1-2,5,8}
 
 
-Here's the [playground link](https://melange.re/v2.1.0/playground/?language=Reason&code=bW9kdWxlIFN0eWxlcyA9IHsKICBsZXQgbWFrZSA9IFJlYWN0RE9NU3R5bGUubWFrZTsKCiAgbGV0IHJvb3QgPQogICAgbWFrZSgKICAgICAgfmZvbnRTaXplPSIyZW0iLAogICAgICB%2BcGFkZGluZz0iMWVtIiwKICAgICAgfmRpc3BsYXk9ImZsZXgiLAogICAgICB%2BZ3JpZEdhcD0iMWVtIiwKICAgICAgfmFsaWduSXRlbXM9ImNlbnRlciIsCiAgICAgICgpLAogICAgKTsKCiAgbGV0IGJ1dHRvbiA9CiAgICBtYWtlKAogICAgICB%2BZm9udFNpemU9IjFlbSIsCiAgICAgIH5ib3JkZXI9IjFweCBzb2xpZCB3aGl0ZSIsCiAgICAgIH5ib3JkZXJSYWRpdXM9IjAuNWVtIiwKICAgICAgfnBhZGRpbmc9IjAuNWVtIiwKICAgICAgKCksCiAgICApOwoKICBsZXQgbnVtYmVyID0gbWFrZSh%2BbWluV2lkdGg9IjJlbSIsIH50ZXh0QWxpZ249ImNlbnRlciIsICgpKTsKfTsKCm1vZHVsZSBDb3VudGVyID0gewogIFtAcmVhY3QuY29tcG9uZW50XQogIGxldCBtYWtlID0gKCkgPT4gewogICAgbGV0IChjb3VudGVyLCBzZXRDb3VudGVyKSA9IFJlYWN0LnVzZVN0YXRlKCgpID0%2BIDApOwoKICAgIDxkaXYgc3R5bGU9U3R5bGVzLnJvb3Q%2BCiAgICAgIDxidXR0b24gc3R5bGU9U3R5bGVzLmJ1dHRvbiBvbkNsaWNrPXtfZXZ0ID0%2BIHNldENvdW50ZXIodiA9PiB2IC0gMSl9PgogICAgICAgIHtSZWFjdC5zdHJpbmcoIi0iKX0KICAgICAgPC9idXR0b24%2BCiAgICAgIDxzcGFuIHN0eWxlPVN0eWxlcy5udW1iZXI%2BCiAgICAgICAge2NvdW50ZXIgfD4gSW50LnRvX3N0cmluZyB8PiBSZWFjdC5zdHJpbmd9CiAgICAgIDwvc3Bhbj4KICAgICAgPGJ1dHRvbiBzdHlsZT1TdHlsZXMuYnV0dG9uIG9uQ2xpY2s9e19ldnQgPT4gc2V0Q291bnRlcih2ID0%2BIHYgKyAxKX0%2BCiAgICAgICAge1JlYWN0LnN0cmluZygiKyIpfQogICAgICA8L2J1dHRvbj4KICAgIDwvZGl2PjsKICB9Owp9OwoKc3dpdGNoIChSZWFjdERPTS5xdWVyeVNlbGVjdG9yKCIjcHJldmlldyIpKSB7CnwgTm9uZSA9PiBKcy5sb2coIkZhaWxlZCB0byBzdGFydCBSZWFjdDogY291bGRuJ3QgZmluZCB0aGUgI3ByZXZpZXcgZWxlbWVudCIpCnwgU29tZShyb290KSA9PiBSZWFjdERPTS5yZW5kZXIoPENvdW50ZXIgLz4sIHJvb3QpCn07Cg%3D%3D&live=on) for the fully-styled Counter component.
+Here's the [playground link](https://melange.re/v2.2.0/playground/?language=Reason&code=bW9kdWxlIFN0eWxlcyA9IHsKICBsZXQgbWFrZSA9IFJlYWN0RE9NU3R5bGUubWFrZTsKCiAgbGV0IHJvb3QgPQogICAgbWFrZSgKICAgICAgfmZvbnRTaXplPSIyZW0iLAogICAgICB%2BcGFkZGluZz0iMWVtIiwKICAgICAgfmRpc3BsYXk9ImZsZXgiLAogICAgICB%2BZ3JpZEdhcD0iMWVtIiwKICAgICAgfmFsaWduSXRlbXM9ImNlbnRlciIsCiAgICAgICgpLAogICAgKTsKCiAgbGV0IGJ1dHRvbiA9CiAgICBtYWtlKAogICAgICB%2BZm9udFNpemU9IjFlbSIsCiAgICAgIH5ib3JkZXI9IjFweCBzb2xpZCB3aGl0ZSIsCiAgICAgIH5ib3JkZXJSYWRpdXM9IjAuNWVtIiwKICAgICAgfnBhZGRpbmc9IjAuNWVtIiwKICAgICAgKCksCiAgICApOwoKICBsZXQgbnVtYmVyID0gbWFrZSh%2BbWluV2lkdGg9IjJlbSIsIH50ZXh0QWxpZ249ImNlbnRlciIsICgpKTsKfTsKCm1vZHVsZSBDb3VudGVyID0gewogIFtAcmVhY3QuY29tcG9uZW50XQogIGxldCBtYWtlID0gKCkgPT4gewogICAgbGV0IChjb3VudGVyLCBzZXRDb3VudGVyKSA9IFJlYWN0LnVzZVN0YXRlKCgpID0%2BIDApOwoKICAgIDxkaXYgc3R5bGU9U3R5bGVzLnJvb3Q%2BCiAgICAgIDxidXR0b24gc3R5bGU9U3R5bGVzLmJ1dHRvbiBvbkNsaWNrPXtfZXZ0ID0%2BIHNldENvdW50ZXIodiA9PiB2IC0gMSl9PgogICAgICAgIHtSZWFjdC5zdHJpbmcoIi0iKX0KICAgICAgPC9idXR0b24%2BCiAgICAgIDxzcGFuIHN0eWxlPVN0eWxlcy5udW1iZXI%2BCiAgICAgICAge2NvdW50ZXIgfD4gSW50LnRvX3N0cmluZyB8PiBSZWFjdC5zdHJpbmd9CiAgICAgIDwvc3Bhbj4KICAgICAgPGJ1dHRvbiBzdHlsZT1TdHlsZXMuYnV0dG9uIG9uQ2xpY2s9e19ldnQgPT4gc2V0Q291bnRlcih2ID0%2BIHYgKyAxKX0%2BCiAgICAgICAge1JlYWN0LnN0cmluZygiKyIpfQogICAgICA8L2J1dHRvbj4KICAgIDwvZGl2PjsKICB9Owp9OwoKc3dpdGNoIChSZWFjdERPTS5xdWVyeVNlbGVjdG9yKCIjcHJldmlldyIpKSB7CnwgTm9uZSA9PiBKcy5sb2coIkZhaWxlZCB0byBzdGFydCBSZWFjdDogY291bGRuJ3QgZmluZCB0aGUgI3ByZXZpZXcgZWxlbWVudCIpCnwgU29tZShyb290KSA9PiBSZWFjdERPTS5yZW5kZXIoPENvdW50ZXIgLz4sIHJvb3QpCn07Cg%3D%3D&live=on) for the fully-styled Counter component.
 
 -----
 
@@ -224,7 +224,7 @@ JavaScript representation of int64?
 
 <b>3.</b> How do you add two int64 values? Hint: Take a look at the standard
 library's
-[Int64 module](https://melange.re/v2.1.0/api/re/melange/Stdlib/Int64/index.html).
+[Int64 module](https://melange.re/v2.2.0/api/re/melange/Stdlib/Int64/index.html).
 
 ## Overview
 
