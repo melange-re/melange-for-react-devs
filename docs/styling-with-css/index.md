@@ -5,10 +5,10 @@ Madame Jellobutter insists that you make the widget less ugly before you do
 anything else. In previous chapters, we saw how to add styles using the `style`
 prop, but let's see how to do it with good old CSS.
 
-## Update webpack config
+## Update Webpack config
 
 In order to use CSS from our ReasonReact components, we'll install the
-`style-loader` and `css-loader` webpack plugins[^1]:
+`style-loader` and `css-loader` Webpack plugins[^1]:
 
 ```
 npm install --save-dev css-loader style-loader
@@ -62,7 +62,7 @@ Converter](/celsius-converter-exception/#solutions) chapter, with the difference
 that they won't handle Unicode correctly.
 
 Unfortunately, in the terminal where we're running `make serve`, we see this
-webpack compilation error:
+Webpack compilation error:
 
 ```
 ERROR in ./_build/default/src/order-confirmation/output/src/order-confirmation/Order.js 7:0-8:1
@@ -71,7 +71,7 @@ Module not found: Error: Can't resolve './order-item.css' in '~/melange-for-reac
 
 ## Tell Dune to copy CSS files
 
-The problem is that webpack is serving the app from the build directory at
+The problem is that Webpack is serving the app from the build directory at
 `_build/default/src/order-confirmation/output/src/order-confirmation`, and the
 `order-item.css` file isn't in the build directory.
 
@@ -270,7 +270,7 @@ declaration instead of `mel.raw`.
 ## Solutions
 
 <b>1.</b> Change the `%%mel.raw` to `%mel.raw` will cause a compile error in
-webpack because the generated JS code changes to
+Webpack because the generated JS code changes to
 
 ```
 ((import "./order.css"));

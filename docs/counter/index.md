@@ -8,7 +8,7 @@ We're going build the classic frontend starter app, the counter, using
 [melange-for-react-devs-template](https://github.com/melange-re/melange-for-react-devs-template)
 project
 1. Run `make watch` to start the Melange compiler in watch mode.
-1. In another terminal window, start the webpack dev server by running `make
+1. In another terminal window, start the Webpack dev server by running `make
 serve`. As a side effect, it will open a browser tab pointed to
 <a href="http://localhost:8080/" target="_blank" rel="noreferrer
 noopener">http://localhost:8080/</a>.
