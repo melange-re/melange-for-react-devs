@@ -54,10 +54,12 @@ line to the top of `Order.re`:
 [%%mel.raw {|import "./order-item.css"|}];
 ```
 
-The `{||}` string doesn't require you to escape characters like double-quote and
-newline. They are similar to the `{js||js}` strings we first saw in the [Celsius
-Converter](/celsius-converter-exception/#solutions) chapter, with the
-difference that they won't handle Unicode correctly.
+The `{||}` string literal is known as a [quoted
+string literal](https://v2.ocaml.org/manual/lex.html#sss:stringliterals), and it
+is used to represent strings of arbitrary content without escaping[^3]. They are
+similar to the `{js||js}` string literals we first saw in the [Celsius
+Converter](/celsius-converter-exception/#solutions) chapter, with the difference
+that they won't handle Unicode correctly.
 
 Unfortunately, in the terminal where we're running `make serve`, we see this
 webpack compilation error:
@@ -115,7 +117,7 @@ Now we can add the appropriate classes to `OrderItem.make`'s JSX:
 
 As well as `Order.make`'s JSX:
 
-<<< Order.re#make{6,13}
+<<< Order.re#order-make{6,13}
 
 Finally, add a `mel.raw` extension node at the top of `Order.re`:
 
@@ -208,7 +210,7 @@ There are three changes of note:
   `./order-item.module.css` to reflect the new name of the file
 - We rename the `_css` variable to `css`, since we intend to use the variable
   later
-- We change the type of `css` from `unit` to `Js.t({..})`[^3]
+- We change the type of `css` from `unit` to `Js.t({..})`[^4]
 
 If you look at your compiled app in the browser right now, you'll see that this
 change breaks the styles, because the classes defined in `order-item.module.css`
@@ -221,7 +223,7 @@ accesses the class names through the `css` variable:
 Recall that `##` is the access operator for `Js.t` objects, so
 `className=css##item` is equivalent to `className={css.item}` in JavaScript.
 Note that we also moved the `external` declaration for `./order-item.module.css`
-inside the `OrderComponent` module[^4], since that's the only place it's used.
+inside the `OrderComponent` module, since that's the only place it's used.
 
 We have not seen the last of `external` declarations, as they are the primary
 way in which OCaml interacts with code written in JavaScript. See the [Melange
@@ -317,6 +319,10 @@ repo](https://github.com/melange-re/melange-for-react-devs).
 [^2]: Recall that in the `Index` modules you've written so far, you've never had
     to import any of the components you used that were defined in other files.
 
-[^3]: ` Js.t({..})` is a `Js.t` object, which we [first
+[^3]: Quoted string literals are similar to [multiline string literals in
+    Python](https://ioflood.com/blog/python-multiline-string/). Inside a quoted
+    string literal, you don't need to escape double quote or newline characters.
+
+[^4]: ` Js.t({..})` is the type signature for a `Js.t` object, which we [first
     encountered](/celsius-converter-exception/#js-t-object) in the Celsius
     Converter chapter.

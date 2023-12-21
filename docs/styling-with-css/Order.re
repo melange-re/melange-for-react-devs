@@ -34,7 +34,7 @@ module OrderItem = {
 
 type t = array(Item.t);
 
-// #region make
+// #region order-make
 [@react.component]
 let make = (~items: t) => {
   let total =
@@ -54,7 +54,7 @@ let make = (~items: t) => {
     </tbody>
   </table>;
 };
-// #endregion make
+// #endregion order-make
 
 module OrderItemV2 = {
   // #region order-item-css
