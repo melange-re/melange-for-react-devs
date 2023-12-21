@@ -102,12 +102,15 @@ To ensure that `order.css` is also copied to the build directory, we can add
 (runtime_deps item.css order.css)
 ```
 
-If you have many `.css` files, you can just tell `runtime_deps` to copy all
-`.css` files over:
+If you have many `.css` files, you can tell `runtime_deps` to copy all `.css`
+files over using Dune's `glob_files` configuration:
 
 ```clj
 (runtime_deps (glob_files *.css))
 ```
+
+Check the Dune documentation for the [different options for
+globs](https://dune.readthedocs.io/en/stable/concepts/dependency-spec.html#glob).
 
 ## Add classes to JSX
 
