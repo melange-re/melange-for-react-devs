@@ -170,7 +170,7 @@ Let's break down the individual parts of the `external` declaration:
   [attribute](https://melange.re/v2.2.0/communicate-with-javascript/#attributes)
   that tells the `external` declaration which module to import from
 - The `external` keyword tells OCaml this is a declaration for a value defined
-  outside of OCaml, i.e. it comes from JavaScript
+  outside of OCaml, i.e. it comes from JavaScript[^4]
 - `_css: unit` means the object we get back from the import is named `_css` and
   has type `unit`. We put an underscore in front of the name because we don't
   intend to use this variable. Likewise, we give it a type of
@@ -210,7 +210,7 @@ There are three changes of note:
   `./order-item.module.css` to reflect the new name of the file
 - We rename the `_css` variable to `css`, since we intend to use the variable
   later
-- We change the type of `css` from `unit` to `Js.t({..})`[^4]
+- We change the type of `css` from `unit` to `Js.t({..})`[^5]
 
 If you look at your compiled app in the browser right now, you'll see that this
 change breaks the styles, because the classes defined in `order-item.module.css`
@@ -323,6 +323,9 @@ repo](https://github.com/melange-re/melange-for-react-devs).
     Python](https://ioflood.com/blog/python-multiline-string/). Inside a quoted
     string literal, you don't need to escape double quote or newline characters.
 
-[^4]: ` Js.t({..})` is the type signature for a `Js.t` object, which we [first
+[^4]: In native OCaml, `external` refers to functions and variables that come
+    from C.
+
+[^5]: ` Js.t({..})` is the type signature for a `Js.t` object, which we [first
     encountered](/celsius-converter-exception/#js-t-object) in the Celsius
     Converter chapter.
