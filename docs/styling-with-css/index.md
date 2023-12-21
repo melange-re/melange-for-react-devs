@@ -135,9 +135,6 @@ we change the `module_systems` field of the `melange.emit` stanza from `es6` to
 `commonjs`. This results in a subtle runtime error caused by the fact
 that CommonJS uses `require` instead of `import` to import modules.
 
-Another issue is that you can't easily use `mel.raw` extension nodes in
-submodules.
-
 The `mel.raw` extension node is unsafe, but it is still useful for prototyping.
 Fortunately, Melange provides an official and more reliable way to import
 frontend assets.
