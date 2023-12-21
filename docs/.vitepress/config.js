@@ -34,6 +34,7 @@ export default defineConfig({
           { text: 'Celsius Converter using Option', link: '/celsius-converter-option/' },
           { text: 'Introduction to Dune', link: '/intro-to-dune/' },
           { text: 'Order Confirmation', link: '/order-confirmation/' },
+          { text: 'Styling with CSS', link: '/styling-with-css/' },
         ]
       }
     ],
