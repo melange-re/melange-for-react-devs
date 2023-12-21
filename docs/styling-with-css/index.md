@@ -73,7 +73,7 @@ Module not found: Error: Can't resolve './order-item.css' in '~/melange-for-reac
 
 The problem is that Webpack is serving the app from the build directory at
 `_build/default/src/order-confirmation/output/src/order-confirmation`, and the
-`order-item.css` file isn't in the build directory.
+`order-item.css` file isn't in that build directory.
 
 To solve this, we can add the [runtime_deps
 field](https://melange.re/v2.1.0/build-system/#handling-assets) to our
@@ -269,7 +269,7 @@ declaration instead of `mel.raw`.
 
 ## Solutions
 
-<b>1.</b> Change the `%%mel.raw` to `%mel.raw` will cause a compile error in
+<b>1.</b> Changing `%%mel.raw` to `%mel.raw` will cause a compile error in
 Webpack because the generated JS code changes to
 
 ```
@@ -292,8 +292,8 @@ declaration, it should look something like this:
 
 <<< Order.re#order-external
 
-<b>3.</b> If you replace `mel.modlue` with `bs.module`, your code will continue
-to compile but you get a morning from Melange:
+<b>3.</b> If you replace `mel.module` with `bs.module`, your code will continue
+to compile but you get a warning from Melange:
 
 ```
 File "src/styling-with-css/Order.re", line 4, characters 4-13:
