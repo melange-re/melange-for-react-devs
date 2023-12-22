@@ -194,7 +194,7 @@ to the `external` declaration we just added.
 Right now, the classes defined in the CSS files we're importing are in the
 global scope. For non-trivial projects, it's better to use [CSS
 modules](https://css-tricks.com/css-modules-part-1-need/), which give us access
-to locally scoped classes.
+to locally-scoped classes[^5].
 
 First, rename `order-item.css` to `order-item.module.css`, which turns it into a
 CSS module. Then change the corresponding `external` declaration:
@@ -210,7 +210,7 @@ There are three changes of note:
   `./order-item.module.css` to reflect the new name of the file
 - We rename the `_css` variable to `css`, since we intend to use the variable
   later
-- We change the type of `css` from `unit` to `Js.t({..})`[^5]
+- We change the type of `css` from `unit` to `Js.t({..})`[^6]
 
 If you look at your compiled app in the browser right now, you'll see that this
 change breaks the styles, because the classes defined in `order-item.module.css`
@@ -261,11 +261,13 @@ declaration instead of `mel.raw`.
 
 ## Overview
 
-- The `mel.raw` extension node embeds raw JavaScript inside OCaml code. Use with
-  caution.
+- The `mel.raw` extension node embeds raw JavaScript inside OCaml code
+  - It isn't type-safe and you can usually use `external` instead
 - The `runtime_deps` field of `melange.emit` copies assets like `.css` files to
-  the build directory.
-- `external` declarations are used to import CSS or JS files.
+  the build directory
+  - The `glob_files` term can be used to copy all files of a certain type
+- `external` declarations are used to import CSS or JS files
+  - The `mel.module` attribute is used to specify which module or file to import
 
 ## Solutions
 
@@ -326,6 +328,11 @@ repo](https://github.com/melange-re/melange-for-react-devs).
 [^4]: In native OCaml, `external` refers to functions and variables that come
     from C.
 
-[^5]: ` Js.t({..})` is the type signature for a `Js.t` object, which we [first
+[^5]: The "local scoping" of CSS modules isn't quite like scoping in a
+    programming language. Instead, class names defined in a `.module.css` file
+    are obfuscated so that only OCaml/JS modules that import them directly can
+    use them.
+
+[^6]: ` Js.t({..})` is the type signature for a `Js.t` object, which we [first
     encountered](/celsius-converter-exception/#js-t-object) in the Celsius
     Converter chapter.
