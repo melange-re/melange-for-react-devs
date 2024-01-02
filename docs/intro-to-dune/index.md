@@ -138,7 +138,7 @@ contains:
 - `Index.re` to render the app to the DOM
 
   <<< @/../src/counter/Index.re
-- `Makefile` to serve the app using webpack dev server
+- `Makefile` to serve the app using Webpack dev server
 
   <<< @/../src/counter/Makefile{make}
 
@@ -202,7 +202,7 @@ use
 ./_build/default/src/$(app)/output/src/$(app)/Index.js
 ```
 
-This means that the entry script served by webpack dev server depends on the
+This means that the entry script served by Webpack dev server depends on the
 `app` environment variable, which is provided by `src/counter/Makefile`.
 
 You're now ready to run the new Counter app you created! Go into the
