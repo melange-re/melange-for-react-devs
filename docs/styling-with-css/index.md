@@ -132,12 +132,11 @@ Finally, add a `mel.raw` extension node at the top of `Order.re`:
 
 This solution works well for our current build configuration, but falls apart if
 we change the `module_systems` field of the `melange.emit` stanza from `es6` to
-`commonjs`. This results in a subtle runtime error caused by the fact
-that CommonJS uses `require` instead of `import` to import modules.
+`commonjs`. This results in a subtle runtime error caused by CommonJS needing
+`require` instead of `import` to import modules.
 
 The `mel.raw` extension node is unsafe, but it is still useful for prototyping.
-Fortunately, Melange provides an official and more reliable way to import
-frontend assets.
+Fortunately, Melange provides a more reliable way to import frontend assets.
 
 ## Import using `external`
 
