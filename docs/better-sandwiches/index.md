@@ -130,7 +130,7 @@ put shorter branches before longer branches:
 
 <<< Item.re#to-emoji-short-branch-first
 
-## `j` quoted string literal
+## `{j||j}` quoted string literal
 
 The approach using `Js.Array.joinWith` works, but readability could be improved
 by using a [quoted string literal with the quoted string identifier
@@ -138,12 +138,12 @@ by using a [quoted string literal with the quoted string identifier
 
 <<< Item.re#to-emoji-j-string-literal{5-13}
 
-`j` quoted string literals are similar to [template literals in
+`{j||j}` quoted string literals are similar to [template literals in
 JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
 except that they can only accept variables, not arbitrary expressions. Variables
-that appear in `j` quoted string literals are implicitly converted to strings,
-so they are not type safe and thus unsuitable for production code. See the
-[exercises at the end of this chapter](#exercises) for more details.
+that appear in `{j||j}` quoted string literals are implicitly converted to
+strings, so they are not type safe and thus unsuitable for production code. See
+the [exercises at the end of this chapter](#exercises) for more details.
 
 Also note that unlike switch expressions, the `fun` syntax does not accept
 multi-line expressions in branches unless you add `{}` around them.
@@ -166,7 +166,7 @@ function:
 
 <<< Item.re#to-emoji-sprintf
 
-Unlike `j` quoted string literals, `Printf.sprintf` will not do implicit string
+Unlike `{j||j}` quoted string literals, `Printf.sprintf` will not do implicit string
 conversion.
 
 ---
@@ -196,8 +196,8 @@ Use a `when` guard in the switch expression.
 
 :::
 
-<b>3.</b> The following program uses `j` quoted string literals and has a number
-of issues:
+<b>3.</b> The following program uses `{j||j}` quoted string literals and has a
+number of issues:
 
 ```reason
 let compute = (a, b) => (a +. 10.) /. b;
@@ -251,8 +251,8 @@ documentation](https://melange.re/v2.2.0/api/re/melange/Stdlib/Printf/index.html
 - A valid use of wildcards in switch expressions is when you want to silence
   compiler errors while you fill in the logic for new branches in switch
   expressions
-- `j` quoted string literals are similar to JavaScript's template literals, but
-  they are not type safe and should be avoided in production code
+- `{j||j}` quoted string literals are similar to JavaScript's template literals,
+  but they are not type safe and should be avoided in production code
 - `Print.sprintf` is a type-safe function for string interpolation
 
 ## Solutions
@@ -275,8 +275,9 @@ discount, `Item.toPrice` needs to be updated like so:
 Note that the `fun` syntax had to be abandoned, because the body of
 `Item.toPrice` now consists of more than just a switch expression.
 
-<b>3.</b> After replacing the `j` quoted string literals with `Printf.sprintf`
-and fixing the various issues, you might end up with something [like
+<b>3.</b> After replacing the `{j||j}` quoted string literals with
+`Printf.sprintf` and fixing the various issues, you might end up with something
+[like
 this](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKCJyZXN1bHQgdG8gMyBkZWNpbWFsIHBsYWNlcyA9ICUwLjNmIiwgY29tcHV0ZSg0MC4sIDQ3LikpLAopOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgZG9uJ3QgcHJpbnQgZnVuY3Rpb24KSnMubG9nKFByaW50Zi5zcHJpbnRmKCJhbm90aGVyIHJlc3VsdCA9ICVmIiwgY29tcHV0ZSg0NC4sIDQ5LikpKTsKCi8vIFJld3JpdGUgdXNpbmcgUHJpbnRmLnNwcmludGYgYW5kIHByaW50IHRoZSBpbmRpdmlkdWFsIGZpZWxkcyBvZiB0aGUgb2JqZWN0CmxldCBwbGF5ZXI6IEpzLnQoey4ufSkgPSB7CiAgIm5hbWUiOiAiV2lsYnVyIiwKICAvKiBib251czogdXNlIHRoZSBmbGFnIHRoYXQgbWFrZXMgbG9uZyBudW1iZXJzIG1vcmUgcmVhZGFibGUgKi8KICAibGV2ZWwiOiA5MDAxMjM0LAogICJpbW1vcnRhbCI6IGZhbHNlLAp9OwpKcy5sb2coCiAgUHJpbnRmLnNwcmludGYoCiAgICAiUGxheWVyOiBuYW1lPSVzLCBsZXZlbD0lI2QsIGltbW9ydGFsPSVCIiwKICAgIHBsYXllciMjbmFtZSwKICAgIHBsYXllciMjbGV2ZWwsCiAgICBwbGF5ZXIjI2ltbW9ydGFsLAogICksCik7Cg%3D%3D&live=off).
 
 -----
