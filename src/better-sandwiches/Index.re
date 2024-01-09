@@ -1,0 +1,24 @@
+module App = {
+  let items: Order.t = [|
+    Sandwich(Portabello),
+    Burger,
+    Sandwich(Unicorn),
+    Hotdog,
+    Sandwich(Ham),
+    Sandwich(Turducken),
+  |];
+
+  [@react.component]
+  let make = () =>
+    <div>
+      <h1> {React.string("Order confirmation")} </h1>
+      <Order items />
+    </div>;
+};
+
+let node = ReactDOM.querySelector("#root");
+switch (node) {
+| None =>
+  Js.Console.error("Failed to start React: couldn't find the #root element")
+| Some(root) => ReactDOM.render(<App />, root)
+};

@@ -35,6 +35,7 @@ export default defineConfig({
           { text: 'Introduction to Dune', link: '/intro-to-dune/' },
           { text: 'Order Confirmation', link: '/order-confirmation/' },
           { text: 'Styling with CSS', link: '/styling-with-css/' },
+          { text: 'Better Sandwiches', link: '/better-sandwiches/'},
         ]
       }
     ],
