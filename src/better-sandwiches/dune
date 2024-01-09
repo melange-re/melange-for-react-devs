@@ -3,4 +3,6 @@
  (libraries reason-react)
  (preprocess
   (pps melange.ppx reason-react-ppx))
- (module_systems es6))
+ (module_systems es6)
+ (runtime_deps
+  (glob_files *.css)))
