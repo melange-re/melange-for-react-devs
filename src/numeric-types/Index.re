@@ -1,6 +1,10 @@
 module App = {
   [@react.component]
-  let make = () => <Counter_Float />;
+  let make = () =>
+    <div>
+      <h1> {React.string("Counter using float")} </h1>
+      <Counter_Float />
+    </div>;
 };
 
 let node = ReactDOM.querySelector("#root");

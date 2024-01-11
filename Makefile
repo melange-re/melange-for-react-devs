@@ -1,10 +1,5 @@
 project_name = melange-for-react-devs
 
-# Set default value for app if it's not present
-ifndef app
-	app := counter
-endif
-
 DUNE = opam exec -- dune
 
 .DEFAULT_GOAL := help
@@ -40,11 +35,11 @@ build_verbose: ## Build the project
 
 .PHONY: serve
 serve: ## Serve an application using a local HTTP server
-	npx webpack serve --open --mode development --entry ./_build/default/src/$(app)/output/src/$(app)/Index.js
+	npx vite serve --open
 
 .PHONY: bundle
 bundle: ## Bundle the JavaScript application
-	npx webpack --mode production --entry ./_build/default/src/$(app)/output/src/$(app)/Index.js
+	npx vite build
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files

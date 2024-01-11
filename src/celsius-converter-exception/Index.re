@@ -1,6 +1,10 @@
 module App = {
   [@react.component]
-  let make = () => <CelsiusConverter />;
+  let make = () =>
+    <div>
+      <h1> {React.string("Celsius Converter")} </h1>
+      <CelsiusConverter />
+    </div>;
 };
 
 let node = ReactDOM.querySelector("#root");
