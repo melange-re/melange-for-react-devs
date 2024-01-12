@@ -2,9 +2,9 @@
 
 Depending on how you've been following along, you may have several components in
 your project. Since these components don't have much in common with each other,
-it makes sense to put them in separate, independent apps. To do that, we'll have
-to spend a little time with [Dune](https://dune.build/). Dune is a build system
-designed for OCaml projects, and it has many [useful
+it makes sense to put them in separate, independent single-page apps. To do
+that, we'll use [Dune](https://dune.build/), a build system designed for OCaml
+projects, with many [useful
 features](https://melange.re/v2.2.0/build-system/#features). For our purposes,
 the feature of primary interest is its [built-in support for
 Melange](https://dune.readthedocs.io/en/stable/melange.html).
@@ -98,30 +98,52 @@ give to `melange.emit` here are `target`, `libraries`, `preprocess`, and
 `module_systems`, which are ones that we need to use for pretty much every
 Melange project.
 
-A note about the `target` field: It is referenced in the `serve` npm script,
-whose command is
-
-```bash
-webpack serve --open --mode development --entry ./_build/default/output/Index.js
-```
-
-If you change the value of `target` to, say, `stuff`, the value of the `--entry`
-option must be changed to
+`melange.emit` tells Dune to compile `Index.re` in your root directory to
+`Index.js` somewhere in the `_build/default` directory. The specific location of
+`Index.js` depends on the location of the `dune` file and the value of
+`melange.emit`'s `target` field. Our `dune` file is in the root directory and
+`target`'s value is `output`, so the location of `Index.js` is
 
 ```
-./_build/default/stuff/Index.js
+_build/default/stuff/Index.js
+```
+
+If the `dune` file was in directory `foo/bar` and the value of `target` was
+`fructus`, the location of `Index.js` would be
+
+```
+_build/default/foo/bar/fructus/foo/bar/Index.js
+```
+
+We need to know the exact location of `Index.js` so that we can reference it in
+the `index.html` file in the root directory:
+
+```html{6}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Melange for React Developers</title>
+    <script type="module" src="./_build/default/output/Index.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
 ```
 
 For more details about where JavaScript output files end up in the build
 directory, see [JavaScript artifacts
 layout](https://melange.re/v2.2.0/build-system/#javascript-artifacts-layout).
 
-::: info
+::: tip
+
 In this dune file, we're only concerned with building JavaScript to run in the
 browser, but if we also wanted to build JavaScript to run on Node, we'd include
 another `melange.emit` stanza specifically for that. See
 [melange-opam-template](https://github.com/melange-re/melange-opam-template/blob/main/src/dune)
 for an example of building for Node.
+
 :::
 
 ## Counter app directory
@@ -138,9 +160,10 @@ contains:
 - `Index.re` to render the app to the DOM
 
   <<< @/../src/counter/Index.re
-- `Makefile` to serve the app using Webpack dev server
+- `index.html` is the page for your new app and tells Vite where to find
+  `Index.js`:
 
-  <<< @/../src/counter/Makefile{make}
+  <<< @/../src/counter/index.html
 
 After you've added those files, your `src/counter` directory should look like
 this:
@@ -150,80 +173,93 @@ src/counter
 ├─ Counter.re
 ├─ dune
 ├─ Index.re
-└─ Makefile
+└─ index.html
 ```
 
-## Why Makefile
+## Update root directory `index.html`
 
-You might be wondering why we're using a `Makefile` instead of adding another
-npm script. In OCaml projects, usage of [the Make build automation
-tool](https://en.wikipedia.org/wiki/Make_(software)) is common, and this
-includes Melange-related projects. So let's take a short detour to explain the
-`Makefile` we just added.
+Now that we've added `src/counter/index.html`, we don't need the root
+directory's `index.html` to render the Counter app. Instead, it can serve as an
+index page to link to all of our single-page apps. Change `index.html` to this:
 
-## Anatomy of Makefile
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Melange for React Developers</title>
+  </head>
+  <body>
+    <h1>Melange for React Developers</h1>
+    <ul>
+      <li>
+        <a href="src/counter/index.html">Counter</a>
+      </li>
+    </ul>
+  </body>
+</html>
+```
 
-In case you're not familiar with Make, here's a breakdown of
-`src/counter/Makefile`:
+Now run `make serve` to check that everything works as expected.
 
-<<< @/../src/counter/Makefile{make}
+## Why use Make?
 
-- There's only a single rule here, and its *target* is `serve`.
-- `.PHONY: serve` is used to indicate that `serve` is a [phony
-  target](https://makefiletutorial.com/#phony), meaning `serve` is not a file we
-  want to generate but just a label for an action. In a simple `Makefile` like
-  this one, declaring phony targets isn't strictly necessary.
-- The line under `serve:` is the *recipe*, basically the command that will be
-  executed when we run `make serve` at the command line.
-  - `app=counter` sets the `app` environment variable to `counter`,
-    which is the name of the directory this `Makefile` lives in
-  - The [-C
-    option](https://www.gnu.org/software/make/manual/html_node/Options-Summary.html)
-    tells Make to change the directory before reading the `Makefile`. In effect,
-    it means we're running the `serve` rule in the root directory's `Makefile`.
+By now you might have noticed that even though Dune is used to build your
+project, we never execute Dune directly, but instead always go through
+[Make](https://en.wikipedia.org/wiki/Make_(software)). One reason is that the
+commands for Dune can occasionally be verbose, but the other reason is that Make
+is a very good task runner. For example, here are some advantages it has over
+`npm run`:
 
-## Root directory `Makefile`
+- You can add comments!
+- It's trivial to create tasks with multiple commands
+- Running `make` lists all the rules inside the `Makefile` (achieved with a few
+  lines of boilerplate)
 
-Currently, the `serve` rule in root directory's `Makefile` can only run the app
-in the root directory. We want it to be able to run the app in `src/counter`,
-so we need to change it:
+## Modifying the `serve` rule
+
+Right now the project is still using `npm run` to serve the app, but let's
+migrate it fully to Make. First, take a look at the `serve` rule inside the
+`Makefile`:
 
 ```make
 .PHONY: serve
 serve: ## Serve the application with a local HTTP server
-	npx webpack serve --open --mode development --entry ./_build/default/src/$(app)/output/src/$(app)/Index.js
+	npm run serve
 ```
 
-We basically copied the `serve` npm command from `package.json` to create the
-recipe for this rule, but instead of a fixed value for the `--entry` option, we
-use
+A breakdown of this rule:
 
+- `.PHONY: serve` tells Make that the `serve` rule is a [phony
+  target](https://makefiletutorial.com/#phony), meaning `serve` is not a file we
+  want to generate but just a label for an action. Note that declaring phony
+  targets is optional.
+- The name of the rule is `serve`, and it's followed immediately by a comment
+  (denoted by whatever follows `#`) explaining its purpose.
+- Underneath the rule's name is its *recipe*, basically the command(s) that will
+  be executed when we run `make serve` at the command line. Here it just runs
+  `npm run serve`.
+
+There's no particular reason to rely on `npm run`, so change the `Makefile`'s
+`serve` rule to:
+
+```make{3}
+.PHONY: serve
+serve: ## Serve the application with a local HTTP server
+	npx vite serve --open
 ```
-./_build/default/src/$(app)/output/src/$(app)/Index.js
-```
 
-This means that the entry script served by Webpack dev server depends on the
-`app` environment variable, which is provided by `src/counter/Makefile`.
+Run `make serve` again to verify that it does the same thing as before.
 
-You're now ready to run the new Counter app you created! Go into the
-`src/counter` directory and run
+::: tip
 
-```
-make serve
-```
+Feel free to do a little cleanup before moving on:
 
-It should open a new tab in your default browser to <a
-href="http://localhost:8080/" target="_blank" rel="noreferrer
-noopener">http://localhost:8080/</a> and display your Counter component.
+- Delete the `scripts` section of `package.json`
+- Delete the `Index.re` file in the root directory
+- Delete the `melange.emit` stanza from the root directory's `dune` file
 
-## Cleanup
-
-Feel to delete the `Index.re` file in the root directory. You won't need it
-anymore for this or later chapters. You can also delete:
-
-- The `scripts` section of your`package.json` file
-- The `melange.emit` stanza from the `dune` file in the root directory
-
+:::
 
 ## Rationale for monorepo structure
 
@@ -247,8 +283,8 @@ great advice if your repo only contains a single app!
 
 -----
 
-Huzzah! You created a new `dune` file to build an app and a `Makefile` to serve
-that app locally. In future chapters, we assume that you will use the same
+Huzzah! You created a new `dune` file to build an app and created an index page
+for all your apps. In future chapters, we assume that you will use the same
 directory structure for each new app you build.
 
 ## Exercises
@@ -274,15 +310,26 @@ recipe with four spaces?
   - Which directories to include and which to exclude
   - Which directories contain code that should be transpiled to JavaScript,
     using the `melange.emit` stanza
-- Make is a build automation tool commonly used in the OCaml world
-  - `Makefile`s contain rules which can run commands based on the target you
+- Make is a great way to run project-related tasks
+  - A `Makefile` contains rules which can run commands based on the target you
     pass to the `make` command
 
 ## Solutions
 
 <b>1.</b> Creating a separate app for Celsius Converter, with its own `dune`,
-`Makefile`, and `Index.re` files, should look something like
+`Index.re`, and `index.html` files, should look something like
 [this](https://github.com/melange-re/melange-for-react-devs/tree/main/src/celsius-converter-option).
+For ease of navigation, you should also update `index.html` in the root
+directory:
+
+```html{4-6}
+<li>
+  <a href="src/counter/index.html">Counter</a>
+</li>
+<li>
+  <a href="src/celsius-converter-exception/index.html">Celsius Converter</a>
+</li>
+```
 
 <b>2.</b> Deleting `reason-react-ppx` from `src/counter/dune` will result in a
 compilation error:
@@ -321,8 +368,8 @@ repo](https://github.com/melange-re/melange-for-react-devs):
   project](https://github.com/melange-re/melange-for-react-devs/tree/main/src/celsius-converter-option)
 
 [^1]: The full list of files we'd need to create for every project would
-    actually be `dune-project`, `.opam`, `package.json`, `public/index.html`,
-    and `webpack.config.js`.
+    actually be `dune-project`, `.opam`, `package.json`, `index.html`,
+    and `vite.config.js`.
 
 [^2]: More details about how JSX gets translated can be found
     [here](https://reasonml.github.io/docs/en/jsx#uncapitalized-tag) and

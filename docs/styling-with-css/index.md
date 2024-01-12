@@ -5,34 +5,6 @@ Madame Jellobutter insists that you make the widget less ugly before you do
 anything else. In previous chapters, we saw how to add styles using the `style`
 prop, but let's see how to do it with good old CSS.
 
-## Update Webpack config
-
-In order to use CSS from our ReasonReact components, we'll install the
-`style-loader` and `css-loader` Webpack plugins[^1]:
-
-```
-npm install --save-dev css-loader style-loader
-```
-
-Add a new rule to `webpack.config.js` so that these plugins will be applied to
-your `.css` files:
-
-```javascript{5-12}
-module.exports = {
-  devServer: {
-    historyApiFallback: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-    ],
-  },
-};
-```
-
 ## Add the first CSS file
 
 Add a new file

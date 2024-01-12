@@ -12,14 +12,20 @@ same directory structure as we showed you in the previous chapter:
 src/order-confirmation
 ├─ dune
 ├─ Index.re
-├─ Makefile
-└─ Item.re
+├─ Item.re
+└─ index.html
 ```
 
-The `dune` file can be copied from any of the existing projects. The `Makefile`
-can also be copied over, but remember to update the value of the `app`
-environment variable to `order-confirmation`. The `.re` files can be empty for
-now.
+The `dune` file can be copied from any of the existing projects. The
+`index.html` file can also be copied over, but remember to update the value of
+the `script` element's `src` attribute to point to the new location of
+`Index.js`:
+
+```
+../../_build/default/src/order-confirmation/output/src/order-confirmation/Index.js
+```
+
+The `.re` files can be empty for now.
 
 ## Variant type `Item.t`
 
