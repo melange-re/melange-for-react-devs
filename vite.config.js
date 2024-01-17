@@ -9,11 +9,4 @@ export default defineConfig({
       ignored: ['**/_opam']
     }
   },
-  build: {
-    rollupOptions: {
-      input: {
-        better_sandwiches: resolve(__dirname, 'src/better-sandwiches/index.html'),
-      },
-    },
-  },
 });
