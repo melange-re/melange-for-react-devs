@@ -140,34 +140,29 @@ by using a [quoted string literal with the quoted string identifier
 
 `{j||j}` quoted string literals are similar to [template literals in
 JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals)
-except that they can only accept variables, not arbitrary expressions. Variables
-that appear in `{j||j}` quoted string literals are implicitly converted to
-strings, so they are not type safe and thus unsuitable for production code. See
-the [exercises at the end of this chapter](#exercises) for more details.
+except that they can only accept variables, not arbitrary expressions.
 
 Also note that unlike switch expressions, the `fun` syntax does not accept
 multi-line expressions in branches unless you add `{}` around them.
 
-::: warning
-
-If you need to make a string literal that contains Unicode characters, use
-`{js||js}`. You may be tempted to use `{j||j}` because it also supports Unicode
-characters and it saves some keystrokes, but as explained above, it isn't
-type-safe and is therefore less future-proof.
-
-:::
-
 ## `Printf.sprintf`
 
-The OCaml standard library provides a type-safe way to do string interpolation
-in the form of the
+The OCaml standard library also provides a type-safe way to do string
+interpolation in the form of the
 [Printf.sprintf](https://melange.re/v2.2.0/api/re/melange/Stdlib/Printf/index.html#val-sprintf)
 function:
 
 <<< Item.re#to-emoji-sprintf
 
-Unlike `{j||j}` quoted string literals, `Printf.sprintf` will not do implicit
-string conversion.
+`Printf.sprintf` has a couple of advantages over `{j||j}` quoted string
+literals:
+
+- Since it's just a function, you can pass expressions into it
+- It supports [conversion
+  specifications](https://melange.re/v2.2.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
+  like `%s`, `%i`, `%d`, etc which concisely handle basic string conversion
+  logic for all primitive data types. This can often make your code shorter and
+  easier to understand.
 
 ## Bundling
 
@@ -212,8 +207,8 @@ dist/assets/order_confirmation-2_8a7RSk.js   190.13 kB │ gzip: 57.85 kB
 ```
 
 You can see that the JS bundle for the Order Confirmation app is 190 kB. If you
-change `Item.toEmoji` back to use `Js.Array.joinWith`, the bundle size will be
-144 kB, about 46 kB smaller.
+change `Item.toEmoji` back to use a `{j||j}` quoted string literal, the bundle
+size will be 144 kB, about 46 kB smaller.
 
 ---
 
@@ -223,7 +218,7 @@ In the next chapter, we'll see how to expand the options for burgers.
 ## Exercises
 
 <b>1.</b> Madame Jellobutter wants to add another type of sandwich and she's
-asked you for your input. Give it an appropriate price and find the most
+letting you decide what it is. Give it an appropriate price and find the most
 suitable emoji(s) for it.
 
 <b>2.</b> Change the logic of `Item.toPrice` so that the new sandwich you just
@@ -242,46 +237,38 @@ Use a `when` guard in the switch expression.
 
 :::
 
-<b>3.</b> The following program uses `{j||j}` quoted string literals and has a
-number of issues:
+<b>3.</b> The following program uses `{j||j}` quoted string literals for string
+interpolation:
 
 ```reason
 let compute = (a, b) => (a +. 10.) /. b;
 
 // Rewrite using Printf.sprintf, limit result to 3 decimal places
-let result = compute(40., 47.);
+let result = compute(40., 47.) |> string_of_float;
 Js.log({j|result to 3 decimal places = $(result)|j});
 
-// Rewrite using Printf.sprintf, don't print function
-let result = compute(44. /* oops, forgot the second argument */);
-Js.log({j|another result = $(result)|j});
-
-// Rewrite using Printf.sprintf and print the individual fields of the object
+// Rewrite using Printf.sprintf
 let player: Js.t({..}) = {
   "name": "Wilbur",
-  /* bonus: use the flag that makes long numbers more readable */
   "level": 9001234,
   "immortal": false,
 };
-Js.log({j|Player: $(player)|j});
-```
-
-Currently, it prints:
-
-```
-result to 3 decimal places = 1.0638297872340425
-another result = function result$1(param) { return compute(44, param); }
-Player: [object Object]
+{
+  let name = player##name;
+  // bonus: use the flag that makes long numbers more readable
+  let level = player##level |> string_of_int;
+  let immortal = player##immortal |> string_of_bool;
+  Js.log({j|Player: name=$(name), level=$(level), immortal=$(immortal)|j});
+};
 ```
 
 Use `Printf.sprintf` instead and improve the program as suggested by the
 comments. You can edit the program interactively in [Melange
-Playground](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKbGV0IHJlc3VsdCA9IGNvbXB1dGUoNDAuLCA0Ny4pOwpKcy5sb2coe2p8cmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMgPSAkKHJlc3VsdCl8an0pOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgZG9uJ3QgcHJpbnQgZnVuY3Rpb24KbGV0IHJlc3VsdCA9IGNvbXB1dGUoNDQuIC8qIG9vcHMsIGZvcmdvdCB0aGUgc2Vjb25kIGFyZ3VtZW50ICovKTsKSnMubG9nKHtqfGFub3RoZXIgcmVzdWx0ID0gJChyZXN1bHQpfGp9KTsKCi8vIFJld3JpdGUgdXNpbmcgUHJpbnRmLnNwcmludGYgYW5kIHByaW50IHRoZSBpbmRpdmlkdWFsIGZpZWxkcyBvZiB0aGUgb2JqZWN0CmxldCBwbGF5ZXI6IEpzLnQoey4ufSkgPSB7CiAgIm5hbWUiOiAiV2lsYnVyIiwKICAvKiBib251czogdXNlIHRoZSBmbGFnIHRoYXQgbWFrZXMgbG9uZyBudW1iZXJzIG1vcmUgcmVhZGFibGUgKi8KICAibGV2ZWwiOiA5MDAxMjM0LAogICJpbW1vcnRhbCI6IGZhbHNlLAp9OwpKcy5sb2coe2p8UGxheWVyOiAkKHBsYXllcil8an0pOw%3D%3D&live=off).
+Playground](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKbGV0IHJlc3VsdCA9IGNvbXB1dGUoNDAuLCA0Ny4pIHw%2BIHN0cmluZ19vZl9mbG9hdDsKSnMubG9nKHtqfHJlc3VsdCB0byAzIGRlY2ltYWwgcGxhY2VzID0gJChyZXN1bHQpfGp9KTsKCi8vIFJld3JpdGUgdXNpbmcgUHJpbnRmLnNwcmludGYKbGV0IHBsYXllcjogSnMudCh7Li59KSA9IHsKICAibmFtZSI6ICJXaWxidXIiLAogICJsZXZlbCI6IDkwMDEyMzQsCiAgImltbW9ydGFsIjogZmFsc2UsCn07CnsKICBsZXQgbmFtZSA9IHBsYXllciMjbmFtZTsKICAvLyBib251czogdXNlIHRoZSBmbGFnIHRoYXQgbWFrZXMgbG9uZyBudW1iZXJzIG1vcmUgcmVhZGFibGUKICBsZXQgbGV2ZWwgPSBwbGF5ZXIjI2xldmVsIHw%2BIHN0cmluZ19vZl9pbnQ7IAogIGxldCBpbW1vcnRhbCA9IHBsYXllciMjaW1tb3J0YWwgfD4gc3RyaW5nX29mX2Jvb2w7CiAgSnMubG9nKHtqfFBsYXllcjogbmFtZT0kKG5hbWUpLCBsZXZlbD0kKGxldmVsKSwgaW1tb3J0YWw9JChpbW1vcnRhbCl8an0pOwp9Owo%3D&live=off).
 
 ::: details Hint
 
-You will have to make use of conversion specifications like `%s`. Consult the
-[conversion specification
+Consult the [conversion specification
 documentation](https://melange.re/v2.2.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf).
 
 :::
@@ -324,9 +311,8 @@ Note that the `fun` syntax had to be abandoned, because the body of
 `Item.toPrice` now consists of more than just a switch expression.
 
 <b>3.</b> After replacing the `{j||j}` quoted string literals with
-`Printf.sprintf` and fixing the various issues, you might end up with something
-[like
-this](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKCJyZXN1bHQgdG8gMyBkZWNpbWFsIHBsYWNlcyA9ICUwLjNmIiwgY29tcHV0ZSg0MC4sIDQ3LikpLAopOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgZG9uJ3QgcHJpbnQgZnVuY3Rpb24KSnMubG9nKFByaW50Zi5zcHJpbnRmKCJhbm90aGVyIHJlc3VsdCA9ICVmIiwgY29tcHV0ZSg0NC4sIDQ5LikpKTsKCi8vIFJld3JpdGUgdXNpbmcgUHJpbnRmLnNwcmludGYgYW5kIHByaW50IHRoZSBpbmRpdmlkdWFsIGZpZWxkcyBvZiB0aGUgb2JqZWN0CmxldCBwbGF5ZXI6IEpzLnQoey4ufSkgPSB7CiAgIm5hbWUiOiAiV2lsYnVyIiwKICAvKiBib251czogdXNlIHRoZSBmbGFnIHRoYXQgbWFrZXMgbG9uZyBudW1iZXJzIG1vcmUgcmVhZGFibGUgKi8KICAibGV2ZWwiOiA5MDAxMjM0LAogICJpbW1vcnRhbCI6IGZhbHNlLAp9OwpKcy5sb2coCiAgUHJpbnRmLnNwcmludGYoCiAgICAiUGxheWVyOiBuYW1lPSVzLCBsZXZlbD0lI2QsIGltbW9ydGFsPSVCIiwKICAgIHBsYXllciMjbmFtZSwKICAgIHBsYXllciMjbGV2ZWwsCiAgICBwbGF5ZXIjI2ltbW9ydGFsLAogICksCik7Cg%3D%3D&live=off).
+`Printf.sprintf` and improving it a bit, you might end up with something [like
+this](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKCJyZXN1bHQgdG8gMyBkZWNpbWFsIHBsYWNlcyA9ICUwLjNmIiwgY29tcHV0ZSg0MC4sIDQ3LikpLAopOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZgpsZXQgcGxheWVyOiBKcy50KHsuLn0pID0gewogICJuYW1lIjogIldpbGJ1ciIsCiAgImxldmVsIjogOTAwMTIzNCwKICAiaW1tb3J0YWwiOiBmYWxzZSwKfTsKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKAogICAgIlBsYXllcjogbmFtZT0lcywgbGV2ZWw9JSNkLCBpbW1vcnRhbD0lQiIsCiAgICBwbGF5ZXIjI25hbWUsCiAgICBwbGF5ZXIjI2xldmVsLAogICAgcGxheWVyIyNpbW1vcnRhbCwKICApLAopOwo%3D&live=off).
 
 -----
 
