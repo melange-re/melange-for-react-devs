@@ -2,6 +2,7 @@ module App = {
   [@react.component]
   let make = () =>
     <div>
+      <h1> {React.string("Celsius Converter using Option")} </h1>
       <CelsiusConverter />
       <h2> {React.string("Using Float.fromString")} </h2>
       <CelsiusConverter_FloatFromString />

@@ -5,34 +5,6 @@ Madame Jellobutter insists that you make the widget less ugly before you do
 anything else. In previous chapters, we saw how to add styles using the `style`
 prop, but let's see how to do it with good old CSS.
 
-## Update Webpack config
-
-In order to use CSS from our ReasonReact components, we'll install the
-`style-loader` and `css-loader` Webpack plugins[^1]:
-
-```
-npm install --save-dev css-loader style-loader
-```
-
-Add a new rule to `webpack.config.js` so that these plugins will be applied to
-your `.css` files:
-
-```javascript{5-12}
-module.exports = {
-  devServer: {
-    historyApiFallback: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-    ],
-  },
-};
-```
-
 ## Add the first CSS file
 
 Add a new file
@@ -62,16 +34,21 @@ Converter](/celsius-converter-exception/#solutions) chapter, with the difference
 that they won't handle Unicode correctly.
 
 Unfortunately, in the terminal where we're running `make serve`, we see this
-Webpack compilation error:
+Vite compilation error:
 
 ```
-ERROR in ./_build/default/src/order-confirmation/output/src/order-confirmation/Order.js 7:0-8:1
-Module not found: Error: Can't resolve './order-item.css' in '~/melange-for-react-devs/_build/default/src/order-confirmation/output/src/order-confirmation'
+6:05:39 PM [vite] Pre-transform error:
+Failed to load url /_build/default/src/styling-with-css/output/src/styling-with-css/order-item.module.css
+(resolved id:
+~/melange-for-react-devs/_build/default/src/styling-with-css/output/src/styling-with-css/order-item.module.css)
+in
+~/melange-for-react-devs/_build/default/src/styling-with-css/output/src/styling-with-css/Order.js.
+Does the file exist?
 ```
 
 ## Tell Dune to copy CSS files
 
-The problem is that Webpack is serving the app from the build directory at
+The problem is that Vite is serving the app from the build directory at
 `_build/default/src/order-confirmation/output/src/order-confirmation`, and the
 `order-item.css` file isn't in that build directory.
 
@@ -270,8 +247,8 @@ declaration instead of `mel.raw`.
 
 ## Solutions
 
-<b>1.</b> Changing `%%mel.raw` to `%mel.raw` will cause a compile error in
-Webpack because the generated JS code changes to
+<b>1.</b> Changing `%%mel.raw` to `%mel.raw` will cause a compilation error in
+Vite because the generated JS code changes to
 
 ```
 ((import "./order.css"));

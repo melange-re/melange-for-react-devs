@@ -1,6 +1,7 @@
 module App = {
   [@react.component]
-  let make = () => <Counter />;
+  let make = () =>
+    <div> <h1> {React.string("Counter")} </h1> <Counter /> </div>;
 };
 
 let node = ReactDOM.querySelector("#root");
