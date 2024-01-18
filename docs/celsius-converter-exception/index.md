@@ -157,6 +157,13 @@ single expression:
 This compiles, but it now contains a hidden bug. Do you know what silent error
 might occur?
 
+::: details Hint
+
+The `getValueFromEvent` function is not being invoked in the same scope as
+before.
+
+:::
+
 <b>3.</b> It's possible to use partial application with most functions in OCaml,
 even operators. Take a look at the following program:
 
@@ -171,11 +178,16 @@ What do you think it outputs? Run it in [Melange
 Playground](https://melange.re/v2.2.0/playground) to confirm your hypothesis.
 
 <b>4.</b> Use the pipe last operator (`|>`) and partial application to write a
-function that takes an integer
-argument `x`, subtracts `x` from 10, and converts that result to binary. Hint:
+function that takes an integer argument `x`, subtracts `x` from 10, and converts
+that result to binary.
+
+::: details Hint
+
 Use the
 [Js.Int.toStringWithRadix](https://melange.re/v2.2.0/api/re/melange/Js/Int/#val-toStringWithRadix)
 function.
+
+:::
 
 ## Overview
 
@@ -200,8 +212,10 @@ correctly](https://melange.re/v2.2.0/communicate-with-javascript/#strings), so
 any string that contains non-ASCII text must be delimited using `{js||js}`.
 
 ::: tip
-Note that quoted string literals using the `js` identifier are specific to
-Melange and are not available in native OCaml.
+
+Note that `{js||js}` quoted string literals are specific to Melange and are not
+available in native OCaml.
+
 :::
 
 <b>2.</b> Rewriting `onChange` the handler to use a single expression creates a

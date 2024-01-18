@@ -122,11 +122,24 @@ future chapters we'll create more complex and interesting components.
 
 ## Exercises
 
-<b>1.</b> There aren't any runtime errors in our app right now. But what happens
-if you try to remove the `| None` branch of the `switch (node)` expression?
+<b>1.</b> What happens if you try to remove the `| None` branch of the
+`switch (node)` expression in `Index.re`?
+
+```reason
+let node = ReactDOM.querySelector("#root");
+switch (node) {
+| Some(root) => ReactDOM.render(<App />, root)
+| None => // [!code --]
+  Js.Console.error("Failed to start React: couldn't find the #root element") // [!code --]
+};
+```
 
 <b>2.</b> What happens if you rename the `_evt` variable inside the button
 callback to `evt`?
+
+```reason
+<button onClick={evt => setCounter(v => v - 1)}>
+```
 
 <b>3.</b> Comment out the `[@react.component]` attribute in `Counter.re`. What
 happens?
@@ -161,8 +174,8 @@ to ship your app. This is part of what makes OCaml such a type-safe language.
 Error (warning 27 [unused-var-strict]): unused variable evt.
 ```
 
-OCaml wants you to use all the variables you declare, unless they begin with
-`_` (underscore).
+By default, OCaml wants you to use all the variables you declare, unless they
+begin with `_` (underscore).
 
 <b>3.</b> Commenting out `[@react.component]` in `Counter.re` will trigger a
 compilation error in `Index.re`, at the place where `Counter` component is used:

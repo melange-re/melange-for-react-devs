@@ -222,9 +222,14 @@ Js.log(baz);
 Note the use of underscores to make the large number more readable. What is the
 JavaScript representation of int64?
 
-<b>3.</b> How do you add two int64 values? Hint: Take a look at the standard
-library's
-[Int64 module](https://melange.re/v2.2.0/api/re/melange/Stdlib/Int64/index.html).
+<b>3.</b> How do you add two int64 values?
+
+::: details Hint
+
+Take a look at the standard library's [Int64
+module](https://melange.re/v2.2.0/api/re/melange/Stdlib/Int64/index.html).
+
+:::
 
 ## Overview
 

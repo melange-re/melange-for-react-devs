@@ -283,6 +283,12 @@ don't expect it to be used anywhere else (items rendered in a menu component
 would look different). Rename it to `OrderItem` and move it inside the `Order`
 module.
 
+::: details Hint
+
+Create a submodule inside `Order.re`
+
+:::
+
 <b>2.</b> Add another constructor to `Item.t` variant type. Update the `Item`
 module's helper functions to get your program to compile again.
 
@@ -290,6 +296,12 @@ module's helper functions to get your program to compile again.
 Js.Float.toFixedWithPrecision(~digits=2)
 |> React.string`, add a helper function `Format.currency` that does
 the same thing.
+
+::: details Hint
+
+Create a new file named `Format.re`.
+
+:::
 
 ## Overview
 

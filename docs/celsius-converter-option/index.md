@@ -138,15 +138,29 @@ system](https://melange.re/v2.2.0/build-system/) used by Melange.
 
 <b>1.</b> If you enter a space in the input, it'll unintuitively produce a
 Fahrenheit value of 32.00 degrees (because `float_of_string_opt(" ") ==
-Some(0.)`). Handle this case correctly by showing "? °F" instead. Hint: Use the
-`String.trim` function.
+Some(0.)`). Handle this case correctly by showing "? °F" instead.
+
+::: details Hint
+
+Use the `String.trim` function.
+
+:::
 
 <b>2.</b> Add another branch with a `when` guard that renders "Unreasonably
 cold🥶" if the temperature is less than -128.6°F (the lowest temperature
 ever recorded on Earth).
 
-<b>3.</b> Use `Js.Float.fromString` instead of `float_of_string_opt` to parse a
-string to float. Hint: Use `Js.Float.isNaN`.
+<b>3.</b> Use
+[Js.Float.fromString](https://melange.re/v2.2.0/api/re/melange/Js/Float/#val-fromString)
+instead of `float_of_string_opt` to parse a string to float. Note that
+`Js.Float.fromString` does not return `None` if it fails to parse a string to a
+valid float.
+
+::: details Hint
+
+Use [Js.Float.isNaN](https://melange.re/v2.2.0/api/re/melange/Js/Float/#val-isNaN).
+
+:::
 
 ## Overview
 
