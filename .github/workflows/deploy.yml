@@ -29,14 +29,23 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Not needed if lastUpdated is not enabled
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: npm
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-      - name: Install dependencies
+      - uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: 5.1.1
+      - name: Install all deps
+        run: make install
+      - name: Format check
+        run: make format-check
+      - name: Bundle the demo app
+        run: make bundle
+      - name: Install dependencies for VitePress
         run: |
           cd docs
           npm ci
@@ -44,6 +53,8 @@ jobs:
         run: |
           cd docs
           npm run docs:build
+      - name: Move demo site into docs dir
+        run: mv dist docs/.vitepress/dist/demo
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:

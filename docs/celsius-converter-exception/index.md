@@ -239,10 +239,11 @@ in the [ReasonReact](https://reasonml.github.io/reason-react/) docs.
 
 -----
 
-[Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/celsius-converter-exception/)
-can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs).
+View [source
+code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/celsius-converter-exception/)
+and [demo](https://react-book.melange.re/demo/src/celsius-converter-exception/) for this chapter.
+
+-----
 
 [^1]:
     See [Using Js.t

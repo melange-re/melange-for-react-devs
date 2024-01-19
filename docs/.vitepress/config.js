@@ -10,12 +10,13 @@ export default defineConfig({
   title: "Melange for React Devs",
   description: "A project-based, guided introduction to Melange and its ecosystem for React developers",
   base: '/',
+  lastUpdated: true,
   themeConfig: {
     search: {
       provider: 'local'
     },
     editLink: {
-      pattern: 'https://github.com/melange-re/melange-for-react-devs/edit/develop/docs/:path'
+      pattern: 'https://github.com/melange-re/melange-for-react-devs/edit/main/docs/:path'
     },
     nav: [
       { text: 'Home', link: '/' },
@@ -35,7 +36,7 @@ export default defineConfig({
           { text: 'Introduction to Dune', link: '/intro-to-dune/' },
           { text: 'Order Confirmation', link: '/order-confirmation/' },
           { text: 'Styling with CSS', link: '/styling-with-css/' },
-          { text: 'Better Sandwiches', link: '/better-sandwiches/'},
+          { text: 'Better Sandwiches', link: '/better-sandwiches/' },
         ]
       }
     ],
