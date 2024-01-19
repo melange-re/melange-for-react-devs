@@ -358,10 +358,11 @@ Then we can use that function like this:
 
 -----
 
-[Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/order-confirmation/)
-can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs).
+View [source
+code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/order-confirmation/)
+and [demo](https://react-book.melange.re/demo/src/order-confirmation/) for this chapter.
+
+-----
 
 [^1]: Variant types have no equivalent in JavaScript, but they are similar to
     TypeScript's [union

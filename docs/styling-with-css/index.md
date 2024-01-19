@@ -286,10 +286,11 @@ decent amount of code out in the wild that uses `bs.module`.
 
 -----
 
-[Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/styling-with-css/)
-can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs).
+View [source
+code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/styling-with-css/)
+and [demo](https://react-book.melange.re/demo/src/styling-with-css/) for this chapter.
+
+-----
 
 [^1]: The `css-loader` plugin allows you to import CSS files and the
     `style-loader` plugin injects imported CSS into the DOM.

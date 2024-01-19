@@ -359,13 +359,15 @@ character instead of space characters.
 
 -----
 
-Source code for this chapter can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs):
+Source code for this chapter:
 
+- [`src` folder containing all projects](https://github.com/melange-re/melange-for-react-devs/tree/main/src)
 - [Counter
   project](https://github.com/melange-re/melange-for-react-devs/tree/main/src/counter)
 - [Celsius Converter
   project](https://github.com/melange-re/melange-for-react-devs/tree/main/src/celsius-converter-option)
+
+-----
 
 [^1]: The full list of files we'd need to create for every project would
     actually be `dune-project`, `.opam`, `package.json`, `index.html`,

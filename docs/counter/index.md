@@ -194,10 +194,11 @@ is a very common newbie mistake. See the [PPX chapter](/todo) for more details.
 
 -----
 
-[Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/counter/)
-can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs).
+View [source
+code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/counter/)
+and [demo](https://react-book.melange.re/demo/src/counter/) for this chapter.
+
+-----
 
 [^1]: Despite the name, don't confuse OCaml's *switch expressions* with
     JavaScript's *switch statements*.

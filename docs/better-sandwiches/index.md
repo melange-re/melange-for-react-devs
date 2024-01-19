@@ -316,10 +316,11 @@ this](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvbXB1dGU
 
 -----
 
-[Source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/better-sandwiches/)
-can be found in the [Melange for React Developers
-repo](https://github.com/melange-re/melange-for-react-devs).
+View [source
+code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/better-sandwiches/)
+and [demo](https://react-book.melange.re/demo/src/better-sandwiches/) for this chapter.
+
+-----
 
 [^1]: Technically, undeclared variables produce a warning and it's possible to
   tell OCaml to not treat them as compilation errors. A common way to do this is

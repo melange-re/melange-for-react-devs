@@ -38,12 +38,13 @@ serve: ## Serve an application using a local HTTP server
 	npx vite serve --open
 
 .PHONY: bundle
-bundle: ## Bundle the JavaScript application
+bundle: build ## Bundle the JavaScript application
 	npx vite build
 
 .PHONY: clean
 clean: ## Clean build artifacts and other generated files
 	$(DUNE) clean
+	rm -rf dist
 
 .PHONY: format
 format: ## Format the codebase with ocamlformat
