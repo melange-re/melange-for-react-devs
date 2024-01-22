@@ -37,6 +37,7 @@ export default defineConfig({
           { text: 'Order Confirmation', link: '/order-confirmation/' },
           { text: 'Styling with CSS', link: '/styling-with-css/' },
           { text: 'Better Sandwiches', link: '/better-sandwiches/' },
+          { text: 'Better Burgers', link: '/better-burgers/' },
         ]
       }
     ],
