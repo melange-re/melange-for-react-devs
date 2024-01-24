@@ -25,9 +25,23 @@ The fields in the `burger` record are:
 | cheese | int | the number of cheese slices |
 
 Records are similar to the [`Js.t` objects we've seen
-before](/celsius-converter-exception/#js-t-object), but the biggest difference
-is that record fields must be predefined. Both `Js.t` objects and records
-ultimately become JavaScript objects in the transpiled code.
+before](/celsius-converter-exception/#js-t-object), in that they both group a
+collection of values into a single object with named fields. However, there are
+a number of syntactic and practical differences between them:
+
+- Record fields must be predefined
+- Records use `.` to access fields
+- Records can be destructured and pattern matched)
+- Record use [nominal
+  typing](https://en.wikipedia.org/wiki/Nominal_type_system), while `Js.t`
+  objects use [structural
+  typing](https://en.wikipedia.org/wiki/Structural_type_system). This means that
+  two record types with exactly the same fields are still considered different
+  types.
+
+The runtime representation of a record is a [plain JavaScript
+object](https://melange.re/v2.2.0/communicate-with-javascript/#data-types-and-runtime-representation),
+the same as for a `Js.t` object.
 
 ::: info
 
@@ -53,8 +67,6 @@ expression inside of `Item.toEmoji`:
 <<< Item.re#to-emoji{14-24}
 
 Note the use of `Js.Array.filter` to filter out empty strings in the array.
-
-todo: mention partial application
 
 ## Destructuring records
 
