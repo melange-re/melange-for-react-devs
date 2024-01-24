@@ -56,7 +56,7 @@ the code listings shorter.
 Depending on what toppings were chosen and how many of toppings there are, we
 want to show different emoji:
 
-| Burger | Return value of `Item.toEmoji` |
+| `item` | `Item.toEmoji(item)` |
 | ------ | ------------------------------ |
 | `Burger({lettuce: true, onions: 1, cheese: 2})` | <span v-pre>🍔{🥬,🧅×1,🧀×2}</span> |
 | `Burger({lettuce: false, onions: 0, cheese: 0})` | <span v-pre>🍔{🧅×0,🧀×0}</span> |
@@ -176,10 +176,10 @@ fields of a record type.
 
 ## Pattern matching records
 
-Right now, if a customer doesn't add any toppings to a burger, `Burger.toPrice`
-will return `🍔{🧅×0, 🧀×0}`. It would be better if it just returned `🍔` to
-indicate that it's a burger without embellishments. One way to handle this is to
-use a ternary expression:
+Right now, if a customer doesn't add any toppings to a burger,
+`Item.Burger.toPrice` will return `🍔{🧅×0, 🧀×0}`. It would be better if it
+just returned `🍔` to indicate that it's a burger without embellishments. One
+way to handle this is to use a ternary expression:
 
 <<< Item.re#ternary{5-7}
 
@@ -207,8 +207,8 @@ expression:
 <<< Item.re#match-record{6-7}
 
 Note that destructuring of the record has been moved from the argument list to
-the branches of the switch expression. Now `Burger.toEmoji` gets the name `t`
-for its single argument.
+the branches of the switch expression. Now `Item.Burger.toEmoji` gets the name
+`t` for its single argument.
 
 ---
 
@@ -221,10 +221,10 @@ arrays.
 <b>1.</b> Inside `Item.re`, create another submodule for sandwich-related types
 and functions.
 
-<b>2.</b> Add `tomatoes: bool` and `bacon: int` fields to `Burger.t`. Let’s say
-that adding tomatoes costs $0.05 and each piece of bacon[^1] costs $0.5.
+<b>2.</b> Add `tomatoes: bool` and `bacon: int` fields to `Item.Burger.t`. Let’s
+say that adding tomatoes costs $0.05 and each piece of bacon[^1] costs $0.5.
 
-<b>3.</b> Make `Burger.toPrice` function more readable by writing a helper
+<b>3.</b> Make `Item.Burger.toPrice` function more readable by writing a helper
 function that calculates the cost of a topping by multiplying its price with its
 quantity.
 
@@ -239,11 +239,11 @@ let toPrice = ({onions, cheese, tomato, bacon, lettuce: _}) => {
 };
 ```
 
-<b>4.</b> Right now, the `Burger.toEmoji` function shows more emojis than
+<b>4.</b> Right now, the `Item.Burger.toEmoji` function shows more emojis than
 absolutely necessary. Refactor the `multiple` inner function in `Burger.toEmoji`
 so that it exhibits the following behavior:
 
-| Burger | Expected output |
+| `item` | `Item.Burger.toEmoji(item)` |
 | ------ | --------------- |
 | `Burger({lettuce: true, onions: 1, cheese: 1})` | `🍔{🥬,🧅,🧀}` |
 | `Burger({lettuce: true, onions: 0, cheese: 0})` | `🍔{🥬}` |
@@ -311,8 +311,8 @@ something like this:
 <<< Item.re#to-price-topping-cost
 
 <b>4.</b> After refactoring the `multiple` helper function inside
-`Burger.toEmoji` to avoid showing unnecessary emojis, it should look something
-like this:
+`Item.Burger.toEmoji` to avoid showing unnecessary emojis, it should look
+something like this:
 
 <<< Item.re#to-emoji-multiple
 
