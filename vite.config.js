@@ -24,6 +24,7 @@ export default defineConfig({
         'order-confirmation': resolve(__dirname, 'src/order-confirmation/index.html'),
         'styling-with-css': resolve(__dirname, 'src/styling-with-css/index.html'),
         'better-sandwiches': resolve(__dirname, 'src/better-sandwiches/index.html'),
+        'better-burgers': resolve(__dirname, 'src/better-burgers/index.html'),
       },
     },
   },
