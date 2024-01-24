@@ -317,15 +317,15 @@ something like this:
 <<< Item.re#to-emoji-multiple
 
 Since the body of this function only consists of a switch expression, you can
-actually refacor the `multiple` function to use the `fun` syntax:
+actually refactor the `multiple` function to use the `fun` syntax:
 
 <<< Item.re#to-emoji-multiple-fun
 
-This might look a little strange, but it works because a two-argument function
-in OCaml is, in reality, a one-argument function that returns another function
-that accepts a single argument[^2]. Manually adding a type annotation to the
-function makes it more clear that it's entirely equivalent to the version that
-uses a switch expression:
+This might look a little strange, but in OCaml, all functions take exactly one
+argument. What looks like a two-argument function is actually a one-argument
+function that returns another one-argument function[^2]. Manually adding a type
+annotation to the function makes it more clear that it's entirely equivalent to
+the version that uses a switch expression:
 
 <<< Item.re#to-emoji-multiple-fun-annotated
 
@@ -341,17 +341,17 @@ and [demo](https://react-book.melange.re/demo/src/better-burgers/) for this chap
     way, the tomatoes are also magically delicious, because they're grown in a
     special field fertilized by unicorn manure.
 
-[^2]: A simpler example that illustrates the reality of multi-argument functions
-    in OCaml would be:
+[^2]: A simpler example that illustrates how function arguments work in OCaml
+    would be:
 
     ```reason
     let add = (x, y, z) => x + y + z;
     // The above is an easier-to-read version of this:
-    let realAdd = x => y => z => x + y + z;
+    let explicitAdd = x => y => z => x + y + z;
     ```
 
     See this [playground
-    snippet](https://melange.re/v2.2.0/playground/?language=Reason&code=Ly8gVXNlIGEgcmFuZG9tIHZhcmlhYmxlIHNvIGZ1bmN0aW9uIGludm9jYXRpb25zIGFyZW4ndCBvcHRpbWl6ZWQgYXdheQpsZXQgYyA9IFJhbmRvbS5pbnQoMTApOwoKbGV0IGFkZCA9ICh4LCB5LCB6KSA9PiB4ICsgeSArIHo7CkpzLmxvZyhhZGQoMSwgMiwgYykpOwoKLy8gQW4gZXF1aXZhbGVudCBkZWZpbml0aW9uIHRoYXQgZXhwbGljaXRseSByZXR1cm5zIGZ1bmN0aW9uczoKbGV0IHJlYWxBZGQgPSB4ID0%2BIHkgPT4geiA9PiB4ICsgeSArIHo7CkpzLmxvZyhyZWFsQWRkKDEsIDIsIGMpKTsKLy8gQ29uY2VwdHVhbGx5LCB0aGVyZSBhcmUgbXVsdGlwbGUgZnVuY3Rpb24gZGVmaW5pdGlvbnM6CkpzLmxvZyhyZWFsQWRkKDEpKDIpKGMpKTs%3D&live=off)
+    snippet](https://melange.re/v2.2.0/playground/?language=Reason&code=Ly8gVXNlIGEgcmFuZG9tIHZhcmlhYmxlIHNvIGZ1bmN0aW9uIGludm9jYXRpb25zIGFyZW4ndCBvcHRpbWl6ZWQgYXdheQpsZXQgYyA9IFJhbmRvbS5pbnQoMTApOwoKbGV0IGFkZCA9ICh4LCB5LCB6KSA9PiB4ICsgeSArIHo7CkpzLmxvZyhhZGQoMSwgMiwgYykpOwoKLy8gQW4gZXF1aXZhbGVudCBkZWZpbml0aW9uIHRoYXQgZXhwbGljaXRseSByZXR1cm5zIGZ1bmN0aW9uczoKbGV0IGV4cGxpY2l0QWRkID0geCA9PiB5ID0%2BIHogPT4geCArIHkgKyB6OwpKcy5sb2coZXhwbGljaXRBZGQoMSwgMiwgYykpOwovLyBDb25jZXB0dWFsbHksIHRoZXJlIGFyZSBtdWx0aXBsZSBmdW5jdGlvbiBpbnZvY2F0aW9ucy4gQnV0IGluIHRoZSBKUyBvdXRwdXQsCi8vIGl0J3MgYSBzaW5nbGUgZnVuY3Rpb24gY2FsbC4KSnMubG9nKGV4cGxpY2l0QWRkKDEpKDIpKGMpKTs%3D&live=off)
     for an extended example and the [official OCaml
     docs](https://ocaml.org/docs/values-and-functions#types-of-functions-of-multiple-parameters)
     for more details.
