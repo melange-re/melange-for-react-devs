@@ -20,9 +20,9 @@ The fields in the `burger` record are:
 
 | Name | Type | Meaning |
 | ---- | ---- | ------- |
-| lettuce | bool | if `true`, include lettuce |
-| onions | int | the number of onion slices |
-| cheese | int | the number of cheese slices |
+| `lettuce` | `bool` | if `true`, include lettuce |
+| `onions` | `int` | the number of onion slices |
+| `cheese` | `int` | the number of cheese slices |
 
 Records are similar to the [`Js.t` objects we've seen
 before](/celsius-converter-exception/#js-t-object), in that they both group a
@@ -30,9 +30,9 @@ collection of values into a single object with named fields. However, there are
 a number of syntactic and practical differences between them:
 
 - Record fields must be predefined
-- Records use `.` to access fields
-- Records can be destructured and pattern matched)
-- Record use [nominal
+- Records use `.` to access fields, while `Js.t` objects use `##`
+- Records can be destructured and pattern matched
+- Records use [nominal
   typing](https://en.wikipedia.org/wiki/Nominal_type_system), while `Js.t`
   objects use [structural
   typing](https://en.wikipedia.org/wiki/Structural_type_system). This means that

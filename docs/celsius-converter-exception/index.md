@@ -61,7 +61,7 @@ concatenation operator (`++`):
 
 However, there's a bug in this code: it will crash if you enter anything into
 the input that can't be converted to a float. We can remedy this by catching the
-exception using a `switch` expression:
+exception using a switch expression:
 
 <<< Snippets.re#catch-exception{4-10}
 
