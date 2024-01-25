@@ -36,6 +36,7 @@ export default defineConfig({
           { text: 'Better Sandwiches', link: '/better-sandwiches/' },
           { text: 'Better Burgers', link: '/better-burgers/' },
           { text: 'Sandwich Tests', link: '/sandwich-tests/' },
+          { text: 'Coupon Codes', link: '/coupon-codes/' },
         ]
       }
     ],
