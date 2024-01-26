@@ -4,12 +4,14 @@
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (module_systems
-  (es6 mjs)))
+  (es6 mjs))
+ (compile_flags
+  (:standard -open Lib)))
 
 (rule
  (alias runtest)
  (deps
-  (:input ./node/test/Test.mjs)
+  (:input ./node/src/coupon-codes/tests/Test.mjs)
   %{bin:node})
  (action
   (run time %{bin:node} %{input})))

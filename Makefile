@@ -59,5 +59,5 @@ watch: ## Watch the filesystem and rebuild on every change
 	$(DUNE) build --watch
 
 .PHONY: test
-test: ## Run the tests
+test: build ## Run the tests
 	$(DUNE) test

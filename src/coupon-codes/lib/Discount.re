@@ -4,7 +4,7 @@ let getBurgerDiscount = (items: array(Item.t)) => {
     |> Js.Array.sortInPlaceWith((a, b) => {
          let a = Item.toPrice(a);
          let b = Item.toPrice(b);
-         compare(a, b);
+         compare(b, a);
        })
     |> Js.Array.filter(item =>
          switch (item) {
