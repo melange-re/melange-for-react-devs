@@ -7,7 +7,7 @@ license: "MIT"
 homepage: "https://github.com/melange-re/melange-for-react-devs"
 bug-reports: "https://github.com/melange-re/melange-for-react-devs"
 pin-depends: [
-  [ "melange-fest.dev" "https://github.com/jchavarri/melange-fest/archive/751c5b3aa24734e662dc0a38ad0bde880f4bbf33.tar.gz" ]
+  [ "melange-fest.dev" "https://github.com/jchavarri/melange-fest/archive/596ce09c5cd8d3b0295f9e375c6d3e7f2f3cd006.tar.gz" ]
 ]
 depends: [
   "ocaml" {>= "5.1.1"}
