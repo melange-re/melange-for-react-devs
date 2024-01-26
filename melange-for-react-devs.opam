@@ -6,6 +6,9 @@ authors: ["Feihong Hsu <feihong.hsu@ahrefs.com>"]
 license: "MIT"
 homepage: "https://github.com/melange-re/melange-for-react-devs"
 bug-reports: "https://github.com/melange-re/melange-for-react-devs"
+pin-depends: [
+  [ "melange-fest.dev" "https://github.com/jchavarri/melange-fest/archive/751c5b3aa24734e662dc0a38ad0bde880f4bbf33.tar.gz" ]
+]
 depends: [
   "ocaml" {>= "5.1.1"}
   "reason" {>= "3.10.0"}
@@ -18,5 +21,6 @@ depends: [
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "dot-merlin-reader" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "odoc" {with-doc}
+  "melange-fest"
 ]
 dev-repo: "git+https://github.com/melange-re/melange-for-react-devs.git"
