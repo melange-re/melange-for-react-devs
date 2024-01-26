@@ -1,0 +1,15 @@
+(melange.emit
+ (target node)
+ (libraries melange-fest lib)
+ (preprocess
+  (pps melange.ppx reason-react-ppx))
+ (module_systems
+  (es6 mjs)))
+
+(rule
+ (alias runtest)
+ (deps
+  (:input ./node/test/Test.mjs)
+  %{bin:node})
+ (action
+  (run time %{bin:node} %{input})))

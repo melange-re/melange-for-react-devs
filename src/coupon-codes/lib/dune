@@ -1,0 +1,8 @@
+(library
+ (name lib)
+ (modes melange)
+ (preprocess
+  (pps melange.ppx))
+ ; (flags
+ ;  (:standard -open Lib))
+ )

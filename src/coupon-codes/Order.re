@@ -1,3 +1,5 @@
+module Item = Lib.Item;
+
 type t = array(Item.t);
 
 module OrderItem = {
