@@ -14,10 +14,14 @@ let getBurgerDiscount = (items: array(Item.t)) => {
          compare(b, a);
        });
 
-  switch (burgers) {
-  | [|Burger(_), Burger(cheaperBurger)|] =>
-    let price = Item.Burger.toPrice(cheaperBurger);
-    Some(price);
-  | _ => None
-  };
+  Js.Array.length(burgers) < 2
+    ? None
+    : (
+      switch (burgers |> Js.Array.slice(~start=0, ~end_=2)) {
+      | [|Burger(_), Burger(cheaperBurger)|] =>
+        let price = Item.Burger.toPrice(cheaperBurger);
+        Some(price);
+      | _ => None // unreachable
+      }
+    );
 };
