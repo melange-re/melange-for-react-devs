@@ -4,14 +4,26 @@ open Fest;
 [@mel.send.pipe: assertion]
 external deepStrictEqual: ('a, 'a) => unit = "deepStrictEqual";
 
-let makeBurger =
-    (~lettuce=false, ~onions=0, ~cheese=0, ~tomatoes=false, ~bacon=0, ()) =>
-  Item.Burger({lettuce, onions, cheese, tomatoes, bacon});
+// let makeBurger =
+//     (~lettuce=false, ~onions=0, ~cheese=0, ~tomatoes=false, ~bacon=0, ()) =>
+//   Item.Burger({lettuce, onions, cheese, tomatoes, bacon});
+
+let burger: Item.Burger.t = {
+  lettuce: false,
+  onions: 0,
+  cheese: 0,
+  tomatoes: false,
+  bacon: 0,
+};
 
 test("1 burger, no discount", () =>
   expect
   |> equal(
-       Discount.getBurgerDiscount([|Hotdog, Sandwich(Ham), makeBurger()|]),
+       Discount.getBurgerDiscount([|
+         Hotdog,
+         Sandwich(Ham),
+         Burger(burger),
+       |]),
        None,
      )
 );
@@ -21,9 +33,9 @@ test("2 burgers of same price, discount", () =>
   |> equal(
        Discount.getBurgerDiscount([|
          Hotdog,
-         makeBurger(),
+         Burger(burger),
          Sandwich(Ham),
-         makeBurger(),
+         Burger(burger),
        |]),
        Some(15.),
      )
@@ -34,9 +46,9 @@ test("2 burgers of different price, discount of cheaper one", () =>
   |> equal(
        Discount.getBurgerDiscount([|
          Hotdog,
-         makeBurger(~tomatoes=true, ()),
+         Burger({...burger, tomatoes: true}),
          Sandwich(Ham),
-         makeBurger(~bacon=2, ()),
+         Burger({...burger, bacon: 2}),
        |]),
        Some(15.05),
      )
@@ -45,9 +57,9 @@ test("2 burgers of different price, discount of cheaper one", () =>
 test("input array isn't changed", () => {
   let items = [|
     Item.Hotdog,
-    makeBurger(~tomatoes=true, ()),
+    Burger({...burger, tomatoes: true}),
     Sandwich(Ham),
-    makeBurger(~bacon=2, ()),
+    Burger({...burger, bacon: 2}),
   |];
   Discount.getBurgerDiscount(items) |> ignore;
   expect
@@ -55,9 +67,9 @@ test("input array isn't changed", () => {
        items,
        [|
          Item.Hotdog,
-         makeBurger(~tomatoes=true, ()),
+         Burger({...burger, bacon: 2}),
          Sandwich(Ham),
-         makeBurger(~bacon=2, ()),
+         Burger({...burger, bacon: 2}),
        |],
      );
 });
@@ -66,11 +78,11 @@ test("3 burgers of different price, discount of second one", () =>
   expect
   |> equal(
        Discount.getBurgerDiscount([|
-         makeBurger(),
+         Burger(burger),
          Hotdog,
-         makeBurger(~tomatoes=true, ~cheese=1, ()),
+         Burger({...burger, tomatoes: true, cheese: 1}),
          Sandwich(Ham),
-         makeBurger(~bacon=2, ()),
+         Burger({...burger, bacon: 2}),
        |]),
        Some(15.15),
      )
