@@ -63,7 +63,7 @@ test("input array isn't changed", () => {
        items,
        [|
          Item.Hotdog,
-         Burger({...burger, bacon: 2}),
+         Burger({...burger, tomatoes: true}),
          Sandwich(Ham),
          Burger({...burger, bacon: 2}),
        |],

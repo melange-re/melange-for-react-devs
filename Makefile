@@ -60,4 +60,4 @@ watch: ## Watch the filesystem and rebuild on every change
 
 .PHONY: test
 test: build ## Run the tests
-	$(DUNE) test
+	$(DUNE) test --no-buffer

@@ -1,8 +1,17 @@
 (melange.emit
  (target output)
- (libraries reason-react lib)
+ (libraries reason-react melange-fest)
  (preprocess
   (pps melange.ppx reason-react-ppx))
- (module_systems es6)
+ (module_systems
+  (es6 mjs))
  (runtime_deps
   (glob_files *.css)))
+
+(rule
+ (alias runtest)
+ (deps
+  (:input ./output/src/burger-discounts/Test.mjs)
+  %{bin:node})
+ (action
+  (run time %{bin:node} %{input})))
