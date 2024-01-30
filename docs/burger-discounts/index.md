@@ -1,4 +1,4 @@
-# Coupon Codes
+# Burger Discounts
 
 intro
 
