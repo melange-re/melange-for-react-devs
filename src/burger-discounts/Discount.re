@@ -1,4 +1,27 @@
-let getBurgerDiscount = (items: array(Item.t)) => {
+let getBurgerDiscountOriginal = (items: array(Item.t)) => {
+  let burgers =
+    items
+    |> Js.Array.filter(
+         fun
+         | Item.Burger(_) => true
+         | Sandwich(_)
+         | Hotdog => false,
+       )
+    |> Js.Array.sortInPlaceWith((a, b) => {
+         let a = Item.toPrice(a);
+         let b = Item.toPrice(b);
+         compare(b, a);
+       });
+
+  switch (burgers) {
+  | [|Burger(_), Burger(cheaperBurger)|] =>
+    let price = Item.Burger.toPrice(cheaperBurger);
+    Some(price);
+  | _ => None
+  };
+};
+
+let getBurgerDiscountCatchException = (items: array(Item.t)) => {
   let burgers =
     items
     |> Js.Array.filter(
@@ -28,7 +51,7 @@ let arrayGet = (array, int) =>
   | element => Some(element)
   };
 
-let getBurgerDiscountTypeSafe = (items: array(Item.t)) => {
+let getBurgerDiscount = (items: array(Item.t)) => {
   let burgers =
     items
     |> Js.Array.filter(
