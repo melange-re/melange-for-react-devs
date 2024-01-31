@@ -11,6 +11,8 @@
 (rule
  (alias runtest)
  (deps
+  ; (alias melange)
+  Discount.re
   (:input ./output/src/burger-discounts/Test.mjs)
   %{bin:node})
  (action

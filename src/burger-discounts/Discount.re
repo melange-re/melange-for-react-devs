@@ -13,14 +13,40 @@ let getBurgerDiscount = (items: array(Item.t)) => {
          compare(b, a);
        });
 
-  Js.Array.length(burgers) < 2
-    ? None
-    : (
-      switch (burgers |> Js.Array.slice(~start=0, ~end_=2)) {
-      | [|Burger(_), Burger(cheaperBurger)|] =>
-        let price = Item.Burger.toPrice(cheaperBurger);
-        Some(price);
-      | _ => None // unreachable
-      }
-    );
+  switch (burgers[0], burgers[1]) {
+  | exception _ => None
+  | (Burger(_), Burger(cheaperBurger)) =>
+    let price = Item.Burger.toPrice(cheaperBurger);
+    Some(price);
+  | _ => None
+  };
+};
+
+let arrayGet = (array, int) =>
+  switch (array[int]) {
+  | exception _ => None
+  | element => Some(element)
+  };
+
+let getBurgerDiscountTypeSafe = (items: array(Item.t)) => {
+  let burgers =
+    items
+    |> Js.Array.filter(
+         fun
+         | Item.Burger(_) => true
+         | Sandwich(_)
+         | Hotdog => false,
+       )
+    |> Js.Array.sortInPlaceWith((a, b) => {
+         let a = Item.toPrice(a);
+         let b = Item.toPrice(b);
+         compare(b, a);
+       });
+
+  switch (arrayGet(burgers, 0), arrayGet(burgers, 1)) {
+  | (Some(Burger(_)), Some(Burger(cheaperBurger))) =>
+    let price = Item.Burger.toPrice(cheaperBurger);
+    Some(price);
+  | _ => None
+  };
 };
