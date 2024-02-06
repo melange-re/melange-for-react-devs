@@ -270,14 +270,12 @@ declaration, it should look something like this:
 
 <<< Order.re#order-external
 
-<b>3.</b> If you replace `mel.module` with `bs.module`, your code will continue
-to compile but you get a warning from Melange:
+<b>3.</b> If you replace `mel.module` with `bs.module`, your code will fail to
+compile with this error message:
 
 ```
 File "src/styling-with-css/Order.re", line 4, characters 4-13:
-Alert deprecated: The `[@bs.*]' attributes are deprecated and will be removed in the
-next release.
-Use `[@mel.*]' instead.
+Error: `[@bs.*]' and non-namespaced attributes have been removed in favor of `[@mel.*]' attributes.
 ```
 
 Basically, `bs.module` was the old name for the attribute, but it has been

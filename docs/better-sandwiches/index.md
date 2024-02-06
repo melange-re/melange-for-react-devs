@@ -145,13 +145,6 @@ except that they can only accept variables, not arbitrary expressions.
 Also note that unlike switch expressions, the `fun` syntax does not accept
 multi-line expressions in branches unless you add `{}` around them.
 
-::: warning
-
-In Melange v2, `{j||j}` quoted string literals are not type-safe and so should
-not be used in production code. This is fixed in Melange v3.
-
-:::
-
 ## `Printf.sprintf`
 
 The OCaml standard library also provides a type-safe way to do string
@@ -170,13 +163,6 @@ literals:
   like `%s`, `%i`, `%d`, etc which concisely handle basic string conversion
   logic for all primitive data types. This can often make your code shorter and
   easier to understand.
-
-::: warning
-
-In Melange v2, the first argument of `Printf.sprintf` cannot contain unicode
-characters. This is fixed in Melange v3.
-
-:::
 
 ## Bundling
 

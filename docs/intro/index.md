@@ -6,14 +6,6 @@ This is a work in progress.
 
 :::
 
-::: info
-
-The content here targets [Melange
-v3](https://docs.google.com/document/d/1q9NWiXun_Lqgv5iNNYm2SKzUGGJ02FpRawKUiTxnJPI/edit#heading=h.9je9ws3oydaz),
-so if you are using Melange v2, a few things might not work quite the same.
-
-:::
-
 ## Motivation
 
 This is a project-based, guided introduction to Melange and its ecosystem.
