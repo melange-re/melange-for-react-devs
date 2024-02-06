@@ -66,8 +66,9 @@ it doesn't find the element, it returns `None`, and if it does find the element,
 it returns `Some(Dom.element)`, i.e. the element wrapped in the `Some`
 constructor. The *switch expression*[^1] allows you to succinctly express:
 
-- If `node` is `Some(Dom.element)`, render the `App` component to the DOM
-- Otherwise if `node` is `None`, log an error message
+- If `node` is `None`, log an error message
+- Otherwise if `node` is `Some(Dom.element)`, render the `App` component to the
+  DOM
 
 We'll talk more about `option` in the [Celsius converter chapter](/celsius-converter-option/).
 
@@ -111,8 +112,8 @@ Let's add a bit of styling to the root element of `Counter`:
 <<< Snippets.re#render-with-styling{2-7}
 
 Unlike in React, the `style` prop in ReasonReact doesn't take a generic object,
-instead it takes an object of type `ReactDOMStyle.t` that is created by calling
-`ReactDOMStyle.make`. This isn't a sustainable way to style our app---later,
+instead it takes an object of type `ReactDOM.style` that is created by calling
+`ReactDOM.Style.make`. This isn't a sustainable way to style our app---later,
 we'll see how to [style using CSS classes](/todo).
 
 ----
@@ -126,11 +127,12 @@ future chapters we'll create more complex and interesting components.
 `switch (node)` expression in `Index.re`?
 
 ```reason
-let node = ReactDOM.querySelector("#root");
 switch (node) {
-| Some(root) => ReactDOM.render(<App />, root)
 | None => // [!code --]
   Js.Console.error("Failed to start React: couldn't find the #root element") // [!code --]
+| Some(root) =>
+  let root = ReactDOM.Client.createRoot(root);
+  ReactDOM.Client.render(root, <App />);
 };
 ```
 
