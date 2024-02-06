@@ -5,7 +5,7 @@ your project. Since these components don't have much in common with each other,
 it makes sense to put them in separate, independent single-page apps. To do
 that, we'll use [Dune](https://dune.build/), a build system designed for OCaml
 projects, with many [useful
-features](https://melange.re/v2.2.0/build-system/#features). For our purposes,
+features](https://melange.re/v3.0.0/build-system/#features). For our purposes,
 the feature of primary interest is its [built-in support for
 Melange](https://dune.readthedocs.io/en/stable/melange.html).
 
@@ -134,7 +134,7 @@ the `index.html` file in the root directory:
 
 For more details about where JavaScript output files end up in the build
 directory, see [JavaScript artifacts
-layout](https://melange.re/v2.2.0/build-system/#javascript-artifacts-layout).
+layout](https://melange.re/v3.0.0/build-system/#javascript-artifacts-layout).
 
 ::: tip
 
@@ -274,7 +274,7 @@ every single project.
 ::: info
 
 Melange documentation's [guidelines for
-melange.emit](https://melange.re/v2.2.0/build-system/#guidelines-for-melangeemit)
+melange.emit](https://melange.re/v3.0.0/build-system/#guidelines-for-melangeemit)
 recommends you put the `melange.emit` stanza in the `dune` file in the project's
 root directory. We are no longer doing that going forward, but this is still
 great advice if your repo only contains a single app!
