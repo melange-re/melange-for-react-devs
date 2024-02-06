@@ -55,8 +55,8 @@ module ItemV2 = {
           {js|🧅×|js} ++ string_of_int(burger.onions),
           {js|🧀×|js} ++ string_of_int(burger.cheese),
         |]
-        |> Js.Array.filter(str => str != "")
-        |> Js.Array.joinWith(", "),
+        |> Js.Array.filter(~f=str => str != "")
+        |> Js.Array.join(~sep=", "),
       );
   // #endregion to-emoji
 
@@ -74,8 +74,8 @@ module ItemV2 = {
             {js|🧅×|js} ++ string_of_int(onions),
             {js|🧀×|js} ++ string_of_int(cheese),
           |]
-          |> Js.Array.filter(str => str != "")
-          |> Js.Array.joinWith(", "),
+          |> Js.Array.filter(~f=str => str != "")
+          |> Js.Array.join(~sep=", "),
         );
       };
   // #endregion destructure-burger
@@ -93,8 +93,8 @@ module ItemV2 = {
           {js|🧅×|js} ++ string_of_int(onions),
           {js|🧀×|js} ++ string_of_int(cheese),
         |]
-        |> Js.Array.filter(str => str != "")
-        |> Js.Array.joinWith(", "),
+        |> Js.Array.filter(~f=str => str != "")
+        |> Js.Array.join(~sep=", "),
       );
   // #endregion destructure-burger-branch
 
@@ -114,8 +114,8 @@ module ItemV2 = {
             multiple({js|🧅|js}, onions),
             multiple({js|🧀|js}, cheese),
           |]
-          |> Js.Array.filter(str => str != "")
-          |> Js.Array.joinWith(", "),
+          |> Js.Array.filter(~f=str => str != "")
+          |> Js.Array.join(~sep=", "),
         );
       };
   // #endregion multiple
@@ -141,8 +141,8 @@ module ItemV3 = {
           multiple({js|🧅|js}, onions),
           multiple({js|🧀|js}, cheese),
         |]
-        |> Js.Array.filter(str => str != "")
-        |> Js.Array.joinWith(", "),
+        |> Js.Array.filter(~f=str => str != "")
+        |> Js.Array.join(~sep=", "),
       );
     };
 
@@ -232,8 +232,8 @@ module ItemV3 = {
               multiple({js|🧅|js}, onions),
               multiple({js|🧀|js}, cheese),
             |]
-            |> Js.Array.filter(str => str != "")
-            |> Js.Array.joinWith(", "),
+            |> Js.Array.filter(~f=str => str != "")
+            |> Js.Array.join(~sep=", "),
           );
     };
     // #endregion ternary
@@ -255,8 +255,8 @@ module ItemV3 = {
             multiple({js|🧅|js}, onions),
             multiple({js|🧀|js}, cheese),
           |]
-          |> Js.Array.filter(str => str != "")
-          |> Js.Array.joinWith(", "),
+          |> Js.Array.filter(~f=str => str != "")
+          |> Js.Array.join(~sep=", "),
         )
       };
     };
@@ -279,8 +279,8 @@ module ItemV3 = {
             multiple({js|🧅|js}, onions),
             multiple({js|🧀|js}, cheese),
           |]
-          |> Js.Array.filter(str => str != "")
-          |> Js.Array.joinWith(", "),
+          |> Js.Array.filter(~f=str => str != "")
+          |> Js.Array.join(~sep=", "),
         )
       };
     };

@@ -12,12 +12,15 @@ module OrderItem = {
 [@react.component]
 let make = (~items: t) => {
   let total =
-    items |> Js.Array.reduce((acc, order) => acc +. Item.toPrice(order), 0.);
+    items
+    |> Js.Array.reduce(~init=0., ~f=(acc, order) =>
+         acc +. Item.toPrice(order)
+       );
 
   <table>
     <tbody>
       {items
-       |> Js.Array.mapi((item, index) =>
+       |> Js.Array.mapi(~f=(item, index) =>
             <OrderItem key={"item-" ++ string_of_int(index)} item />
           )
        |> React.array}

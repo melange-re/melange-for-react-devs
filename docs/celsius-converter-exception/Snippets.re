@@ -10,7 +10,7 @@ module CelsiusConverterOriginal = {
       <input
         value=celsius
         onChange={evt => {
-          let newCelsius = ReactEvent.Form.target(evt)##value;
+          let newCelsius = React.Event.Form.target(evt)##value;
           setCelsius(_ => newCelsius);
         }}
       />
@@ -24,7 +24,7 @@ module CelsiusConverterOriginal = {
 module CelsiusConverterGetValueFromEvent = {
   // #region get-value-from-event
   let getValueFromEvent = (evt): string =>
-    ReactEvent.Form.target(evt)##value;
+    React.Event.Form.target(evt)##value;
 
   let convert = celsius => 9.0 /. 5.0 *. celsius +. 32.0;
 
@@ -167,8 +167,7 @@ let _ = {
            switch (celsius |> float_of_string |> convert) {
            | exception _ => "error"
            | fahrenheit =>
-             Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-             ++ {js|°F|js}
+             Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js|°F|js}
            }
          )
      )
@@ -192,7 +191,7 @@ let _ = {
              celsius
              |> float_of_string
              |> convert
-             |> Js.Float.toFixedWithPrecision(~digits=2)
+             |> Js.Float.toFixed(~digits=2)
            ) {
            | exception _ => "error"
            | fahrenheit => fahrenheit ++ {js|°F|js}

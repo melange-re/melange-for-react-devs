@@ -38,12 +38,15 @@ type t = array(Item.t);
 [@react.component]
 let make = (~items: t) => {
   let total =
-    items |> Js.Array.reduce((acc, order) => acc +. Item.toPrice(order), 0.);
+    items
+    |> Js.Array.reduce(~init=0., ~f=(acc, order) =>
+         acc +. Item.toPrice(order)
+       );
 
   <table className="order">
     <tbody>
       {items
-       |> Js.Array.mapi((item, index) =>
+       |> Js.Array.mapi(~f=(item, index) =>
             <OrderItem key={"item-" ++ string_of_int(index)} item />
           )
        |> React.array}
@@ -82,12 +85,14 @@ module OrderV2 = {
   let make = (~items: t) => {
     let total =
       items
-      |> Js.Array.reduce((acc, order) => acc +. Item.toPrice(order), 0.);
+      |> Js.Array.reduce(~init=0., ~f=(acc, order) =>
+           acc +. Item.toPrice(order)
+         );
 
     <table className=css##order>
       <tbody>
         {items
-         |> Js.Array.mapi((item, index) =>
+         |> Js.Array.mapi(~f=(item, index) =>
               <OrderItem key={"item-" ++ string_of_int(index)} item />
             )
          |> React.array}

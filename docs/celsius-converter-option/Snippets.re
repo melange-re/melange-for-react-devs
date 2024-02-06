@@ -6,8 +6,7 @@ let _ = {
     switch (celsius |> float_of_string_opt) {
     | None => "error"
     | Some(fahrenheit) =>
-      (fahrenheit |> convert |> Js.Float.toFixedWithPrecision(~digits=2))
-      ++ {js|°F|js}
+      (fahrenheit |> convert |> Js.Float.toFixed(~digits=2)) ++ {js|°F|js}
     }
   )
   // #endregion float-of-string-opt
@@ -23,7 +22,7 @@ let _ = {
       celsius
       |> float_of_string_opt
       |> Option.map(convert)
-      |> Option.map(Js.Float.toFixedWithPrecision(~digits=2))
+      |> Option.map(Js.Float.toFixed(~digits=2))
     ) {
     | None => "error"
     | Some(fahrenheit) => fahrenheit ++ {js|°F|js}
@@ -43,7 +42,7 @@ let _ = {
     | Some(fahrenheit) =>
       fahrenheit > 212.0
         ? {js|Unreasonably hot🥵|js}
-        : Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js| °F|js}
+        : Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js| °F|js}
     }
   )
   // #endregion inner-ternary
@@ -59,7 +58,7 @@ let _ = {
     | None => "error"
     | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
     | Some(fahrenheit) =>
-      Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js| °F|js}
+      Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js| °F|js}
     }
   )
   // #endregion when-guard
@@ -78,7 +77,7 @@ let _ = {
         | None => "error"
         | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
         | Some(fahrenheit) =>
-          Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js| °F|js}
+          Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js| °F|js}
         }
       )
   )
@@ -96,7 +95,7 @@ let _ = {
     | Some(fahrenheit) when fahrenheit < (-128.6) => {js|Unreasonably cold🥶|js}
     | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
     | Some(fahrenheit) =>
-      Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js|°F|js}
+      Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js|°F|js}
     }
   )
   // #endregion when-guard-cold
@@ -120,7 +119,7 @@ let _ = {
     | Some(fahrenheit) when fahrenheit < (-128.6) => {js|Unreasonably cold🥶|js}
     | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
     | Some(fahrenheit) =>
-      Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2) ++ {js|°F|js}
+      Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js|°F|js}
     }
   )
   // #endregion switch-float-from-string

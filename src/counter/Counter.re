@@ -3,7 +3,7 @@ let make = () => {
   let (counter, setCounter) = React.useState(() => 0);
 
   <div
-    style={ReactDOMStyle.make(
+    style={ReactDOM.Style.make(
       ~padding="1em",
       ~display="flex",
       ~gridGap="1em",

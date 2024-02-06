@@ -35,10 +35,7 @@ let make = (~item: t) =>
   <tr>
     <td> {item |> toEmoji |> React.string} </td>
     <td>
-      {item
-       |> toPrice
-       |> Js.Float.toFixedWithPrecision(~digits=2)
-       |> React.string}
+      {item |> toPrice |> Js.Float.toFixed(~digits=2) |> React.string}
     </td>
   </tr>;
 // #endregion make

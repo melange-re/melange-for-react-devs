@@ -88,7 +88,7 @@ let _ = {
         },
         ")",
       |]
-      |> Js.Array.joinWith("")
+      |> Js.Array.join(~sep="")
     | Burger => {js|🍔|js}
     | Hotdog => {js|🌭|js};
   // #endregion to-emoji-joinwith
@@ -111,7 +111,7 @@ let _ = {
         },
         ")",
       |]
-      |> Js.Array.joinWith("");
+      |> Js.Array.join(~sep="");
   // #endregion to-emoji-short-branch-first
   toEmoji(Hotdog);
 };

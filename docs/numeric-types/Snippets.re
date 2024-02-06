@@ -5,7 +5,7 @@ module Counter = {
     let (counter, setCounter) = React.useState(() => 0);
 
     <div
-      style={ReactDOMStyle.make(
+      style={ReactDOM.Style.make(
         ~padding="1em",
         ~display="flex",
         ~gridGap="1em",
@@ -24,14 +24,16 @@ module Counter = {
 
 switch (ReactDOM.querySelector("#preview")) {
 | None => Js.log("Failed to start React: couldn't find the #preview element")
-| Some(root) => ReactDOM.render(<Counter />, root)
+| Some(root) =>
+  let root = ReactDOM.Client.createRoot(root);
+  ReactDOM.Client.render(root, <Counter />);
 };
 // #endregion counter
 
 // #region styles
 module Styles = {
   // Alias the function to save on keystrokes
-  let make = ReactDOMStyle.make;
+  let make = ReactDOM.Style.make;
 
   let root =
     make(
