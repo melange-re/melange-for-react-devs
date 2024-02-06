@@ -293,7 +293,7 @@ Create a submodule inside `Order.re`
 module's helper functions to get your program to compile again.
 
 <b>3.</b> Instead of repeatedly using `value |>
-Js.Float.toFixedWithPrecision(~digits=2)
+Js.Float.toFixed(~digits=2)
 |> React.string`, add a helper function `Format.currency` that does
 the same thing.
 

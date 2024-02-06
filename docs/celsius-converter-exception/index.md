@@ -101,11 +101,11 @@ haven't quite gotten used to OCaml syntax yet.
 If we enter a value with a lot of decimals in it, e.g. `21.1223456`, we'll
 get a Fahrenheit value with a lot of decimals in it as well. We can limit the
 number of decimals in the converted value using
-[Js.Float.toFixedWithPrecision](https://melange.re/v3.0.0/api/re/melange/Js/Float/index.html#val-toFixedWithPrecision):
+[Js.Float.toFixed](https://melange.re/v3.0.0/api/re/melange/Js/Float/index.html#val-toFixed):
 
-<<< Snippets.re#fixed-precision{8,11-12}
+<<< Snippets.re#fixed-precision{8,11}
 
-`Js.Float.toFixedWithPrecision` is a function that has one positional argument
+`Js.Float.toFixed` is a function that has one positional argument
 and one [labeled
 argument](https://melange.re/v3.0.0/communicate-with-javascript/#labeled-arguments).
 In this case, the labeled argument is named `digits` and it's receiving a value
@@ -129,14 +129,14 @@ celsius |> float_of_string |> convert
 ```
 
 This happened because `string_of_float`, which takes a single argument, was
-replaced by `Js.Float.toFixedWithPrecision`, which takes two arguments, and
+replaced by `Js.Float.toFixed`, which takes two arguments, and
 functions chained using `|>` can only take a single argument. But this
 one-argument restriction actually doesn't prevent us from putting
-`Js.Float.toFixedWithPrecision` in the chain! We can take advantage of OCaml's
+`Js.Float.toFixed` in the chain! We can take advantage of OCaml's
 [partial
 application](https://reasonml.github.io/docs/en/function#partial-application)
 feature to create a one-argument function by writing
-`Js.Float.toFixedWithPrecision(~digits=2)`. Then our switch expression becomes
+`Js.Float.toFixed(~digits=2)`. Then our switch expression becomes
 
 <<< Snippets.re#partial-application{12,15}
 

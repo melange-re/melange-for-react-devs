@@ -60,7 +60,7 @@ were still using `float_of_string`:
 celsius
 |> float_of_string
 |> convert
-|> Js.Float.toFixedWithPrecision(~digits=2)
+|> Js.Float.toFixed(~digits=2)
 ```
 
 Actually, we can still use a very similar chain of functions with
@@ -70,7 +70,7 @@ Actually, we can still use a very similar chain of functions with
 celsius
 |> float_of_string_opt
 |> Option.map(convert)
-|> Option.map(Js.Float.toFixedWithPrecision(~digits=2))
+|> Option.map(Js.Float.toFixed(~digits=2))
 ```
 
 `Option.map` takes a function and an `option` value, and only invokes the
