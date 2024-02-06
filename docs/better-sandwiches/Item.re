@@ -75,7 +75,7 @@ let toPrice =
 // #endregion to-price
 
 let _ = {
-  // #region to-emoji-joinwith
+  // #region to-emoji-join
   let toEmoji =
     fun
     | Sandwich(sandwich) =>
@@ -91,7 +91,7 @@ let _ = {
       |> Js.Array.join(~sep="")
     | Burger => {js|🍔|js}
     | Hotdog => {js|🌭|js};
-  // #endregion to-emoji-joinwith
+  // #endregion to-emoji-join
   toEmoji(Hotdog);
 };
 

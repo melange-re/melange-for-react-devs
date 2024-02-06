@@ -193,7 +193,7 @@ read; it can even be error-prone when some of the elements of the tuple are of
 the same type. For example, what if you accidentally changed the positions of
 the `onions` and `cheese` variables in the second branch:
 
-```reason{3}
+```reason{1,3}
 switch (lettuce, onions, cheese) {
 | (false, 0, 0) => {js|🍔|js}
 | (lettuce, cheese, onions) =>

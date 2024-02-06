@@ -121,9 +121,9 @@ OCaml Way!
 | Ham | 🥪(🐷) |
 | Unicorn | 🥪(🦄) |
 
-We can implement this using `Js.Array.joinWith`:
+We can implement this using `Js.Array.join`:
 
-<<< Item.re#to-emoji-joinwith{3-13}
+<<< Item.re#to-emoji-join{3-13}
 
 This touches on the issue of coding style for switch expressions. When possible,
 put shorter branches before longer branches:
@@ -132,7 +132,7 @@ put shorter branches before longer branches:
 
 ## `{j||j}` quoted string literal
 
-The approach using `Js.Array.joinWith` works, but readability could be improved
+The approach using `Js.Array.join` works, but readability could be improved
 by using a [quoted string literal with the quoted string identifier
 `j`](https://melange.re/v3.0.0/communicate-with-javascript/#strings):
 

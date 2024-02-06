@@ -97,7 +97,7 @@ Now we can add the appropriate classes to `OrderItem.make`'s JSX:
 
 As well as `Order.make`'s JSX:
 
-<<< Order.re#order-make{6,13}
+<<< Order.re#order-make{9,16}
 
 Finally, add a `mel.raw` extension node at the top of `Order.re`:
 
@@ -250,7 +250,7 @@ declaration instead of `mel.raw`.
 <b>1.</b> Changing `%%mel.raw` to `%mel.raw` will cause a compilation error in
 Vite because the generated JS code changes to
 
-```
+```javascript
 ((import "./order.css"));
 ```
 

@@ -209,12 +209,12 @@ match the expected type, we must add a call to `React.array` which turns
 To better see what types are at play, it might make sense to refactor
 `Order.make` like so:
 
-<<< Order.re#order-make-item-rows{4-5,9}
+<<< Order.re#order-make-item-rows{7-8,12}
 
 `React.array` is a strict type transformation that doesn't actually change the
 underlying JavaScript object. For example, try running the [following code in
 the
-playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKHggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
+playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKH5mPXggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
 
 <<< Snippets.re#react-array-demo
 
