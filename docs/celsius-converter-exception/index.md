@@ -184,7 +184,7 @@ that result to binary.
 ::: details Hint
 
 Use the
-[Js.Int.toStringWithRadix](https://melange.re/v3.0.0/api/re/melange/Js/Int/#val-toStringWithRadix)
+[Js.Int.toString](https://melange.re/v3.0.0/api/re/melange/Js/Int/#val-toString)
 function.
 
 :::
@@ -235,7 +235,7 @@ in the [ReasonReact](https://reasonml.github.io/reason-react/) docs.
 
 <b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
 
-<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nV2l0aFJhZGl4KH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nKH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
 
 -----
 
