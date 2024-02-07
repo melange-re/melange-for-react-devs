@@ -33,7 +33,7 @@ similar to the `{js||js}` string literals we first saw in the [Celsius
 Converter](/celsius-converter-exception/#solutions) chapter, with the difference
 that they won't handle Unicode correctly.
 
-Unfortunately, in the terminal where we're running `make serve`, we see this
+Unfortunately, in the terminal where we're running `npm run serve`, we see this
 Vite compilation error:
 
 ```
