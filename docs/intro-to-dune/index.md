@@ -169,6 +169,42 @@ src/counter
 └─ index.html
 ```
 
+## Structure of `_build` directory
+
+If you look inside the `_build/default/src/counter` directory, you'll see that
+your `src/counter` directory is essentially mirrored there, along with some
+extra files:
+
+```
+_build/default/src/counter
+├─ .merlin-conf/
+├─ .output.mobjs/
+├─ output/
+├─ Counter.re
+├─ Counter.re.ml
+├─ Counter.re.pp.ml
+├─ Index.re
+├─ Index.re.ml
+└─ Index.re.pp.ml
+```
+
+Extra files and directories like `.output.mobjs` and `Counter.re.ml` are build
+artifacts and we won't go into any detail about them. If you look into
+`_build/default/src/counter/output/src/counter`, you'll see that `src/counter` is mirrored
+there as well, but this time the directory only contains the generated `.js`
+files:
+
+```
+_build/default/src/counter/output/src/counter
+├─ .output.mobjs/
+├─ Counter.js
+└─ Index.js
+```
+
+So the `_build` directory contains two mirrored directories for `src/counter`:
+one for the original `.re` source files and their intermediate build artifacts,
+another for the final generated `.js` files.
+
 ## Update root directory `index.html`
 
 Now that we've added `src/counter/index.html`, we don't need the root
