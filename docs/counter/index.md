@@ -7,8 +7,8 @@ We're going build the classic frontend starter app, the counter, using
 1. Go to the root directory of your
 [melange-for-react-devs-template](https://github.com/melange-re/melange-for-react-devs-template)
 project
-1. Run `make watch` to start the Melange compiler in watch mode.
-1. In another terminal window, start the Vite dev server by running `make
+1. Run `npm run watch` to start the Melange compiler in watch mode.
+1. In another terminal window, start the Vite dev server by running `npm run
 serve`. As a side effect, it will open a browser tab pointed to
 <a href="http://localhost:5174/" target="_blank" rel="noreferrer
 noopener">http://localhost:5174/</a>.

@@ -200,62 +200,12 @@ index page to link to all of our single-page apps. Change `index.html` to this:
 </html>
 ```
 
-Now run `make serve` to check that everything works as expected.
-
-## Why use Make?
-
-By now you might have noticed that even though Dune is used to build your
-project, we never execute Dune directly, but instead always go through
-[Make](https://en.wikipedia.org/wiki/Make_(software)). One reason is that the
-commands for Dune can occasionally be verbose, but the other reason is that Make
-is a very good task runner. For example, here are some advantages it has over
-`npm run`:
-
-- You can add comments!
-- It's trivial to create tasks with multiple commands
-- Running `make` lists all the rules inside the `Makefile` (achieved with a few
-  lines of boilerplate)
-
-## Modifying the `serve` rule
-
-Right now the project is still using `npm run` to serve the app, but let's
-migrate it fully to Make. First, take a look at the `serve` rule inside the
-`Makefile`:
-
-```make
-.PHONY: serve
-serve: ## Serve the application with a local HTTP server
-	npm run serve
-```
-
-A breakdown of this rule:
-
-- `.PHONY: serve` tells Make that the `serve` rule is a [phony
-  target](https://makefiletutorial.com/#phony), meaning `serve` is not a file we
-  want to generate but just a label for an action. Note that declaring phony
-  targets is optional.
-- The name of the rule is `serve`, and it's followed immediately by a comment
-  (denoted by whatever follows `#`) explaining its purpose.
-- Underneath the rule's name is its *recipe*, basically the command(s) that will
-  be executed when we run `make serve` at the command line. Here it just runs
-  `npm run serve`.
-
-There's no particular reason to rely on `npm run`, so change the `Makefile`'s
-`serve` rule to:
-
-```make{3}
-.PHONY: serve
-serve: ## Serve the application with a local HTTP server
-	npx vite serve --open
-```
-
-Run `make serve` again to verify that it does the same thing as before.
+Now run `npm run serve` to check that everything works as expected.
 
 ::: tip
 
 Feel free to do a little cleanup before moving on:
 
-- Delete the `scripts` section of `package.json`
 - Delete the `Index.re` file in the root directory
 - Delete the `melange.emit` stanza from the root directory's `dune` file
 
@@ -295,10 +245,6 @@ Celsius Converter.
 <b>2.</b> Delete `reason-react-ppx` from `src/counter/dune`'s `melange.emit`
 stanza. What compiler errors do you get?
 
-<b>3.</b> You might have noticed that every recipe in the Makefile is prefixed
-by a tab. What happens if you replace the tab in front of the `serve` rule's
-recipe with four spaces?
-
 ## Overview
 
 - Dune is the build system we use to build Melange projects
@@ -310,9 +256,6 @@ recipe with four spaces?
   - Which directories to include and which to exclude
   - Which directories contain code that should be transpiled to JavaScript,
     using the `melange.emit` stanza
-- Make is a great way to run project-related tasks
-  - A `Makefile` contains rules which can run commands based on the target you
-    pass to the `make` command
 
 ## Solutions
 
@@ -344,18 +287,6 @@ Error: Unbound value div
 That's because putting `reason-react-ppx` in the `preprocess/pps` field will
 transform function calls to `div` (which isn't defined anywhere) into calls to
 `React.createElement("div", ...)`[^2].
-
-<b>3.</b> Replacing the tab in front of the `serve` rule's
-recipe with four spaces will result in a `Makefile` error:
-
-```
-Makefile:42: *** missing separator.  Stop.
-```
-
-The line number where it expects the tab is 42. It is a very common mistake to
-write spaces instead of tabs in a `Makefile`. Fortunately, most code editors
-know that when you press the Tab key inside a `Makefile`, you mean to add a tab
-character instead of space characters.
 
 -----
 

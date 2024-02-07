@@ -152,7 +152,7 @@ Render the `Order` component inside `src/order-confirmation/Index.re`:
 
 <<< Index.re
 
-Run `make serve` inside `src/order-confirmation` to see your new app in action.
+Run `npm run serve` inside `src/order-confirmation` to see your new app in action.
 
 ## Passing `key` prop to `Item`s
 

@@ -195,7 +195,7 @@ export default defineConfig({
 });
 ```
 
-Now run `make bundle` again and you should see some output like this:
+Now run `npm run bundle` again and you should see some output like this:
 
 ```bash{5}
 vite v5.0.11 building for production...
