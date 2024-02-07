@@ -2,12 +2,13 @@ let getBurgerDiscountOriginal = (items: array(Item.t)) => {
   let burgers =
     items
     |> Js.Array.filter(
-         fun
-         | Item.Burger(_) => true
-         | Sandwich(_)
-         | Hotdog => false,
+         ~f=
+           fun
+           | Item.Burger(_) => true
+           | Sandwich(_)
+           | Hotdog => false,
        )
-    |> Js.Array.sortInPlaceWith((a, b) => {
+    |> Js.Array.sortInPlaceWith(~f=(a, b) => {
          let a = Item.toPrice(a);
          let b = Item.toPrice(b);
          compare(b, a);
@@ -25,12 +26,13 @@ let getBurgerDiscountCatchException = (items: array(Item.t)) => {
   let burgers =
     items
     |> Js.Array.filter(
-         fun
-         | Item.Burger(_) => true
-         | Sandwich(_)
-         | Hotdog => false,
+         ~f=
+           fun
+           | Item.Burger(_) => true
+           | Sandwich(_)
+           | Hotdog => false,
        )
-    |> Js.Array.sortInPlaceWith((a, b) => {
+    |> Js.Array.sortInPlaceWith(~f=(a, b) => {
          let a = Item.toPrice(a);
          let b = Item.toPrice(b);
          compare(b, a);
@@ -55,12 +57,13 @@ let getBurgerDiscount = (items: array(Item.t)) => {
   let burgers =
     items
     |> Js.Array.filter(
-         fun
-         | Item.Burger(_) => true
-         | Sandwich(_)
-         | Hotdog => false,
+         ~f=
+           fun
+           | Item.Burger(_) => true
+           | Sandwich(_)
+           | Hotdog => false,
        )
-    |> Js.Array.sortInPlaceWith((a, b) => {
+    |> Js.Array.sortInPlaceWith(~f=(a, b) => {
          let a = Item.toPrice(a);
          let b = Item.toPrice(b);
          compare(b, a);
