@@ -27,11 +27,8 @@ let toEmoji =
   | Burger => {js|🍔|js}
   | Hotdog => {js|🌭|js}
   | Sandwich(sandwich) =>
-    // todo: Put 🥪 in format string after Melange 3 is released
-    // https://github.com/melange-re/melange-for-react-devs/issues/12
     Printf.sprintf(
-      "%s(%s)",
-      {js|🥪|js},
+      {js|🥪(%s)|js},
       switch (sandwich) {
       | Portabello => {js|🍄|js}
       | Ham => {js|🐷|js}

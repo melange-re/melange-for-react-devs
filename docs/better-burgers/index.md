@@ -40,7 +40,7 @@ a number of syntactic and practical differences between them:
   types.
 
 The runtime representation of a record is a [plain JavaScript
-object](https://melange.re/v2.2.0/communicate-with-javascript/#data-types-and-runtime-representation),
+object](https://melange.re/v3.0.0/communicate-with-javascript/#data-types-and-runtime-representation),
 the same as for a `Js.t` object.
 
 ::: info
@@ -193,7 +193,7 @@ read; it can even be error-prone when some of the elements of the tuple are of
 the same type. For example, what if you accidentally changed the positions of
 the `onions` and `cheese` variables in the second branch:
 
-```reason{3}
+```reason{1,3}
 switch (lettuce, onions, cheese) {
 | (false, 0, 0) => {js|🍔|js}
 | (lettuce, cheese, onions) =>
@@ -351,7 +351,7 @@ and [demo](https://react-book.melange.re/demo/src/better-burgers/) for this chap
     ```
 
     See this [playground
-    snippet](https://melange.re/v2.2.0/playground/?language=Reason&code=Ly8gVXNlIGEgcmFuZG9tIHZhcmlhYmxlIHNvIGZ1bmN0aW9uIGludm9jYXRpb25zIGFyZW4ndCBvcHRpbWl6ZWQgYXdheQpsZXQgYyA9IFJhbmRvbS5pbnQoMTApOwoKbGV0IGFkZCA9ICh4LCB5LCB6KSA9PiB4ICsgeSArIHo7CkpzLmxvZyhhZGQoMSwgMiwgYykpOwoKLy8gQW4gZXF1aXZhbGVudCBkZWZpbml0aW9uIHRoYXQgZXhwbGljaXRseSByZXR1cm5zIGZ1bmN0aW9uczoKbGV0IGV4cGxpY2l0QWRkID0geCA9PiB5ID0%2BIHogPT4geCArIHkgKyB6OwpKcy5sb2coZXhwbGljaXRBZGQoMSwgMiwgYykpOwovLyBDb25jZXB0dWFsbHksIHRoZXJlIGFyZSBtdWx0aXBsZSBmdW5jdGlvbiBpbnZvY2F0aW9ucy4gQnV0IGluIHRoZSBKUyBvdXRwdXQsCi8vIGl0J3MgYSBzaW5nbGUgZnVuY3Rpb24gY2FsbC4KSnMubG9nKGV4cGxpY2l0QWRkKDEpKDIpKGMpKTs%3D&live=off)
+    snippet](https://melange.re/v3.0.0/playground/?language=Reason&code=Ly8gVXNlIGEgcmFuZG9tIHZhcmlhYmxlIHNvIGZ1bmN0aW9uIGludm9jYXRpb25zIGFyZW4ndCBvcHRpbWl6ZWQgYXdheQpsZXQgYyA9IFJhbmRvbS5pbnQoMTApOwoKbGV0IGFkZCA9ICh4LCB5LCB6KSA9PiB4ICsgeSArIHo7CkpzLmxvZyhhZGQoMSwgMiwgYykpOwoKLy8gQW4gZXF1aXZhbGVudCBkZWZpbml0aW9uIHRoYXQgZXhwbGljaXRseSByZXR1cm5zIGZ1bmN0aW9uczoKbGV0IGV4cGxpY2l0QWRkID0geCA9PiB5ID0%2BIHogPT4geCArIHkgKyB6OwpKcy5sb2coZXhwbGljaXRBZGQoMSwgMiwgYykpOwovLyBDb25jZXB0dWFsbHksIHRoZXJlIGFyZSBtdWx0aXBsZSBmdW5jdGlvbiBpbnZvY2F0aW9ucy4gQnV0IGluIHRoZSBKUyBvdXRwdXQsCi8vIGl0J3MgYSBzaW5nbGUgZnVuY3Rpb24gY2FsbC4KSnMubG9nKGV4cGxpY2l0QWRkKDEpKDIpKGMpKTs%3D&live=off)
     for an extended example and the [official OCaml
     docs](https://ocaml.org/docs/values-and-functions#types-of-functions-of-multiple-parameters)
     for more details.

@@ -1,4 +1,4 @@
-let getValueFromEvent = (evt): string => ReactEvent.Form.target(evt)##value;
+let getValueFromEvent = (evt): string => React.Event.Form.target(evt)##value;
 
 let convert = celsius => 9.0 /. 5.0 *. celsius +. 32.0;
 
@@ -24,8 +24,7 @@ let make = () => {
            | Some(fahrenheit) when fahrenheit < (-128.6) => {js|Unreasonably cold🥶|js}
            | Some(fahrenheit) when fahrenheit > 212.0 => {js|Unreasonably hot🥵|js}
            | Some(fahrenheit) =>
-             Js.Float.toFixedWithPrecision(fahrenheit, ~digits=2)
-             ++ {js|°F|js}
+             Js.Float.toFixed(fahrenheit, ~digits=2) ++ {js|°F|js}
            }
          )
      )

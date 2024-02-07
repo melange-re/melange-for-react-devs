@@ -10,12 +10,16 @@ depends: [
   "ocaml" {>= "5.1.1"}
   "reason" {>= "3.10.0"}
   "dune" {>= "3.8"}
-  "melange" {>= "2.2.0"}
-  "reason-react" {>= "0.13.0"}
-  "reason-react-ppx"
+  "melange" {>= "3.0.0-51"}
+  "reason-react" {>= "0.14.0"}
+  "reason-react-ppx" {>= "0.14.0"}
   "opam-check-npm-deps" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "dot-merlin-reader" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "odoc" {with-doc}
 ]
 dev-repo: "git+https://github.com/melange-re/melange-for-react-devs.git"
+pin-depends: [
+  ["reason-react.dev" "https://github.com/reasonml/reason-react/archive/47da6ae6e11d49363d59313b9fe5c5968ba13045.tar.gz"]
+  ["reason-react-ppx.dev" "https://github.com/reasonml/reason-react/archive/47da6ae6e11d49363d59313b9fe5c5968ba13045.tar.gz"]
+]

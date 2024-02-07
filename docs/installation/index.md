@@ -9,7 +9,7 @@ Linux](https://learn.microsoft.com/en-us/windows/wsl/)
   - [Node.js](https://nodejs.org/)
   - [git](https://git-scm.com/)
   - A code editor such as [Visual Studio Code](https://code.visualstudio.com/)
-    - There are also [many other editors](https://melange.re/v2.2.0/getting-started/#editor-integration)
+    - There are also [many other editors](https://melange.re/v3.0.0/getting-started/#editor-integration)
       which can support OCaml
 
 ## Opam

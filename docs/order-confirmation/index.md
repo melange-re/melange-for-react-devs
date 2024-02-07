@@ -136,12 +136,12 @@ There's a lot going on here:
 - The `Order.make` function has a single labeled argument, `~items`, of type
   `Order.t`. This means the `Order` component has a single prop named `items`.
 - We sum up the prices of all items using
-  [Js.Array.reduce](https://melange.re/v2.2.0/api/re/melange/Js/Array/index.html#val-reduce),
+  [Js.Array.reduce](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-reduce),
  which is the Melange binding to JavaScript's [Array.reduce
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce).
   Note that `Js.Array.reduce` requires the initial value to be passed in.
 - For each order, we render an `Item` component via
-  [Js.Array.map](https://melange.re/v2.2.0/api/re/melange/Js/Array/index.html#val-map),
+  [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-map),
   which is the Melange binding to the [Array.map
   method](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 - There's a call to `React.array`, which we'll address in a little bit.
@@ -163,7 +163,7 @@ Warning: Each child in a list should have a unique "key" prop.
 ```
 
 Oops, we forgot the set the `key` prop! One way to fix this is to use
-[Js.Array.mapi](https://melange.re/v2.2.0/api/re/melange/Js/Array/index.html#val-mapi)
+[Js.Array.mapi](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-mapi)
 instead[^4] so we can set `key` based on the index of the element:
 
 <<< Order.re#mapi
@@ -178,7 +178,7 @@ If you hover over it, you'll see that it has the type signature
 
 When a JavaScript function has optional arguments, it's common to create
 [multiple OCaml functions that bind to
-it](https://melange.re/v2.2.0/communicate-with-javascript/#approach-1-multiple-external-functions).
+it](https://melange.re/v3.0.0/communicate-with-javascript/#approach-1-multiple-external-functions).
 We'll discuss this in more detail [later](/todo).
 
 ## Type transformations in JSX
@@ -209,12 +209,12 @@ match the expected type, we must add a call to `React.array` which turns
 To better see what types are at play, it might make sense to refactor
 `Order.make` like so:
 
-<<< Order.re#order-make-item-rows{4-5,9}
+<<< Order.re#order-make-item-rows{7-8,12}
 
 `React.array` is a strict type transformation that doesn't actually change the
 underlying JavaScript object. For example, try running the [following code in
 the
-playground](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKHggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
+playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGVsZW1BcnJheTogYXJyYXkoUmVhY3QuZWxlbWVudCkgPQogICAgW3wiYSIsICJiIiwgImMifF0gfD4gSnMuQXJyYXkubWFwKH5mPXggPT4gUmVhY3Quc3RyaW5nKHgpKTsKSnMubG9nKGVsZW1BcnJheSk7CkpzLmxvZyhSZWFjdC5hcnJheShlbGVtQXJyYXkpKTs%3D&live=off):
 
 <<< Snippets.re#react-array-demo
 
@@ -293,7 +293,7 @@ Create a submodule inside `Order.re`
 module's helper functions to get your program to compile again.
 
 <b>3.</b> Instead of repeatedly using `value |>
-Js.Float.toFixedWithPrecision(~digits=2)
+Js.Float.toFixed(~digits=2)
 |> React.string`, add a helper function `Format.currency` that does
 the same thing.
 
@@ -315,7 +315,7 @@ Create a new file named `Format.re`.
   function whose entire body is a switch expression
 - Labeled arguments in a component's `make` function are treated as props by
   ReasonReact.
-- The [Js.Array](https://melange.re/v2.2.0/api/re/melange/Js/Array/index.html)
+- The [Js.Array](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html)
   module contains useful array functions
   - The `Js.Array.reduce` function is the binding to JavaScript's `Array.reduce`
     method

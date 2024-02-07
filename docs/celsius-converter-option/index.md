@@ -60,7 +60,7 @@ were still using `float_of_string`:
 celsius
 |> float_of_string
 |> convert
-|> Js.Float.toFixedWithPrecision(~digits=2)
+|> Js.Float.toFixed(~digits=2)
 ```
 
 Actually, we can still use a very similar chain of functions with
@@ -70,7 +70,7 @@ Actually, we can still use a very similar chain of functions with
 celsius
 |> float_of_string_opt
 |> Option.map(convert)
-|> Option.map(Js.Float.toFixedWithPrecision(~digits=2))
+|> Option.map(Js.Float.toFixed(~digits=2))
 ```
 
 `Option.map` takes a function and an `option` value, and only invokes the
@@ -104,7 +104,7 @@ let map = (func, option) =>
 
 You may be interested in browsing the many other helper functions related to
 `option` in the standard library's [Option
-module](https://melange.re/v2.2.0/api/re/melange/Stdlib/Option/).
+module](https://melange.re/v3.0.0/api/re/melange/Stdlib/Option/).
 
 At this point, your switch expression might look like this:
 
@@ -132,7 +132,7 @@ nesting of conditionals to a minimum and making your code more readable.
 Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 [create a component that can convert back and forth between Celsius and
 Fahrenheit](/todo). But first, we'll explore [Dune, the build
-system](https://melange.re/v2.2.0/build-system/) used by Melange.
+system](https://melange.re/v3.0.0/build-system/) used by Melange.
 
 ## Exercises
 
@@ -151,14 +151,14 @@ cold🥶" if the temperature is less than -128.6°F (the lowest temperature
 ever recorded on Earth).
 
 <b>3.</b> Use
-[Js.Float.fromString](https://melange.re/v2.2.0/api/re/melange/Js/Float/#val-fromString)
+[Js.Float.fromString](https://melange.re/v3.0.0/api/re/melange/Js/Float/#val-fromString)
 instead of `float_of_string_opt` to parse a string to float. Note that
 `Js.Float.fromString` does not return `None` if it fails to parse a string to a
 valid float.
 
 ::: details Hint
 
-Use [Js.Float.isNaN](https://melange.re/v2.2.0/api/re/melange/Js/Float/#val-isNaN).
+Use [Js.Float.isNaN](https://melange.re/v3.0.0/api/re/melange/Js/Float/#val-isNaN).
 
 :::
 

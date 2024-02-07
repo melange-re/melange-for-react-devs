@@ -18,7 +18,7 @@ When running `make init`, you may encounter an error like this:
 ```
 [ERROR] Could not determine which packages to install for this switch:
   * Missing dependency:
-    - melange >= 2.0.0
+    - melange >= 3.0.0-51
     no matching version
 ```
 

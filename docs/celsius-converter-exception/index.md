@@ -101,13 +101,13 @@ haven't quite gotten used to OCaml syntax yet.
 If we enter a value with a lot of decimals in it, e.g. `21.1223456`, we'll
 get a Fahrenheit value with a lot of decimals in it as well. We can limit the
 number of decimals in the converted value using
-[Js.Float.toFixedWithPrecision](https://melange.re/v2.2.0/api/re/melange/Js/Float/index.html#val-toFixedWithPrecision):
+[Js.Float.toFixed](https://melange.re/v3.0.0/api/re/melange/Js/Float/index.html#val-toFixed):
 
-<<< Snippets.re#fixed-precision{8,11-12}
+<<< Snippets.re#fixed-precision{8,11}
 
-`Js.Float.toFixedWithPrecision` is a function that has one positional argument
+`Js.Float.toFixed` is a function that has one positional argument
 and one [labeled
-argument](https://melange.re/v2.2.0/communicate-with-javascript/#labeled-arguments).
+argument](https://melange.re/v3.0.0/communicate-with-javascript/#labeled-arguments).
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
@@ -129,14 +129,14 @@ celsius |> float_of_string |> convert
 ```
 
 This happened because `string_of_float`, which takes a single argument, was
-replaced by `Js.Float.toFixedWithPrecision`, which takes two arguments, and
+replaced by `Js.Float.toFixed`, which takes two arguments, and
 functions chained using `|>` can only take a single argument. But this
 one-argument restriction actually doesn't prevent us from putting
-`Js.Float.toFixedWithPrecision` in the chain! We can take advantage of OCaml's
+`Js.Float.toFixed` in the chain! We can take advantage of OCaml's
 [partial
 application](https://reasonml.github.io/docs/en/function#partial-application)
 feature to create a one-argument function by writing
-`Js.Float.toFixedWithPrecision(~digits=2)`. Then our switch expression becomes
+`Js.Float.toFixed(~digits=2)`. Then our switch expression becomes
 
 <<< Snippets.re#partial-application{12,15}
 
@@ -175,7 +175,7 @@ Js.log(addFive(10));
 ```
 
 What do you think it outputs? Run it in [Melange
-Playground](https://melange.re/v2.2.0/playground) to confirm your hypothesis.
+Playground](https://melange.re/v3.0.0/playground) to confirm your hypothesis.
 
 <b>4.</b> Use the pipe last operator (`|>`) and partial application to write a
 function that takes an integer argument `x`, subtracts `x` from 10, and converts
@@ -184,7 +184,7 @@ that result to binary.
 ::: details Hint
 
 Use the
-[Js.Int.toStringWithRadix](https://melange.re/v2.2.0/api/re/melange/Js/Int/#val-toStringWithRadix)
+[Js.Int.toString](https://melange.re/v3.0.0/api/re/melange/Js/Int/#val-toString)
 function.
 
 :::
@@ -208,7 +208,7 @@ function.
 
 <b>1.</b> Changing it to `"°C = "` will result in a bit of gibberish being
 rendered: "Â°C". We can't rely on OCaml strings to [deal with Unicode
-correctly](https://melange.re/v2.2.0/communicate-with-javascript/#strings), so
+correctly](https://melange.re/v3.0.0/communicate-with-javascript/#strings), so
 any string that contains non-ASCII text must be delimited using `{js||js}`.
 
 ::: tip
@@ -233,9 +233,9 @@ Values with
 useState](https://reasonml.github.io/reason-react/docs/en/usestate-event-value)
 in the [ReasonReact](https://reasonml.github.io/reason-react/) docs.
 
-<b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
+<b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
 
-<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v2.2.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nV2l0aFJhZGl4KH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nKH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
 
 -----
 
@@ -247,5 +247,5 @@ and [demo](https://react-book.melange.re/demo/src/celsius-converter-exception/) 
 
 [^1]:
     See [Using Js.t
-    objects](https://melange.re/v2.2.0/communicate-with-javascript/#using-jst-objects) for more
+    objects](https://melange.re/v3.0.0/communicate-with-javascript/#using-jst-objects) for more
     details.

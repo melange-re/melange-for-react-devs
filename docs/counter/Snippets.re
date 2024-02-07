@@ -5,14 +5,18 @@ module App = {
 };
 // #endregion app-v1
 
-// #region use-app-component
-let node = ReactDOM.querySelector("#root");
-switch (node) {
-| Some(root) => ReactDOM.render(<App />, root)
-| None =>
-  Js.Console.error("Failed to start React: couldn't find the #root element")
+let _ = {
+  // #region use-app-component
+  let node = ReactDOM.querySelector("#root");
+  switch (node) {
+  | None =>
+    Js.Console.error("Failed to start React: couldn't find the #root element")
+  | Some(root) =>
+    let root = ReactDOM.Client.createRoot(root);
+    ReactDOM.Client.render(root, <App />);
+  };
+  // #endregion use-app-component
 };
-// #endregion use-app-component
 
 module Counter = {
   // #region counter-v1
@@ -47,7 +51,7 @@ let _ = {
 
   // #region render-with-styling
   <div
-    style={ReactDOMStyle.make(
+    style={ReactDOM.Style.make(
       ~padding="1em",
       ~display="flex",
       ~gridGap="1em",

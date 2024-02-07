@@ -97,7 +97,7 @@ Now we can add the appropriate classes to `OrderItem.make`'s JSX:
 
 As well as `Order.make`'s JSX:
 
-<<< Order.re#order-make{6,13}
+<<< Order.re#order-make{9,16}
 
 Finally, add a `mel.raw` extension node at the top of `Order.re`:
 
@@ -118,7 +118,7 @@ Fortunately, Melange provides a more reliable way to import frontend assets.
 ## Import using `external`
 
 At the top of `Order.re`, replace our first `mel.raw` extension node with an
-[external](https://melange.re/v2.2.0/communicate-with-javascript/#external-functions)
+[external](https://melange.re/v3.0.0/communicate-with-javascript/#external-functions)
 declaration:
 
 ```reason
@@ -141,9 +141,9 @@ Let's break down the individual parts of the `external` declaration:
 [@mel.module "./order-item.css"] external _css: unit = "default";
 ```
 
-- [mel.module](https://melange.re/v2.2.0/communicate-with-javascript/#using-functions-from-other-javascript-modules)
+- [mel.module](https://melange.re/v3.0.0/communicate-with-javascript/#using-functions-from-other-javascript-modules)
   is an
-  [attribute](https://melange.re/v2.2.0/communicate-with-javascript/#attributes)
+  [attribute](https://melange.re/v3.0.0/communicate-with-javascript/#attributes)
   that tells the `external` declaration which module to import from
 - The `external` keyword tells OCaml this is a declaration for a value defined
   outside of OCaml, i.e. it comes from JavaScript[^4]
@@ -158,9 +158,9 @@ Let's break down the individual parts of the `external` declaration:
 ::: tip
 
 A quick way to check what an `external` declaration compiles to is to use
-the [Melange Playground](https://melange.re/v2.2.0/playground/). For example,
+the [Melange Playground](https://melange.re/v3.0.0/playground/). For example,
 here's a
-[link](https://melange.re/v2.2.0/playground/?language=Reason&code=W0BtZWwubW9kdWxlICIuL29yZGVyLWl0ZW0uY3NzIl0gZXh0ZXJuYWwgX2NzczogdW5pdCA9ICJkZWZhdWx0Ijs%3D&live=off)
+[link](https://melange.re/v3.0.0/playground/?language=Reason&code=W0BtZWwubW9kdWxlICIuL29yZGVyLWl0ZW0uY3NzIl0gZXh0ZXJuYWwgX2NzczogdW5pdCA9ICJkZWZhdWx0Ijs%3D&live=off)
 to the `external` declaration we just added.
 
 :::
@@ -203,7 +203,7 @@ inside the `OrderComponent` module, since that's the only place it's used.
 
 We have not seen the last of `external` declarations, as they are the primary
 way in which OCaml interacts with code written in JavaScript. See the [Melange
-docs](https://melange.re/v2.2.0/communicate-with-javascript/#external-functions)
+docs](https://melange.re/v3.0.0/communicate-with-javascript/#external-functions)
 for more details.
 
 ## Class names must be the same
@@ -250,7 +250,7 @@ declaration instead of `mel.raw`.
 <b>1.</b> Changing `%%mel.raw` to `%mel.raw` will cause a compilation error in
 Vite because the generated JS code changes to
 
-```
+```javascript
 ((import "./order.css"));
 ```
 
@@ -270,14 +270,12 @@ declaration, it should look something like this:
 
 <<< Order.re#order-external
 
-<b>3.</b> If you replace `mel.module` with `bs.module`, your code will continue
-to compile but you get a warning from Melange:
+<b>3.</b> If you replace `mel.module` with `bs.module`, your code will fail to
+compile with this error message:
 
 ```
 File "src/styling-with-css/Order.re", line 4, characters 4-13:
-Alert deprecated: The `[@bs.*]' attributes are deprecated and will be removed in the
-next release.
-Use `[@mel.*]' instead.
+Error: `[@bs.*]' and non-namespaced attributes have been removed in favor of `[@mel.*]' attributes.
 ```
 
 Basically, `bs.module` was the old name for the attribute, but it has been

@@ -12,17 +12,14 @@ module Burger = {
       switch (count) {
       | 0 => ""
       | 1 => emoji
-      // todo: Move unicode characters back into format string after Melange 3 is released
-      | count => Printf.sprintf({js|%s%s%d|js}, emoji, {js|×|js}, count)
+      | count => Printf.sprintf({js|%s×%d|js}, emoji, count)
       };
 
     switch (t) {
     | {lettuce: false, onions: 0, cheese: 0, tomatoes: false, bacon: 0} => {js|🍔|js}
     | {lettuce, onions, cheese, tomatoes, bacon} =>
-      // todo: Move unicode characters back into format string after Melange 3 is released
       Printf.sprintf(
-        {js|%s{%s}|js},
-        {js|🍔|js},
+        {js|🍔{%s}|js},
         [|
           lettuce ? {js|🥬|js} : "",
           tomatoes ? {js|🍅|js} : "",
@@ -30,8 +27,8 @@ module Burger = {
           multiple({js|🧀|js}, cheese),
           multiple({js|🥓|js}, bacon),
         |]
-        |> Js.Array.filter(str => str != "")
-        |> Js.Array.joinWith(", "),
+        |> Js.Array.filter(~f=str => str != "")
+        |> Js.Array.join(~sep=", "),
       )
     };
   };
@@ -67,11 +64,8 @@ module Sandwich = {
   };
 
   let toEmoji = t =>
-    // todo: Put 🥪 in format string after Melange 3 is released
-    // https://github.com/melange-re/melange-for-react-devs/issues/12
     Printf.sprintf(
-      "%s(%s)",
-      {js|🥪|js},
+      {js|🥪(%s)|js},
       switch (t) {
       | Portabello => {js|🍄|js}
       | Ham => {js|🐷|js}
