@@ -40,11 +40,11 @@ jobs:
         with:
           ocaml-compiler: 5.1.1
       - name: Install all deps
-        run: make install
+        run: npm run install-opam-npm
       - name: Format check
-        run: make format-check
+        run: npm run format-check
       - name: Bundle the demo app
-        run: make bundle
+        run: npm run bundle
       - name: Install dependencies for VitePress
         run: |
           cd docs
