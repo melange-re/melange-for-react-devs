@@ -105,14 +105,7 @@ Melange project.
 `target`'s value is `output`, so the location of `Index.js` is
 
 ```
-_build/default/stuff/Index.js
-```
-
-If the `dune` file was in directory `foo/bar` and the value of `target` was
-`fructus`, the location of `Index.js` would be
-
-```
-_build/default/foo/bar/fructus/foo/bar/Index.js
+_build/default/output/Index.js
 ```
 
 We need to know the exact location of `Index.js` so that we can reference it in
@@ -139,8 +132,8 @@ layout](https://melange.re/v3.0.0/build-system/#javascript-artifacts-layout).
 ::: tip
 
 In this dune file, we're only concerned with building JavaScript to run in the
-browser, but if we also wanted to build JavaScript to run on Node, we'd include
-another `melange.emit` stanza specifically for that. See
+browser, but if we also wanted to build JavaScript to run on Node using
+CommonJS, we'd include another `melange.emit` stanza specifically for that. See
 [melange-opam-template](https://github.com/melange-re/melange-opam-template/blob/main/src/dune)
 for an example of building for Node.
 
@@ -176,6 +169,42 @@ src/counter
 └─ index.html
 ```
 
+## Structure of `_build` directory
+
+If you look inside the `_build/default/src/counter` directory, you'll see that
+your `src/counter` directory is essentially mirrored there, along with some
+extra files:
+
+```
+_build/default/src/counter
+├─ .merlin-conf/
+├─ .output.mobjs/
+├─ output/
+├─ Counter.re
+├─ Counter.re.ml
+├─ Counter.re.pp.ml
+├─ Index.re
+├─ Index.re.ml
+└─ Index.re.pp.ml
+```
+
+Extra files and directories like `.output.mobjs` and `Counter.re.ml` are build
+artifacts and we won't go into any detail about them. If you look into
+`_build/default/src/counter/output/src/counter`, you'll see that `src/counter` is mirrored
+there as well, but this time the directory only contains the generated `.js`
+files:
+
+```
+_build/default/src/counter/output/src/counter
+├─ .output.mobjs/
+├─ Counter.js
+└─ Index.js
+```
+
+So the `_build` directory contains two mirrored directories for `src/counter`:
+one for the original `.re` source files and their intermediate build artifacts,
+another for the final generated `.js` files.
+
 ## Update root directory `index.html`
 
 Now that we've added `src/counter/index.html`, we don't need the root
@@ -200,62 +229,12 @@ index page to link to all of our single-page apps. Change `index.html` to this:
 </html>
 ```
 
-Now run `make serve` to check that everything works as expected.
-
-## Why use Make?
-
-By now you might have noticed that even though Dune is used to build your
-project, we never execute Dune directly, but instead always go through
-[Make](https://en.wikipedia.org/wiki/Make_(software)). One reason is that the
-commands for Dune can occasionally be verbose, but the other reason is that Make
-is a very good task runner. For example, here are some advantages it has over
-`npm run`:
-
-- You can add comments!
-- It's trivial to create tasks with multiple commands
-- Running `make` lists all the rules inside the `Makefile` (achieved with a few
-  lines of boilerplate)
-
-## Modifying the `serve` rule
-
-Right now the project is still using `npm run` to serve the app, but let's
-migrate it fully to Make. First, take a look at the `serve` rule inside the
-`Makefile`:
-
-```make
-.PHONY: serve
-serve: ## Serve the application with a local HTTP server
-	npm run serve
-```
-
-A breakdown of this rule:
-
-- `.PHONY: serve` tells Make that the `serve` rule is a [phony
-  target](https://makefiletutorial.com/#phony), meaning `serve` is not a file we
-  want to generate but just a label for an action. Note that declaring phony
-  targets is optional.
-- The name of the rule is `serve`, and it's followed immediately by a comment
-  (denoted by whatever follows `#`) explaining its purpose.
-- Underneath the rule's name is its *recipe*, basically the command(s) that will
-  be executed when we run `make serve` at the command line. Here it just runs
-  `npm run serve`.
-
-There's no particular reason to rely on `npm run`, so change the `Makefile`'s
-`serve` rule to:
-
-```make{3}
-.PHONY: serve
-serve: ## Serve the application with a local HTTP server
-	npx vite serve --open
-```
-
-Run `make serve` again to verify that it does the same thing as before.
+Now run `npm run serve` to check that everything works as expected.
 
 ::: tip
 
 Feel free to do a little cleanup before moving on:
 
-- Delete the `scripts` section of `package.json`
 - Delete the `Index.re` file in the root directory
 - Delete the `melange.emit` stanza from the root directory's `dune` file
 
@@ -295,9 +274,27 @@ Celsius Converter.
 <b>2.</b> Delete `reason-react-ppx` from `src/counter/dune`'s `melange.emit`
 stanza. What compiler errors do you get?
 
-<b>3.</b> You might have noticed that every recipe in the Makefile is prefixed
-by a tab. What happens if you replace the tab in front of the `serve` rule's
-recipe with four spaces?
+<b>3.</b> Assume you have a directory `foo/bar` in the root of your project
+directory with these files in it:
+
+```
+foo/bar
+├─ Hello.re
+└─ dune
+```
+
+The contents of `foo/bar/dune` are:
+
+```clj
+(melange.emit
+ (target dist)
+ (libraries reason-react)
+ (preprocess
+  (pps melange.ppx reason-react-ppx))
+ (module_systems es6))
+```
+
+What is the path of the `Hello.js` file generated by Melange?
 
 ## Overview
 
@@ -310,9 +307,6 @@ recipe with four spaces?
   - Which directories to include and which to exclude
   - Which directories contain code that should be transpiled to JavaScript,
     using the `melange.emit` stanza
-- Make is a great way to run project-related tasks
-  - A `Makefile` contains rules which can run commands based on the target you
-    pass to the `make` command
 
 ## Solutions
 
@@ -345,17 +339,11 @@ That's because putting `reason-react-ppx` in the `preprocess/pps` field will
 transform function calls to `div` (which isn't defined anywhere) into calls to
 `React.createElement("div", ...)`[^2].
 
-<b>3.</b> Replacing the tab in front of the `serve` rule's
-recipe with four spaces will result in a `Makefile` error:
+<b>3.</b> The path of the `Hello.js` file generated from `foo/bar/Hello.re` is:
 
 ```
-Makefile:42: *** missing separator.  Stop.
+_build/default/foo/bar/dist/foo/bar/Hello.js
 ```
-
-The line number where it expects the tab is 42. It is a very common mistake to
-write spaces instead of tabs in a `Makefile`. Fortunately, most code editors
-know that when you press the Tab key inside a `Makefile`, you mean to add a tab
-character instead of space characters.
 
 -----
 

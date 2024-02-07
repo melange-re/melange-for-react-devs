@@ -49,15 +49,15 @@ template
 ```bash
 git clone https://github.com/melange-re/melange-for-react-devs-template
 cd melange-for-react-devs-template
-make init
-make build
-make serve
+npm run init
+npm run build
+npm run serve
 ```
 
-While `make init` is running, consider grabbing some coffee or other beverage,
-as it might take a while to fetch all the dependencies and build them. The last
-command, `make serve`, should open a tab in your default browser which points to
-<a href="http://localhost:5174/" target="_blank" rel="noreferrer
+While `npm run init` is running, consider grabbing some coffee or other
+beverage, as it might take a while to fetch all the dependencies and build them.
+The last command, `npm run serve`, should open a tab in your default browser which
+points to <a href="http://localhost:5174/" target="_blank" rel="noreferrer
 noopener">http://localhost:5174/</a> and shows you a typical "Hello World" page.
 If you see this page, then the project was successfully installed!
 
