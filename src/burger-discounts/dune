@@ -13,7 +13,7 @@
  (deps
   ; (alias melange)
   Discount.re
-  (:input ./output/src/burger-discounts/Test.mjs)
+  (:input ./output/src/burger-discounts/Tests.mjs)
   %{bin:node})
  (action
   (run time %{bin:node} %{input})))
