@@ -18,8 +18,12 @@ module Burger = {
     switch (t) {
     | {lettuce: false, onions: 0, cheese: 0, tomatoes: false, bacon: 0} => {js|🍔|js}
     | {lettuce, onions, cheese, tomatoes, bacon} =>
+      let toppingsCount =
+        (lettuce ? 1 : 0) + (tomatoes ? 1 : 0) + onions + cheese + bacon;
+
       Printf.sprintf(
-        {js|🍔{%s}|js},
+        {js|🍔%s{%s}|js},
+        toppingsCount > 12 ? {js|🥣|js} : "",
         [|
           lettuce ? {js|🥬|js} : "",
           tomatoes ? {js|🍅|js} : "",
@@ -29,7 +33,7 @@ module Burger = {
         |]
         |> Js.Array.filter(~f=(!=)(""))
         |> Js.Array.join(~sep=","),
-      )
+      );
     };
   };
 

@@ -37,3 +37,17 @@ test("Burger with 2 or more of onions, cheese, or bacon should show ×", () =>
        {js|🍔{🧅×2,🧀×3,🥓×4}|js},
      )
 );
+
+test("Burger with more than 12 toppings should also show bowl", () =>
+  expect
+  |> equal(
+       Item.Burger.toEmoji({
+         lettuce: true,
+         tomatoes: true,
+         onions: 4,
+         cheese: 2,
+         bacon: 5,
+       }),
+       {js|🍔🥣{🥬,🍅,🧅×4,🧀×2,🥓×5}|js},
+     )
+);
