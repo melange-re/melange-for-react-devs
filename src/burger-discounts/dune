@@ -10,10 +10,6 @@
 
 (rule
  (alias runtest)
- (deps
-  ; (alias melange)
-  Discount.re
-  (:input ./output/src/burger-discounts/Tests.mjs)
-  %{bin:node})
+ (deps Discount.re)
  (action
-  (run time %{bin:node} %{input})))
+  (run time node %{dep:./output/src/burger-discounts/DiscountTests.mjs})))
