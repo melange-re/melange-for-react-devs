@@ -212,9 +212,8 @@ the branches of the switch expression. Now `Item.Burger.toEmoji` gets the name
 
 ---
 
-Felicitations! The order confirmation widget now supports burgers with different
-toppings. In the next chapter, we'll refactor the code to use lists instead of
-arrays.
+Magnifique! The order confirmation widget now supports burgers with different
+toppings. In the next chapter, we'll start writing tests for our code.
 
 ## Exercises
 
