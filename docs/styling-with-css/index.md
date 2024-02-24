@@ -76,7 +76,7 @@ To ensure that `order.css` is also copied to the build directory, we can add
 `order.css` to the value of `runtime_deps`:
 
 ```clj
-(runtime_deps item.css order.css)
+(runtime_deps order-item.css order.css)
 ```
 
 If you have many `.css` files, you can tell `runtime_deps` to copy all `.css`
