@@ -132,7 +132,7 @@ nesting of conditionals to a minimum and making your code more readable.
 Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 [create a component that can convert back and forth between Celsius and
 Fahrenheit](/todo). But first, we'll explore [Dune, the build
-system](https://melange.re/v3.0.0/build-system/) used by Melange.
+system](https://melange.re/v3.0.0/build-system.html) used by Melange.
 
 ## Exercises
 

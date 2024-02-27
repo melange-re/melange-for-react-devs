@@ -178,7 +178,7 @@ If you hover over it, you'll see that it has the type signature
 
 When a JavaScript function has optional arguments, it's common to create
 [multiple OCaml functions that bind to
-it](https://melange.re/v3.0.0/communicate-with-javascript/#approach-1-multiple-external-functions).
+it](https://melange.re/v3.0.0/communicate-with-javascript.html#approach-1-multiple-external-functions).
 We'll discuss this in more detail [later](/todo).
 
 ## Type transformations in JSX

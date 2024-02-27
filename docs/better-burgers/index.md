@@ -40,7 +40,7 @@ a number of syntactic and practical differences between them:
   types.
 
 The runtime representation of a record is a [plain JavaScript
-object](https://melange.re/v3.0.0/communicate-with-javascript/#data-types-and-runtime-representation),
+object](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation),
 the same as for a `Js.t` object.
 
 ::: info
