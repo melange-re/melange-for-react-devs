@@ -73,7 +73,7 @@ the root directory of your project:
  (libraries reason-react)
  ; The `preprocess` field lists preprocessors which transform code before it is
  ; compiled. melange.ppx allows to use Melange attributes [@mel. ...]
- ; (https://melange.re/v2.0.0/communicate-with-javascript/#attributes)
+ ; (https://melange.re/v3.0.0/communicate-with-javascript.html#attributes)
  ; reason-react-ppx allows to use JSX for ReasonReact components by using the
  ; [@JSX] attributes from Reason: https://reasonml.github.io/docs/en/jsx
  (preprocess
