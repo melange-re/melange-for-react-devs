@@ -107,7 +107,7 @@ number of decimals in the converted value using
 
 `Js.Float.toFixed` is a function that has one positional argument
 and one [labeled
-argument](https://melange.re/v3.0.0/communicate-with-javascript/#labeled-arguments).
+argument](https://melange.re/v3.0.0/communicate-with-javascript.html#labeled-arguments).
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
@@ -208,7 +208,7 @@ function.
 
 <b>1.</b> Changing it to `"°C = "` will result in a bit of gibberish being
 rendered: "Â°C". We can't rely on OCaml strings to [deal with Unicode
-correctly](https://melange.re/v3.0.0/communicate-with-javascript/#strings), so
+correctly](https://melange.re/v3.0.0/communicate-with-javascript.html#strings), so
 any string that contains non-ASCII text must be delimited using `{js||js}`.
 
 ::: tip
@@ -247,5 +247,5 @@ and [demo](https://react-book.melange.re/demo/src/celsius-converter-exception/) 
 
 [^1]:
     See [Using Js.t
-    objects](https://melange.re/v3.0.0/communicate-with-javascript/#using-jst-objects) for more
+    objects](https://melange.re/v3.0.0/communicate-with-javascript.html#using-js-t-objects) for more
     details.

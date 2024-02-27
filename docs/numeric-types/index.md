@@ -175,7 +175,7 @@ Js.log(Js.typeof(foo)); // prints "number"
 Js.log(Js.typeof(bar)); // prints "number"
 ```
 
-Refer to the [Melange docs](https://melange.re/v3.0.0/communicate-with-javascript/#data-types-and-runtime-representation)
+Refer to the [Melange docs](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
 for a complete rundown of how OCaml types get translated to JavaScript types.
 
 ## Widgets in the Playground
