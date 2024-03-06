@@ -6,7 +6,7 @@
     "init": "opam switch create . 5.1.1 -y --deps-only && npm run install-opam-npm",
     "install-opam-npm": "npm install && npm run install-opam && npm run check-npm-deps",
     "dune": "opam exec -- dune",
-    "build": "npm run dune -- build @melange",
+    "build": "npm run dune -- build",
     "build-verbose": "npm run build -- --verbose",
     "clean": "npm run dune -- clean",
     "format": "npm run format-check -- --auto-promote",

@@ -11,15 +11,13 @@
 (rule
  (alias runtest)
  (deps
-  Item.re
-  (:input ./output/src/sandwich-tests/SandwichTests.mjs))
+  (alias melange))
  (action
-  (run time node %{input})))
+  (run node ./output/src/sandwich-tests/SandwichTests.mjs)))
 
 (rule
  (alias runtest)
  (deps
-  Item.re
-  (:input ./output/src/sandwich-tests/BurgerTests.mjs))
+  (alias melange))
  (action
-  (run time node %{input})))
+  (run node ./output/src/sandwich-tests/BurgerTests.mjs)))
