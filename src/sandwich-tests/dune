@@ -10,6 +10,4 @@
 
 (cram
  (deps
-  (alias melange)
-  ./output/src/sandwich-tests/SandwichTests.mjs
-  ./output/src/sandwich-tests/BurgerTests.mjs))
+  (alias melange)))

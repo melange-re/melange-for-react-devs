@@ -11,3 +11,7 @@
 ; Enable cram tests
 
 (cram enable)
+
+; Copy expansion of alias into cram test sandbox
+
+(expand_aliases_in_sandbox)
