@@ -8,16 +8,8 @@
  (runtime_deps
   (glob_files *.css)))
 
-(rule
- (alias runtest)
+(cram
  (deps
-  (alias melange))
- (action
-  (run node ./output/src/sandwich-tests/SandwichTests.mjs)))
-
-(rule
- (alias runtest)
- (deps
-  (alias melange))
- (action
-  (run node ./output/src/sandwich-tests/BurgerTests.mjs)))
+  (alias melange)
+  ./output/src/sandwich-tests/SandwichTests.mjs
+  ./output/src/sandwich-tests/BurgerTests.mjs))

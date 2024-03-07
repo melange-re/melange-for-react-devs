@@ -7,3 +7,7 @@
 ; Set the name which is used by error messages
 
 (name melange-for-react-devs)
+
+; Enable cram tests
+
+(cram enable)

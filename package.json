@@ -14,7 +14,8 @@
     "watch": "npm run build -- --watch",
     "serve": "vite serve --open",
     "bundle": "npm run build && vite build",
-    "test": "npm run build -- @runtest --no-buffer"
+    "test": "npm run build -- @runtest",
+    "promote": "npm run dune -- promote"
   },
   "scriptsComments": {
     "preinstall-opam": "# Sync opam database with upstream repositories: https://opam.ocaml.org/doc/Usage.html#opam-update",
