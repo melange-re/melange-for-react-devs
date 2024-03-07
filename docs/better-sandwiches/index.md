@@ -132,9 +132,9 @@ put shorter branches before longer branches:
 
 ## `{j||j}` quoted string literal
 
-The approach using `Js.Array.join` works, but readability could be improved
-by using a [quoted string literal with the quoted string identifier
-`j`](https://melange.re/v3.0.0/communicate-with-javascript/#strings):
+The approach using `Js.Array.join` works, but readability could be improved by
+using a [quoted string literal with the quoted string identifier
+`j`](https://melange.re/v3.0.0/communicate-with-javascript.html#strings):
 
 <<< Item.re#to-emoji-j-string-literal{5-13}
 
@@ -292,13 +292,13 @@ documentation](https://melange.re/v3.0.0/api/re/melange/Stdlib/Printf/index.html
 
 ## Solutions
 
-<b>1.</b> Add a new `Turducken` constructor to variant type `sandwich` and update
-the `Item.toPrice` and `Item.toEmoji` functions accordingly:
+<b>1.</b> Add a new `Turducken` constructor to variant type `sandwich` and
+update the `Item.toPrice` and `Item.toEmoji` functions accordingly:
 
 <<< Item.re#item-turducken
 
-Of course, you could've chosen a completely different sandwich, and that would be
-just fine.
+Of course, you could've chosen a completely different sandwich, and that would
+be just fine.
 
 <b>2.</b> In the alternate dimension where the turducken sandwich was added,
 Madame Jellobutter wants to do a promotion called "Turducken Tuesdays" where
@@ -318,7 +318,8 @@ this](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvbXB1dGU
 
 View [source
 code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/better-sandwiches/)
-and [demo](https://react-book.melange.re/demo/src/better-sandwiches/) for this chapter.
+and [demo](https://react-book.melange.re/demo/src/better-sandwiches/) for this
+chapter.
 
 -----
 

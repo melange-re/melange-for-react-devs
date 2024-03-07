@@ -21,7 +21,5 @@ depends: [
 ]
 dev-repo: "git+https://github.com/melange-re/melange-for-react-devs.git"
 pin-depends: [
-  ["reason-react.dev" "https://github.com/reasonml/reason-react/archive/47da6ae6e11d49363d59313b9fe5c5968ba13045.tar.gz"]
-  ["reason-react-ppx.dev" "https://github.com/reasonml/reason-react/archive/47da6ae6e11d49363d59313b9fe5c5968ba13045.tar.gz"]
   ["melange-fest.dev" "https://github.com/jchavarri/melange-fest/archive/fd1dfbad1bfb81730515ef0caba8c3040f7d40cc.tar.gz"]
 ]

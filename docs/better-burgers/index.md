@@ -40,7 +40,7 @@ a number of syntactic and practical differences between them:
   types.
 
 The runtime representation of a record is a [plain JavaScript
-object](https://melange.re/v3.0.0/communicate-with-javascript/#data-types-and-runtime-representation),
+object](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation),
 the same as for a `Js.t` object.
 
 ::: info
@@ -76,7 +76,7 @@ for destructuring records:
 <<< Item.re#destructure-burger{2,6-8}
 
 Even better would be to do the destructuring directly inside the `| Burger(_)`
-branch:
+pattern match:
 
 <<< Item.re#destructure-burger-branch{1}
 
@@ -97,9 +97,10 @@ inside of it:
 
 <<< Item.re#burger-submodule
 
-Note that we renamed the `burger` type to `t` since, by convention, the
-primary type of a module is called `t`. Also, we put the destructuring of the
-burger record in the argument list of the `Burger.toEmoji` function.
+Note that we renamed the `burger` type to `t` since, by convention, the [primary
+type of a module is called `t`](/order-confirmation/#variant-type-item-t). Also,
+we put the destructuring of the `burger` record in the argument list of the
+`Burger.toEmoji` function.
 
 In order to get everything to compile again, we'll need to also update the
 definitions for `Item.t`, `Item.toEmoji`, and `Item.toPrice`:
@@ -132,7 +133,7 @@ Error (warning 27 [unused-var-strict]): unused variable lettuce.
 ```
 
 Since Madame Jellobutter doesn't want to charge for lettuce, we don't need the
-value of the `lettuce` variable and remove it:
+value of the `lettuce` variable and can remove it:
 
 ```reason
 let toPrice = ({onions, cheese}) => {
@@ -156,8 +157,8 @@ Either bind these labels explicitly or add '; _' to the pattern.
 ```
 
 OCaml doesn't like that you left the `lettuce` field out of the pattern match.
-We could take the advice of the error message and add a wildcard to the end of
-the record pattern match:
+We could take the second piece of advice from the error message and add a
+wildcard to the end of the record pattern match:
 
 <<< Item.re#record-wildcard
 
@@ -178,8 +179,8 @@ fields of a record type.
 
 Right now, if a customer doesn't add any toppings to a burger,
 `Item.Burger.toPrice` will return `🍔{🧅×0, 🧀×0}`. It would be better if it
-just returned `🍔` to indicate that it's a burger without embellishments. One
-way to handle this is to use a ternary expression:
+just returned `🍔` to make it clear that it's a burger without any
+embellishments. One way to handle this is to use a ternary expression:
 
 <<< Item.re#ternary{5-7}
 
@@ -191,7 +192,7 @@ cheese)`:
 However, pattern matching on tuples of more than 2 elements tends to be hard to
 read; it can even be error-prone when some of the elements of the tuple are of
 the same type. For example, what if you accidentally changed the positions of
-the `onions` and `cheese` variables in the second branch:
+the `onions` and `cheese` variables in the second branch?
 
 ```reason{1,3}
 switch (lettuce, onions, cheese) {
