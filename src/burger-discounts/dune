@@ -8,14 +8,6 @@
  (runtime_deps
   (glob_files *.css)))
 
-(rule
- (alias runtest)
- (deps Item.re)
- (action
-  (run time node %{dep:./output/src/burger-discounts/BurgerTests.mjs})))
-
-(rule
- (alias runtest)
- (deps Discount.re)
- (action
-  (run time node %{dep:./output/src/burger-discounts/DiscountTests.mjs})))
+(cram
+ (deps
+  (alias melange)))
