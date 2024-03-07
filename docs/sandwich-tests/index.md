@@ -350,53 +350,8 @@ changed.
 
 ---
 
-Subarashii! You now have a module for testing sandwich-related logic. In the
-next chapter, we'll focus on adding tests for burger-related logic.
-
-## Exercises
-
-<b>1.</b> Test all possible outputs for `Item.Sandwich.toEmoji` using
-`Fest.deepStrictEqual` (see [`node:assert`
-docs](https://nodejs.org/api/assert.html) if you're not familiar with this
-function).
-
-::: details Hint 1
-
-Create an array of sandwiches:
-
-<<< SandwichTests.re#array-of-sandwiches
-
-:::
-
-::: details Hint 2
-
-Use `Js.Array.map` and pass two arrays of strings to `Fest.deepStrictEqual`.
-
-:::
-
-<b>2.</b> Add a new file for `BurgerTests.re` containing this code:
-
-<<< @/../src/sandwich-tests/BurgerTests.re
-
-Add a new `rule` stanza in your `dune` file so that this test can be run via
-`npm run test`.
-
-<b>3.</b> Refactor `Item.Sandwich.toPrice` to accept a `Js.Date.t`:
-
-<<< Item.re#to-price
-
-Fix the resulting compilation error in `Item.toPrice` and add a unit test to
-check that the date-dependent logic for Turducken sandwiches works as expected.
-
-::: details Hint
-
-Use
-[Js.Date.makeWithYMD](https://melange.re/v3.0.0/api/re/melange/Js/Date/#val-makeWithYMD)
-and `Js.Array.map` to generate a whole week's worth of dates. Here's a [relevant
-playground
-example](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGRhdGVzID0KICBbfDEuLCAyLiwgMy4sIDQuLCA1LiwgNi4sIDcufF0KICB8PiBKcy5BcnJheS5tYXAofmY9ZGF0ZSA9PgogICAgICAgSnMuRGF0ZS5tYWtlV2l0aFlNRCh%2BeWVhcj0yMDI0Liwgfm1vbnRoPTAuLCB%2BZGF0ZSkKICAgICApOwoKZGF0ZXMKfD4gSnMuQXJyYXkuZm9yRWFjaCh%2BZj1kYXRlID0%2BCiAgICAgSnMubG9nMihKcy5EYXRlLmdldERheShkYXRlKSwgSnMuRGF0ZS50b1N0cmluZyhkYXRlKSkKICAgKTsK&live=off).
-
-:::
+Sugoi! You now have a module for testing sandwich-related logic. In the next
+chapter, we'll focus on adding tests for burger-related logic.
 
 ## Overview
 
@@ -424,13 +379,45 @@ example](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGRhdGVz
     - Use variables inside `deps` so you don't have to type a path twice
   - Use the `action` field to specify the command that launches the test
 
-## Solutions
+## Exercises
 
-<b>1.</b> A comprehensive test of `Item.Sandwich.toEmoji` might look like this:
+<b>1.</b> Test all possible outputs for `Item.Sandwich.toEmoji` using
+`Fest.deepStrictEqual` (see [`node:assert`
+docs](https://nodejs.org/api/assert.html) if you're not familiar with this
+function).
+
+::: details Hint 1
+
+Create an array of sandwiches:
+
+<<< SandwichTests.re#array-of-sandwiches
+
+:::
+
+::: details Hint 2
+
+Use `Js.Array.map` and pass two arrays of strings to `Fest.deepStrictEqual`.
+
+:::
+
+::: details Solution
+
+A comprehensive test of `Item.Sandwich.toEmoji` might look like this:
 
 <<< SandwichTests.re#test-to-emoji
 
-<b>2.</b> The `rule` stanza for `BurgerTests.re` is very similar to the existing
+:::
+
+<b>2.</b> Add a new file for `BurgerTests.re` containing this code:
+
+<<< @/../src/sandwich-tests/BurgerTests.re
+
+Add a new `rule` stanza in your `dune` file so that this test can be run via
+`npm run test`.
+
+::: details Solution
+
+The `rule` stanza for `BurgerTests.re` is very similar to the existing
 rule we have for `SandwichTests.re`:
 
 ```clj
@@ -443,10 +430,33 @@ rule we have for `SandwichTests.re`:
   (run time node %{input})))
 ```
 
-<b>3.</b> A comprehensive test of `Item.Sandwich.toPrice` for Turducken
+:::
+
+<b>3.</b> Refactor `Item.Sandwich.toPrice` to accept a `Js.Date.t`:
+
+<<< Item.re#to-price
+
+Fix the resulting compilation error in `Item.toPrice` and add a unit test to
+check that the date-dependent logic for Turducken sandwiches works as expected.
+
+::: details Hint
+
+Use
+[Js.Date.makeWithYMD](https://melange.re/v3.0.0/api/re/melange/Js/Date/#val-makeWithYMD)
+and `Js.Array.map` to generate a whole week's worth of dates. Here's a [relevant
+playground
+example](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGRhdGVzID0KICBbfDEuLCAyLiwgMy4sIDQuLCA1LiwgNi4sIDcufF0KICB8PiBKcy5BcnJheS5tYXAofmY9ZGF0ZSA9PgogICAgICAgSnMuRGF0ZS5tYWtlV2l0aFlNRCh%2BeWVhcj0yMDI0Liwgfm1vbnRoPTAuLCB%2BZGF0ZSkKICAgICApOwoKZGF0ZXMKfD4gSnMuQXJyYXkuZm9yRWFjaCh%2BZj1kYXRlID0%2BCiAgICAgSnMubG9nMihKcy5EYXRlLmdldERheShkYXRlKSwgSnMuRGF0ZS50b1N0cmluZyhkYXRlKSkKICAgKTsK&live=off).
+
+:::
+
+::: details Solution
+
+A comprehensive test of `Item.Sandwich.toPrice` for Turducken
 sandwiches might look like this:
 
 <<< SandwichTests.re#test-to-price
+
+:::
 
 -----
 
