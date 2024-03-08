@@ -213,145 +213,58 @@ you must also change the reference in `src/order-confirmation/index.html`:
 </html>
 ```
 
-## Run tests through Dune
+## Add `test` npm script
 
-It's a good idea to let Dune [run your
-tests](https://dune.readthedocs.io/en/stable/tests.html), because Dune will
-optimize your test runs by only running the tests that need to run. In addition,
-Dune can conveniently execute all your tests with a single command:
-
-```shell
-opam exec -- dune build @melange @runtest
-```
-
-This tells Dune to build everything that has the aliases `@melange` and
-`@runtest`. In Dune, an
-[alias](https://dune.readthedocs.io/en/stable/reference/aliases.html) is a build
-target that doesn't correspond to a specific file. In practice, it's a way to
-group related stanzas under a common name. When we refer to aliases, we write an
-`@` in front of them, because that's how they're referenced on the command line.
-[By default](https://melange.re/v3.0.0/build-system.html#building-the-project),
-all `melange.emit` stanzas are attached to the `@melange` alias.
-
-To save ourselves from having to type the above command repeatedly, add a new
-npm script to `package.json`:
+To save ourselves from having to repeatedly type the commands to rebuild the
+project and run the test, add a new npm script to `package.json`:
 
 ```json
-"test": "npm run build -- @runtest --no-buffer"
+"test": "npm run build && node _build/default/src/order-confirmation/output/src/order-confirmation/SandwichTests.mjs"
 ```
 
-We don't need to include the `@melange` alias in this script because it's
-already referenced in the `build` script. We add `--no-buffer` at the end of the
-command so that the output from Node test runner will retain its colors.
+## Test `Item.Sandwich.toPrice`
 
-## Add `rule` for running tests
+Let's add a test for `Item.Sandwich.toPrice`. However, in its current form, it's
+not very easy to test since it can return different values depending on what the
+date is. So first we must make the function pure, i.e. make it free from side
+effects. The easiest way to do so is by adding a `date` argument:
 
-Right now, running `npm run test` won't run any tests, because we first need to
-add a [rule stanza](https://dune.readthedocs.io/en/stable/dune-files.html#rule)
-which runs the code generated from `SandwichTests.re`. Add this to your
-`src/order-confirmation/dune` file:
+<<< Item.re#to-price-with-date{1}
 
-```clj
-(rule
- (alias runtest)
- (action
-  (run time node ./output/src/order-confirmation/SandwichTests.mjs)))
+To quiet the compiler, you must also update `Item.toPrice` accordingly:
+
+<<< Item.re#to-price{3}
+
+Now you can use the
+[Fest.deepEqual](https://ahrefs.github.io/melange-fest/reason/Fest/index.html#val-deepEqual)
+function to write the test for `Item.Sandwich.toPrice`:
+
+<<< SandwichTests.re#test-to-price
+
+## Punning
+
+There are two things to note about this line:
+
+```reason
+sandwiches |> Js.Array.map(~f=Item.Sandwich.toPrice(~date)),
 ```
 
-Breaking it down:
+1. We use [punning](https://reasonml.github.io/docs/en/jsx#punning) to shorten
+`~date=date` to just `~date`.
+1. We use [partial application](/celsius-converter-exception/#partial-application) to avoid explicitly creating an anonymous
+   function for the callback to `Js.Array.map`.
 
-- [`rule`](https://dune.readthedocs.io/en/stable/dune-files.html#rule) is a
-  stanza that "tells Dune how to generate a specific set of files from a
-  specific set of dependencies". While this is technically correct, in this
-  case, no files are generated and what we are really interested in is the side
-  effects of the `action` field (described below).
-- `(alias runtest)` attaches this rule to the alias `@runtest`
-- [`action`](https://dune.readthedocs.io/en/stable/reference/actions/index.html)
-  is a required field of the `rule` stanza and is used to run commands.
-  - The
-    [`run`](https://dune.readthedocs.io/en/stable/reference/actions/run.html)
-    field is used to execute a program. In this case, it runs `node` on the
-    `SandwichTests.mjs` file and `time`s how long it takes.
-  - The default working directory for a rule is the mirrored directory in
-    `_build` that corresponds to the directory where the rule is located. Since
-    this rule is defined in `src/order-confirmation/dune`, the working directory
-    for it is `_build/default/src/order-confirmation`. Therefore the full path
-    of the file is
+If we didn't use punning or partial application, the line would look like this:
 
-    ```
-    _build/default/src/order-confirmation/output/src/order-confirmation/SandwichTests.mjs
-    ```
-
-Run `npm run test` to see your test being run through Dune.
-
-::: tip
-
-Rules are the true building blocks of Dune. A stanza like `melange.emit` is
-really just shorthand for a series of related rules. See [The Dune Mental
-Model](https://dune.readthedocs.io/en/stable/explanation/mental-model.html) for
-a good explanation of this.
-
-:::
-
-## `deps` field
-
-Change `SandwichTests.re` so that the test fails:
-
-<<< SandwichTests.re#broken-test
-
-Run `npm run test` again and... nothing happens. Dune won't re-run the test
-because we didn't add any dependencies to our rule. We need to add a
-`deps` field:
-
-```clj{3-5,7}
-(rule
- (alias runtest)
- (deps
-  Item.re
-  (:input ./output/src/order-confirmation/SandwichTests.mjs))
- (action
-  (run time node %{input})))
+```reason
+sandwiches
+|> Js.Array.map(~f=item => Item.Sandwich.toPrice(~date=date, item)),
 ```
-
-This `deps` field has two values:
-
-- `Item.re` makes the rule depend on the `Item.re` file. This means that if
-  `Item.re` changes after the last successful test run, then running `npm run
-  test` will cause this test rule to run its `action` again.
-- `(:input ./output/src/order-confirmation/SandwichTests.mjs)` defines a new
-  [variable](https://dune.readthedocs.io/en/stable/concepts/variables.html#variables)
-  named `input` and binds it to the path
-  `./output/src/order-confirmation/SandwichTests.mjs`.
-
-Inside the action, we can reference the variable using `%{input}` (the name of
-the variable `input` enclosed by `%{` and `}`).
-
-See [Dependency
-Specification](https://dune.readthedocs.io/en/stable/concepts/dependency-spec.html)
-for the full lowdown on dependencies in Dune.
-
-We didn't have to use a variable here, but the alternative would've been to
-write the same path two times:
-
-```clj{5,7}
-(rule
- (alias runtest)
- (deps
-  Item.re
-  ./output/src/order-confirmation/SandwichTests.mjs)
- (action
-  (run time node ./output/src/order-confirmation/SandwichTests.mjs)))
-```
-
-Run `npm run test` to see that your test runs. It fails, but you can fix it and
-run `npm run test` again. After the test succeeds, running `npm run test` won't
-cause any tests to run until either `Item.re` or `SandwichTests.mjs` is
-changed.
 
 ---
 
 Sugoi! You now have a module for testing sandwich-related logic. In the next
-chapter, we'll focus on adding tests for burger-related logic.
+chapter, we'll see how to integrate your tests with the Dune build system.
 
 ## Overview
 
@@ -369,15 +282,6 @@ chapter, we'll focus on adding tests for burger-related logic.
   scope
 - Set the value of `module_systems` to `(es6 mjs)` to make Melange generate
   `.mjs` files that are treated by Node as ECMASCript modules
-- Dune has built-in support for tests
-  - Execute all tests by running `opam exec -- dune build @runtest`
-  - Only re-run succeeding tests when dependencies changed since the last time
-    the test was run
-- The `rule` stanza can be used to specify your tests
-  - Use the `alias` field to attach the rule to the `@runtest` alias
-  - Use the `deps` field to specify the dependencies for the rule
-    - Use variables inside `deps` so you don't have to type a path twice
-  - Use the `action` field to specify the command that launches the test
 
 ## Exercises
 

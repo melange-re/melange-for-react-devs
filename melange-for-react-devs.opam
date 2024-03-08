@@ -21,5 +21,5 @@ depends: [
 ]
 dev-repo: "git+https://github.com/melange-re/melange-for-react-devs.git"
 pin-depends: [
-  ["melange-fest.dev" "https://github.com/jchavarri/melange-fest/archive/fd1dfbad1bfb81730515ef0caba8c3040f7d40cc.tar.gz"]
+  ["melange-fest.dev" "https://github.com/jchavarri/melange-fest/archive/da32b1117c3c0dbfbd80a2435cc11486c2557857.tar.gz"]
 ]
