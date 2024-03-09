@@ -7,11 +7,3 @@
 ; Set the name which is used by error messages
 
 (name melange-for-react-devs)
-
-; Enable cram tests
-
-(cram enable)
-
-; Copy expansion of alias into cram test sandbox
-
-(expand_aliases_in_sandbox)

@@ -7,7 +7,3 @@
   (es6 mjs))
  (runtime_deps
   (glob_files *.css)))
-
-(cram
- (deps
-  (alias melange)))

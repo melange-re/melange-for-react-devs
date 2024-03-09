@@ -1,8 +1,8 @@
 opam-version: "2.0"
 synopsis: "Melange for React Developers"
-description: "Source code for Melange For React Developers Guide"
-maintainer: ["Feihong Hsu <feihong.hsu@gmail.com>"]
-authors: ["Feihong Hsu <feihong.hsu@gmail.com>"]
+description: "Source code for Melange For React Developers book"
+maintainer: ["Feihong Hsu <feihong.hsu@ahrefs.com>"]
+authors: ["Feihong Hsu <feihong.hsu@ahrefs.com>"]
 license: "MIT"
 homepage: "https://github.com/melange-re/melange-for-react-devs"
 bug-reports: "https://github.com/melange-re/melange-for-react-devs"
