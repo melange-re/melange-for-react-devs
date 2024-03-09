@@ -262,8 +262,15 @@ array directly to `Js.Array.map`:
 
 <<< SandwichTests.re#test-to-price-type-inference
 
-Based on its usage, `[|Portabello, Ham, Unicorn, Turducken|]` is inferred to be
-of type `array(Item.Sandwich.t)`.
+The OCaml compiler can infer that `[|Portabello, Ham, Unicorn, Turducken|]` is
+of type `array(Item.Sandwich.t)` because
+
+```reason
+Js.Array.map(~f=item => Item.Sandwich.toPrice(~date, item))
+```
+
+is a function that only accepts an argument of the type
+`array(Item.Sandwich.t)`.
 
 ---
 
@@ -289,7 +296,7 @@ chapter, we'll see how to integrate your tests with the Dune build system.
 - Punning shortens function invocations by transforming `~foo=foo` into just
   `foo`.
 - Sometimes you can use a value without any type annotation because the compiler
-  can infer the type based on usage
+  can infer the type based on the type signature of the function it's fed into
 
 ## Exercises
 
