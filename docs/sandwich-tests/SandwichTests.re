@@ -36,28 +36,6 @@ let sandwiches: array(Item.Sandwich.t) = [|
 |];
 // #endregion array-of-sandwiches
 
-// #region test-to-emoji
-test("Item.Sandwich.toEmoji", () => {
-  let sandwiches: array(Item.Sandwich.t) = [|
-    Portabello,
-    Ham,
-    Unicorn,
-    Turducken,
-  |];
-
-  expect
-  |> deepEqual(
-       sandwiches |> Js.Array.map(~f=Item.Sandwich.toEmoji),
-       [|
-         {js|🥪(🍄)|js},
-         {js|🥪(🐷)|js},
-         {js|🥪(🦄)|js},
-         {js|🥪(🦃🦆🐓)|js},
-       |],
-     );
-});
-// #endregion test-to-emoji
-
 // #region test-to-price
 test("Item.Sandwich.toPrice", () => {
   let sandwiches: array(Item.Sandwich.t) = [|
@@ -72,23 +50,50 @@ test("Item.Sandwich.toPrice", () => {
 
   expect
   |> deepEqual(
-       sandwiches |> Js.Array.map(~f=Item.Sandwich.toPrice(~date)),
-       [|10., 10., 80., 20.|],
+       sandwiches
+       |> Js.Array.map(~f=item => Item.Sandwich.toPrice(~date, item)),
+       [|10., 10., 80., 20.|] /* expected prices */
      );
 });
 // #endregion test-to-price
 
-// #region test-to-price-with-date
+// #region test-to-price-type-inference
+test("Item.Sandwich.toPrice", () => {
+  // 14 Feb 2024 is a Wednesday
+  let date = Js.Date.makeWithYMD(~year=2024., ~month=1., ~date=14.);
+
+  expect
+  |> deepEqual(
+       [|Portabello, Ham, Unicorn, Turducken|]
+       |> Js.Array.map(~f=item => Item.Sandwich.toPrice(~date, item)),
+       [|10., 10., 80., 20.|],
+     );
+});
+// #endregion test-to-price-type-inference
+
+// #region test-to-emoji
+test("Item.Sandwich.toEmoji", () => {
+  expect
+  |> deepEqual(
+       [|Portabello, Ham, Unicorn, Turducken|]
+       |> Js.Array.map(~f=Item.Sandwich.toEmoji),
+       [|
+         {js|🥪(🍄)|js},
+         {js|🥪(🐷)|js},
+         {js|🥪(🦄)|js},
+         {js|🥪(🦃🦆🐓)|js},
+       |],
+     )
+});
+// #endregion test-to-emoji
+
+// #region test-to-price-turducken
 test("Item.Sandwich.toPrice returns lower price for Turducken on Tuesdays", () => {
-  // 1 Jan 2024 is a Monday
+  // Make an array of all dates in a single week; 1 Jan 2024 is a Monday
   let dates =
     [|1., 2., 3., 4., 5., 6., 7.|]
     |> Js.Array.map(~f=date =>
-         Js.Date.makeWithYMD(
-           ~year=2024.,
-           ~month=0.,
-           ~date /* `~date` is equivalent to `~date=date` */
-         )
+         Js.Date.makeWithYMD(~year=2024., ~month=0., ~date)
        );
 
   expect
@@ -98,4 +103,20 @@ test("Item.Sandwich.toPrice returns lower price for Turducken on Tuesdays", () =
        [|20., 10., 20., 20., 20., 20., 20.|],
      );
 });
-// #endregion test-to-price-with-date
+// #endregion test-to-price-turducken
+
+// #region test-to-price-exercise-solution
+test("Item.Sandwich.toPrice", () => {
+  let f =
+    Item.Sandwich.toPrice(
+      // 14 Feb 2024 is a Wednesday
+      ~date=Js.Date.makeWithYMD(~year=2024., ~month=1., ~date=14.),
+    );
+
+  expect
+  |> deepEqual(
+       [|Portabello, Ham, Unicorn, Turducken|] |> Js.Array.map(~f),
+       [|10., 10., 80., 20.|],
+     );
+});
+// #endregion test-to-price-exercise-solution

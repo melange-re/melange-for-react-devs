@@ -1,39 +1,27 @@
 open Fest;
 
 test("Item.Sandwich.toEmoji", () => {
-  let sandwiches: array(Item.Sandwich.t) = [|
-    Portabello,
-    Ham,
-    Unicorn,
-    Turducken,
-  |];
-
   expect
   |> deepEqual(
-       sandwiches |> Js.Array.map(~f=Item.Sandwich.toEmoji),
+       [|Portabello, Ham, Unicorn, Turducken|]
+       |> Js.Array.map(~f=Item.Sandwich.toEmoji),
        [|
          {js|🥪(🍄)|js},
          {js|🥪(🐷)|js},
          {js|🥪(🦄)|js},
          {js|🥪(🦃🦆🐓)|js},
        |],
-     );
+     )
 });
 
 test("Item.Sandwich.toPrice", () => {
-  let sandwiches: array(Item.Sandwich.t) = [|
-    Portabello,
-    Ham,
-    Unicorn,
-    Turducken,
-  |];
-
   // 14 Feb 2024 is a Wednesday
   let date = Js.Date.makeWithYMD(~year=2024., ~month=1., ~date=14.);
 
   expect
   |> deepEqual(
-       sandwiches |> Js.Array.map(~f=Item.Sandwich.toPrice(~date)),
+       [|Portabello, Ham, Unicorn, Turducken|]
+       |> Js.Array.map(~f=Item.Sandwich.toPrice(~date)),
        [|10., 10., 80., 20.|],
      );
 });

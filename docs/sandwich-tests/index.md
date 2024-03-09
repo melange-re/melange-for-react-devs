@@ -11,7 +11,7 @@ unit tests.
 After asking around in the `#melange` channel of the [Reason Discord
 chatroom](https://melange.re/v3.0.0/community.html#community), you get a
 recommendation from user MonadicFanatic1984 to try out
-[melange-fest](https://github.com/jchavarri/melange-fest), a library that allows
+[melange-fest](https://github.com/ahrefs/melange-fest), a library that allows
 you to write tests in OCaml and run them in [Node test
 runner](https://nodejs.org/api/test.html#test-runner). You decide to give it a
 shot!
@@ -67,9 +67,10 @@ repository](https://opam.ocaml.org/packages/), but this will be fixed soon.
 ## Opam switch
 
 An [opam switch](https://ocaml.org/docs/opam-switch-introduction) is an isolated
-OCaml environment, similar to Python's
-[virtualenv](https://virtualenv.pypa.io/)[^2]. You can list all the opam switches on
-your computer by running
+OCaml environment. In this book, we only use [local
+switches](https://opam.ocaml.org/blog/opam-local-switches/), which are similar
+to Node project directories[^2]. You can list all the opam switches on your
+computer by running
 
 ```shell
 opam switch
@@ -222,12 +223,15 @@ project and run the test, add a new npm script to `package.json`:
 "test": "npm run build && node _build/default/src/order-confirmation/output/src/order-confirmation/SandwichTests.mjs"
 ```
 
+In the next chapter, we'll see a way to shorten this script.
+
 ## Test `Item.Sandwich.toPrice`
 
 Let's add a test for `Item.Sandwich.toPrice`. However, in its current form, it's
-not very easy to test since it can return different values depending on what the
-date is. So first we must make the function pure, i.e. make it free from side
-effects. The easiest way to do so is by adding a `date` argument:
+not testable since it's a nondeterministic function which can return different
+values depending on what the date is. So first we must refactor it into a [pure
+function](https://en.wikipedia.org/wiki/Pure_function), i.e. make it free from
+side effects. The easiest way to do so is by adding a `date` argument:
 
 <<< Item.re#to-price-with-date{1}
 
@@ -241,25 +245,32 @@ function to write the test for `Item.Sandwich.toPrice`:
 
 <<< SandwichTests.re#test-to-price
 
-## Punning
+Here we create an array of `Item.Sandwich.t`, tranform it to an array of prices,
+then compare that array with an array of expected prices.
 
-There are two things to note about this line:
+## Punning for function arguments
 
-```reason
-sandwiches |> Js.Array.map(~f=Item.Sandwich.toPrice(~date)),
-```
+Note that the following chunk of code uses
+[punning](https://reasonml.github.io/docs/en/jsx#punning):
 
-1. We use [punning](https://reasonml.github.io/docs/en/jsx#punning) to shorten
-`~date=date` to just `~date`.
-1. We use [partial application](/celsius-converter-exception/#partial-application) to avoid explicitly creating an anonymous
-   function for the callback to `Js.Array.map`.
+```reason{4}
+let date = Js.Date.makeWithYMD(~year=2024., ~month=1., ~date=14.);
 
-If we didn't use punning or partial application, the line would look like this:
-
-```reason
 sandwiches
-|> Js.Array.map(~f=item => Item.Sandwich.toPrice(~date=date, item)),
+|> Js.Array.map(~f=item => Item.Sandwich.toPrice(~date, item))
 ```
+
+Punning means that `~date=date` gets shortened to just `~date`.
+
+## Type inference
+
+It's actually not necessary to create a `sandwiches` variable, we can feed the
+array directly to `Js.Array.map`:
+
+<<< SandwichTests.re#test-to-price-type-inference
+
+Based on its usage, `[|Portabello, Ham, Unicorn, Turducken|]` is inferred to be
+of type `array(Item.Sandwich.t)`.
 
 ---
 
@@ -276,72 +287,36 @@ chapter, we'll see how to integrate your tests with the Dune build system.
     dependencies the next time you run `opam install . --deps-only`
   - Add it to the `libraries` field of your `melange.emit` stanza so your code
     can use it
-- `melange-fest` is a testing library that allows you write tests in OCaml and
-  run them in Node test runner
+- [melange-fest](https://github.com/ahrefs/melange-fest) is a testing library
+  that allows you write tests in OCaml and run them in Node test runner
 - You can `open` a module to make all its functions available in the current
-  scope
-- Set the value of `module_systems` to `(es6 mjs)` to make Melange generate
-  `.mjs` files that are treated by Node as ECMASCript modules
+  scope, but you should do this sparingly
+- To generate `.mjs` files that are treated by Node as ECMASCript modules, set
+  the `melange.emit` stanza's `module_systems` field to `(es6 mjs)`
+- Punning shortens function invocations by transforming `~foo=foo` into just
+  `foo`.
+- Sometimes you can use a value without any type annotation because the compiler
+  can infer the type based on usage
 
 ## Exercises
 
-<b>1.</b> Test all possible outputs for `Item.Sandwich.toEmoji` using
-`Fest.deepStrictEqual` (see [`node:assert`
-docs](https://nodejs.org/api/assert.html) if you're not familiar with this
-function).
-
-::: details Hint 1
-
-Create an array of sandwiches:
-
-<<< SandwichTests.re#array-of-sandwiches
-
-:::
-
-::: details Hint 2
-
-Use `Js.Array.map` and pass two arrays of strings to `Fest.deepStrictEqual`.
-
-:::
+<b>1.</b> Use
+[Fest.deepEqual](https://ahrefs.github.io/melange-fest/reason/Fest/index.html#val-deepEqual)
+to improve the existing test for `Item.Sandwich.toEmoji` by testing for all
+possible outputs.
 
 ::: details Solution
-
-A comprehensive test of `Item.Sandwich.toEmoji` might look like this:
 
 <<< SandwichTests.re#test-to-emoji
 
-:::
-
-<b>2.</b> Add a new file for `BurgerTests.re` containing this code:
-
-<<< @/../src/sandwich-tests/BurgerTests.re
-
-Add a new `rule` stanza in your `dune` file so that this test can be run via
-`npm run test`.
-
-::: details Solution
-
-The `rule` stanza for `BurgerTests.re` is very similar to the existing
-rule we have for `SandwichTests.re`:
-
-```clj
-(rule
- (alias runtest)
- (deps
-  Item.re
-  (:input ./output/src/order-confirmation/BurgerTests.mjs))
- (action
-  (run time node %{input})))
-```
+Note the use of [partial
+application](https://reasonml.github.io/docs/en/function#partial-application) in
+the callback to `Js.Array.map`.
 
 :::
 
-<b>3.</b> Refactor `Item.Sandwich.toPrice` to accept a `Js.Date.t`:
-
-<<< Item.re#to-price
-
-Fix the resulting compilation error in `Item.toPrice` and add a unit test to
-check that the date-dependent logic for Turducken sandwiches works as expected.
+<b>2.</b> Write a new unit test for `Item.Sandwich.toPrice` that checks the
+date-dependent logic for Turducken sandwiches.
 
 ::: details Hint
 
@@ -355,10 +330,28 @@ example](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGRhdGVz
 
 ::: details Solution
 
-A comprehensive test of `Item.Sandwich.toPrice` for Turducken
-sandwiches might look like this:
+<<< SandwichTests.re#test-to-price-turducken
 
-<<< SandwichTests.re#test-to-price
+:::
+
+<b>3.</b> Refactor the `Item.Sandwich.toPrice` test using punning and partial
+application:
+
+```reason
+test("Item.Sandwich.toPrice", () => {
+  /* Write your code here; don't change the rest of the function */
+
+  expect
+  |> deepEqual(
+       [|Portabello, Ham, Unicorn, Turducken|] |> Js.Array.map(~f),
+       [|10., 10., 80., 20.|],
+     );
+});
+```
+
+::: details Solution
+
+<<< SandwichTests.re#test-to-price-exercise-solution
 
 :::
 
@@ -374,11 +367,9 @@ and [demo](https://react-book.melange.re/demo/src/sandwich-tests/) for this chap
     dependencies and not the package. When you're developing an application and
     not a library, there is no package associated with your project.
 
-[^2]: In this book, we only use opam's [local
-    switches](https://opam.ocaml.org/blog/opam-local-switches/), which are in
-    practice similar to Node project directories containing a `package.json`
-    file. But in general, an opam switch doesn't have to be associated with a
-    project directory.
+[^2]: This is how Node project directories correspond to opam local switches:
+    - `packages.json` -> `.opam` file
+    - `node_modules` directory -> `_opam` directory
 
 [^3]: A shell hook is responsible for setting the current opam switch depending
     on what directory you're in. The shell hook is typically installed when you
