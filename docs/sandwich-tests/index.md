@@ -41,28 +41,21 @@ depends: [
   "melange" {>= "3.0.0-51"}
   "reason-react" {>= "0.14.0"}
   "reason-react-ppx" {>= "0.14.0"}
+  "melange-fest" {>= "0.1.0"} // [!code ++]
   "opam-check-npm-deps" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "dot-merlin-reader" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "odoc" {with-doc}
-  "melange-fest" {>= "0.1"} // [!code ++]
 ]
 ```
 
-Note that the version number might not be `0.1` when you run `opam list`. If
+Note that the version number might not be `0.1.0` when you run `opam list`. If
 it's different, just use that version number instead.
 
 Now if we want to install this project on another computer, we don't need to
 manually install `melange-fest`; it will be installed along with all the other
-dependencies when we run `opam install . --deps-only`[^1] (this is already done for
-you when you run `npm run init`).
-
-::: warning
-
-Currently, `melange-fest` isn't yet available in the [opam package
-repository](https://opam.ocaml.org/packages/), but this will be fixed soon.
-
-:::
+dependencies when we run `opam install . --deps-only`[^1] (this is already done
+for you when you run `npm run init`).
 
 ## Opam switch
 

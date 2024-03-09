@@ -13,13 +13,10 @@ depends: [
   "melange" {>= "3.0.0-51"}
   "reason-react" {>= "0.14.0"}
   "reason-react-ppx" {>= "0.14.0"}
+  "melange-fest" {>= "0.1.0"}
   "opam-check-npm-deps" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "dot-merlin-reader" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "odoc" {with-doc}
-  "melange-fest" {>= "0.1.0"}
 ]
 dev-repo: "git+https://github.com/melange-re/melange-for-react-devs.git"
-pin-depends: [
-  ["melange-fest.dev" "https://github.com/ahrefs/melange-fest/archive/da32b1117c3c0dbfbd80a2435cc11486c2557857.tar.gz"]
-]
