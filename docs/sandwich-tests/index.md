@@ -364,9 +364,9 @@ and [demo](https://react-book.melange.re/demo/src/sandwich-tests/) for this chap
     - `packages.json` -> `.opam` file
     - `node_modules` directory -> `_opam` directory
 
-[^3]: A shell hook is responsible for setting the current opam switch depending
-    on what directory you're in. The shell hook is typically installed when you
-    run `opam init`. Just respond with `y` when it asks
+[^3]: A shell hook is responsible for setting the current opam switch based on
+    the directory you are `cd`-ing into. The shell hook is typically installed
+    when you run `opam init`. Just respond with `y` when it asks
 
     ```
     Do you want opam to modify ~/.profile?
