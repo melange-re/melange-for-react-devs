@@ -56,7 +56,7 @@ To solve this, we can add the [runtime_deps
 field](https://melange.re/v3.0.0/build-system.html#handling-assets) to our
 `melange.emit` stanza in `src/order-confirmation/dune`:
 
-```clj{7}
+```dune{7}
 (melange.emit
  (target output)
  (libraries reason-react)
@@ -75,14 +75,14 @@ We also want to add styles for the `Order` component, so add a new file
 To ensure that `order.css` is also copied to the build directory, we can add
 `order.css` to the value of `runtime_deps`:
 
-```clj
+```dune
 (runtime_deps order-item.css order.css)
 ```
 
 If you have many `.css` files, you can tell `runtime_deps` to copy all `.css`
 files over using Dune's `glob_files` configuration:
 
-```clj
+```dune
 (runtime_deps (glob_files *.css))
 ```
 

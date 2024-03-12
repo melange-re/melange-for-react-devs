@@ -1,14 +1,14 @@
-import { readFileSync } from "fs"
+import { readFileSync } from 'fs'
 import { defineConfig } from 'vitepress'
 import markdownItFootnote from 'markdown-it-footnote'
 
-// From https://github.com/ocamllabs/vscode-ocaml-platform/blob/master/syntaxes/reason.json
-const reasonGrammar = JSON.parse(readFileSync("./reason.json"))
+const reasonGrammar = JSON.parse(readFileSync('./syntaxes/reason.json'))
+const duneGrammar = JSON.parse(readFileSync('./syntaxes/dune.json'))
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Melange for React Devs",
-  description: "A project-based, guided introduction to Melange and its ecosystem for React developers",
+  title: 'Melange for React Devs',
+  description: 'A project-based, guided introduction to Melange and its ecosystem for React developers',
   base: '/',
   lastUpdated: true,
   themeConfig: {
@@ -54,11 +54,17 @@ export default defineConfig({
     },
     languages: [
       {
-        id: "reason",
-        scopeName: "source.reason",
-        displayName: "Reason",
+        id: 'reason',
+        scopeName: 'source.reason',
+        displayName: 'Reason',
         grammar: reasonGrammar,
-        aliases: ["re", "rei"],
+        aliases: ['re', 'rei'],
+      },
+      {
+        id: 'dune',
+        scopeName: 'source.dune',
+        displayName: 'Dune',
+        grammar: duneGrammar,
       },
     ],
   },

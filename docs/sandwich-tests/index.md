@@ -108,7 +108,7 @@ Error: Unbound module Fest
 In order to use a library, you must add it to the `libraries` field of the
 `melange.emit` stanza in your `dune` file:
 
-```clj
+```dune
 (melange.emit
  (target output)
  (libraries reason-react) // [!code --]
@@ -176,7 +176,7 @@ default. Node automatically treats `.mjs` files as ECMAScript modules, so you
 can change the `module_systems` field of your `melange.emit` stanza to use the
 `.mjs` extension:
 
-```clj
+```dune
 (melange.emit
  (target output)
  (libraries reason-react melange-fest)

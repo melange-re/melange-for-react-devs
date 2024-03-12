@@ -16,11 +16,11 @@ the root directory of your project. If you've been using the [starter
 project](/installation/#download-and-run-the-starter-project), then you've been
 using Dune this whole time and therefore already have a `dune-project` file:
 
-<<< @/../dune-project{clj}
+<<< @/../dune-project{dune}
 
 The line
 
-```clj
+```dune
 (using melange 0.1)
 ```
 
@@ -51,7 +51,7 @@ Basically, `dune` files tell Dune about directories, executables, libraries,
 tests, and anything else of interest. For example, here's the `dune` file inside
 the root directory of your project:
 
-```clj
+```dune
 ; `dirs` is a stanza to tell dune which subfolders from the current folder
 ; (where the `dune` file is) it should process. Here it is saying to include
 ; all directories that don't start with . or _, but exclude node_modules.
@@ -148,7 +148,7 @@ contains:
 - `Counter.re` (move from root directory to `src/counter`)
 - `dune` file that just has a `melange.emit` stanza
 
-   <<< @/../src/counter/dune{clj}
+   <<< @/../src/counter/dune{dune}
 
 - `Index.re` to render the app to the DOM
 
@@ -289,7 +289,7 @@ foo/bar
 
 The contents of `foo/bar/dune` are:
 
-```clj
+```dune
 (melange.emit
  (target dist)
  (libraries reason-react)
