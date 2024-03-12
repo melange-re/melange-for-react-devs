@@ -10,7 +10,6 @@ prop, but let's see how to do it with good old CSS.
 Add a new file
 `src/order-confirmation/order-item.css` and give it these styles:
 
-<!-- This file gets renamed to order-item.module.css later -->
 <<< @/../src/styling-with-css/order-item.module.css
 
 ## Import using `mel.raw`
@@ -224,17 +223,6 @@ far. But she plans to add more options for her current menu items, for example
 she'd like to have more than one type of sandwich. We'll tackle that in the next
 chapter.
 
-## Exercises
-
-
-<b>1.</b> Extension nodes like `mel.raw` can also be prefixed with `%` instead
-of `%%`. What happens if you replace `%%mel.raw` with `%mel.raw`?
-
-<b>2.</b> Refactor the `Order` component so that it also uses an `external`
-declaration instead of `mel.raw`.
-
-<b>3.</b> Replace your usage of `mel.module` with `bs.module`. What happens?
-
 ## Overview
 
 - The `mel.raw` extension node embeds raw JavaScript inside OCaml code
@@ -245,9 +233,19 @@ declaration instead of `mel.raw`.
 - `external` declarations are used to import CSS or JS files
   - The `mel.module` attribute is used to specify which module or file to import
 
-## Solutions
+## Exercises
 
-<b>1.</b> Changing `%%mel.raw` to `%mel.raw` will cause a compilation error in
+<b>1.</b> Extension nodes like `mel.raw` can also be prefixed with `%` instead
+of `%%`. What happens if you replace `%%mel.raw` with `%mel.raw`?
+
+```reason
+[%%mel.raw {|import "./order-item.css"|}]; // [!code --]
+[%mel.raw {|import "./order-item.css"|}]; // [!code ++]
+```
+
+::: details Solution
+
+Changing `%%mel.raw` to `%mel.raw` will cause a compilation error in
 Vite because the generated JS code changes to
 
 ```javascript
@@ -265,12 +263,24 @@ import "./order.css"
 The general rule is that you should use `%%mel.raw` for statements, and
 `%mel.raw` for expressions.
 
-<b>2.</b> After you refactor the `Order` component to use an `external`
-declaration, it should look something like this:
+:::
+
+<b>2.</b> Refactor the `Order` component so that it also uses an `external`
+declaration instead of `mel.raw`.
+
+::: details Solution
+
+`Order` component using `external` declaration:
 
 <<< Order.re#order-external
 
-<b>3.</b> If you replace `mel.module` with `bs.module`, your code will fail to
+:::
+
+<b>3.</b> Replace your usage of `mel.module` with `bs.module`. What happens?
+
+::: details Solution
+
+If you replace `mel.module` with `bs.module`, your code will fail to
 compile with this error message:
 
 ```
@@ -281,6 +291,8 @@ Error: `[@bs.*]' and non-namespaced attributes have been removed in favor of `[@
 Basically, `bs.module` was the old name for the attribute, but it has been
 replaced by `mel.module`. This is worth mentioning because there's still a
 decent amount of code out in the wild that uses `bs.module`.
+
+:::
 
 -----
 
