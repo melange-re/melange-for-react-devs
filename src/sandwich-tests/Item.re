@@ -28,7 +28,7 @@ module Burger = {
           multiple({js|🥓|js}, bacon),
         |]
         |> Js.Array.filter(~f=str => str != "")
-        |> Js.Array.join(~sep=", "),
+        |> Js.Array.join(~sep=","),
       )
     };
   };
