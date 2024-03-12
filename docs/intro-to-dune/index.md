@@ -132,8 +132,10 @@ layout](https://melange.re/v3.0.0/build-system.html#javascript-artifacts-layout)
 ::: tip
 
 In this dune file, we're only concerned with building JavaScript to run in the
-browser. To build for Node, you should [build files that have the `.mjs`
-extension](/sandwich-tests/#compile-with-mjs-extension).
+browser, but if we also wanted to build JavaScript to run on Node we could
+include another `melange.emit` stanza specifically for that. See
+[melange-opam-template](https://github.com/melange-re/melange-opam-template/blob/main/src/dune)
+for an example of building for Node.
 
 :::
 
