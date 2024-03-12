@@ -358,6 +358,12 @@ test("Item.Sandwich.toPrice", () => {
 });
 ```
 
+::: details Hint
+
+Add a new function `f` with the type signature `Item.Sandwich.t => float`.
+
+:::
+
 ::: details Solution
 
 <<< SandwichTests.re#test-to-price-exercise-solution
