@@ -22,12 +22,18 @@ Run this from your project's root directory:
 opam install melange-fest
 ```
 
-Once that finishes, run `opam list` to see all the opam packages you've
-installed in your *opam switch* (more on that later). Scroll down to the entry
-for `melange-fest` and you should see something like this:
+Once that finishes, run
+
+```shell
+opam list
+```
+
+to see all the packages you've installed in your *opam switch* (more on that
+later). Scroll down to the entry for `melange-fest` and you should see something
+like this:
 
 ```
-melange-fest    0.1.0   A minimal test framework for Melange using Node test runner
+melange-fest    0.1.0   A minimal test framework for Melange
 ```
 
 Open `melange-for-react-devs.opam` and add a corresponding entry in the
@@ -93,7 +99,7 @@ to it:
 You should get this error:
 
 ```
-File "docs/burger-tests/SandwichTests.re", line 2, characters 0-9:
+File "docs/order-confirmation/SandwichTests.re", line 2, characters 0-9:
 2 | Fest.test("Item.Sandwich.toEmoji", () =>
     ^^^^^^^^^
 Error: Unbound module Fest
