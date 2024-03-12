@@ -108,10 +108,11 @@ Error: Unbound module Fest
 In order to use a library, you must add it to the `libraries` field of the
 `melange.emit` stanza in your `dune` file:
 
-```clj{3}
+```clj
 (melange.emit
  (target output)
- (libraries reason-react melange-fest)
+ (libraries reason-react) // [!code --]
+ (libraries reason-react melange-fest) // [!code ++]
  (preprocess
   (pps melange.ppx reason-react-ppx))
  (module_systems es6)
@@ -175,13 +176,14 @@ default. Node automatically treats `.mjs` files as ECMAScript modules, so you
 can change the `module_systems` field of your `melange.emit` stanza to use the
 `.mjs` extension:
 
-```clj{6}
+```clj
 (melange.emit
  (target output)
  (libraries reason-react melange-fest)
  (preprocess
   (pps melange.ppx reason-react-ppx))
- (module_systems (es6 mjs))
+ (module_systems es6)  // [!code --]
+ (module_systems (es6 mjs))  // [!code ++]
  (runtime_deps
   (glob_files *.css)))
 ```
@@ -198,14 +200,15 @@ The tests should run successfully this time!
 Since you've changed the extension of your generated JavaScript files to `.mjs`,
 you must also change the reference in `src/order-confirmation/index.html`:
 
-```html{7}
+```html
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Melange for React Devs</title>
-    <script type="module" src="../../_build/default/src/order-confirmation/output/src/order-confirmation/Index.mjs"></script>
+    <script type="module" src="../../_build/default/src/order-confirmation/output/src/order-confirmation/Index.js"></script> // [!code --]
+    <script type="module" src="../../_build/default/src/order-confirmation/output/src/order-confirmation/Index.mjs"></script> // [!code ++]
   </head>
   <body>
     <div id="root"></div>
