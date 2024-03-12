@@ -206,31 +206,6 @@ Here's the [playground link](https://melange.re/v3.0.0/playground/?language=Reas
 
 W00t! You are now empowered to use numbers in your OCaml programs.
 
-## Exercises
-
-<b>1.</b> Convert the Counter component we created in the previous chapter to
-use float instead of integer. Make the `-` button decrement by `0.5` and the `+`
-button increment by `1.5`.
-
-<b>2.</b> Add an int64 value to your program in Melange Playground:
-
-```reason
-let baz = 42_000_000_000L; // int64
-Js.log(baz);
-```
-
-Note the use of underscores to make the large number more readable. What is the
-JavaScript representation of int64?
-
-<b>3.</b> How do you add two int64 values?
-
-::: details Hint
-
-Take a look at the standard library's [Int64
-module](https://melange.re/v3.0.0/api/re/melange/Stdlib/Int64/index.html).
-
-:::
-
 ## Overview
 
 - Integer and float are separate types in OCaml, but both translate to
@@ -248,23 +223,55 @@ module](https://melange.re/v3.0.0/api/re/melange/Stdlib/Int64/index.html).
   - Share code snippets via URL
   - Render ReasonReact components
 
-## Solutions
+## Exercises
 
-<b>1.</b> A Counter component that uses float instead of integer would look
-something like this:
+<b>1.</b> Convert the Counter component we created in the previous chapter to
+use float instead of integer. Make the `-` button decrement by `0.5` and the `+`
+button increment by `1.5`.
+
+::: details Solution
 
 <<< @/../src/numeric-types/Counter_Float.re
 
-<b>2.</b> JavaScript's `Number` type doesn't have enough precision to represent
+:::
+
+<b>2.</b> Add an int64 value to your program in Melange Playground:
+
+```reason
+let baz = 42_000_000_000L; // int64
+Js.log(baz);
+```
+
+Note the use of underscores to make the large number more readable. What is the
+JavaScript representation of int64?
+
+::: details Solution
+
+JavaScript's `Number` type doesn't have enough precision to represent
 in64 values. They're instead represented by an array of two numbers `[high,
 low]`, where `high` is signed, `low` is unsigned.
 
-<b>3.</b> You can add two int64 values using `Int64.add`, e.g.
+:::
+
+<b>3.</b> How do you add two int64 values?
+
+::: details Hint
+
+Take a look at the standard library's [Int64
+module](https://melange.re/v3.0.0/api/re/melange/Stdlib/Int64/index.html).
+
+:::
+
+::: details Solution
+
+You can add two int64 values using `Int64.add`, e.g.
 
 ```reason
 let result = Int64.add(42L, 16L);
 Js.log(result); // prints [0,58]
 ```
+
+:::
 
 -----
 
