@@ -25,6 +25,7 @@ export default defineConfig({
         'styling-with-css': resolve(__dirname, 'src/styling-with-css/index.html'),
         'better-sandwiches': resolve(__dirname, 'src/better-sandwiches/index.html'),
         'better-burgers': resolve(__dirname, 'src/better-burgers/index.html'),
+        'sandwich-tests': resolve(__dirname, 'src/sandwich-tests/index.html'),
       },
     },
   },

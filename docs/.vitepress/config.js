@@ -38,6 +38,7 @@ export default defineConfig({
           { text: 'Styling with CSS', link: '/styling-with-css/' },
           { text: 'Better Sandwiches', link: '/better-sandwiches/' },
           { text: 'Better Burgers', link: '/better-burgers/' },
+          { text: 'Sandwich Tests', link: '/sandwich-tests/' },
         ]
       }
     ],

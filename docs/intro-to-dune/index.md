@@ -132,8 +132,8 @@ layout](https://melange.re/v3.0.0/build-system.html#javascript-artifacts-layout)
 ::: tip
 
 In this dune file, we're only concerned with building JavaScript to run in the
-browser, but if we also wanted to build JavaScript to run on Node using
-CommonJS, we'd include another `melange.emit` stanza specifically for that. See
+browser, but if we also wanted to build JavaScript to run on Node we could
+include another `melange.emit` stanza specifically for that. See
 [melange-opam-template](https://github.com/melange-re/melange-opam-template/blob/main/src/dune)
 for an example of building for Node.
 
@@ -189,10 +189,10 @@ _build/default/src/counter
 ```
 
 Extra files and directories like `.output.mobjs` and `Counter.re.ml` are build
-artifacts and we won't go into any detail about them. If you look into
-`_build/default/src/counter/output/src/counter`, you'll see that `src/counter` is mirrored
-there as well, but this time the directory only contains the generated `.js`
-files:
+artifacts and we won't go into any detail about them. If you look inside
+`_build/default/src/counter/output/src/counter`, you'll see that `src/counter`
+is mirrored there as well, but this time the directory only contains the
+generated `.js` files:
 
 ```
 _build/default/src/counter/output/src/counter
@@ -202,8 +202,12 @@ _build/default/src/counter/output/src/counter
 ```
 
 So the `_build` directory contains two mirrored directories for `src/counter`:
-one for the original `.re` source files and their intermediate build artifacts,
-another for the final generated `.js` files.
+- `_build/default/src/counter`, which contains copies of the `.re` source files
+  and their intermediate build artifacts
+- `_build/default/src/counter/output/src/counter`, which contains the final
+  generated `.js` files.
+
+
 
 ## Update root directory `index.html`
 
