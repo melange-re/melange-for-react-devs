@@ -215,11 +215,40 @@ size will be 144 kB, about 46 kB smaller.
 Frabjous! The order confirmation widget now supports more types of sandwiches.
 In the next chapter, we'll see how to expand the options for burgers.
 
+## Overview
+
+- Variant constructors can contain arguments
+- OCaml's pattern matching syntax makes your code more readable and concise
+  - You can match to any level of nesting: `| A(B(C)) => 42`
+  - There are many options for combining branches in switch expressions, e.g.
+    - `| A => 42 | B => 42` becomes `| A | B => 42`
+    - `| A(B) => 42 | A(C) => 42` becomes `| A(B | C) => 42`
+- A valid use of wildcards in switch expressions is when you want to silence
+  compiler errors while you fill in the logic for new branches in switch
+  expressions
+- `{j||j}` quoted string literals are similar to JavaScript's template literals,
+  but they are not type safe and should be avoided in production code
+- `Print.sprintf` is a type-safe function for string interpolation
+- For Vite multi-page apps, you must add a little extra configuration to build
+  bundles for `index.html` files not in the project's root directory
+
 ## Exercises
 
 <b>1.</b> Madame Jellobutter wants to add another type of sandwich and she's
 letting you decide what it is. Give it an appropriate price and find the most
 suitable emoji(s) for it.
+
+::: details Solution
+
+Add a new `Turducken` constructor to variant type `sandwich` and
+update the `Item.toPrice` and `Item.toEmoji` functions accordingly:
+
+<<< Item.re#item-turducken
+
+Of course, you could've chosen a completely different sandwich, and that would
+be just fine.
+
+:::
 
 <b>2.</b> Change the logic of `Item.toPrice` so that the new sandwich you just
 added is cheaper or more expensive *depending on the day of the week*.
@@ -234,6 +263,20 @@ Look at the functions in the
 ::: details Hint 2
 
 Use a `when` guard in the switch expression.
+
+:::
+
+::: details Solution
+
+In the alternate dimension where the turducken sandwich was added,
+Madame Jellobutter wants to do a promotion called "Turducken Tuesdays" where
+turducken sandwiches become half-price on Tuesdays. To support this generous
+discount, `Item.toPrice` needs to be updated like so:
+
+<<< Item.re#to-price-turducken-tuesdays
+
+Note that the `fun` syntax had to be abandoned, because the body of
+`Item.toPrice` now consists of more than just a switch expression.
 
 :::
 
@@ -273,46 +316,13 @@ documentation](https://melange.re/v3.0.0/api/re/melange/Stdlib/Printf/index.html
 
 :::
 
-## Overview
+::: details Solution
 
-- Variant constructors can contain arguments
-- OCaml's pattern matching syntax makes your code more readable and concise
-  - You can match to any level of nesting: `| A(B(C)) => 42`
-  - There are many options for combining branches in switch expressions, e.g.
-    - `| A => 42 | B => 42` becomes `| A | B => 42`
-    - `| A(B) => 42 | A(C) => 42` becomes `| A(B | C) => 42`
-- A valid use of wildcards in switch expressions is when you want to silence
-  compiler errors while you fill in the logic for new branches in switch
-  expressions
-- `{j||j}` quoted string literals are similar to JavaScript's template literals,
-  but they are not type safe and should be avoided in production code
-- `Print.sprintf` is a type-safe function for string interpolation
-- For Vite multi-page apps, you must add a little extra configuration to build
-  bundles for `index.html` files not in the project's root directory
-
-## Solutions
-
-<b>1.</b> Add a new `Turducken` constructor to variant type `sandwich` and
-update the `Item.toPrice` and `Item.toEmoji` functions accordingly:
-
-<<< Item.re#item-turducken
-
-Of course, you could've chosen a completely different sandwich, and that would
-be just fine.
-
-<b>2.</b> In the alternate dimension where the turducken sandwich was added,
-Madame Jellobutter wants to do a promotion called "Turducken Tuesdays" where
-turducken sandwiches become half-price on Tuesdays. To support this generous
-discount, `Item.toPrice` needs to be updated like so:
-
-<<< Item.re#to-price-turducken-tuesdays
-
-Note that the `fun` syntax had to be abandoned, because the body of
-`Item.toPrice` now consists of more than just a switch expression.
-
-<b>3.</b> After replacing the `{j||j}` quoted string literals with
+After replacing the `{j||j}` quoted string literals with
 `Printf.sprintf` and improving it a bit, you might end up with something [like
 this](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKCJyZXN1bHQgdG8gMyBkZWNpbWFsIHBsYWNlcyA9ICUwLjNmIiwgY29tcHV0ZSg0MC4sIDQ3LikpLAopOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZgpsZXQgcGxheWVyOiBKcy50KHsuLn0pID0gewogICJuYW1lIjogIldpbGJ1ciIsCiAgImxldmVsIjogOTAwMTIzNCwKICAiaW1tb3J0YWwiOiBmYWxzZSwKfTsKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKAogICAgIlBsYXllcjogbmFtZT0lcywgbGV2ZWw9JSNkLCBpbW1vcnRhbD0lQiIsCiAgICBwbGF5ZXIjI25hbWUsCiAgICBwbGF5ZXIjI2xldmVsLAogICAgcGxheWVyIyNpbW1vcnRhbCwKICApLAopOwo%3D&live=off).
+
+:::
 
 -----
 
