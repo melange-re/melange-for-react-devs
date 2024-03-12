@@ -140,54 +140,22 @@ feature to create a one-argument function by writing
 
 <<< Snippets.re#partial-application{12,15}
 
+## `{js||js}` quoted string literal
+
+Try changing `{js|°C = |js}` to `"°C = "`.
+
+Changing it to `"°C = "` will result in a bit of gibberish being rendered  in
+the browser: `Â°C`. We can't rely on normal OCaml strings to [deal with Unicode
+correctly](https://melange.re/v3.0.0/communicate-with-javascript.html#strings),
+so any string that contains non-ASCII text must be delimited using `{js||js}`
+and not `""`. This kind of string constant is called a `{js||js}` *quoted string
+literal* and it is specific to Melange, meaning it is not available in native
+OCaml.
+
 -----
 
 Nice, we have a working component now, but catching exceptions isn't The OCaml
 Way! In the next chapter, you'll see how to rewrite the logic using `option`.
-
-## Exercises
-
-<b>1.</b> Try changing `{js|°C = |js}` to `"°C = "`. What happens?
-
-<b>2.</b> It's possible to rewrite the `onChange` callback so that it contains a
-single expression:
-
-<<< Snippets.re#single-expression
-
-This compiles, but it now contains a hidden bug. Do you know what silent error
-might occur?
-
-::: details Hint
-
-The `getValueFromEvent` function is not being invoked in the same scope as
-before.
-
-:::
-
-<b>3.</b> It's possible to use partial application with most functions in OCaml,
-even operators. Take a look at the following program:
-
-```reason
-let addFive = (+)(5);
-Js.log(addFive(2));
-Js.log(addFive(7));
-Js.log(addFive(10));
-```
-
-What do you think it outputs? Run it in [Melange
-Playground](https://melange.re/v3.0.0/playground) to confirm your hypothesis.
-
-<b>4.</b> Use the pipe last operator (`|>`) and partial application to write a
-function that takes an integer argument `x`, subtracts `x` from 10, and converts
-that result to binary.
-
-::: details Hint
-
-Use the
-[Js.Int.toString](https://melange.re/v3.0.0/api/re/melange/Js/Int/#val-toString)
-function.
-
-:::
 
 ## Overview
 
@@ -203,22 +171,37 @@ function.
 - Besides positional arguments, OCaml functions can also have labeled arguments.
 - If a function takes two arguments, we can supply one of them and get a
   function that takes only one argument. This is called partial application.
+- You must use a `{js||js}` quoted string literal for string constants that
+  contain Unicode characters
 
-## Solutions
+## Exercises
 
-<b>1.</b> Changing it to `"°C = "` will result in a bit of gibberish being
-rendered: "Â°C". We can't rely on OCaml strings to [deal with Unicode
-correctly](https://melange.re/v3.0.0/communicate-with-javascript.html#strings), so
-any string that contains non-ASCII text must be delimited using `{js||js}`.
+<b>1.</b> It's possible to rewrite the `onChange` callback to be a one-liner:
 
-::: tip
+```reason
+<input
+  value=celsius
+  onChange={evt => {
+    let newCelsius = React.Event.Form.target(evt)##value; // [!code --]
+    setCelsius(_ => newCelsius); // [!code --]
+    setCelsius(_ => getValueFromEvent(evt)); // [!code ++]
+  }}
+/>
+```
 
-Note that `{js||js}` quoted string literals are specific to Melange and are not
-available in native OCaml.
+This compiles, but it now contains a hidden bug. Do you know what silent error
+might occur?
+
+::: details Hint
+
+The `getValueFromEvent` function is no longer being invoked in the same scope as
+before.
 
 :::
 
-<b>2.</b> Rewriting `onChange` the handler to use a single expression creates a
+::: details Solution
+
+Rewriting the `onChange` handler to use a single expression creates a
 potential problem with stale values coming from the event object:
 
 <<< Snippets.re#single-expression-annotated{5-6}
@@ -233,9 +216,45 @@ Values with
 useState](https://reasonml.github.io/reason-react/docs/en/usestate-event-value)
 in the [ReasonReact](https://reasonml.github.io/reason-react/) docs.
 
-<b>3.</b> Playground: [Define an addFive function using partial application](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
+:::
 
-<b>4.</b> Playground: [Define a function that subtracts from 10 and converts to binary](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nKH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+<b>2.</b> It's possible to use partial application with most functions in OCaml,
+even operators. Take a look at the following program:
+
+```reason
+let addFive = (+)(5);
+Js.log(addFive(2));
+Js.log(addFive(7));
+Js.log(addFive(10));
+```
+
+What do you think it outputs? Run it in [Melange
+Playground](https://melange.re/v3.0.0/playground) to confirm your hypothesis.
+
+::: details Solution
+
+Playground: [Define an addFive function using partial application](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
+
+:::
+
+<b>3.</b> Use the pipe last operator (`|>`) and partial application to write a
+function that takes an integer argument `x`, subtracts `x` from 10, and converts
+that result to binary.
+
+::: details Hint
+
+Use the
+[Js.Int.toString](https://melange.re/v3.0.0/api/re/melange/Js/Int/#val-toString)
+function.
+
+:::
+
+::: details Solution
+
+Playground: [Define a function that subtracts from 10 and converts to
+binary](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nKH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+
+:::
 
 -----
 

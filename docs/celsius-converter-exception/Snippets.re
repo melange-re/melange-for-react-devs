@@ -207,18 +207,6 @@ let _ = {
   let celsius = "";
   let setCelsius = _ => ();
   let getValueFromEvent = _ => "";
-  // #region single-expression
-  <input
-    value=celsius
-    onChange={evt => setCelsius(_ => getValueFromEvent(evt))}
-  />;
-  // #endregion single-expression
-};
-
-let _ = {
-  let celsius = "";
-  let setCelsius = _ => ();
-  let getValueFromEvent = _ => "";
   // #region single-expression-annotated
   <input
     value=celsius
