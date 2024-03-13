@@ -289,13 +289,14 @@ chapter, we'll see how to integrate your tests with the Dune build system.
 ## Overview
 
 - An opam switch is an isolated OCaml environment
-- Use `opam install` to install third-party libraries into the current opam
+- Use `opam list` to see all the packages installed in your current opam switch
+- Use `opam install` to install third-party packages into the current opam
   switch
-- After you install a library, you should:
+- After you install a package, you should:
   - Add it to your `.opam` file so that it will be installed with all your other
     dependencies the next time you run `opam install . --deps-only`
-  - Add it to the `libraries` field of your `melange.emit` stanza so your code
-    can use it
+  - Add the corresponding library to the `libraries` field of your
+    `melange.emit` stanza so your code can use it
 - [melange-fest](https://github.com/ahrefs/melange-fest) is a testing library
   that allows you write tests in OCaml and run them in Node test runner
 - You can `open` a module to make all its functions available in the current
