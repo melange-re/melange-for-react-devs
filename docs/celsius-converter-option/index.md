@@ -134,6 +134,15 @@ Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 Fahrenheit](/todo). But first, we'll explore [Dune, the build
 system](https://melange.re/v3.0.0/build-system.html) used by Melange.
 
+## Overview
+
+- Prefer functions that return `option` over those that throw exceptions.
+  - When the input of a switch expression is `option`, the compiler can
+    helpfully remind you to handle the error case.
+- `Option.map` is very useful when chaining functions that return `option`.
+- You can use a `when` guard to make your switch expression more expressive
+  without nesting conditionals.
+
 ## Exercises
 
 <b>1.</b> If you enter a space in the input, it'll unintuitively produce a
@@ -146,9 +155,25 @@ Use the `String.trim` function.
 
 :::
 
+::: details Solution
+
+Add a call to `String.trim` in your render logic:
+
+<<< Snippets.re#string-trim{2-3}
+
+:::
+
 <b>2.</b> Add another branch with a `when` guard that renders "Unreasonably
 cold🥶" if the temperature is less than -128.6°F (the lowest temperature
 ever recorded on Earth).
+
+::: details Solution
+
+Add another `Some(fahrenheit)` branch with a `when` guard:
+
+<<< Snippets.re#when-guard-cold{4}
+
+:::
 
 <b>3.</b> Use
 [Js.Float.fromString](https://melange.re/v3.0.0/api/re/melange/Js/Float/#val-fromString)
@@ -162,29 +187,9 @@ Use [Js.Float.isNaN](https://melange.re/v3.0.0/api/re/melange/Js/Float/#val-isNa
 
 :::
 
-## Overview
+::: details Solution
 
-- Prefer functions that return `option` over those that throw exceptions.
-  - When the input of a switch expression is `option`, the compiler can
-    helpfully remind you to handle the error case.
-- `Option.map` is very useful when chaining functions that return `option`.
-- You can use a `when` guard to make your switch expression more expressive
-  without nesting conditionals.
-
-## Solutions
-
-<b>1.</b> To prevent a space from producing 32.00 degrees Fahrenheit, just add a
-call to `String.trim` in your render logic:
-
-<<< Snippets.re#string-trim{2-3}
-
-<b>2.</b> To render "Unreasonably cold" when the temperature is less than
--128.6°F, you can add another `Some(fahrenheit)` branch with a `when` guard:
-
-<<< Snippets.re#when-guard-cold{4}
-
-<b>3.</b> To use `Js.Float.fromString` instead of `float_of_string_opt`, you can
-define a new helper function that takes a `string` and returns `option`:
+Define a new helper function that takes a `string` and returns `option`:
 
 <<< Snippets.re#float-from-string
 
@@ -192,6 +197,8 @@ Then substitute `float_of_string_opt` with `floatFromString` in your switch
 expression:
 
 <<< Snippets.re#switch-float-from-string{2}
+
+:::
 
 -----
 

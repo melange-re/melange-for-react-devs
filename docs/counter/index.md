@@ -121,6 +121,15 @@ we'll see how to [style using CSS classes](/todo).
 Congratulations! You've created your first ReasonReact app and component. In
 future chapters we'll create more complex and interesting components.
 
+## Overview
+
+- How to create and run a basic ReasonReact app
+- ReasonReact components are also modules
+- OCaml has an `option` type whose value can be either `None` or `Some(_)`
+- The pipe last operator (`|>`) is an alternate way to invoke functions that enables
+  easy chaining of function calls
+- The `style` prop doesn't take generic objects
+
 ## Exercises
 
 <b>1.</b> What happens if you try to remove the `| None` branch of the
@@ -136,30 +145,9 @@ switch (node) {
 };
 ```
 
-<b>2.</b> What happens if you rename the `_evt` variable inside the button
-callback to `evt`?
+::: details Solution
 
-```reason
-<button onClick={evt => setCounter(v => v - 1)}>
-```
-
-<b>3.</b> Comment out the `[@react.component]` attribute in `Counter.re`. What
-happens?
-
-## Overview
-
-What we covered in this section:
-
-- How to create and run a basic ReasonReact app
-- ReasonReact components are also modules
-- OCaml has an `option` type whose value can be either `None` or `Some(_)`
-- The pipe last operator (`|>`) is an alternate way to invoke functions that enables
-  easy chaining of function calls
-- The `style` prop doesn't take generic objects
-
-## Solutions
-
-<b>1.</b> Removing the `| None` branch will result in a compilation error:
+Removing the `| None` branch will result in a compilation error:
 
 ```
 Error (warning 8 [partial-match]): this pattern-matching is not exhaustive.
@@ -170,7 +158,18 @@ None
 Basically, the compiler is telling you to handle the `None` case if you want
 to ship your app. This is part of what makes OCaml such a type-safe language.
 
-<b>2.</b> Renaming `_evt` to `evt` results in a compilation error:
+:::
+
+<b>2.</b> What happens if you rename the `_evt` variable inside the button
+callback to `evt`?
+
+```reason
+<button onClick={evt => setCounter(v => v - 1)}>
+```
+
+::: details Solution
+
+Renaming `_evt` to `evt` results in a compilation error:
 
 ```
 Error (warning 27 [unused-var-strict]): unused variable evt.
@@ -179,7 +178,20 @@ Error (warning 27 [unused-var-strict]): unused variable evt.
 By default, OCaml wants you to use all the variables you declare, unless they
 begin with `_` (underscore).
 
-<b>3.</b> Commenting out `[@react.component]` in `Counter.re` will trigger a
+:::
+
+<b>3.</b> Comment out the `[@react.component]` attribute in `Counter.re`. What
+happens?
+
+```reason
+//[@react.component]
+let make = () => {
+  let (counter, setCounter) = React.useState(() => 0);
+```
+
+::: details Solution
+
+Commenting out `[@react.component]` in `Counter.re` will trigger a
 compilation error in `Index.re`, at the place where `Counter` component is used:
 
 ```
@@ -193,6 +205,8 @@ For now, don't worry about what `Counter.makeProps` is or where it came
 from---just remember that you need to put the `[@react.component]` attribute
 above your `make` function if you want your component to be usable in JSX. This
 is a very common newbie mistake. See the [PPX chapter](/todo) for more details.
+
+:::
 
 -----
 

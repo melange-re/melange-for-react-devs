@@ -126,7 +126,7 @@ let toPrice = ({onions, cheese, lettuce}) => {
 You get an error from Melange:
 
 ```
-File "src/better-burgers/Item.re", line 24, characters 34-41:
+File "src/order-confirmation/Item.re", line 24, characters 34-41:
 24 |   let toPrice = ({onions, cheese, lettuce}) => {
                                        ^^^^^^^
 Error (warning 27 [unused-var-strict]): unused variable lettuce.
@@ -148,7 +148,7 @@ let toPrice = ({onions, cheese}) => {
 However, this results in a different error:
 
 ```
-File "src/better-burgers/Item.re", line 24, characters 17-33:
+File "src/order-confirmation/Item.re", line 24, characters 17-33:
 24 |   let toPrice = ({onions, cheese}) => {
                       ^^^^^^^^^^^^^^^^
 Error (warning 9 [missing-record-field-pattern]): the following labels are not bound in this record pattern:
@@ -178,7 +178,7 @@ fields of a record type.
 ## Pattern matching records
 
 Right now, if a customer doesn't add any toppings to a burger,
-`Item.Burger.toPrice` will return `🍔{🧅×0, 🧀×0}`. It would be better if it
+`Item.Burger.toPrice` will return `🍔{🧅×0,🧀×0}`. It would be better if it
 just returned `🍔` to make it clear that it's a burger without any
 embellishments. One way to handle this is to use a ternary expression:
 
@@ -216,44 +216,6 @@ the branches of the switch expression. Now `Item.Burger.toEmoji` gets the name
 Magnifique! The order confirmation widget now supports burgers with different
 toppings. In the next chapter, we'll start writing tests for our code.
 
-## Exercises
-
-<b>1.</b> Inside `Item.re`, create another submodule for sandwich-related types
-and functions.
-
-<b>2.</b> Add `tomatoes: bool` and `bacon: int` fields to `Item.Burger.t`. Let’s
-say that adding tomatoes costs $0.05 and each piece of bacon[^1] costs $0.5.
-
-<b>3.</b> Make `Item.Burger.toPrice` function more readable by writing a helper
-function that calculates the cost of a topping by multiplying its price with its
-quantity.
-
-```reason
-let toPrice = ({onions, cheese, tomato, bacon, lettuce: _}) => {
-  let toppingCost = /* write me */;
-
-  15.  // base cost
-  +. toppingCost(onions, 0.2)
-  +. toppingCost(cheese, 0.1)
-  /* some stuff involving tomato and bacon */;
-};
-```
-
-<b>4.</b> Right now, the `Item.Burger.toEmoji` function shows more emojis than
-absolutely necessary. Refactor the `multiple` inner function in `Burger.toEmoji`
-so that it exhibits the following behavior:
-
-| `item` | `Item.Burger.toEmoji(item)` |
-| ------ | --------------- |
-| `Burger({lettuce: true, onions: 1, cheese: 1})` | `🍔{🥬,🧅,🧀}` |
-| `Burger({lettuce: true, onions: 0, cheese: 0})` | `🍔{🥬}` |
-
-::: details Hint
-
-Use a switch expression.
-
-:::
-
 ## Overview
 
 - Record types are like `Js.t` objects but their fields must be explicitly
@@ -287,16 +249,28 @@ Use a switch expression.
 - Try not to pattern match on tuples of more than 2 elements because it tends to
   be hard to read
 
-## Solutions
+## Exercises
 
-<b>1.</b> The `Item.Sandwich` submodule should look something like this:
+<b>1.</b> Inside `Item.re`, create another submodule for sandwich-related types
+and functions.
+
+::: details Solution
+
+The `Item.Sandwich` submodule should look something like this:
 
 <<< Item.re#sandwich-module
 
 You also need to refactor `Item.toPrice` and `Item.toEmoji` functions to use the
 new functions in `Item.Sandwich`.
 
-<b>2.</b> After adding `tomatoes` and `bacon` fields to `Item.Burger.t`, the
+:::
+
+<b>2.</b> Add `tomatoes: bool` and `bacon: int` fields to `Item.Burger.t`. Let’s
+say that adding tomatoes costs $0.05 and each piece of bacon[^1] costs $0.5.
+
+::: details Solution
+
+After adding `tomatoes` and `bacon` fields to `Item.Burger.t`, the
 changes to `Item.Burger.toEmoji` are fairly mechanical, so let's focus on
 `Item.Burger.toPrice`:
 
@@ -305,12 +279,50 @@ changes to `Item.Burger.toEmoji` are fairly mechanical, so let's focus on
 Note that we keep `lettuce: _` at the end of the pattern match since the value
 of `lettuce` isn't ever used.
 
-<b>3.</b> The `toppingCost` helper function inside `Burger.toPrice` should look
+:::
+
+<b>3.</b> Make `Item.Burger.toPrice` function more readable by writing a helper
+function that calculates the cost of a topping by multiplying its price with its
+quantity.
+
+```reason
+let toPrice = ({onions, cheese, tomato, bacon, lettuce: _}) => {
+  let toppingCost = /* write me */;
+
+  15.  // base cost
+  +. toppingCost(onions, 0.2)
+  +. toppingCost(cheese, 0.1)
+  /* some stuff involving tomato and bacon */;
+};
+```
+
+::: details Solution
+
+After adding the `toppingCost` helper function, `Burger.toPrice` should look
 something like this:
 
 <<< Item.re#to-price-topping-cost
 
-<b>4.</b> After refactoring the `multiple` helper function inside
+:::
+
+<b>4.</b> Right now, the `Item.Burger.toEmoji` function shows more emojis than
+absolutely necessary. Refactor the `multiple` inner function in `Burger.toEmoji`
+so that it exhibits the following behavior:
+
+| `item` | `Item.Burger.toEmoji(item)` |
+| ------ | --------------- |
+| `Burger({lettuce: true, onions: 1, cheese: 1})` | `🍔{🥬,🧅,🧀}` |
+| `Burger({lettuce: true, onions: 0, cheese: 0})` | `🍔{🥬}` |
+
+::: details Hint
+
+Use a switch expression.
+
+:::
+
+::: details Solution
+
+After refactoring the `multiple` helper function inside
 `Item.Burger.toEmoji` to avoid showing unnecessary emojis, it should look
 something like this:
 
@@ -328,6 +340,8 @@ annotation to the function makes it more clear that it's entirely equivalent to
 the version that uses a switch expression:
 
 <<< Item.re#to-emoji-multiple-fun-annotated
+
+:::
 
 -----
 

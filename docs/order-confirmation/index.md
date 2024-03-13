@@ -276,33 +276,6 @@ Wunderbar! You've got a basic order confirmation component, but it looks... not
 so great[^5]. In the next chapter, we'll see how ReasonReact components can be
 styled with plain old CSS.
 
-## Exercises
-
-<b>1.</b> The `Item` component is only used inside the `Order` component and we
-don't expect it to be used anywhere else (items rendered in a menu component
-would look different). Rename it to `OrderItem` and move it inside the `Order`
-module.
-
-::: details Hint
-
-Create a submodule inside `Order.re`
-
-:::
-
-<b>2.</b> Add another constructor to `Item.t` variant type. Update the `Item`
-module's helper functions to get your program to compile again.
-
-<b>3.</b> Instead of repeatedly using `value |>
-Js.Float.toFixed(~digits=2)
-|> React.string`, add a helper function `Format.currency` that does
-the same thing.
-
-::: details Hint
-
-Create a new file named `Format.re`.
-
-:::
-
 ## Overview
 
 - By convention, the main type in a module is often named `t`
@@ -325,9 +298,22 @@ Create a new file named `Format.re`.
   `React.element`s to a single `React.element`, e.g. after a call to
   `Js.Array.map`
 
-## Solutions
+## Exercises
 
-<b>1.</b> To move the `Item` component from the `Item` module to the
+<b>1.</b> The `Item` component is only used inside the `Order` component and we
+don't expect it to be used anywhere else (items rendered in a menu component
+would look different). Rename it to `OrderItem` and move it inside the `Order`
+module.
+
+::: details Hint
+
+Create a submodule inside `Order.re`
+
+:::
+
+::: details Solution
+
+To move the `Item` component from the `Item` module to the
 `Order` module, you'll have to move the `Item.make` function to a submodule
 called `Order.OrderItem`. Then you'll have to prefix the references to `t`,
 `toPrice`, and `toEmoji` with `Item.` since they're now being referenced outside
@@ -336,8 +322,15 @@ look something like this:
 
 <<< @/../src/order-confirmation/Order.re
 
-<b>2.</b> After you add a `HotDog` constructor to `Item.t`, your `Item` module
-should look something like this:
+:::
+
+<b>2.</b> Add another constructor to `Item.t` variant type. Update the `Item`
+module's helper functions to get your program to compile again.
+
+::: details Solution
+
+Let's say you add a `HotDog` constructor to `Item.t`; your `Item` module would
+look something like this:
 
 <<< Item.re#hotdog
 
@@ -345,7 +338,22 @@ Of course, you may have chosen a different price for the hotdog. Or maybe you
 didn't add a hotdog at all, and instead added `CannedFood` (🥫) or `PotOfFood`
 (🍲). It's totally up to you!
 
-<b>3.</b> In order to create a helper function `Format.currency`, we must create
+:::
+
+<b>3.</b> Instead of repeatedly using `value |>
+Js.Float.toFixed(~digits=2)
+|> React.string`, add a helper function `Format.currency` that does
+the same thing.
+
+::: details Hint
+
+Create a new file named `Format.re`.
+
+:::
+
+::: details Solution
+
+In order to create a helper function `Format.currency`, we must create
 a new module file called `Format.re` and add a `currency` function:
 
 <<< @/../src/order-confirmation/Format.re
@@ -355,6 +363,8 @@ Then we can use that function like this:
 ```reason
 <td> {item |> toPrice |> Format.currency} </td>
 ```
+
+:::
 
 -----
 

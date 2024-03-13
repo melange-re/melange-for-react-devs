@@ -178,8 +178,7 @@ module ItemAddTurducken = {
     | Hotdog => {js|🌭|js}
     | Sandwich(sandwich) =>
       Printf.sprintf(
-        "%s(%s)",
-        {js|🥪|js},
+        {js|🥪(%s)|js},
         switch (sandwich) {
         | Portabello => {js|🍄|js}
         | Ham => {js|🐷|js}
