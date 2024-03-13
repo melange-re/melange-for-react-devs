@@ -17,9 +17,5 @@ make serve
 
 ## Syntax files
 
-Syntax highlighting files are in `syntaxes` folder.
-
-- Reason syntax comes from
-  https://github.com/ocamllabs/vscode-ocaml-platform/blob/master/syntaxes/reason.json
-- Dune syntax comes from
-  https://github.com/ocamllabs/vscode-ocaml-platform/blob/master/syntaxes/dune.json
+Syntax highlighting files were copied from
+https://github.com/ocamllabs/vscode-ocaml-platform/blob/master/syntaxes
