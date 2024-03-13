@@ -1581,6 +1581,87 @@
           ]
         },
         {
+          "comment": "melange.emit",
+          "begin": "\\([[:space:]]*(melange\\.emit)\\b",
+          "end": "\\)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.language.dune"
+            }
+          },
+          "patterns": [
+            {
+              "comment": "melange.emit/target",
+              "begin": "\\([[:space:]]*(target)\\b",
+              "end": "\\)",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.language.dune"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#general"
+                }
+              ]
+            },
+            {
+              "comment": "melange.emit/module_systems",
+              "begin": "\\([[:space:]]*(module_systems)\\b",
+              "end": "\\)",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.language.dune"
+                }
+              },
+              "patterns": [
+                {
+                  "comment": "module_systems/es6/commonjs",
+                  "begin": "\\([[:space:]]*(es6|commonjs)\\b",
+                  "end": "\\)",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "keyword.language.dune"
+                    }
+                  },
+                  "patterns": [
+                    {
+                      "include": "#general"
+                    }
+                  ]
+                },
+                {
+                  "include": "#general"
+                }
+              ]
+            },
+            {
+              "comment": "melange.emit/runtime_deps",
+              "begin": "\\([[:space:]]*(runtime_deps)\\b",
+              "end": "\\)",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.language.dune"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#dependencies"
+                },
+                {
+                  "include": "#general"
+                }
+              ]
+            },
+            {
+              "include": "#library"
+            },
+            {
+              "include": "#general"
+            }
+          ]
+        },
+        {
           "include": "#general"
         }
       ]

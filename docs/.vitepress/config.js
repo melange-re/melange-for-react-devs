@@ -59,6 +59,7 @@ export default defineConfig({
         aliases: ['re', 'rei'],
       },
       // Source: https://github.com/ocamllabs/vscode-ocaml-platform/blob/master/syntaxes/dune.json
+      // with a few additions to support melange.emit
       {
         id: 'dune',
         scopeName: 'source.dune',
