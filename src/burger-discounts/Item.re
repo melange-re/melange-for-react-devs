@@ -55,8 +55,8 @@ module Sandwich = {
     | Unicorn
     | Turducken;
 
-  let toPrice = t => {
-    let day = Js.Date.make() |> Js.Date.getDay |> int_of_float;
+  let toPrice = (~date: Js.Date.t, t) => {
+    let day = date |> Js.Date.getDay |> int_of_float;
 
     switch (t) {
     | Portabello
@@ -86,7 +86,7 @@ type t =
 
 let toPrice = t => {
   switch (t) {
-  | Sandwich(sandwich) => Sandwich.toPrice(sandwich)
+  | Sandwich(sandwich) => Sandwich.toPrice(~date=Js.Date.make(), sandwich)
   | Burger(burger) => Burger.toPrice(burger)
   | Hotdog => 5.
   };

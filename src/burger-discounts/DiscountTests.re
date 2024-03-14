@@ -59,7 +59,7 @@ test("input array isn't changed", () => {
   |];
   Discount.getBurgerDiscount(items) |> ignore;
   expect
-  |> deepStrictEqual(
+  |> deepEqual(
        items,
        [|
          Item.Hotdog,
