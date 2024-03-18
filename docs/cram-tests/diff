@@ -1,0 +1,27 @@
+@@ -4,17 +4,17 @@ Sandwich tests
+   # Subtest: Item.Sandwich.toEmoji
+   ok 1 - Item.Sandwich.toEmoji
+     ---
+-    duration_ms: 2.225448
++    duration_ms: 3.012631
+     ...
+   # Subtest: Item.Sandwich.toPrice
+   ok 2 - Item.Sandwich.toPrice
+     ---
+-    duration_ms: 0.262691
++    duration_ms: 0.276333
+     ...
+   # Subtest: Item.Sandwich.toPrice returns lower price for Turducken on Tuesdays
+   ok 3 - Item.Sandwich.toPrice returns lower price for Turducken on Tuesdays
+     ---
+-    duration_ms: 0.109477
++    duration_ms: 0.140118
+     ...
+   1..3
+   # tests 3
+@@ -24,4 +24,4 @@ Sandwich tests
+   # cancelled 0
+   # skipped 0
+   # todo 0
+-  # duration_ms 0.125331
++  # duration_ms 0.143172

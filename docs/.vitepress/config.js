@@ -36,6 +36,7 @@ export default defineConfig({
           { text: 'Better Sandwiches', link: '/better-sandwiches/' },
           { text: 'Better Burgers', link: '/better-burgers/' },
           { text: 'Sandwich Tests', link: '/sandwich-tests/' },
+          { text: 'Cram Tests', link: '/cram-tests/' },
         ]
       }
     ],
@@ -65,6 +66,14 @@ export default defineConfig({
         scopeName: 'source.dune',
         displayName: 'Dune',
         grammar: JSON.parse(readFileSync('./syntaxes/dune.json')),
+      },
+      // Source: https://github.com/ocamllabs/vscode-ocaml-platform/blob/master/syntaxes/cram.json
+      {
+        id: 'cram',
+        scopeName: 'source.cram',
+        displayName: 'Cram Test',
+        grammar: JSON.parse(readFileSync('./syntaxes/cram.json')),
+        aliases: ['t'],
       },
     ],
   },
