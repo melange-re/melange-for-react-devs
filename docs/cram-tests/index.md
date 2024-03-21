@@ -68,7 +68,7 @@ Note that this is the same path we specified inside the `cram/deps` field.
 To run tests, execute
 
 ```shell
-opam exec -- dune build @runtest
+dune build @runtest
 ```
 
 Here,
@@ -94,7 +94,7 @@ Cram tests are automatically attached to the `@runtest` alias, and
 
 ## Promotion
 
-After running `opam exec -- dune build @runtest`, you should be able to see the
+After running `dune build @runtest`, you should be able to see the
 output from the cram test you just added[^1]. However, this doesn't count as a
 passing cram test, because this output can't be compared to the expected output.
 Dune has a nice feature that lets you
@@ -102,7 +102,7 @@ Dune has a nice feature that lets you
 the latest output of a cram test to become the expected output:
 
 ```shell
-opam exec -- dune promote
+dune promote
 ```
 
 The above command updates your `src/order-confirmation/tests.t` cram test file,
@@ -114,8 +114,8 @@ The part underneath the command is the expected output of the command.
 
 ## Add `npm` scripts
 
-Instead of typing `opam exec` commands over and over, let's add the relevant
-`npm` scripts to your `package.json` file:
+Instead of typing `dune` commands over and over, let's add the relevant `npm`
+scripts to your `package.json` file:
 
 ```json
 "test": "npm run build -- @runtest",
