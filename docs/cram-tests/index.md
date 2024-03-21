@@ -50,10 +50,8 @@ This configuration tells Dune two things:
   re-run all the cram tests defined in the same directory as this `dune` file
 
 Note that we cannot use the same path to `SandwichTests.mjs` as we would if we
-were running this from the root directory of our project. It's useful to think
-of cram tests as being run from the mirrored directory in your build directory,
-which in this case would be `_build/default/src/order-confirmation` (although in
-reality, cram tests are run inside the sandbox directory; more on that later).
+were running this from the root directory of our project, because cram tests are
+run inside a sandbox directory (more on that later).
 
 ## Add `tests.t` file
 
@@ -229,8 +227,15 @@ The output should now look like this:
 
 From this, you can see that `./output/src/cram-tests/SandwichTests.mjs` is
 actually a symbolic link which links to the real file inside your build
-directory. This explains why you can successfully run the test even when the
-rest of the `.mjs` files aren't present in the sandbox directory.
+directory, specifically this file:
+
+```
+_build/default/src/order-confirmation/output/src/order-confirmation/SandwichTests.mjs
+```
+
+`SandwichTests.mjs` being a symbolic link explains why you can run the test
+successfully even when the rest of the `.mjs` files aren't present in the
+sandbox directory.
 
 ## Better dependencies
 
