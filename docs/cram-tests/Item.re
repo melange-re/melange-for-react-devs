@@ -7,6 +7,7 @@ module Burger = {
     bacon: int,
   };
 
+  // #region to-emoji
   let toEmoji = t => {
     let multiple = (emoji, count) =>
       switch (count) {
@@ -35,6 +36,7 @@ module Burger = {
         |> Js.Array.join(~sep=","),
       );
     };
+    // #endregion to-emoji
   };
 
   let toPrice = ({onions, cheese, tomatoes, bacon, lettuce: _}) => {
@@ -47,53 +49,3 @@ module Burger = {
     +. toppingCost(bacon, 0.5);
   };
 };
-
-module Sandwich = {
-  type t =
-    | Portabello
-    | Ham
-    | Unicorn
-    | Turducken;
-
-  let toPrice = (~date: Js.Date.t, t) => {
-    let day = date |> Js.Date.getDay |> int_of_float;
-
-    switch (t) {
-    | Portabello
-    | Ham => 10.
-    | Unicorn => 80.
-    | Turducken when day == 2 => 10.
-    | Turducken => 20.
-    };
-  };
-
-  let toEmoji = t =>
-    Printf.sprintf(
-      {js|🥪(%s)|js},
-      switch (t) {
-      | Portabello => {js|🍄|js}
-      | Ham => {js|🐷|js}
-      | Unicorn => {js|🦄|js}
-      | Turducken => {js|🦃🦆🐓|js}
-      },
-    );
-};
-
-type t =
-  | Sandwich(Sandwich.t)
-  | Burger(Burger.t)
-  | Hotdog;
-
-let toPrice = t => {
-  switch (t) {
-  | Sandwich(sandwich) => Sandwich.toPrice(sandwich, ~date=Js.Date.make())
-  | Burger(burger) => Burger.toPrice(burger)
-  | Hotdog => 5.
-  };
-};
-
-let toEmoji =
-  fun
-  | Hotdog => {js|🌭|js}
-  | Burger(burger) => Burger.toEmoji(burger)
-  | Sandwich(sandwich) => Sandwich.toEmoji(sandwich);

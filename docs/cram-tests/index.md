@@ -108,7 +108,7 @@ dune promote
 The above command updates your `src/order-confirmation/tests.t` cram test file,
 which now looks something like this:
 
-<<< tests{cram}
+<<< tests#first-cram{cram}
 
 The part underneath the command is the expected output of the command.
 
@@ -333,11 +333,101 @@ the next chapter, we'll add logic for promotional discounts.
 
 ## Exercises
 
-<b>1.</b> tbd
+<b>1.</b> Follow these steps to add a new cram test for burger-related logic:
 
-<b>2.</b> tbd
 
-<b>3.</b> tbd
+- Run `npm run test:watch`
+- Add new source file `src/order-confirmation/BurgerTests.re`:
+
+  <<< BurgerTests.re#new-file
+- Add a new cram test for it in `src/order-confirmation/tests.t`
+- The test fails, so fix the expected string in the second argument to `expect`
+- The test in Burger should succeed, but the cram test still fails because it
+  has no expected output
+- Run `npm run promote` in another terminal
+- You should now see `Success, waiting for filesystem changes...`
+
+::: details Solution
+
+Fixed test:
+
+<<< BurgerTests.re#first-test-fixed
+
+New cram test:
+
+<<< tests#first-burger-cram{cram}
+
+:::
+
+<b>2.</b> Add three more tests to `BurgerTests` module:
+
+```reason
+test("Burger with 0 of onions, cheese, or bacon doesn't show those emoji", () =>
+  expect |> equal(Item.Burger.toEmoji(/* burger record */), {js|🍔|js})
+);
+
+test(
+  "Burger with 1 of onions, cheese, or bacon should show just the emoji without ×",
+  () =>
+  expect |> equal(Item.Burger.toEmoji(/* burger record */), {js|🍔|js})
+);
+
+test("Burger with 2 or more of onions, cheese, or bacon should show ×", () =>
+  expect |> equal(Item.Burger.toEmoji(/* burger record */), {js|🍔|js})
+);
+```
+
+Get the tests to pass and promote the new test output.
+
+::: details Solution
+
+Fixed tests:
+
+<<< BurgerTests.re#three-tests-fixed
+
+:::
+
+<b>3.</b> Recently, some Cafe Emoji customers have gotten into the habit of
+ordering burgers with an absurd number of toppings. You can barely even hold
+these monstrous burgers in your hands, and on the small chance that you manage
+to grab one, it will explode as soon as you bite into it. Madame Jellobutter
+has therefore decided that whenever someone orders a burger with more than 12
+toppings, it will be served in a big bowl. Update the `Item.Burger.toEmoji`
+function so that the following expressions are true:
+
+```reason
+Item.Burger.toEmoji({
+  lettuce: true,
+  tomatoes: true,
+  onions: 4,
+  cheese: 2,
+  bacon: 5,
+})
+== {js|🍔🥣{🥬,🍅,🧅×4,🧀×2,🥓×5}|js};
+
+Item.Burger.toEmoji({
+  lettuce: true,
+  tomatoes: true,
+  onions: 4,
+  cheese: 2,
+  bacon: 4,
+})
+== {js|🍔{🥬,🍅,🧅×4,🧀×2,🥓×5}|js};
+```
+
+Note that lettuce and tomato each count as 1 topping.
+
+::: details Solution
+
+New version of `Item.Burger.toEmoji`:
+
+<<< Item.re#to-emoji
+
+New test:
+
+<<< BurgerTests.re#bowl-test
+
+:::
 
 -----
 
