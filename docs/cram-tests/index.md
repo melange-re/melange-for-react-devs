@@ -63,7 +63,8 @@ Sandwich tests
   $ node ./output/src/order-confirmation/SandwichTests.mjs
 ```
 
-Note that this is the same path we specified inside the `cram/deps` field.
+Note that this is the same path for `SandwichTests.mjs` that we specified inside
+the `cram/deps` field.
 
 To run tests, execute
 
@@ -95,9 +96,12 @@ Cram tests are automatically attached to the `@runtest` alias, and
 ## Promotion
 
 After running `dune build @runtest`, you should be able to see the
-output from the cram test you just added[^1]. However, this doesn't count as a
-passing cram test, because this output can't be compared to the expected output.
-Dune has a nice feature that lets you
+output from the cram test you just added[^1]:
+
+<<< initial-diff{diff}
+
+However, this doesn't count as a passing cram test, because this output can't be
+compared to any expected output. Dune has a nice feature that lets you
 [promote](https://dune.readthedocs.io/en/stable/concepts/promotion.html#promotion)
 the latest output of a cram test to become the expected output:
 
@@ -115,7 +119,8 @@ The part underneath the command is the expected output of the command.
 ## Add `npm` scripts
 
 Instead of typing `dune` commands over and over, let's add the relevant `npm`
-scripts to your `package.json` file:
+scripts to your `package.json` file. Replace the current `test` script with
+these three scripts:
 
 ```json
 "test": "npm run build -- @runtest",
@@ -139,10 +144,10 @@ Run `npm run test` to check that it works.
 The cram test still doesn't succeed, but now it's because the most recent output
 and the expected output don't match:
 
-<<< diff{diff}
+<<< duration-diff{diff}
 
-The problem is that the recorded durations for individual unit tests is differs
-on each test run. Therefore we must
+The problem is that the recorded durations for individual unit tests is a little
+bit different on each test run. Therefore we must
 [sanitize](https://dune.readthedocs.io/en/stable/tests.html#test-output-sanitation)
 the test output, i.e. remove the parts that are non-deterministic. Update your
 cram test command:
@@ -156,11 +161,12 @@ all the lines containing the string `duration_ms`.
 
 Follow these steps to achieve your first successful cram test run:
 
-1. Run `npm run test`
-1. It fails because the expected output still contains the `duration_ms` lines
-1. Run `npm run promote` to promote the latest output to the expected output
-1. Run `npm run test`
-1. You should see no test output
+1. Run `npm run test:watch`
+1. It shows errors because the expected output still contains the `duration_ms`
+   lines
+1. Run `npm run promote` in another terminal to promote the latest output to the
+   expected output
+1. You should see `Success, waiting for filesystem changes...`
 
 No test output means it succeeded. Somewhat unintuitively, when cram tests
 succeed, they remain silent![^2]
@@ -185,7 +191,8 @@ See all the files inside the sandbox
   $ npx tree
 ```
 
-Now when you run `npm run test`, you'll see some output like this:
+If `npm run test:watch` is still running, you'll immediately see some output
+like this:
 
 ```diff
 @@ -24,3 +24,8 @@ Sandwich tests
@@ -240,8 +247,8 @@ sandbox directory.
 ## Better dependencies
 
 There's a problem with the cram test dependencies. The cram test is re-run if
-`SandwichTests.re` changes, but if `Item.re`, which `SandwichTests.re` depends
-on, were to change, it wouldn't trigger a test re-run. To see this, make the
+`SandwichTests.re` changes, but if `Item.re` (which `SandwichTests.re` depends
+on), were to change, it wouldn't trigger a test re-run. To see this, make the
 following change to `Item.Sandwich.toEmoji`:
 
 ```reason
@@ -258,8 +265,9 @@ let toEmoji = t =>
   );
 ```
 
-After running `npm run test`, you would expect a failing test, but that doesn't
-happen. You have to add `(alias melange)` to `cram/deps`:
+In the terminal in which `npm run test:watch` is running, you would expect to
+see a failing test, but no errors appear. You have to add `(alias melange)` to
+`cram/deps`:
 
 ```dune
 (cram
@@ -286,10 +294,9 @@ to your `dune-project` file:
 (expand_aliases_in_sandbox)
 ```
 
-Run `npm run test` again and you'll see that a lot of files have been copied
+The `npx tree` cram test makes it clear that a lot of files have been copied
 over to the sandbox directory. Since `SandwichTests.mjs` is a `@melange` build
-target too, it actually no longer needs to be explicitly included in
-`cram/deps`:
+target too, it is redundant and can be removed from `cram/deps`:
 
 ```
 (cram
@@ -297,14 +304,13 @@ target too, it actually no longer needs to be explicitly included in
   (alias melange)))
 ```
 
-Fix the bug in `Item.re` and re-run `npm run test`. Your cram test should pass
-once more.
+Fix the bug in `Item.re`. The `SandwichTests` cram test should pass once more.
 
 ::: warning
 
 Using
 [expand_aliases_in_sandbox](https://dune.readthedocs.io/en/stable/dune-files.html#stanza-expand_aliases_in_sandbox)
-is more convenient, but it may noticeably impact cram test performance. If you
+is very convenient, but it may noticeably impact cram test performance. If you
 feel your cram tests are too slow, you should remove it.
 
 :::
@@ -323,29 +329,23 @@ the next chapter, we'll add logic for promotional discounts.
 - A `cram` stanza is used to specify dependencies for your cram tests
 - Cram test files have the `.t` extension
 - Aliases are virtual build targets that other build targets can be attached to
-- Cram tests that produce nondeterministic output must have that be sanitized
+- Cram tests that produce nondeterministic output must have their output be
+  sanitized
 - Cram tests execute in a sandbox
 - For Melange projects, `(alias melange)` is generally the best dependency for
   your cram tests
-- The `expand_aliases_in_sandbox` allows you to avoid having to put generated
-  `.mjs` files in your cram test dependencies, at the cost of having slower cram
-  tests
+- The `expand_aliases_in_sandbox` stanza allows you to avoid having to put
+  generated `.mjs` files in your cram test dependencies, at the cost of having
+  slower cram tests
 
 ## Exercises
 
-<b>1.</b> Follow these steps to add a new cram test for burger-related logic:
-
-
-- Run `npm run test:watch`
-- Add new source file `src/order-confirmation/BurgerTests.re`:
+<b>1.</b> Add new source file `src/order-confirmation/BurgerTests.re`:
 
   <<< BurgerTests.re#new-file
-- Add a new cram test for it in `src/order-confirmation/tests.t`
-- The test fails, so fix the expected string in the second argument to `expect`
-- The test in Burger should succeed, but the cram test still fails because it
-  has no expected output
-- Run `npm run promote` in another terminal
-- You should now see `Success, waiting for filesystem changes...`
+
+Fix the broken logic inside the test and add a new cram test for `BurgerTests`
+in `src/order-confirmation/tests.t`.
 
 ::: details Solution
 
