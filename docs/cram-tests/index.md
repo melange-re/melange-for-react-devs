@@ -123,8 +123,8 @@ scripts to your `package.json` file:
 "promote": "npm run dune -- promote"
 ```
 
-You should also add some lines to the `scriptsComments` section of
-`package.json`:
+Since JSON doesn't support comments, you can optionally add some lines to the
+`scriptsComments` section of `package.json` to explain what each command does:
 
 ```json
 "test": "# Run the tests",
