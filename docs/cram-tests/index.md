@@ -119,7 +119,7 @@ scripts to your `package.json` file:
 
 ```json
 "test": "npm run build -- @runtest",
-"testwatch": "npm run build -- @runtest --watch",
+"test:watch": "npm run build -- @runtest --watch",
 "promote": "npm run dune -- promote"
 ```
 
@@ -128,7 +128,7 @@ You should also add some lines to the `scriptsComments` section of
 
 ```json
 "test": "# Run the tests",
-"testwatch": "# Watch files and re-run tests",
+"test:watch": "# Watch files and re-run tests",
 "promote": "# Promote most recent output to expected output"
 ```
 
