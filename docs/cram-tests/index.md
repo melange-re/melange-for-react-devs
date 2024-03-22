@@ -268,16 +268,6 @@ happen. You have to add `(alias melange)` to `cram/deps`:
   ./output/src/cram-tests/SandwichTests.mjs))
 ```
 
-This adds the `Item.re` to the sandbox, but it doesn't cause the test to fail.
-The proper fix is to instead add `(alias melange)` to `cram/deps`:
-
-```dune
-(cram
- (deps
-  (alias melange)
-  ./output/src/cram-tests/SandwichTests.mjs))
-```
-
 Now the test finally fails. The presence of `(alias melange)` means that all
 build targets attached to the `@melange` alias are now dependencies for the cram
 tests in this directory.
@@ -293,7 +283,6 @@ to your `dune-project` file:
 
 ```dune
 ; Copy all build targets for an alias into the sandbox
-
 (expand_aliases_in_sandbox)
 ```
 
@@ -358,10 +347,10 @@ and [demo](https://react-book.melange.re/demo/src/cram-tests/) for this chapter.
 
 -----
 
-[^1]: You might notice that the output from the Node test runner looks different
-    when run inside a cram test. That's because Note test runner uses different
-    [test reporters](https://nodejs.org/api/test.html#test-reporters) depending
-    on whether you run it directly or through another process.
+[^1]: You might notice that the output from Node test runner looks different
+    when run inside a cram test. That's because it uses different [test
+    reporters](https://nodejs.org/api/test.html#test-reporters) depending on
+    whether you run it directly or through another process.
 
 [^2]: A successful cram test won't print any output from the test, but you may
     see some logging that indicates that build targets were produced, e.g.
