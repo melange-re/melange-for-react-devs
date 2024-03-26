@@ -42,7 +42,7 @@ jobs:
       - name: Install all deps
         run: npm run install:npm-opam
       - name: Format check
-        run: npm run format-check
+        run: npm run format:check
       - name: Bundle the demo app
         run: npm run bundle
       - name: Install dependencies for VitePress
