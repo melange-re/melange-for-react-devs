@@ -1,0 +1,13 @@
+(melange.emit
+ (target output)
+ (libraries reason-react melange-fest)
+ (preprocess
+  (pps melange.ppx reason-react-ppx))
+ (module_systems
+  (es6 mjs))
+ (runtime_deps
+  (glob_files *.css)))
+
+(cram
+ (deps
+  (alias melange)))
