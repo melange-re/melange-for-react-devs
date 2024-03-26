@@ -15,7 +15,7 @@
     "serve": "vite serve --open",
     "bundle": "npm run build && vite build",
     "test": "npm run build -- @runtest",
-    "testwatch": "npm run build -- @runtest --watch",
+    "test:watch": "npm run build -- @runtest --watch",
     "promote": "npm run dune -- promote"
   },
   "scriptsComments": {
