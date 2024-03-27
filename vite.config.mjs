@@ -26,6 +26,7 @@ export default defineConfig({
         'better-sandwiches': resolve(__dirname, 'src/better-sandwiches/index.html'),
         'better-burgers': resolve(__dirname, 'src/better-burgers/index.html'),
         'sandwich-tests': resolve(__dirname, 'src/sandwich-tests/index.html'),
+        'cram-tests': resolve(__dirname, 'src/cram-tests/index.html'),
       },
     },
   },
