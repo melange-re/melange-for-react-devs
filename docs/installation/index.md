@@ -15,30 +15,59 @@ Linux](https://learn.microsoft.com/en-us/windows/wsl/)
 ## Opam
 
 We need [opam](https://opam.ocaml.org/), the OCaml Package Manager. There are
-many ways to install it depending on your platform, but let's go with the
-simplest method:
+many ways to [install](https://opam.ocaml.org/doc/Install.html) it depending on
+your platform, but let's go with the simplest method:
 
-```bash
+```shell
 bash -c "sh <(curl -fsSL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh)"
 opam init
-eval $(opam env)
 ```
 
 While `opam init` is running, it will prompt you with something like
 
 ```
-Do you want opam to modify ~/.profile?
+Do you want opam to modify ~/.zshrc? [N/y/f]
 ```
 
 Type `y` to agree.
 
+::: warning
+
+If it asks
+
+```
+Do you want opam to modify ~/.profile? [N/y/f]
+```
+
+You should enter `f` and then enter `~/.bashrc` as the file to be modified.
+There's a [bug when installing the shell hook when running Bash or Bourne
+shell](https://github.com/ocaml/opam/issues/5819).
+
+:::
+
+### Verify that `opam` was correctly installed
+
 After the installation completes, run
 
-```
-opam --version
+```shell
+opam switch
 ```
 
-to verify that it succeeded.
+If you see this message at the bottom, then the shell hook wasn't installed
+correctly:
+
+```
+[WARNING] The environment is not in sync with the current switch.
+          You should run: eval $(opam env)
+```
+
+To get rid of the warning, you should run setup again:
+
+```shell
+opam init --reinit
+```
+
+Then follow the instructions for the warning section above.
 
 ## Download and run the starter project
 
