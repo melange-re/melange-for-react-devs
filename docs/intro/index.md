@@ -38,6 +38,7 @@ teaches the language from the ground up and goes much deeper into its features.
 | Better Sandwiches | Support different kinds of sandwiches by adding constructor arguments | variant constructor argument, variant pattern matching, `{j\|\|j}` quoted string literal, `Printf.sprintf`, building bundles |
 | Better Burgers | Support different toppings for burgers by using records | record type, record destructuring, record pattern matching, submodules, wildcard |
 | Sandwich Tests | Add unit tests for sandwich-related logic | opam switch, `opam switch`, `opam install`, `opam list`, `.opam` file, `melange-fest`, `open` module, `module_systems` field, punning, type inference |
+| Cram Tests | Set up cram tests to run your unit tests | cram tests, `cram` stanza, Dune alias, promotion, test output sanitization, sandbox, `expand_aliases_in_sandbox` stanza |
 
 ...and much more to come!
 
