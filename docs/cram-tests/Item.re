@@ -38,14 +38,4 @@ module Burger = {
     };
     // #endregion to-emoji
   };
-
-  let toPrice = ({onions, cheese, tomatoes, bacon, lettuce: _}) => {
-    let toppingCost = (quantity, cost) => float_of_int(quantity) *. cost;
-
-    15.  // base cost
-    +. toppingCost(onions, 0.2)
-    +. toppingCost(cheese, 0.1)
-    +. (tomatoes ? 0.05 : 0.0)
-    +. toppingCost(bacon, 0.5);
-  };
 };
