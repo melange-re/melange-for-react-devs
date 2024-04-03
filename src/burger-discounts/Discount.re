@@ -13,8 +13,8 @@ let getFreeBurger = (items: array(Item.t)) => {
          - compare(Item.toPrice(item1), Item.toPrice(item2))
        );
 
-  switch (burgers) {
-  | [|Burger(_), Burger(cheaperBurger)|] =>
+  switch (burgers[0], burgers[1]) {
+  | (Burger(_), Burger(cheaperBurger)) =>
     Some(Item.Burger.toPrice(cheaperBurger))
   | _ => None
   };

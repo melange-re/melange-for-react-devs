@@ -296,6 +296,27 @@ runtime representation of `None` is `undefined` and `Some(value)` is just
 `value` (the argument of the `Some` constructor). So Node test runner is
 basically saying that `None` was returned, but `Some(15.15)` was expected.
 
+## Pattern matching on arrays
+
+The test is failing because the current "success" pattern match only accounts
+for a two-element array:
+
+```reason{2}
+switch (burgers) {
+| [|Burger(_), Burger(cheaperBurger)|] =>
+  Some(Item.Burger.toPrice(cheaperBurger))
+| _ => None
+```
+
+OCaml [only allows you to pattern match on arrays of fixed
+length](https://v2.ocaml.org/manual/patterns.html#sss:pat-array), so to fix
+this, we must instead match on a tuple of the first and second elements of the
+array:
+
+<<< Discount.re#match-on-tuple
+
+TBD
+
 ---
 
 Nice, you've implemented the burger discount, and you also understand more about

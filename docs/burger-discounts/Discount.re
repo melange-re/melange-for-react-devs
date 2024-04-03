@@ -1,3 +1,6 @@
+// Mock function just to get code to compile
+let getFreeBurger = (_items: array(Item.t)) => None;
+
 let _ =
   (items: array(Item.t)) => {
     let burgers =
@@ -80,5 +83,14 @@ let _ =
     |> ignore;
   };
 
-// Mock function just to get code to compile
-let getFreeBurger = (_items: array(Item.t)) => None;
+let _ = {
+  let burgers: array(Item.t) = [||];
+
+  // #region match-on-tuple
+  switch (burgers[0], burgers[1]) {
+  | (Burger(_), Burger(cheaperBurger)) =>
+    Some(Item.Burger.toPrice(cheaperBurger))
+  | _ => None
+  };
+  // #endregion match-on-tuple
+};
