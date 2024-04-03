@@ -69,8 +69,8 @@ in the callback to `Js.Array.sortInPlaceWith`?
 
 ```reason
 |> Js.Array.sortInPlaceWith(~f=(item1, item2) =>
-      compare(Item.toPrice(item1), Item.toPrice(item2))
-    )
+    - compare(Item.toPrice(item1), Item.toPrice(item2))
+  )
 ```
 
 The reason is that `Item.toPrice` is invoked inside this callback, and its type
@@ -85,7 +85,7 @@ so we can help the compiler out by type annotating the `item` argument:
 
 <<< Discount.re#type-annotate-argument{1}
 
-## Full name of constructor
+## Use the full name
 
 There's another, less direct way to indicate the type of `item`, which is to use
 the full name for the constructors used in the switch expression:
@@ -262,12 +262,22 @@ integer. If the constructor has an argument, like `Sandwich(Ham)`, then it's
 turned into a record where the `TAG` field is an integer and the `_0` field
 contains the argument. Records are turned into JS objects.
 
+::: warning
+
+Variant constructors in the runtime don't always have the `TAG` field. It only
+appears when there's more than one variant constructor with an argument. See
+[Data types and runtime
+representation](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
+for more details.
+
+:::
+
 ## Arrays are mutable
 
 The "Input array isn't changed" unit test fails because arrays in OCaml are
-mutable and the `Discount.getFreeBurger` function mutates its array argument.
-The easiest way to fix this is to swap the order of `Js.Array.sortInPlaceWith`
-and `Js.Array.filter` invocations:
+mutable (just as in JavaScript) and the `Discount.getFreeBurger` function
+mutates its array argument. The easiest way to fix this is to swap the order of
+`Js.Array.sortInPlaceWith` and `Js.Array.filter` invocations:
 
 <<< Discount.re#swap-function-order
 
@@ -332,10 +342,11 @@ is the exception raised when you try to access an array with an invalid index.
 What looks like an array access operator is actually just a function call. That
 is, `burger[0]` is completely equivalent to `Array.get(burger, 0)`.
 
-The code as it is right now uses
-[Stdlib.Array.get](https://melange.re/v1.0.0/api/re/melange/Stdlib/Array/#val-get),
-but it's possible to override this by defining our own `Array` module. Add a new
-file `src/order-confirmation/Array.re`:
+Since the [`Stdlib` module is opened by
+default](https://melange.re/v1.0.0/api/re/melange/Stdlib/), the
+[Stdlib.Array.get](https://melange.re/v1.0.0/api/re/melange/Stdlib/Array/#val-get)
+function is used for `Array.get`, but it's possible to override this by defining
+our own `Array` module. Add a new file `src/order-confirmation/Array.re`:
 
 <<< Discount.re#module-array
 
@@ -369,7 +380,30 @@ using lists, which are better suited to this problem than arrays.
 
 ## Overview
 
-
+- Type inference is less effective inside functions that don't call other
+  functions. In those cases, you can give the compiler more information:
+  - Type annotate the function arguments
+  - Use the full name for value
+- The `Stdlib` module is opened by default
+- Records are immutable
+- Use record copy syntax to make copies of records that have different values
+  for some fields
+- OCaml doesn't allow you to ignore the return value of functions (unless the
+  value is `()`), so you can use `Stdlib.ignore` to explicitly discard return
+  values
+- Runtime representations of common data types:
+  - Variant constructor without argument -> integer
+  - Variant constructor with argument -> JS object
+  - Record -> JS object
+  - `None` -> `undefined`
+  - `Some(value)` -> `value`
+- Array facts:
+  - Arrays are mutable, just like in JS
+  - You can pattern match on arrays of fixed length
+  - Array access is unsafe by default
+  - `anArray[index]` is equivalent to `Array.get(anArray, index)`
+  - You can create your own `Array` module to override the behavior of
+    `Stdlib.Array.get`
 
 ## Exercises
 
