@@ -315,6 +315,18 @@ array:
 
 <<< Discount.re#match-on-tuple
 
+## Array access is unsafe
+
+The first and second tests now fail due to `index out of bounds` errors. Array
+access in OCaml is unsafe, so trying to get the first element of an empty array
+raises an exception. The simplest fix is to catch the exception in the switch
+expression:
+
+<<< Discount.re#catch-exception{2}
+
+[Stdlib.Invalid_argument](https://melange.re/v3.0.0/api/re/melange/Stdlib/#exception-Invalid_argument)
+is the exception raised when you try to access an array with an invalid index.
+
 TBD
 
 ---

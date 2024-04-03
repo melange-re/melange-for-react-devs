@@ -77,10 +77,14 @@ Discount tests
   ok 5 - Input array isn't changed
     ---
     ...
-  1..5
-  # tests 5
+  # Subtest: 3 burgers of different price, return Some(15.15)
+  ok 6 - 3 burgers of different price, return Some(15.15)
+    ---
+    ...
+  1..6
+  # tests 6
   # suites 0
-  # pass 5
+  # pass 6
   # fail 0
   # cancelled 0
   # skipped 0

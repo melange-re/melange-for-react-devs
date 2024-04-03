@@ -94,3 +94,16 @@ let _ = {
   };
   // #endregion match-on-tuple
 };
+
+let _ = {
+  let burgers: array(Item.t) = [||];
+
+  // #region catch-exception
+  switch (burgers[0], burgers[1]) {
+  | exception (Invalid_argument(_)) => None
+  | (Burger(_), Burger(cheaperBurger)) =>
+    Some(Item.Burger.toPrice(cheaperBurger))
+  | _ => None
+  };
+  // #endregion catch-exception
+};
