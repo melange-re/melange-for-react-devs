@@ -107,3 +107,26 @@ let _ = {
   };
   // #endregion catch-exception
 };
+
+module Array = {
+  // #region module-array
+  // Safe array access function
+  let get = (array: array('a), index): option('a) =>
+    switch (index) {
+    | index when index < 0 || index >= Js.Array.length(array) => None
+    | index => Some(Stdlib.Array.get(array, index))
+    };
+  // #endregion module-array
+};
+
+let _ = {
+  let burgers: array(Item.t) = [||];
+
+  // #region custom-array-get
+  switch (burgers[0], burgers[1]) {
+  | (Some(Burger(_)), Some(Burger(cheaperBurger))) =>
+    Some(Item.Burger.toPrice(cheaperBurger))
+  | _ => None
+  };
+  // #endregion custom-array-get
+};

@@ -327,13 +327,45 @@ expression:
 [Stdlib.Invalid_argument](https://melange.re/v3.0.0/api/re/melange/Stdlib/#exception-Invalid_argument)
 is the exception raised when you try to access an array with an invalid index.
 
-TBD
+## `Array.get` array access function
+
+What looks like an array access operator is actually just a function call. That
+is, `burger[0]` is completely equivalent to `Array.get(burger, 0)`.
+
+The code as it is right now uses
+[Stdlib.Array.get](https://melange.re/v1.0.0/api/re/melange/Stdlib/Array/#val-get),
+but it's possible to override this by defining our own `Array` module. Add a new
+file `src/order-confirmation/Array.re`:
+
+<<< Discount.re#module-array
+
+This function returns `None` if the `index` is out of bounds; otherwise it
+returns `Some(Stdlib.Array.get(array, index))`, i.e. the element at `index`
+encased by `Some`.
+
+Introducing our own `Array` module triggers a new compilation error:
+
+```
+File "src/order-confirmation/Discount.re", line 18, characters 5-11:
+18 |   | (Burger(_), Burger(cheaperBurger)) =>
+          ^^^^^^
+Error: This variant pattern is expected to have type Item.t option
+       There is no constructor Burger within type option
+```
+
+The "success" branch should now use `Some`:
+
+<<< Discount.re#custom-array-get{2}
+
+Your code should now compile and all unit tests should pass. If you haven't done
+so already, run `npm run promote` to promote the latest test output to become
+the expected test output inside `tests.t`.
 
 ---
 
 Nice, you've implemented the burger discount, and you also understand more about
-how to use arrays in OCaml. In the next chapter, you'll implement the same
-discount logic using lists, which are better suited to this problem than arrays.
+arrays in OCaml. In the next chapter, you'll implement the same discount logic
+using lists, which are better suited to this problem than arrays.
 
 ## Overview
 

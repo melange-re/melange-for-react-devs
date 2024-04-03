@@ -14,8 +14,7 @@ let getFreeBurger = (items: array(Item.t)) => {
        );
 
   switch (burgers[0], burgers[1]) {
-  | exception (Invalid_argument(_)) => None
-  | (Burger(_), Burger(cheaperBurger)) =>
+  | (Some(Burger(_)), Some(Burger(cheaperBurger))) =>
     Some(Item.Burger.toPrice(cheaperBurger))
   | _ => None
   };
