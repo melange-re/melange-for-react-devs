@@ -90,7 +90,7 @@ test("2 burgers of same price, discount", () =>
 );
 // #endregion refactor-use-burger-record
 
-// #region fourth-test
+// #region different-price-test
 test("2 burgers of different price, discount of cheaper one", () =>
   expect
   |> equal(
@@ -103,4 +103,4 @@ test("2 burgers of different price, discount of cheaper one", () =>
        Some(15.05),
      )
 );
-// #endregion fourth-test
+// #endregion different-price-test

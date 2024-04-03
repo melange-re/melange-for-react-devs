@@ -53,3 +53,25 @@ test("2 burgers of different price, discount of cheaper one", () =>
        Some(15.05),
      )
 );
+
+test("Input array isn't changed", () => {
+  let items = [|
+    Item.Hotdog,
+    Burger({...burger, tomatoes: true}),
+    Sandwich(Ham),
+    Burger({...burger, bacon: 2}),
+  |];
+
+  Discount.getFreeBurger(items) |> ignore;
+
+  expect
+  |> deepEqual(
+       items,
+       [|
+         Item.Hotdog,
+         Burger({...burger, tomatoes: true}),
+         Sandwich(Ham),
+         Burger({...burger, bacon: 2}),
+       |],
+     );
+});

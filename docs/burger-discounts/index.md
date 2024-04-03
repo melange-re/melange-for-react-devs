@@ -140,7 +140,7 @@ in any way.
 
 Add a new test to `DiscountTests`:
 
-<<< DiscountTests.re#fourth-test
+<<< DiscountTests.re#different-price-test
 
 Again, we're reusing the `burger` record, but this time, we use [record copy
 syntax](https://reasonml.github.io/docs/en/record#updating-records-spreading) to
@@ -163,6 +163,57 @@ shorter way to write this:
   tomatoes: true,
 }
 ```
+
+## Ignoring function return values
+
+Add another test to `DiscountTests`:
+
+```reason
+test("Input array isn't changed", () => {
+  let items = [|
+    Item.Hotdog,
+    Burger({...burger, tomatoes: true}),
+    Sandwich(Ham),
+    Burger({...burger, bacon: 2}),
+  |];
+
+  Discount.getFreeBurger(items);
+
+  expect
+  |> deepEqual(
+       items,
+       [|
+         Item.Hotdog,
+         Burger({...burger, tomatoes: true}),
+         Sandwich(Ham),
+         Burger({...burger, bacon: 2}),
+       |],
+     );
+});
+```
+
+You'll get this compilation error:
+
+```
+File "src/order-confirmation/DiscountTests.re", line 65, characters 2-31:
+65 |   Discount.getFreeBurger(items);
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: This expression has type float option
+       but an expression was expected of type unit
+       because it is in the left-hand side of a sequence
+```
+
+When you call a function in OCaml, you have use its return value unless the
+return value is `()` (the [unit
+value](https://reasonml.github.io/docs/en/overview#unit)). However, inside this
+test, we are calling `Discount.getFreeBurger` to test its side effects, so the
+return value isn't useful here. We can explicitly discard the value by using
+[Stdlib.ignore](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-ignore):
+
+```reason
+Discount.getFreeBurger(items) |> ignore;
+```
+
 
 ---
 
