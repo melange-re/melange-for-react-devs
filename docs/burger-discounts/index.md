@@ -10,7 +10,7 @@ let getFreeBurger = (items: array(Item.t)) => {
   let burgers =
     items
     |> Js.Array.sortInPlaceWith(~f=(item1, item2) =>
-        compare(Item.toPrice(item1), Item.toPrice(item2))
+        - compare(Item.toPrice(item1), Item.toPrice(item2))
       )
     |> Js.Array.filter(~f=item =>
         switch (item) {
@@ -34,9 +34,19 @@ The new function `Discount.getFreeBurger` takes an array of items, finds the
 second-most-expensive burger, and returns its price encased in `Some`. If there
 is no second burger, it returns `None`.
 
-[Js.Array.sortInPlaceWith](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-sortInPlaceWith)
-is used to sort the items by price, and it takes a callback function that
-accepts two arguments and returns an integer.
+About the functions used in `Discount.getFreeBurger`:
+
+- [Js.Array.sortInPlaceWith](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-sortInPlaceWith)
+  takes a callback function `~f` that accepts two arguments and returns `int`.
+  It's used to used to sort the items by price (highest to lowest).
+- [Stdlib.compare](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-compare)
+  takes two arguments and returns `int`. It's a polymorphic function capable of
+  comparing many types, including `bool`, `int`, `string`, etc. Note that you
+  can always just write `compare` instead of `Stdlib.compare`, because the
+  `Stdlib` module is always opened by default.
+- [Js.Array.filter](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-filter)
+  takes a callback function `~f` that accepts one argument and returns a `bool`.
+  It's used to make sure all items in the resulting array are burgers.
 
 There are a number of issues with this code, including the fact that it doesn't
 compile, but we'll address each issue in the following sections.
@@ -93,6 +103,66 @@ By using the full name of the `Burger` constructor, we can also switch the
 callback function to use the `fun` syntax:
 
 <<< Discount.re#full-name-fun
+
+## Add new tests
+
+Let's add some tests in a new file called
+`src/order-confirmation/DiscountTests.re`:
+
+<<< DiscountTests.re#first-three
+
+To run these tests, add a new cram test to `src/order-confirmation/tests.t`:
+
+```cram
+Discount tests
+  $ node ./output/src/order-confirmation/DiscountTests.mjs | sed '/duration_ms/d'
+```
+
+Run `npm run test:watch` to see that the unit tests pass, then run `npm promote`
+to make the cram test pass.
+
+## Records are immutable
+
+It's tiresome and also redundant to fully write out every burger record in the
+tests. Define a `Item.Burger.t` record at the very top of `DiscountTests`:
+
+<<< DiscountTests.re#burger-record
+
+Then refactor the second and third tests to use this record:
+
+<<< DiscountTests.re#refactor-use-burger-record{4,14,16}
+
+It's perfectly fine to reuse records in this way because records are immutable.
+You can pass a record to any function and not worry that its fields might change
+in any way.
+
+## Record copy syntax
+
+Add a new test to `DiscountTests`:
+
+<<< DiscountTests.re#fourth-test
+
+Again, we're reusing the `burger` record, but this time, we use [record copy
+syntax](https://reasonml.github.io/docs/en/record#updating-records-spreading) to
+make copies of `burger` record that have slightly different field values. For
+example,
+
+```reason
+{...burger, tomatoes: true}
+```
+
+means to make a copy of `burger` but with `tomatoes` set to `true`. It's just a
+shorter way to write this:
+
+```reason
+{
+  lettuce: burger.lettuce,
+  onions: burger.onions,
+  cheese: burger.cheese,
+  bacon: burger.bacon,
+  tomatoes: true,
+}
+```
 
 ---
 

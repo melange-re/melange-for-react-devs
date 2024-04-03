@@ -1,5 +1,5 @@
 Sandwich tests
-  $ node ./output/src/cram-tests/SandwichTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/burger-discounts/SandwichTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: Item.Sandwich.toEmoji
   ok 1 - Item.Sandwich.toEmoji
@@ -23,7 +23,7 @@ Sandwich tests
   # todo 0
 
 Burger tests
-  $ node ./output/src/cram-tests/BurgerTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/burger-discounts/BurgerTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: A fully-loaded burger
   ok 1 - A fully-loaded burger
@@ -49,6 +49,30 @@ Burger tests
   # tests 5
   # suites 0
   # pass 5
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
+
+Discount tests
+  $ node ./output/src/burger-discounts/DiscountTests.mjs | sed '/duration_ms/d'
+  TAP version 13
+  # Subtest: 0 burgers, no discount
+  ok 1 - 0 burgers, no discount
+    ---
+    ...
+  # Subtest: 1 burger, no discount
+  ok 2 - 1 burger, no discount
+    ---
+    ...
+  # Subtest: 2 burgers of same price, discount
+  ok 3 - 2 burgers of same price, discount
+    ---
+    ...
+  1..3
+  # tests 3
+  # suites 0
+  # pass 3
   # fail 0
   # cancelled 0
   # skipped 0
