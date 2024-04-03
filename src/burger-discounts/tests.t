@@ -69,10 +69,18 @@ Discount tests
   ok 3 - 2 burgers of same price, discount
     ---
     ...
-  1..3
-  # tests 3
+  # Subtest: 2 burgers of different price, discount of cheaper one
+  ok 4 - 2 burgers of different price, discount of cheaper one
+    ---
+    ...
+  # Subtest: Input array isn't changed
+  ok 5 - Input array isn't changed
+    ---
+    ...
+  1..5
+  # tests 5
   # suites 0
-  # pass 3
+  # pass 5
   # fail 0
   # cancelled 0
   # skipped 0

@@ -217,8 +217,8 @@ Discount.getFreeBurger(items) |> ignore;
 
 ## Runtime representation of variants
 
-Unfortunately, the "Input array isn't changed" test fails. Part of the output
-(cleaned up for readability) looks like this:
+After compliation succeeds, we find that the "Input array isn't changed" unit
+test fails. Part of the output (cleaned up for readability) looks like this:
 
 ```json
 0,
@@ -261,6 +261,18 @@ A variant constructor without arguments, like `Hotdog`, gets turned into an
 integer. If the constructor has an argument, like `Sandwich(Ham)`, then it's
 turned into a record where the `TAG` field is an integer and the `_0` field
 contains the argument. Records are turned into JS objects.
+
+## Arrays are mutable
+
+The "Input array isn't changed" unit test fails because arrays in OCaml are
+mutable and the `Discount.getFreeBurger` function mutates its array argument.
+The easiest way to fix this is to swap the order of `Js.Array.sortInPlaceWith`
+and `Js.Array.filter` invocations:
+
+<<< Discount.re#swap-function-order
+
+Although sorting still happens in-place, the array being sorted is a new one
+created by `Js.Array.filter`, not the original argument array.
 
 ---
 
