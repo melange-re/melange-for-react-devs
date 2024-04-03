@@ -75,3 +75,17 @@ test("Input array isn't changed", () => {
        |],
      );
 });
+
+test("3 burgers of different price, return Some(15.15)", () =>
+  expect
+  |> equal(
+       Discount.getFreeBurger([|
+         Burger(burger), // 15
+         Hotdog,
+         Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+         Sandwich(Ham),
+         Burger({...burger, bacon: 2}) // 16.00
+       |]),
+       Some(15.15),
+     )
+);

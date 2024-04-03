@@ -104,3 +104,19 @@ test("2 burgers of different price, discount of cheaper one", () =>
      )
 );
 // #endregion different-price-test
+
+// #region three-burgers
+test("3 burgers of different price, return Some(15.15)", () =>
+  expect
+  |> equal(
+       Discount.getFreeBurger([|
+         Burger(burger), // 15
+         Hotdog,
+         Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+         Sandwich(Ham),
+         Burger({...burger, bacon: 2}) // 16.00
+       |]),
+       Some(15.15),
+     )
+);
+// #endregion three-burgers

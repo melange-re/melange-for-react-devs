@@ -215,7 +215,7 @@ return value isn't useful here. We can explicitly discard the value by using
 Discount.getFreeBurger(items) |> ignore;
 ```
 
-## Runtime representation of variants
+## Runtime representation of variant
 
 After compliation succeeds, we find that the "Input array isn't changed" unit
 test fails. Part of the output (cleaned up for readability) looks like this:
@@ -273,6 +273,28 @@ and `Js.Array.filter` invocations:
 
 Although sorting still happens in-place, the array being sorted is a new one
 created by `Js.Array.filter`, not the original argument array.
+
+## Runtime representation of `option`
+
+The tests are passing again, but we need to add one more test to check that
+`Discount.getFreeBurger` works when there are more than two burgers:
+
+<<< DiscountTests.re#three-burgers
+
+This test fails, with the key part of the output being:
+
+```diff
++      Expected values to be strictly equal:
++      + actual - expected
++
++      + undefined
++      - 15.15
+```
+
+Recall that `Discount.getFreeBurger` has the return type `option(float)`. The
+runtime representation of `None` is `undefined` and `Some(value)` is just
+`value` (the argument of the `Some` constructor). So Node test runner is
+basically saying that `None` was returned, but `Some(15.15)` was expected.
 
 ---
 
