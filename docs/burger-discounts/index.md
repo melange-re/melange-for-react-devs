@@ -166,7 +166,8 @@ shorter way to write this:
 
 ## Ignoring function return values
 
-Add another test to `DiscountTests`:
+Add another test to `DiscountTests` that checks whether `Discount.getFreeBurger`
+modifies the array passed to it:
 
 ```reason
 test("Input array isn't changed", () => {
@@ -214,6 +215,52 @@ return value isn't useful here. We can explicitly discard the value by using
 Discount.getFreeBurger(items) |> ignore;
 ```
 
+## Runtime representation of variants
+
+Unfortunately, the "Input array isn't changed" test fails. Part of the output
+(cleaned up for readability) looks like this:
+
+```json
+0,
+{
+  TAG: 1,
+  _0: {
+    bacon: 0,
+    cheese: 0,
+    lettuce: false,
+    onions: 0,
+    tomatoes: true
+  }
+},
+{
+  TAG: 0,
+  _0: 1
+},
+{
+  TAG: 1,
+  _0: {
+    bacon: 2,
+    cheese: 0,
+    lettuce: false,
+    onions: 0,
+    tomatoes: false
+  }
+}
+```
+
+This is how the original OCaml values map to the JavaScript runtime values shown by Node
+test runner:
+
+| OCaml source | JavaScript runtime |
+|--------------|--------------------|
+| `Item.Hotdog` | `0` |
+| `Burger({...burger, tomatoes: true})` | `{TAG: 1, _0: {bacon: 0, cheese: 0, lettuce: false, onions: 0, tomatoes: true}` |
+| `Sandwich(Ham)` | `{TAG: 0, _0: 1}` |
+
+A variant constructor without arguments, like `Hotdog`, gets turned into an
+integer. If the constructor has an argument, like `Sandwich(Ham)`, then it's
+turned into a record where the `TAG` field is an integer and the `_0` field
+contains the argument. Records are turned into JS objects.
 
 ---
 
