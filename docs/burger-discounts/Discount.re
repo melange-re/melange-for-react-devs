@@ -150,3 +150,37 @@ let getFreeBurger = (items: array(Item.t)) => {
   };
 };
 // #endregion improved-get-free-burger
+
+// #region get-half-off-one
+// If there's at least one burger with one of every topping, get half off
+let getHalfOff = (items: array(Item.t)) => {
+  let meetsCondition =
+    items
+    |> Js.Array.some(~f=item =>
+         switch (item) {
+         | Item.Burger({
+             lettuce: true,
+             tomatoes: true,
+             onions: 1,
+             cheese: 1,
+             bacon: 1,
+           }) =>
+           true
+         | Burger(_)
+         | Sandwich(_)
+         | Hotdog => false
+         }
+       );
+
+  switch (meetsCondition) {
+  | false => None
+  | true =>
+    let total =
+      items
+      |> Js.Array.reduce(~init=0.0, ~f=(total, item) =>
+           total +. Item.toPrice(item)
+         );
+    Some(total /. 2.0);
+  };
+};
+// #endregion get-half-off-one

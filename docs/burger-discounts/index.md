@@ -442,7 +442,21 @@ Use [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-map)
 
 :::
 
-<b>2.</b> tbd
+<b>2.</b> Add new function `Discount.getHalfOff` that gives you a discount of
+half off the entire meal if there’s at least one burger that has one of every
+topping.
+
+::: details Hint
+
+Use [Js.Array.some](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-some)
+
+:::
+
+::: details Solution
+
+<<< Discount.re#get-half-off-one
+
+:::
 
 <b>3.</b> tbd
 
