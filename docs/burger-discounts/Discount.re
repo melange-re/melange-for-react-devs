@@ -1,6 +1,3 @@
-// Mock function just to get code to compile
-let getFreeBurger = (_items: array(Item.t)) => None;
-
 let _ =
   (items: array(Item.t)) => {
     let burgers =
@@ -131,3 +128,25 @@ let _ = {
   };
   // #endregion custom-array-get
 };
+
+// #region improved-get-free-burger
+// Buy 2 burgers, get 1 free
+let getFreeBurger = (items: array(Item.t)) => {
+  let burgers =
+    items
+    |> Js.Array.filter(~f=item =>
+         switch (item) {
+         | Item.Burger(_) => true
+         | Sandwich(_)
+         | Hotdog => false
+         }
+       )
+    |> Js.Array.map(~f=Item.toPrice)
+    |> Js.Array.sortInPlaceWith(~f=(x, y) => - compare(x, y));
+
+  switch (burgers[0], burgers[1]) {
+  | (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
+  | _ => None
+  };
+};
+// #endregion improved-get-free-burger

@@ -9,13 +9,11 @@ let getFreeBurger = (items: array(Item.t)) => {
          | Hotdog => false
          }
        )
-    |> Js.Array.sortInPlaceWith(~f=(item1, item2) =>
-         - compare(Item.toPrice(item1), Item.toPrice(item2))
-       );
+    |> Js.Array.map(~f=Item.toPrice)
+    |> Js.Array.sortInPlaceWith(~f=(x, y) => - compare(x, y));
 
   switch (burgers[0], burgers[1]) {
-  | (Some(Burger(_)), Some(Burger(cheaperBurger))) =>
-    Some(Item.Burger.toPrice(cheaperBurger))
+  | (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
   | _ => None
   };
 };

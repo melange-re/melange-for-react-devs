@@ -420,7 +420,27 @@ using lists, which are a better fit for this problem.
 
 ## Exercises
 
-<b>1.</b> tbd
+<b>1.</b> `Discount.getFreeBurger` can be improved a bit. In particular, there's
+no need to match on the `Burger` constructor when non-burger items have already
+been filtered out. Refactor the function so that the "success" pattern match
+looks like this:
+
+```reason
+| (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
+```
+
+::: details Hint
+
+Use [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-map)
+
+:::
+
+
+::: details Solution
+
+<<< Discount.re#improved-get-free-burger
+
+:::
 
 <b>2.</b> tbd
 
