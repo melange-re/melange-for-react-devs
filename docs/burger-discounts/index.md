@@ -1,8 +1,8 @@
 # Burger Discounts
 
-Madame Jellobutter decides to celebrate the upcoming International Burger Day by
-running the classic "buy 2 burgers get 1 free" promotion. Add a new file
-`src/order-confirmation/Discount.re`:
+International Burger Day falls on Tuesday of next week, so Madame Jellobutter
+decides to celebrate it by running the classic "buy 2 burgers get 1 free"
+promotion. Add a new file `src/order-confirmation/Discount.re`:
 
 ```reason
 // Buy 2 burgers, get 1 free
@@ -34,22 +34,24 @@ The new function `Discount.getFreeBurger` takes an array of items, finds the
 second-most-expensive burger, and returns its price encased in `Some`. If there
 is no second burger, it returns `None`.
 
-About the functions used in `Discount.getFreeBurger`:
+The functions used in `Discount.getFreeBurger` are:
 
 - [Js.Array.sortInPlaceWith](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-sortInPlaceWith)
-  takes a callback function `~f` that accepts two arguments and returns `int`.
-  It's used to used to sort the items by price (highest to lowest).
+  takes a callback function `~f` with type signature `('a, 'a) => int` (accept
+  two arguments of the same type and `int`). It's used to used to sort the items
+  by price (highest to lowest).
 - [Stdlib.compare](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-compare)
-  takes two arguments and returns `int`. It's a polymorphic function capable of
+  has type signature `('a, 'a) => int`. It's a polymorphic function capable of
   comparing many types, including `bool`, `int`, `string`, etc. Note that you
   can always just write `compare` instead of `Stdlib.compare`, because the
-  `Stdlib` module is always opened by default.
+  [`Stdlib` module is always opened by
+  default](https://melange.re/v3.0.0/api/re/melange/Stdlib/).
 - [Js.Array.filter](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-filter)
-  takes a callback function `~f` that accepts one argument and returns a `bool`.
-  It's used to make sure all items in the resulting array are burgers.
+  takes a callback function `~f` with type signature `'a => bool`. It's used to
+  make sure all items in the `burgers` array are all burgers.
 
-There are a number of issues with this code, including the fact that it doesn't
-compile, but we'll address each issue in the following sections.
+At the moment, this code doesn't compile, and that's not the only thing wrong
+with it, but we'll address each issue in due course.
 
 ## Limitation of type inference
 
@@ -76,38 +78,40 @@ in the callback to `Js.Array.sortInPlaceWith`?
 The reason is that `Item.toPrice` is invoked inside this callback, and its type
 signature is already known to be `Item.t => float`. So type inference can figure
 out that `item1` and `item2` must both be of type `Item.t`, because
-`Item.toPrice` can only accept a argument of type `Item.t`.
+`Item.toPrice` can only accept an argument of type `Item.t`.
 
-## Type annotate the callback argument
+## Type annotate callback argument
 
 There aren't any function invocations inside the callback to `Js.Array.filter`,
 so we can help the compiler out by type annotating the `item` argument:
 
 <<< Discount.re#type-annotate-argument{1}
 
-## Use the full name
+Explicit type annotation always works, but it's sometimes enough to just give
+the compiler a hint.
 
-There's another, less direct way to indicate the type of `item`, which is to use
-the full name for the constructors used in the switch expression:
+## Use full name
+
+A less direct way to indicate the type of `item` is to use the full name[^1] for the
+constructors used in the switch expression:
 
 <<< Discount.re#full-name-constructors{3-5}
 
 Because `Item.Burger` is a constructor of the `Item.t` variant type, `item` must
-have type `Item.t`. By the way, you can just put `Item.` in front of the first
-constructor in the switch expression, OCaml is smart to know what module the
-following constructors come from:
+have type `Item.t`. For the sake of convenience, you leave off `Item.` the
+second and third branches of the switch expression---OCaml is smart to know what
+module the following constructors come from.
 
 <<< Discount.re#full-name-constructor{3}
 
-By using the full name of the `Burger` constructor, we can also switch the
+By using the full name of the `Burger` constructor, we can also refactor the
 callback function to use the `fun` syntax:
 
 <<< Discount.re#full-name-fun
 
 ## Add new tests
 
-Let's add some tests in a new file called
-`src/order-confirmation/DiscountTests.re`:
+Add some tests in new file `src/order-confirmation/DiscountTests.re`:
 
 <<< DiscountTests.re#first-three
 
@@ -123,8 +127,8 @@ to make the cram test pass.
 
 ## Records are immutable
 
-It's tiresome and also redundant to fully write out every burger record in the
-tests. Define a `Item.Burger.t` record at the very top of `DiscountTests`:
+It's unnecessary to fully write out every burger record in the tests. Define a
+`burger` record at the very top of `DiscountTests`:
 
 <<< DiscountTests.re#burger-record
 
@@ -132,9 +136,9 @@ Then refactor the second and third tests to use this record:
 
 <<< DiscountTests.re#refactor-use-burger-record{4,14,16}
 
-It's perfectly fine to reuse records in this way because records are immutable.
-You can pass a record to any function and not worry that its fields might change
-in any way.
+It's safe to reuse a single record this way because records are immutable. You
+can pass a record to any function and never worry that its fields might be
+changed by that function.
 
 ## Record copy syntax
 
@@ -152,7 +156,7 @@ example,
 ```
 
 means to make a copy of `burger` but with `tomatoes` set to `true`. It's just a
-shorter way to write this:
+shorter and more convenient way to write this:
 
 ```reason
 {
@@ -204,12 +208,12 @@ Error: This expression has type float option
        because it is in the left-hand side of a sequence
 ```
 
-When you call a function in OCaml, you have use its return value unless the
+When you call a function in OCaml, you have use its return value, unless the
 return value is `()` (the [unit
 value](https://reasonml.github.io/docs/en/overview#unit)). However, inside this
 test, we are calling `Discount.getFreeBurger` to test its side effects, so the
-return value isn't useful here. We can explicitly discard the value by using
-[Stdlib.ignore](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-ignore):
+return value isn't needed; as such, we can explicitly discard it by using
+[Stdlib.ignore](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-ignore)[^2]:
 
 ```reason
 Discount.getFreeBurger(items) |> ignore;
@@ -248,25 +252,26 @@ test fails. Part of the output (cleaned up for readability) looks like this:
 }
 ```
 
-This is how the original OCaml values map to the JavaScript runtime values shown by Node
-test runner:
+This is how Melange maps the original OCaml values to their JavaScript runtime
+values shown by Node test runner:
 
 | OCaml source | JavaScript runtime |
 |--------------|--------------------|
 | `Item.Hotdog` | `0` |
-| `Burger({...burger, tomatoes: true})` | `{TAG: 1, _0: {bacon: 0, cheese: 0, lettuce: false, onions: 0, tomatoes: true}` |
 | `Sandwich(Ham)` | `{TAG: 0, _0: 1}` |
+| `Burger({...burger, tomatoes: true})` | `{TAG: 1, _0: {bacon: 0, cheese: 0, lettuce: false, onions: 0, tomatoes: true}}` |
 
 A variant constructor without arguments, like `Hotdog`, gets turned into an
 integer. If the constructor has an argument, like `Sandwich(Ham)`, then it's
 turned into a record where the `TAG` field is an integer and the `_0` field
-contains the argument. Records are turned into JS objects.
+contains the argument. Records, like the one encased in the `Burger`
+constructor, are turned into JS objects.
 
 ::: warning
 
-Variant constructors in the runtime don't always have the `TAG` field. It only
-appears when there's more than one variant constructor with an argument. See
-[Data types and runtime
+Variant constructors in the runtime don't always have the `TAG` field. That
+field only appears when there's more than one variant constructor with an
+argument. See [Data types and runtime
 representation](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
 for more details.
 
@@ -282,12 +287,13 @@ mutates its array argument. The easiest way to fix this is to swap the order of
 <<< Discount.re#swap-function-order
 
 Although sorting still happens in-place, the array being sorted is a new one
-created by `Js.Array.filter`, not the original argument array.
+created by `Js.Array.filter` (the array containing only burgers), not the
+original input array.
 
 ## Runtime representation of `option`
 
-The tests are passing again, but we need to add one more test to check that
-`Discount.getFreeBurger` works when there are more than two burgers:
+We need to add one more test to check that `Discount.getFreeBurger` works when
+there are more than two burgers:
 
 <<< DiscountTests.re#three-burgers
 
@@ -301,10 +307,16 @@ This test fails, with the key part of the output being:
 +      - 15.15
 ```
 
-Recall that `Discount.getFreeBurger` has the return type `option(float)`. The
-runtime representation of `None` is `undefined` and `Some(value)` is just
-`value` (the argument of the `Some` constructor). So Node test runner is
-basically saying that `None` was returned, but `Some(15.15)` was expected.
+Recall that `Discount.getFreeBurger` has the return type `option(float)`.
+This is how Melange maps `option(float)` values to the JavaScript runtime[^3]:
+
+| OCaml source | JavaScript runtime |
+|--------------|--------------------|
+| `None` | `undefined` |
+| `Some(15.15)` | `15.15` |
+
+So Node test runner is basically telling you that `None` was returned, but
+`Some(15.15)` was expected.
 
 ## Pattern matching on arrays
 
@@ -327,9 +339,9 @@ array:
 
 ## Array access is unsafe
 
-The first and second tests now fail due to `index out of bounds` errors. Array
-access in OCaml is unsafe, so trying to get the first element of an empty array
-raises an exception. The simplest fix is to catch the exception in the switch
+The first and second tests now fail due to `index out of bounds` errors (since
+they work on arrays of length 0 and 1, respectively). Array access in OCaml is
+unsafe by default, so the simplest fix is to catch the exception in the switch
 expression:
 
 <<< Discount.re#catch-exception{2}
@@ -339,12 +351,13 @@ is the exception raised when you try to access an array with an invalid index.
 
 ## `Array.get` array access function
 
-What looks like an array access operator is actually just a function call. That
-is, `burger[0]` is completely equivalent to `Array.get(burger, 0)`.
+It looks like `burger[0]` is using an array access operator, but it's actually
+just a function call. That is, `burger[0]` is completely equivalent to
+`Array.get(burger, 0)`.
 
 Since the [`Stdlib` module is opened by
-default](https://melange.re/v1.0.0/api/re/melange/Stdlib/), the
-[Stdlib.Array.get](https://melange.re/v1.0.0/api/re/melange/Stdlib/Array/#val-get)
+default](https://melange.re/v3.0.0/api/re/melange/Stdlib/), the
+[Stdlib.Array.get](https://melange.re/v3.0.0/api/re/melange/Stdlib/Array/#val-get)
 function is used for `Array.get`, but it's possible to override this by defining
 our own `Array` module. Add a new file `src/order-confirmation/Array.re`:
 
@@ -364,7 +377,7 @@ Error: This variant pattern is expected to have type Item.t option
        There is no constructor Burger within type option
 ```
 
-The "success" branch should now use `Some`:
+The "success" branch must now include `Some` in the pattern match:
 
 <<< Discount.re#custom-array-get{2}
 
@@ -376,7 +389,7 @@ the expected test output inside `tests.t`.
 
 Nice, you've implemented the burger discount, and you also understand more about
 arrays in OCaml. In the next chapter, you'll implement the same discount logic
-using lists, which are better suited to this problem than arrays.
+using lists, which are a better fit for this problem.
 
 ## Overview
 
@@ -413,6 +426,8 @@ using lists, which are better suited to this problem than arrays.
 
 <b>3.</b> tbd
 
+<b>4.</b> tbd
+
 -----
 
 View [source
@@ -421,4 +436,16 @@ and [demo](https://react-book.melange.re/demo/src/burger-discounts/) for this ch
 
 -----
 
-footnotes
+[^1]: The official term for something like `Item.Burger` (module name followed
+    by value name) is [access
+    path](https://v2.ocaml.org/manual/names.html#sss:refer-named), but this term
+    isn't widely used.
+
+[^2]: Another valid way to discard the return value of a function is:
+
+    ```reason
+    let _ = Discount.getFreeBurger(items);
+    ```
+
+[^3]: Technically `option` is a variant, but Melange treats them as a special
+    case---`option` values are never represented as JS objects in the runtime.
