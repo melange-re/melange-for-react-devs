@@ -220,3 +220,17 @@ let getHalfOff = (items: array(Item.t)) => {
   };
 };
 // #endregion get-half-off
+
+let _ =
+  name => {
+    // #region return-variant-at-end
+    let result =
+      name
+      |> String.split_on_char(' ')
+      |> List.map(String.map(c => c |> Char.code |> (+)(1) |> Char.chr))
+      |> String.concat(" ")
+      |> String.cat("Hello, ");
+
+    Some(result);
+    // #endregion return-variant-at-end
+  };

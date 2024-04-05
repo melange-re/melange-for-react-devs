@@ -414,9 +414,10 @@ using lists, which are a better fit for this problem.
   - Arrays are mutable, just like in JS
   - You can pattern match on arrays of fixed length
   - Array access is unsafe by default
-  - `anArray[index]` is equivalent to `Array.get(anArray, index)`
+  - What looks like operator usage in `array[index]` is actually just a call to
+    `Array.get(array, index)`
   - You can create your own `Array` module to override the behavior of
-    `Stdlib.Array.get`
+    `Array.get`
 
 ## Exercises
 
@@ -481,7 +482,28 @@ to see how the tests are implemented. Note the use of a submodule to group the
 
 :::
 
-<b>4.</b> tbd
+<b>4.</b> What happens if you to try to rewrite `Some(String.length("foobar"))`
+to `"foobar" |> String.length |> Some`?
+
+::: details Solution
+
+You'll get a compilation error:
+
+```
+Error This expression should not be a constructor, the expected type is int -> 'a
+```
+
+Variant constructors like `Some` are not functions, so they can't be used with
+the pipe last (`|>`) operator. If you have have a long string of function
+invocations but you need to return a variant at the end, consider using an extra
+variable, e.g.
+
+<<< Discount.re#return-variant-at-end
+
+See [full example on Melange
+Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNpcGhlckdyZWV0aW5nID0gbmFtZSA9PiB7CiAgc3dpdGNoIChTdHJpbmcudHJpbShuYW1lKSkgewogIHwgIiIgPT4gTm9uZQogIHwgbmFtZSA9PgogICAgbGV0IHJlc3VsdCA9CiAgICAgIG5hbWUKICAgICAgfD4gU3RyaW5nLnNwbGl0X29uX2NoYXIoJyAnKQogICAgICB8PiBMaXN0Lm1hcChTdHJpbmcubWFwKGMgPT4gYyB8PiBDaGFyLmNvZGUgfD4gKCspKDEpIHw%2BIENoYXIuY2hyKSkKICAgICAgfD4gU3RyaW5nLmNvbmNhdCgiICIpCiAgICAgIHw%2BIFN0cmluZy5jYXQoIkhlbGxvLCAiKTsKCiAgICBTb21lKHJlc3VsdCk7CiAgfTsKfTsKCkpzLmxvZyhjaXBoZXJHcmVldGluZygiIikpOwpKcy5sb2coY2lwaGVyR3JlZXRpbmcoIlhhdmllciBMZXJveSIpKTsK&live=off).
+
+:::
 
 -----
 
