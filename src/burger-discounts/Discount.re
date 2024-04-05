@@ -14,7 +14,7 @@ let getFreeBurger = (items: array(Item.t)) => {
 
   switch (burgers[0], burgers[1]) {
   | (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
-  | _ => None
+  | (None | Some(_), None | Some(_)) => None
   };
 };
 

@@ -429,6 +429,8 @@ looks like this:
 | (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
 ```
 
+Also refactor the "failure" pattern match so there's no wildcard.
+
 ::: details Hint
 
 Use [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-map)
