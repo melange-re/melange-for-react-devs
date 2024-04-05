@@ -458,7 +458,26 @@ Use [Js.Array.some](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-some)
 
 :::
 
-<b>3.</b> tbd
+<b>3.</b> Update `Discount.getHalfOff` so that it returns a discount of one half
+off the entire meal if there’s at least one burger that has **at least** one of
+every topping. Also add a couple of tests for this function in `DiscountTests`.
+
+::: details Hint
+
+Use `when` guard
+
+:::
+
+::: details Solution
+
+<<< Discount.re#get-half-off
+
+See
+[DiscountTests.re](https://github.com/melange-re/melange-for-react-devs/blob/main/src/burger-discounts/DiscountTests.re)
+to see how the tests are implemented. Note the use of a submodule to group the
+`Discount.getHalfOff` tests together.
+
+:::
 
 <b>4.</b> tbd
 

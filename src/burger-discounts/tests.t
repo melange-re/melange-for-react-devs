@@ -81,10 +81,18 @@ Discount tests
   ok 6 - 3 burgers of different price, return Some(15.15)
     ---
     ...
-  1..6
-  # tests 6
+  # Subtest: No burger has 1+ of every topping, return None
+  ok 7 - No burger has 1+ of every topping, return None
+    ---
+    ...
+  # Subtest: One burger has 1+ of every topping, return Some(15.675)
+  ok 8 - One burger has 1+ of every topping, return Some(15.675)
+    ---
+    ...
+  1..8
+  # tests 8
   # suites 0
-  # pass 6
+  # pass 8
   # fail 0
   # cancelled 0
   # skipped 0
