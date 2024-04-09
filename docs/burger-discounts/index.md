@@ -359,9 +359,8 @@ An alternative approach is to catch the exception that gets raised using an
 
 ## `Array.get` array access function
 
-It looks like `burger[0]` is using an array access operator, but it's actually
-just a function call. That is, `burger[0]` is completely equivalent to
-`Array.get(burger, 0)`.
+In OCaml, the array access operator `[]` is just a function call. That is,
+`burger[0]` is completely equivalent to `Array.get(burger, 0)`.
 
 Since the [`Stdlib` module is opened by
 default](https://melange.re/v3.0.0/api/re/melange/Stdlib/), the
