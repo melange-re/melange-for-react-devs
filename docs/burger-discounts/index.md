@@ -224,7 +224,7 @@ Discount.getFreeBurger(items) |> ignore;
 
 ## Runtime representation of variant
 
-After compliation succeeds, we find that the "Input array isn't changed" unit
+After compilation succeeds, we find that the "Input array isn't changed" unit
 test fails. Part of the output (cleaned up for readability) looks like this:
 
 ```json
@@ -344,13 +344,18 @@ array:
 
 The first and second tests now fail due to `index out of bounds` errors (since
 they work on arrays of length 0 and 1, respectively). Array access in OCaml is
-unsafe by default, so the simplest fix is to catch the exception in the switch
+unsafe by default, so the simplest fix is to check the length of the array
+before using the switch expression:
+
+<<< Discount.re#check-array-length{1-2}
+
+As an extra precaution, you might want to catch the exception inside the switch
 expression:
 
-<<< Discount.re#catch-exception{2}
+<<< Discount.re#catch-exception{5}
 
-[Stdlib.Invalid_argument](https://melange.re/v3.0.0/api/re/melange/Stdlib/#exception-Invalid_argument)
-is the exception raised when you try to access an array with an invalid index.
+With the current logic, it's not impossible to reach the exception branch, but
+who knows how the code might evolve in the future.
 
 ## `Array.get` array access function
 

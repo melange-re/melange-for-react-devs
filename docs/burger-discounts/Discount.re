@@ -95,13 +95,33 @@ let _ = {
 let _ = {
   let burgers: array(Item.t) = [||];
 
+  // #region check-array-length
+  Js.Array.length(burgers) < 2
+    ? None
+    : (
+      switch (burgers[0], burgers[1]) {
+      | (Burger(_), Burger(cheaperBurger)) =>
+        Some(Item.Burger.toPrice(cheaperBurger))
+      | _ => None
+      }
+    );
+  // #endregion check-array-length
+};
+
+let _ = {
+  let burgers: array(Item.t) = [||];
+
   // #region catch-exception
-  switch (burgers[0], burgers[1]) {
-  | exception (Invalid_argument(_)) => None
-  | (Burger(_), Burger(cheaperBurger)) =>
-    Some(Item.Burger.toPrice(cheaperBurger))
-  | _ => None
-  };
+  Js.Array.length(burgers) < 2
+    ? None
+    : (
+      switch (burgers[0], burgers[1]) {
+      | exception _ => None // unreachable
+      | (Burger(_), Burger(cheaperBurger)) =>
+        Some(Item.Burger.toPrice(cheaperBurger))
+      | _ => None
+      }
+    );
   // #endregion catch-exception
 };
 
