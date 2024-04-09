@@ -479,7 +479,7 @@ every topping. Also add a couple of tests for this function in `DiscountTests`.
 
 ::: details Hint
 
-Use `when` guard
+Use [when](https://reasonml.github.io/docs/en/pattern-matching#when) guard
 
 :::
 
@@ -536,5 +536,7 @@ and [demo](https://react-book.melange.re/demo/src/burger-discounts/) for this ch
     let _ = Discount.getFreeBurger(items);
     ```
 
-[^3]: Technically `option` is a variant, but Melange treats them as a special
-    case---`option` values are never represented as JS objects in the runtime.
+[^3]: Technically [`option` is a
+    variant](https://melange.re/v3.0.0/api/re/melange/Stdlib/Option/#type-t),
+    but Melange treats them as a special case---`option` values are never
+    represented as JS objects in the runtime.
