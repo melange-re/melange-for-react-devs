@@ -112,16 +112,12 @@ let _ = {
   let burgers: array(Item.t) = [||];
 
   // #region catch-exception
-  Js.Array.length(burgers) < 2
-    ? None
-    : (
-      switch (burgers[0], burgers[1]) {
-      | exception _ => None // unreachable
-      | (Burger(_), Burger(cheaperBurger)) =>
-        Some(Item.Burger.toPrice(cheaperBurger))
-      | _ => None
-      }
-    );
+  switch (burgers[0], burgers[1]) {
+  | exception _ => None
+  | (Burger(_), Burger(cheaperBurger)) =>
+    Some(Item.Burger.toPrice(cheaperBurger))
+  | _ => None
+  };
   // #endregion catch-exception
 };
 

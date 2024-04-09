@@ -352,13 +352,10 @@ before using the switch expression:
 
 <<< Discount.re#check-array-length{1-2}
 
-As an extra precaution, you might want to catch the exception inside the switch
-expression:
+An alternative approach is to catch the exception that gets raised using an
+`exception` branch inside the switch expression:
 
-<<< Discount.re#catch-exception{5}
-
-With the current logic, it's not impossible to reach the exception branch, but
-who knows how the code might evolve in the future.
+<<< Discount.re#catch-exception{2}
 
 ## `Array.get` array access function
 
@@ -391,6 +388,10 @@ Error: This variant pattern is expected to have type Item.t option
 The "success" branch must now include `Some` in the pattern match:
 
 <<< Discount.re#custom-array-get{2}
+
+Note that we no longer need to check the array length or catch an exception. Our
+new `Array.get` function is a safe function that returns `None` instead of
+raising an exception.
 
 Your code should now compile and all unit tests should pass. If you haven't done
 so already, run `npm run promote` to promote the latest test output to become
