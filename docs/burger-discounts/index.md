@@ -92,25 +92,23 @@ so we can help the compiler out by type annotating the `item` argument:
 
 <<< Discount.re#type-annotate-argument{1}
 
-Explicit type annotation always works, but it's sometimes enough to just give
-the compiler a hint.
-
 ## Use full name
 
-A less direct way to indicate the type of `item` is to use the full name[^1] for the
-constructors used in the switch expression:
+Explicit type annotation always works, but sometimes it's enough to just give
+the compiler a hint. For example, we can use full names[^1] for the constructors
+inside the switch expression:
 
 <<< Discount.re#full-name-constructors{3-5}
 
 Because `Item.Burger` is a constructor of the `Item.t` variant type, `item` must
-have type `Item.t`. For the sake of convenience, you leave off `Item.` the
-second and third branches of the switch expression---OCaml is smart to know what
-module the following constructors come from.
+have type `Item.t`. For the sake of convenience, you don't need to use full
+names in the second branch of the switch expression---OCaml is smart enough to
+infer which module the `Sandwich` and `Hotdog` constructors belong to.
 
-<<< Discount.re#full-name-constructor{3}
+<<< Discount.re#full-name-constructor{4-5}
 
-By using the full name of the `Burger` constructor, we can also refactor the
-callback function to use the `fun` syntax:
+By using the full name of the `Burger` constructor, we can now easily refactor
+the callback function to use the `fun` syntax:
 
 <<< Discount.re#full-name-fun
 
