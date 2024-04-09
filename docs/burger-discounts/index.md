@@ -228,31 +228,33 @@ After compilation succeeds, we find that the "Input array isn't changed" unit
 test fails. Part of the output (cleaned up for readability) looks like this:
 
 ```json
-0,
-{
-  TAG: 1,
-  _0: {
-    bacon: 0,
-    cheese: 0,
-    lettuce: false,
-    onions: 0,
-    tomatoes: true
+[
+  0,
+  {
+    TAG: 1,
+    _0: {
+      bacon: 0,
+      cheese: 0,
+      lettuce: false,
+      onions: 0,
+      tomatoes: true
+    }
+  },
+  {
+    TAG: 0,
+    _0: 1
+  },
+  {
+    TAG: 1,
+    _0: {
+      bacon: 2,
+      cheese: 0,
+      lettuce: false,
+      onions: 0,
+      tomatoes: false
+    }
   }
-},
-{
-  TAG: 0,
-  _0: 1
-},
-{
-  TAG: 1,
-  _0: {
-    bacon: 2,
-    cheese: 0,
-    lettuce: false,
-    onions: 0,
-    tomatoes: false
-  }
-}
+]
 ```
 
 This is how Melange maps the original OCaml values to their JavaScript runtime
@@ -268,7 +270,8 @@ A variant constructor without arguments, like `Hotdog`, gets turned into an
 integer. If the constructor has an argument, like `Sandwich(Ham)`, then it's
 turned into a record where the `TAG` field is an integer and the `_0` field
 contains the argument. Records, like the one encased in the `Burger`
-constructor, are turned into JS objects.
+constructor, are turned into JS objects. OCaml arrays, like the one that
+contains all the items, are turned into JS arrays.
 
 ::: warning
 
@@ -414,12 +417,13 @@ using lists, which are a better fit for this problem.
   values
 - Runtime representations of common data types:
   - Variant constructor without argument -> integer
-  - Variant constructor with argument -> JS object
-  - Record -> JS object
+  - Variant constructor with argument -> JavaScript object
+  - Record -> JavaScript object
+  - Array -> JavaScript array
   - `None` -> `undefined`
   - `Some(value)` -> `value`
 - Array facts:
-  - Arrays are mutable, just like in JS
+  - Arrays are mutable, just like in JavaScript
   - You can pattern match on arrays of fixed length
   - Array access is unsafe by default
   - What looks like operator usage in `array[index]` is actually just a call to
