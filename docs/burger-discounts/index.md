@@ -2,7 +2,12 @@
 
 International Burger Day falls on Tuesday of next week, so Madame Jellobutter
 decides to celebrate it by running the classic "buy 2 burgers get 1 free"
-promotion. Add a new file `src/order-confirmation/Discount.re`:
+promotion. She clearly lays out the rules of this promotion:
+
+> Given an order comprising multiple items, find the price of the second most
+> expensive burger. Subtract this number from the pre-tax total of the order.
+
+Add a new file `src/order-confirmation/Discount.re`:
 
 ```reason
 // Buy 2 burgers, get 1 free
@@ -38,7 +43,7 @@ The functions used in `Discount.getFreeBurger` are:
 
 - [Js.Array.sortInPlaceWith](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-sortInPlaceWith)
   takes a callback function `~f` with type signature `('a, 'a) => int` (accept
-  two arguments of the same type and `int`). It's used to used to sort the items
+  two arguments of the same type and return `int`). It's used to sort the items
   by price (highest to lowest).
 - [Stdlib.compare](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-compare)
   has type signature `('a, 'a) => int`. It's a polymorphic function capable of
