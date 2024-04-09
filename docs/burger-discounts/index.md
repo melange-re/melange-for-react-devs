@@ -533,8 +533,11 @@ and [demo](https://react-book.melange.re/demo/src/burger-discounts/) for this ch
 [^2]: Another valid way to discard the return value of a function is:
 
     ```reason
-    let _ = Discount.getFreeBurger(items);
+    let _: option(float) = Discount.getFreeBurger(items);
     ```
+
+    This works, but `ignore` is more explicit and therefore the recommended
+    approach.
 
 [^3]: Technically [`option` is a
     variant](https://melange.re/v3.0.0/api/re/melange/Stdlib/Option/#type-t),
