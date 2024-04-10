@@ -8,10 +8,6 @@
 
 (name melange-for-react-devs)
 
-; Enable cram tests
-
-(cram enable)
-
 ; Copy all build targets for an alias into the sandbox
 
 (expand_aliases_in_sandbox)
