@@ -143,16 +143,16 @@ It's safe to reuse a single record this way because records are immutable. You
 can pass a record to any function and never worry that its fields might be
 changed by that function.
 
-## Record copy syntax
+## Record spread syntax
 
 Add a new test to `DiscountTests`:
 
 <<< DiscountTests.re#different-price-test
 
-Again, we're reusing the `burger` record, but this time, we use [record copy
+Again, we're reusing the `burger` record, but this time, we use [record spread
 syntax](https://reasonml.github.io/docs/en/record#updating-records-spreading) to
-make copies of `burger` record that have slightly different field values. For
-example,
+make copies of the `burger` record that have slightly different field values.
+For example,
 
 ```reason
 {...burger, tomatoes: true}
@@ -410,8 +410,8 @@ using lists, which are a better fit for this problem.
   - Use the full name for a value used inside the function
 - The `Stdlib` module is opened by default
 - Records are immutable
-- Use record copy syntax to copy a record while changing some fields on the
-  copy, e.g. `{...burger, lettuce: true, onions: 3}`
+- Use record spread syntax to copy a record while changing some fields on the
+  copied record, e.g. `{...burger, lettuce: true, onions: 3}`
 - OCaml doesn't allow you to ignore the return value of functions (unless the
   value is `()`), so you can use `Stdlib.ignore` to explicitly discard return
   values
