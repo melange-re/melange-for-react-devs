@@ -416,12 +416,12 @@ using lists, which are a better fit for this problem.
   value is `()`), so you can use `Stdlib.ignore` to explicitly discard return
   values
 - Runtime representations of common data types:
-  - Variant constructor without argument ⮕ integer
-  - Variant constructor with argument ⮕ JavaScript object
-  - Record ⮕ JavaScript object
-  - Array ⮕ JavaScript array
-  - `None` ⮕ `undefined`
-  - `Some(value)` ⮕ `value`
+  - Variant constructor without argument → integer
+  - Variant constructor with argument → JavaScript object
+  - Record → JavaScript object
+  - Array → JavaScript array
+  - `None` → `undefined`
+  - `Some(value)` → `value`
 - Array facts:
   - Arrays are mutable, just like in JavaScript
   - You can pattern match on arrays of fixed length
