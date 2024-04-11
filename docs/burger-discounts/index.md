@@ -143,16 +143,16 @@ It's safe to reuse a single record this way because records are immutable. You
 can pass a record to any function and never worry that its fields might be
 changed by that function.
 
-## Record copy syntax
+## Record spread syntax
 
 Add a new test to `DiscountTests`:
 
 <<< DiscountTests.re#different-price-test
 
-Again, we're reusing the `burger` record, but this time, we use [record copy
+Again, we're reusing the `burger` record, but this time, we use [record spread
 syntax](https://reasonml.github.io/docs/en/record#updating-records-spreading) to
-make copies of `burger` record that have slightly different field values. For
-example,
+make copies of the `burger` record that have slightly different field values.
+For example,
 
 ```reason
 {...burger, tomatoes: true}
@@ -211,7 +211,7 @@ Error: This expression has type float option
        because it is in the left-hand side of a sequence
 ```
 
-When you call a function in OCaml, you have use its return value, unless the
+When you call a function in OCaml, you must use its return value, unless the
 return value is `()` (the [unit
 value](https://reasonml.github.io/docs/en/overview#unit)). However, inside this
 test, we are calling `Discount.getFreeBurger` to test its side effects, so the
@@ -258,7 +258,7 @@ test fails. Part of the output (cleaned up for readability) looks like this:
 ```
 
 This is how Melange maps the original OCaml values to their JavaScript runtime
-values shown by Node test runner:
+values:
 
 | OCaml source | JavaScript runtime |
 |--------------|--------------------|
@@ -407,21 +407,21 @@ using lists, which are a better fit for this problem.
 - Type inference is less effective inside functions that don't call other
   functions. In those cases, you can give the compiler more information:
   - Type annotate the function arguments
-  - Use the full name for value
+  - Use the full name for a value used inside the function
 - The `Stdlib` module is opened by default
 - Records are immutable
-- Use record copy syntax to make copies of records that have different values
-  for some fields
+- Use record spread syntax to copy a record while changing some fields on the
+  copied record, e.g. `{...burger, lettuce: true, onions: 3}`
 - OCaml doesn't allow you to ignore the return value of functions (unless the
   value is `()`), so you can use `Stdlib.ignore` to explicitly discard return
   values
 - Runtime representations of common data types:
-  - Variant constructor without argument -> integer
-  - Variant constructor with argument -> JavaScript object
-  - Record -> JavaScript object
-  - Array -> JavaScript array
-  - `None` -> `undefined`
-  - `Some(value)` -> `value`
+  - Variant constructor without argument → integer
+  - Variant constructor with argument → JavaScript object
+  - Record → JavaScript object
+  - Array → JavaScript array
+  - `None` → `undefined`
+  - `Some(value)` → `value`
 - Array facts:
   - Arrays are mutable, just like in JavaScript
   - You can pattern match on arrays of fixed length

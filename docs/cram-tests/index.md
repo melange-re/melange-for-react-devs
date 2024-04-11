@@ -22,14 +22,6 @@ which means:
 - You can run all tests using a single command that doesn't need to refer to
   individual tests
 
-Before you can write your first cram test, you need to enable cram tests by
-adding this to your `dune-project` file:
-
-```dune
-; Enable cram tests
-(cram enable)
-```
-
 ## `cram` stanza
 
 To add dependencies for your cram tests, you need to add a [cram
@@ -286,7 +278,7 @@ If you kept the `$ npx tree` cram test around, you'll observe that even though
 all build targets attached to `@melange` are dependencies, they aren't copied
 into the sandbox directory. You can change that behavior by adding the
 [expand_aliases_in_sandbox
-stanza](https://dune.readthedocs.io/en/stable/dune-files.html#stanza-expand_aliases_in_sandbox)
+stanza](https://dune.readthedocs.io/en/stable/reference/dune-project/expand_aliases_in_sandbox.html)
 to your `dune-project` file:
 
 ```dune
@@ -308,10 +300,9 @@ Fix the bug in `Item.re`. The `SandwichTests` cram test should pass once more.
 
 ::: warning
 
-Using
-[expand_aliases_in_sandbox](https://dune.readthedocs.io/en/stable/dune-files.html#stanza-expand_aliases_in_sandbox)
-is very convenient, but it may noticeably impact cram test performance. If you
-feel your cram tests are too slow, you should remove it.
+Using `expand_aliases_in_sandbox` is very convenient, but it may noticeably
+impact cram test performance. If you feel your cram tests are too slow, you
+should remove it and go back to putting `.mjs` files in your `cram/deps` field.
 
 :::
 
