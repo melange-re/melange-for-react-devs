@@ -28,6 +28,7 @@ export default defineConfig({
         'sandwich-tests': resolve(__dirname, 'src/sandwich-tests/index.html'),
         'cram-tests': resolve(__dirname, 'src/cram-tests/index.html'),
         'burger-discounts': resolve(__dirname, 'src/burger-discounts/index.html'),
+        'discounts-lists': resolve(__dirname, 'src/discounts-lists/index.html'),
       },
     },
   },
