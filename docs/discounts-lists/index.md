@@ -63,6 +63,24 @@ Documentation comments can also be attached to modules, types, and variables.
 Besides showing up in editor popups, they are also consumed by documentation
 generators like [odoc](https://ocaml.github.io/odoc/).
 
+## `List` functions
+
+We replaced these functions with their counterparts in the [Stdlib.List
+module](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/):
+
+- `Js.Array.filter` →
+  [List.filter](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filter).
+  Note that `List.filter` doesn’t accept the labeled argument `~f`, because the
+  functions inside `List` don't use labeled arguments.
+- `Js.Array.map` →
+  [List.map](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-map).
+  `List.map` also doesn’t accept the labeled argument `~f`.
+- `Js.Array.sortInPlaceWith` →
+  [List.sort](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-sort).
+  `List.sort` returns a brand new list, because, unlike
+`Js.Array.sortInPlaceWith`, it doesn’t modify its argument (and it can’t, since
+  lists are immutable).
+
 ---
 
 Summary
