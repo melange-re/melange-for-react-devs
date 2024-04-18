@@ -81,6 +81,54 @@ module](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/):
 `Js.Array.sortInPlaceWith`, it doesn’t modify its argument (and it can’t, since
   lists are immutable).
 
+## Pattern match on lists
+
+The switch expression in `Discount.getFreeBurgers` accepts the entire `prices`
+list. Unlike with arrays, we can pattern match on lists even if we don’t know
+the length of the list.
+
+Inside the first branch of the switch expression, we see this:
+
+```reason
+| [_, cheaperPrice, ..._] => Some(cheaperPrice)
+```
+
+This pattern will match on lists that have at least two elements. The first
+element is ignored via `_`. The second element is bound to the name
+`cheaperPrice` and used in the body of the branch. We use *list spread syntax*
+(`...`) to bind the sublist containing the remaining elements to a name, but
+here we bind it to `_`, effectively ignoring it.
+
+## List spread syntax
+
+The spread operator (`...`) is also used to add elements to the front of a list:
+
+```reason
+let list = [1, 2, 3];
+Js.log([0, ...list]); // [0, 1, 2, 3]
+Js.log([-1, 0, ...list]); // [-1, 0, 1, 2, 3]
+```
+
+When pattern matching, the spread operator allows you to bind the **tail** of
+a list to a name:
+
+```reason
+switch ([1, 2, 3]) {
+| [_, ...tail] => Js.log(tail) // [2, 3]
+| _ => ()
+};
+
+switch ([1, 2, 3]) {
+| [_, _, _, ...tail] => Js.log(tail) // []
+| _ => ()
+};
+```
+
+The tail of the list is the sublist that remains after you extract the first n
+elements from the front of the list. As you can see, the tail might be the empty
+list (`[]`).
+
+
 ---
 
 Summary
