@@ -25,6 +25,44 @@ through the
 many functions that are equivalent to the ones you've already used in
 [Js.Array](https://melange.re/v3.0.0/api/re/melange/Js/Array/).
 
+## Rewrite `Discount.getFreeBurger`
+
+Let's rewrite `Discount.getFreeBurger` to accept `list(Item.t)` instead of
+`array(Item.t)`:
+
+<<< Discount.re#get-free-burger
+
+There are a lot of things to talk about in this piece of code--let's go through
+them one by one.
+
+## Documentation comment
+
+You might have noticed that the comment at the beginning of the function has a
+different format than before:
+
+```reason
+/** Buy 2 burgers, get 1 free */
+```
+
+This is a **documentation comments**, an enhanced comment that is attached to
+the function it appears above. Go to `DiscountTests` and hover over an
+invocation of `getFreeBurger`---the editor will show both the type signature and
+documentation comment of this function.
+
+::: info
+
+By "editor", we mean an instance of Visual Studio Code that has the [OCaml
+Platform
+extension](https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform)
+installed. Other editors that have OCaml support probably have similar features
+to the ones we describe in this chapter, but we don't guarantee it.
+
+:::
+
+Documentation comments can also be attached to modules, types, and variables.
+Besides showing up in editor popups, they are also consumed by documentation
+generators like [odoc](https://ocaml.github.io/odoc/).
+
 ---
 
 Summary

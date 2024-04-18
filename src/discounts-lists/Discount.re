@@ -1,20 +1,20 @@
-// Buy 2 burgers, get 1 free
-let getFreeBurger = (items: array(Item.t)) => {
-  let burgers =
+/** Buy 2 burgers, get 1 free */
+let getFreeBurger = (items: list(Item.t)) => {
+  let prices =
     items
-    |> Js.Array.filter(~f=item =>
+    |> List.filter(item =>
          switch (item) {
          | Item.Burger(_) => true
          | Sandwich(_)
          | Hotdog => false
          }
        )
-    |> Js.Array.map(~f=Item.toPrice)
-    |> Js.Array.sortInPlaceWith(~f=(x, y) => - compare(x, y));
+    |> List.map(Item.toPrice)
+    |> List.sort((x, y) => - compare(x, y));
 
-  switch (burgers[0], burgers[1]) {
-  | (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
-  | (None | Some(_), None | Some(_)) => None
+  switch (prices) {
+  | [_, cheaperPrice, ..._] => Some(cheaperPrice)
+  | _ => None
   };
 };
 
