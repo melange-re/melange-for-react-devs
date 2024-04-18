@@ -477,9 +477,23 @@ Use [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-map)
 
 <<< Discount.re#improved-get-free-burger
 
+Since the chain of function invocations now results in an array of `float`s, we
+rename the variable from `burgers` to `prices`. We only need to match on the
+second element of `prices` because if it exists, then a first element must also
+exist (but we don't need to know its value).
+
 :::
 
-<b>2.</b> Add new function `Discount.getHalfOff` that gives you a discount of
+<b>2.</b> `Discount.getFreeBurger` can still be improved. Refactor it to remove
+the switch expression entirely.
+
+::: details Solution
+
+<<< Discount.re#final-get-free-burger
+
+:::
+
+<b>3.</b> Add a new function `Discount.getHalfOff` that gives you a discount of
 half off the entire meal if there’s at least one burger that has one of every
 topping.
 
@@ -495,7 +509,7 @@ Use [Js.Array.some](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-some)
 
 :::
 
-<b>3.</b> Update `Discount.getHalfOff` so that it returns a discount of one half
+<b>4.</b> Update `Discount.getHalfOff` so that it returns a discount of one half
 off the entire meal if there’s at least one burger that has **at least** one of
 every topping. Also add a couple of tests for this function in `DiscountTests`.
 
@@ -515,9 +529,6 @@ to see how the tests are implemented. Note the use of a submodule to group the
 `Discount.getHalfOff` tests together.
 
 :::
-
-<b>4.</b> tbd
-
 
 -----
 
