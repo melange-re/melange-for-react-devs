@@ -129,6 +129,23 @@ elements from the front of the list. As you can see, the tail might be the empty
 list (`[]`). In practice, you don't need to bind the tail to a name unless
 you're writing a [custom list function](/todo).
 
+::: warning
+
+The syntax for list literals is identical to that for arrays in JavaScript, but
+keep in mind that
+
+```reason
+[1, 2, 3]
+```
+
+is really just a shortcut for
+
+```reason
+[1, ...[2, ...[3, ...[]]]]
+```
+
+:::
+
 ## Runtime representation of lists
 
 If you run the code snippets above in the [Melange
@@ -145,6 +162,29 @@ you'll see output like this:
 An empty list in the JS runtime is represented by `0`. A non-empty list is
 represented by an object with fields `hd` (for the head) and `tl` (for the
 tail).
+
+## Fix tests for `Discount.getFreeBurger`
+
+You should be getting this compilation error for `DiscountTests`:
+
+```text
+File "src/order-confirmation/DiscountTests.re", lines 15-19, characters 32-11:
+15 | ................................[|
+16 |            Hotdog,
+17 |            Sandwich(Ham),
+18 |            Sandwich(Turducken),
+19 |          |]..
+Error: This expression has type 'a array
+       but an expression was expected of type Item.t list
+```
+
+It's simple to fix---just change the delimiters from `[||]` to `[]`:
+
+<<< DiscountTests.re#first-test
+
+The "Input array isn't changed" test doesn't need to be changed to use a list.
+It can simply be deleted, because lists are immutable and therefore
+`Discount.getBurger` can't change the list.
 
 ---
 
