@@ -396,6 +396,28 @@ Your code should now compile and all unit tests should pass. If you haven't done
 so already, run `npm run promote` to promote the latest test output to become
 the expected test output inside `tests.t`.
 
+## Variant constructors are not functions
+
+What happens if you to try to rewrite `Some(String.length("foobar"))`
+to `"foobar" |> String.length |> Some`?
+
+
+You'll get a compilation error:
+
+```
+Error This expression should not be a constructor, the expected type is int -> 'a
+```
+
+Variant constructors like `Some` are not functions, so they can't be used with
+the pipe last (`|>`) operator. If you have have a long chain of function
+invocations but you need to return a variant at the end, consider using an extra
+variable, e.g.
+
+<<< Discount.re#return-variant-at-end
+
+See [full example on Melange
+Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNpcGhlckdyZWV0aW5nID0gbmFtZSA9PiB7CiAgc3dpdGNoIChTdHJpbmcudHJpbShuYW1lKSkgewogIHwgIiIgPT4gTm9uZQogIHwgbmFtZSA9PgogICAgbGV0IHJlc3VsdCA9CiAgICAgIG5hbWUKICAgICAgfD4gU3RyaW5nLnNwbGl0X29uX2NoYXIoJyAnKQogICAgICB8PiBMaXN0Lm1hcChTdHJpbmcubWFwKGMgPT4gYyB8PiBDaGFyLmNvZGUgfD4gKCspKDEpIHw%2BIENoYXIuY2hyKSkKICAgICAgfD4gU3RyaW5nLmNvbmNhdCgiICIpCiAgICAgIHw%2BIFN0cmluZy5jYXQoIkhlbGxvLCAiKTsKCiAgICBTb21lKHJlc3VsdCk7CiAgfTsKfTsKCkpzLmxvZyhjaXBoZXJHcmVldGluZygiIikpOwpKcy5sb2coY2lwaGVyR3JlZXRpbmcoIlhhdmllciBMZXJveSIpKTsK&live=off).
+
 ---
 
 Nice, you've implemented the burger discount, and you also understand more about
@@ -422,6 +444,7 @@ using lists, which are a better fit for this problem.
   - Array → JavaScript array
   - `None` → `undefined`
   - `Some(value)` → `value`
+- Variant constructors are not functions
 - Array facts:
   - Arrays are mutable, just like in JavaScript
   - You can pattern match on arrays of fixed length
@@ -439,7 +462,7 @@ been filtered out. Refactor the function so that the "success" pattern match
 looks like this:
 
 ```reason
-| (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
+| Some(cheaperPrice) => Some(cheaperPrice)
 ```
 
 Also refactor the "failure" pattern match so there's no wildcard.
@@ -450,14 +473,27 @@ Use [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-map)
 
 :::
 
-
 ::: details Solution
 
 <<< Discount.re#improved-get-free-burger
 
+Since the chain of function invocations now results in an array of `float`s, we
+rename the variable from `burgers` to `prices`. We only need to match on the
+second element of `prices` because if it exists, then a first element must also
+exist (but we don't need to know its value).
+
 :::
 
-<b>2.</b> Add new function `Discount.getHalfOff` that gives you a discount of
+<b>2.</b> `Discount.getFreeBurger` can still be improved. Refactor it to remove
+the switch expression entirely.
+
+::: details Solution
+
+<<< Discount.re#final-get-free-burger
+
+:::
+
+<b>3.</b> Add a new function `Discount.getHalfOff` that gives you a discount of
 half off the entire meal if there’s at least one burger that has one of every
 topping.
 
@@ -473,7 +509,7 @@ Use [Js.Array.some](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-some)
 
 :::
 
-<b>3.</b> Update `Discount.getHalfOff` so that it returns a discount of one half
+<b>4.</b> Update `Discount.getHalfOff` so that it returns a discount of one half
 off the entire meal if there’s at least one burger that has **at least** one of
 every topping. Also add a couple of tests for this function in `DiscountTests`.
 
@@ -491,29 +527,6 @@ See
 [DiscountTests.re](https://github.com/melange-re/melange-for-react-devs/blob/main/src/burger-discounts/DiscountTests.re)
 to see how the tests are implemented. Note the use of a submodule to group the
 `Discount.getHalfOff` tests together.
-
-:::
-
-<b>4.</b> What happens if you to try to rewrite `Some(String.length("foobar"))`
-to `"foobar" |> String.length |> Some`?
-
-::: details Solution
-
-You'll get a compilation error:
-
-```
-Error This expression should not be a constructor, the expected type is int -> 'a
-```
-
-Variant constructors like `Some` are not functions, so they can't be used with
-the pipe last (`|>`) operator. If you have have a long string of function
-invocations but you need to return a variant at the end, consider using an extra
-variable, e.g.
-
-<<< Discount.re#return-variant-at-end
-
-See [full example on Melange
-Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNpcGhlckdyZWV0aW5nID0gbmFtZSA9PiB7CiAgc3dpdGNoIChTdHJpbmcudHJpbShuYW1lKSkgewogIHwgIiIgPT4gTm9uZQogIHwgbmFtZSA9PgogICAgbGV0IHJlc3VsdCA9CiAgICAgIG5hbWUKICAgICAgfD4gU3RyaW5nLnNwbGl0X29uX2NoYXIoJyAnKQogICAgICB8PiBMaXN0Lm1hcChTdHJpbmcubWFwKGMgPT4gYyB8PiBDaGFyLmNvZGUgfD4gKCspKDEpIHw%2BIENoYXIuY2hyKSkKICAgICAgfD4gU3RyaW5nLmNvbmNhdCgiICIpCiAgICAgIHw%2BIFN0cmluZy5jYXQoIkhlbGxvLCAiKTsKCiAgICBTb21lKHJlc3VsdCk7CiAgfTsKfTsKCkpzLmxvZyhjaXBoZXJHcmVldGluZygiIikpOwpKcy5sb2coY2lwaGVyR3JlZXRpbmcoIlhhdmllciBMZXJveSIpKTsK&live=off).
 
 :::
 

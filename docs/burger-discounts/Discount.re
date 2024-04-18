@@ -148,7 +148,7 @@ let _ = {
 // #region improved-get-free-burger
 // Buy 2 burgers, get 1 free
 let getFreeBurger = (items: array(Item.t)) => {
-  let burgers =
+  let prices =
     items
     |> Js.Array.filter(~f=item =>
          switch (item) {
@@ -160,12 +160,33 @@ let getFreeBurger = (items: array(Item.t)) => {
     |> Js.Array.map(~f=Item.toPrice)
     |> Js.Array.sortInPlaceWith(~f=(x, y) => - compare(x, y));
 
-  switch (burgers[0], burgers[1]) {
-  | (Some(_), Some(cheaperPrice)) => Some(cheaperPrice)
-  | (None | Some(_), None | Some(_)) => None
+  switch (prices[1]) {
+  | None => None
+  | Some(cheaperPrice) => Some(cheaperPrice)
   };
 };
 // #endregion improved-get-free-burger
+
+ignore(getFreeBurger);
+
+// #region final-get-free-burger
+// Buy 2 burgers, get 1 free
+let getFreeBurger = (items: array(Item.t)) => {
+  let prices =
+    items
+    |> Js.Array.filter(~f=item =>
+         switch (item) {
+         | Item.Burger(_) => true
+         | Sandwich(_)
+         | Hotdog => false
+         }
+       )
+    |> Js.Array.map(~f=Item.toPrice)
+    |> Js.Array.sortInPlaceWith(~f=(x, y) => - compare(x, y));
+
+  prices[1];
+};
+// #endregion final-get-free-burger
 
 // #region get-half-off-one
 // Buy 1+ burger with 1 of every topping, get half off
