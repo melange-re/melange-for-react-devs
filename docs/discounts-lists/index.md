@@ -126,8 +126,25 @@ switch ([1, 2, 3]) {
 
 The tail of the list is the sublist that remains after you extract the first n
 elements from the front of the list. As you can see, the tail might be the empty
-list (`[]`).
+list (`[]`). In practice, you don't need to bind the tail to a name unless
+you're writing a [custom list function](/todo).
 
+## Runtime representation of lists
+
+If you run the code snippets above in the [Melange
+Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGxpc3QgPSBbMSwgMiwgM107CkpzLmxvZyhbMCwgLi4ubGlzdF0pOyAvLyBbMCwgMSwgMiwgM10KSnMubG9nKFstMSwgMCwgLi4ubGlzdF0pOyAvLyBbLTEsIDAsIDEsIDIsIDNdCgpzd2l0Y2ggKFsxLCAyLCAzXSkgewp8IFsxLCAuLi50YWlsXSA9PiBKcy5sb2codGFpbCkgLy8gWzIsIDNdCnwgXyA9PiAoKQp9OwoKc3dpdGNoIChbMSwgMiwgM10pIHsKfCBbMSwgMiwgMywgLi4udGFpbF0gPT4gSnMubG9nKHRhaWwpIC8vIFtdCnwgXyA9PiAoKQp9Owo%3D&live=off),
+you'll see output like this:
+
+```text
+{"hd":0,"tl":{"hd":1,"tl":{"hd":2,"tl":{"hd":3,"tl":0}}}}
+{"hd":-1,"tl":{"hd":0,"tl":{"hd":1,"tl":{"hd":2,"tl":{"hd":3,"tl":0}}}}}
+{"hd":2,"tl":{"hd":3,"tl":0}}
+0
+```
+
+An empty list in the JS runtime is represented by `0`. A non-empty list is
+represented by an object with fields `hd` (for the head) and `tl` (for the
+tail).
 
 ---
 
