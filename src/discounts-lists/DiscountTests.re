@@ -74,7 +74,7 @@ module HalfOff = {
   test("No burger has 1+ of every topping, return None", () =>
     expect
     |> equal(
-         Discount.getHalfOff([|
+         Discount.getHalfOff([
            Hotdog,
            Sandwich(Portabello),
            Burger({
@@ -84,7 +84,7 @@ module HalfOff = {
              onions: 1,
              bacon: 0,
            }),
-         |]),
+         ]),
          None,
        )
   );
@@ -92,7 +92,7 @@ module HalfOff = {
   test("One burger has 1+ of every topping, return Some(15.675)", () =>
     expect
     |> equal(
-         Discount.getHalfOff([|
+         Discount.getHalfOff([
            Hotdog,
            Sandwich(Portabello),
            Burger({
@@ -102,7 +102,7 @@ module HalfOff = {
              onions: 1,
              bacon: 2,
            }),
-         |]),
+         ]),
          Some(15.675),
        )
   );

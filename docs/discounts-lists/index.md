@@ -25,9 +25,9 @@ through the
 many functions that are equivalent to the ones you've already used in
 [Js.Array](https://melange.re/v3.0.0/api/re/melange/Js/Array/).
 
-## Rewrite `Discount.getFreeBurger`
+## Refactor `Discount.getFreeBurger`
 
-Let's rewrite `Discount.getFreeBurger` to accept `list(Item.t)` instead of
+Let's refactor `Discount.getFreeBurger` to accept `list(Item.t)` instead of
 `array(Item.t)`:
 
 <<< Discount.re#get-free-burger
@@ -186,6 +186,45 @@ The "Input array isn't changed" test doesn't need to be changed to use a list.
 It can simply be deleted, because lists are immutable and therefore
 `Discount.getBurger` can't change the list.
 
+## Refactor `Discount.getHalfOff`
+
+Let's now refactor `Discount.getHalfOff` to use lists:
+
+<<< Discount.re#get-half-off
+
+All that was done was to swap out array functions for list functions:
+
+- `Js.Array.some` →
+  [List.exists](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-exists).
+  Annoyingly, many of the functions in `List` have different names than their
+  counterparts in `Js.Array`.
+- `Js.Array.reduce` →
+  [List.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-fold_left).
+  Despite its name, `fold_left`[^1] has the same meaning as `reduce`.
+
+Remember to fix the `Discount.getHalfOff` tests inside `DiscountTests`.
+
+## `ListLabels` module
+
+The call to `List.fold_left` is not as readable as the previous version using
+`Js.Array.reduce`, but its readability can be improved by instead using
+[ListLabels.fold_left](https://melange.re/v1.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left):
+
+```reason
+let total =
+  items
+  |> List.fold_left((total, item) => total +. Item.toPrice(item), 0.0); // [!code --]
+  |> ListLabels.fold_left(~init=0.0, ~f=(total, item) => // [!code ++]
+           total +. Item.toPrice(item) // [!code ++]
+         ); // [!code ++]
+Some(total /. 2.0);
+```
+
+The
+[Stdlib.ListLabels](https://melange.re/v1.0.0/api/re/melange/Stdlib/ListLabels/)
+module has all the functions found in `Stdlib.List`, but many of them take
+labeled arguments instead of positional arguments.
+
 ---
 
 Summary
@@ -212,4 +251,7 @@ and [demo](https://react-book.melange.re/demo/src/discounts-lists/) for this cha
 
 -----
 
-footnotes
+[^1]: Inside `Stdlib.List`, there are `fold_left` and `fold_right` functions.
+    "Fold left" means to apply the given fold function starting from the first
+    element and work towards the end of the list, while "fold right" starts from
+    the last element and works backwards through the list.

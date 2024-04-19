@@ -19,24 +19,17 @@ let getFreeBurger = (items: list(Item.t)) => {
 };
 
 // Buy 1+ burger with 1+ of every topping, get half off
-let getHalfOff = (items: array(Item.t)) => {
+let getHalfOff = (items: list(Item.t)) => {
   let meetsCondition =
     items
-    |> Js.Array.some(
-         ~f=
-           fun
-           | Item.Burger({
-               lettuce: true,
-               tomatoes: true,
-               onions,
-               cheese,
-               bacon,
-             })
-               when onions > 0 && cheese > 0 && bacon > 0 =>
-             true
-           | Burger(_)
-           | Sandwich(_)
-           | Hotdog => false,
+    |> List.exists(
+         fun
+         | Item.Burger({lettuce: true, tomatoes: true, onions, cheese, bacon})
+             when onions > 0 && cheese > 0 && bacon > 0 =>
+           true
+         | Burger(_)
+         | Sandwich(_)
+         | Hotdog => false,
        );
 
   switch (meetsCondition) {
@@ -44,7 +37,7 @@ let getHalfOff = (items: array(Item.t)) => {
   | true =>
     let total =
       items
-      |> Js.Array.reduce(~init=0.0, ~f=(total, item) =>
+      |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
            total +. Item.toPrice(item)
          );
     Some(total /. 2.0);
