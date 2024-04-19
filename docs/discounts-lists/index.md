@@ -225,6 +225,41 @@ The
 module has all the functions found in `Stdlib.List`, but many of them take
 labeled arguments instead of positional arguments.
 
+## Refactor `Order`
+
+Because we've gone all in on lists, we have to migrate the other component
+modules as well. Next up is `Order`. Start off by changing the type of `Order.t`
+from `array(Item.t)` to `list(Item.t)`, then refactor `Order.make` to use list
+functions:
+
+<<< Order.re#make
+
+Again, we’re mostly just replacing array functions with list functions:
+
+- `Js.Array.reduce` → `ListLabels.fold_left`
+- `Js.Array.mapi` →
+  [List.mapi](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-mapi).
+  Note that the order of the callback arguments has been reversed. For
+  `Js.Array.mapi` it’s `(item, index)`, but for `List.mapi` it’s `(index,
+  item)`.
+- We have to add a call to
+  [Stdlib.Array.of_list](https://melange.re/v2.2.0/api/re/melange/Stdlib/Array/#val-of_list)
+  in between the calls to `List.mapi` and `React.array` to convert the list to
+  an array. Whenever we want to render a list of `React.element`s, we must first
+  convert it to an array of `React.element`s. To understand why, recall that a
+  list is just an object in the JS runtime, and React cannot directly render
+  objects.
+
+Because `Stdlib` is automatically opened, normally we can just call
+`Array.of_list`, but we have to instead use the full name `Stdlib.Array.of_list`
+because we have a custom `Array` module.
+
+## Refactor `Index`
+
+To get all your code compiling again, you have to also refactor `Index`. But the
+change is trivial, just change the array delimiters (`[||]`) to list delimiters
+(`[]`).
+
 ---
 
 Summary

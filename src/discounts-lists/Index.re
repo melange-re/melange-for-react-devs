@@ -1,5 +1,5 @@
 module App = {
-  let items: Order.t = [|
+  let items: Order.t = [
     Sandwich(Portabello),
     Sandwich(Unicorn),
     Sandwich(Ham),
@@ -10,7 +10,7 @@ module App = {
     Burger({lettuce: true, tomatoes: false, onions: 1, cheese: 1, bacon: 1}),
     Burger({lettuce: false, tomatoes: false, onions: 1, cheese: 0, bacon: 0}),
     Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 1, bacon: 0}),
-  |];
+  ];
 
   [@react.component]
   let make = () =>

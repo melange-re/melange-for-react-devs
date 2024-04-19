@@ -1,19 +1,17 @@
 type t = list(Item.t);
 
-module OrderItem = {
-  [@mel.module "./order-item.module.css"]
-  external css: Js.t({..}) = "default";
-
-  [@react.component]
-  let make = (~item: Item.t) =>
-    <tr className=css##item>
-      <td className=css##emoji> {item |> Item.toEmoji |> React.string} </td>
-      <td className=css##price> {item |> Item.toPrice |> Format.currency} </td>
-    </tr>;
+module Format = {
+  let currency = _ => React.null;
 };
 
-[@mel.module "./order.module.css"] external css: Js.t({..}) = "default";
+module OrderItem = {
+  [@react.component]
+  let make = (~item as _: Item.t) => <div />;
+};
 
+let css = {"order": "", "total": ""};
+
+// #region make
 [@react.component]
 let make = (~items: t) => {
   let total =
@@ -37,3 +35,4 @@ let make = (~items: t) => {
     </tbody>
   </table>;
 };
+// #endregion make
