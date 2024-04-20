@@ -73,26 +73,22 @@ Discount tests
   ok 4 - 2 burgers of different price, discount of cheaper one
     ---
     ...
-  # Subtest: Input array isn't changed
-  ok 5 - Input array isn't changed
-    ---
-    ...
   # Subtest: 3 burgers of different price, return Some(15.15)
-  ok 6 - 3 burgers of different price, return Some(15.15)
+  ok 5 - 3 burgers of different price, return Some(15.15)
     ---
     ...
   # Subtest: No burger has 1+ of every topping, return None
-  ok 7 - No burger has 1+ of every topping, return None
+  ok 6 - No burger has 1+ of every topping, return None
     ---
     ...
   # Subtest: One burger has 1+ of every topping, return Some(15.675)
-  ok 8 - One burger has 1+ of every topping, return Some(15.675)
+  ok 7 - One burger has 1+ of every topping, return Some(15.675)
     ---
     ...
-  1..8
-  # tests 8
+  1..7
+  # tests 7
   # suites 0
-  # pass 8
+  # pass 7
   # fail 0
   # cancelled 0
   # skipped 0

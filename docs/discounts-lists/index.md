@@ -25,6 +25,13 @@ through the
 many functions that are equivalent to the ones you've already used in
 [Js.Array](https://melange.re/v3.0.0/api/re/melange/Js/Array/).
 
+::: tip
+
+Although its full name is `Stdllib.List`, we'll refer to this module as `List`
+from now on, because `Stdlib` is opened by default.
+
+:::
+
 ## Refactor `Discount.getFreeBurger`
 
 Let's refactor `Discount.getFreeBurger` to accept `list(Item.t)` instead of
@@ -44,18 +51,18 @@ different format than before:
 /** Buy 2 burgers, get 1 free */
 ```
 
-This is a **documentation comments**, an enhanced comment that is attached to
-the function it appears above. Go to `DiscountTests` and hover over an
-invocation of `getFreeBurger`---the editor will show both the type signature and
-documentation comment of this function.
+This is a **documentation comment**, a special comment that is attached to the
+function it appears above. Go to `DiscountTests` and hover over an invocation of
+`getFreeBurger`---the editor will display a popup showing both the type
+signature and documentation comment of this function.
 
 ::: info
 
 By "editor", we mean an instance of Visual Studio Code that has the [OCaml
 Platform
 extension](https://marketplace.visualstudio.com/items?itemName=ocamllabs.ocaml-platform)
-installed. Other editors that have OCaml support probably have similar features
-to the ones we describe in this chapter, but we don't guarantee it.
+installed. Other editors that have OCaml support probably have the same (or very
+similar) features, but we don't guarantee it.
 
 :::
 
@@ -65,7 +72,7 @@ generators like [odoc](https://ocaml.github.io/odoc/).
 
 ## `List` functions
 
-We replaced these functions with their counterparts in the [Stdlib.List
+We replaced these functions with their counterparts in the [List
 module](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/):
 
 - `Js.Array.filter` →
@@ -109,6 +116,20 @@ Js.log([0, ...list]); // [0, 1, 2, 3]
 Js.log([-1, 0, ...list]); // [-1, 0, 1, 2, 3]
 ```
 
+::: tip
+
+```reason
+[1, 2, 3]
+```
+
+is really just a shortcut for
+
+```reason
+[1, ...[2, ...[3, ...[]]]]
+```
+
+:::
+
 When pattern matching, the spread operator allows you to bind the **tail** of
 a list to a name:
 
@@ -128,23 +149,6 @@ The tail of the list is the sublist that remains after you extract the first n
 elements from the front of the list. As you can see, the tail might be the empty
 list (`[]`). In practice, you don't need to bind the tail to a name unless
 you're writing a [custom list function](/todo).
-
-::: warning
-
-The syntax for list literals is identical to that for arrays in JavaScript, but
-keep in mind that
-
-```reason
-[1, 2, 3]
-```
-
-is really just a shortcut for
-
-```reason
-[1, ...[2, ...[3, ...[]]]]
-```
-
-:::
 
 ## Runtime representation of lists
 
@@ -182,9 +186,8 @@ It's simple to fix---just change the delimiters from `[||]` to `[]`:
 
 <<< DiscountTests.re#first-test
 
-The "Input array isn't changed" test doesn't need to be changed to use a list.
-It can simply be deleted, because lists are immutable and therefore
-`Discount.getBurger` can't change the list.
+The "Input array isn't changed" test can simply be deleted, because lists are
+immutable and therefore `Discount.getBurger` can't change its input list.
 
 ## Refactor `Discount.getHalfOff`
 
@@ -192,17 +195,18 @@ Let's now refactor `Discount.getHalfOff` to use lists:
 
 <<< Discount.re#get-half-off
 
-All that was done was to swap out array functions for list functions:
+Again, we swap out array functions for list functions:
 
 - `Js.Array.some` →
   [List.exists](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-exists).
-  Annoyingly, many of the functions in `List` have different names than their
-  counterparts in `Js.Array`.
+  Note that this is one of several functions in `List` that have different names
+  than their counterparts in `Js.Array`.
 - `Js.Array.reduce` →
   [List.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-fold_left).
   Despite its name, `fold_left`[^1] has the same meaning as `reduce`.
 
-Remember to fix the `Discount.getHalfOff` tests inside `DiscountTests`.
+Remember to fix the `Discount.getHalfOff` tests inside `DiscountTests`, and then
+all your code should be compiling once more.
 
 ## `ListLabels` module
 
@@ -220,17 +224,15 @@ let total =
 Some(total /. 2.0);
 ```
 
-The
-[Stdlib.ListLabels](https://melange.re/v1.0.0/api/re/melange/Stdlib/ListLabels/)
-module has all the functions found in `Stdlib.List`, but many of them take
-labeled arguments instead of positional arguments.
+The [ListLabels](https://melange.re/v1.0.0/api/re/melange/Stdlib/ListLabels/)
+module has all the functions found in `List`, but many of them take labeled
+arguments instead of positional arguments.
 
-## Refactor `Order`
+## Refactor `Order` component
 
-Because we've gone all in on lists, we have to migrate the other component
-modules as well. Next up is `Order`. Start off by changing the type of `Order.t`
-from `array(Item.t)` to `list(Item.t)`, then refactor `Order.make` to use list
-functions:
+Because we've gone all in on lists, we have to migrate the component modules as
+well. Next up is `Order`. Start off by changing the type of `Order.t` from
+`array(Item.t)` to `list(Item.t)`, then refactor `Order.make` accordingly:
 
 <<< Order.re#make
 
@@ -251,18 +253,97 @@ Again, we’re mostly just replacing array functions with list functions:
   objects.
 
 Because `Stdlib` is automatically opened, normally we can just call
-`Array.of_list`, but we have to instead use the full name `Stdlib.Array.of_list`
-because we have a custom `Array` module.
+`Array.of_list`, but we have to use the full name `Stdlib.Array.of_list` because
+our custom `Array` module takes precedence[^2].
 
-## Refactor `Index`
+To get all your code compiling again, you have to also refactor `Index`. But
+there all you have to do is change the array delimiters (`[||]`) to list
+delimiters (`[]`).
 
-To get all your code compiling again, you have to also refactor `Index`. But the
-change is trivial, just change the array delimiters (`[||]`) to list delimiters
-(`[]`).
+## `List.nth_opt`
+
+If we peruse the `List` module a bit, we'll find a function that can make
+`Discount.getFreeBurger` shorter:
+[List.nth](https://melange.re/v1.0.0/api/re/melange/Stdlib/List/#val-nth). It
+takes an index `n` that returns the `n`-th element of a list. However, from
+previous experience, we don't want to use unsafe functions like this.
+Fortunately, there's a similar
+[List.nth_opt](https://melange.re/v1.0.0/api/re/melange/Stdlib/List/#val-nth_opt)
+function that does the same thing but is safer because it returns `option`
+instead of raising an exception. Let's refactor `Discount.getFreeBurger` to use
+it:
+
+```reason
+let getFreeBurger = (items: list(Item.t)) => {
+  items
+  |> List.filter(item =>
+       switch (item) {
+       | Item.Burger(_) => true
+       | Sandwich(_)
+       | Hotdog => false
+       }
+     )
+  |> List.map(Item.toPrice)
+  |> List.sort((x, y) => - compare(x, y))
+  |> List.nth_opt(1);
+};
+```
+
+By using `List.nth_opt`, we can simplify the function to a single expression.
+However, we get a compilation error:
+
+```text
+File "docs/order-confirmation/Discount.re", line 61, characters 18-19:
+61 |   |> List.nth_opt(1);
+                       ^
+Error: This expression has type int but an expression was expected of type
+         'a list
+```
+
+## Placeholder operator
+
+This is because of the type signature of `List.nth_opt` is
+
+```text
+list('a) => int => option('a)
+```
+
+That is, it accepts the list as the first argument, not the last. Recall that
+the pipe last operator (`|>`) pipes values into the last argument of a function.
+However, there's a way to override the placement of the argument:
+
+```reason
+|> List.nth_opt(_, 1)
+```
+
+Do not confuse the `_` here for wildcard, here it's a placeholder for where the
+argument should go. When we put `_` in the first argument position, it overrides
+the default behavior of the pipe last operator. Run `npm run test` to confirm
+that `Discount.getFreeBurger` works the same as before.
+
+# Problems with `List.nth_opt`
+
+We should reflect briefly to ask whether this shorter version of
+`Discount.getFreeBurger` is actually better. Pattern matching is very explicit
+and generally easy to read. If you're writing code in a team, readability should
+be a consideration.
+
+But the biggest issue with using `List.nth_opt` is that it can still raise an
+`Invalid_argument` exception if the value of `n` is negative. You can confirm
+this by hovering over `nth_opt` and reading the popup or [read its
+documentation](https://melange.re/v1.0.0/api/re/melange/Stdlib/List/#val-nth_opt).
+While this is unlikely to cause a problem inside `Discount.getFreeBurger`, it's
+best to avoid unsafe functions except in special circumstances that call for it,
+for example if a function needs to be as fast as possible. Of course, it's
+possible to implement a truly safe version of `nth_opt`, but that's an exercise
+left up to the reader.
 
 ---
 
-Summary
+Mazel tov! You've implemented the burger discounts in a way that is more
+maintainable, and you've also learned a lot about lists along the way. In the
+next chapter, we'll finally use discount logic to reduce the final price of an
+order.
 
 ## Overview
 
@@ -290,3 +371,11 @@ and [demo](https://react-book.melange.re/demo/src/discounts-lists/) for this cha
     "Fold left" means to apply the given fold function starting from the first
     element and work towards the end of the list, while "fold right" starts from
     the last element and works backwards through the list.
+
+[^2]: A quick fix to allow you to write `Array.of_list` would be to add a
+    function alias in `Array`:
+
+    ```reason
+    /** Convert list to array */
+    let of_list = Stdlib.Array.of_list;
+    ```
