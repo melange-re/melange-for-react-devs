@@ -357,12 +357,31 @@ chapter.
 
 Mazel tov! You've implemented the burger discounts in a way that is more
 maintainable, and you've also learned a lot about lists along the way. In the
-next chapter, we'll finally use discount logic to reduce the final price of an
-order.
+next chapter, we'll finally use the discount logic to reduce the final price of
+an order.
 
 ## Overview
 
-- tbd
+- Lists are immutable
+- You can pattern match on a whole list, even if you don't know its length
+- The `List` module contains most of the functions you'll need for
+  dealing with lists
+- The runtime representation of lists:
+  - Empty list → `0`
+  - Nonempty list → a JavaScript object with the fields `hd` (for head) and `tl`
+    (for tail)
+- The delimiters for list literals are `[]`
+- You can use list spread syntax (`...`) to add elements to the front of a list
+  or pattern match on the tail of a list
+  - The names of equivalent functions might not match the names in `Js.Array`
+- Documentation comments show up in editor hover popups and generated
+  documentation pages
+  - They can be attached to functions, modules, types, and
+  variables
+- The `ListLabels` module contains the same functions as in `List`, but they
+  have labeled arguments instead of positional arguments
+- The placeholder operator (`_`) can be used to override the position of the
+  piped argument when using the pipe last operator
 
 ## Exercises
 
