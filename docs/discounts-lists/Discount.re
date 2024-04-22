@@ -14,11 +14,14 @@ let getFreeBurger = (items: list(Item.t)) => {
     |> List.sort((x, y) => - compare(x, y));
 
   switch (prices) {
+  | []
+  | [_] => None
   | [_, cheaperPrice, ..._] => Some(cheaperPrice)
-  | _ => None
   };
 };
 // #endregion get-free-burger
+
+ignore(getFreeBurger);
 
 // #region get-half-off
 /** Buy 1+ burger with 1+ of every topping, get half off */
@@ -45,3 +48,25 @@ let getHalfOff = (items: list(Item.t)) => {
   };
 };
 // #endregion get-half-off
+
+// #region get-free-burger-improved
+/** Buy 2 burgers, get 1 free */
+let getFreeBurger = (items: list(Item.t)) => {
+  let prices =
+    items
+    |> List.filter_map(item =>
+         switch (item) {
+         | Item.Burger(burger) => Some(Item.Burger.toPrice(burger))
+         | Sandwich(_)
+         | Hotdog => None
+         }
+       )
+    |> List.sort((x, y) => - Float.compare(x, y));
+
+  switch (prices) {
+  | []
+  | [_] => None
+  | [_, cheaperPrice, ..._] => Some(cheaperPrice)
+  };
+};
+// #endregion get-free-burger-improved

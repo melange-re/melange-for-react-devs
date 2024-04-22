@@ -10,11 +10,12 @@ let getFreeBurger = (items: list(Item.t)) => {
          }
        )
     |> List.map(Item.toPrice)
-    |> List.sort((x, y) => - compare(x, y));
+    |> List.sort((x, y) => - Float.compare(x, y));
 
   switch (prices) {
+  | []
+  | [_] => None
   | [_, cheaperPrice, ..._] => Some(cheaperPrice)
-  | _ => None
   };
 };
 

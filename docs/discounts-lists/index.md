@@ -20,15 +20,16 @@ lists are implemented as [singly-linked
 lists](https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list). The main
 limitation is that they don't allow constant-time access to any element except
 the first one (also known as the *head* of a list). Most operations on lists go
-through the
-[Stdlib.List](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/), which has
-many functions that are equivalent to the ones you've already used in
+through the [Stdlib.List
+module](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/), which has many
+functions that are equivalent to the ones you've already used in
 [Js.Array](https://melange.re/v3.0.0/api/re/melange/Js/Array/).
 
 ::: tip
 
-Although its full name is `Stdllib.List`, we'll refer to this module as `List`
-from now on, because `Stdlib` is opened by default.
+Since `Stdlib` is opened by default, you can access all `Stdlib.List` functions
+using just `List`, e.g. `List.map`, `List.filter`, etc. Because of this, we'll
+refer to this module as `List` from now on.
 
 :::
 
@@ -39,7 +40,7 @@ Let's refactor `Discount.getFreeBurger` to accept `list(Item.t)` instead of
 
 <<< Discount.re#get-free-burger
 
-There are a lot of things to talk about in this piece of code--let's go through
+There are a lot of things to talk about in this piece of code---let's go through
 them one by one.
 
 ## Documentation comment
@@ -48,7 +49,8 @@ You might have noticed that the comment at the beginning of the function has a
 different format than before:
 
 ```reason
-/** Buy 2 burgers, get 1 free */
+// Buy 2 burgers, get 1 free // [!code --]
+/** Buy 2 burgers, get 1 free */ // [!code ++]
 ```
 
 This is a **documentation comment**, a special comment that is attached to the
@@ -94,7 +96,17 @@ The switch expression in `Discount.getFreeBurgers` accepts the entire `prices`
 list. Unlike with arrays, we can pattern match on lists even if we don’t know
 the length of the list.
 
-Inside the first branch of the switch expression, we see this:
+Inside the "failure" branch of the switch expression, we see this:
+
+```reason
+| []
+| [_] => None
+```
+
+This pattern matches both empty lists and lists with one element, and returns
+`None`.
+
+Inside the "success" branch of the switch expression, we have:
 
 ```reason
 | [_, cheaperPrice, ..._] => Some(cheaperPrice)
@@ -102,9 +114,9 @@ Inside the first branch of the switch expression, we see this:
 
 This pattern will match on lists that have at least two elements. The first
 element is ignored via `_`. The second element is bound to the name
-`cheaperPrice` and used in the body of the branch. We use *list spread syntax*
-(`...`) to bind the sublist containing the remaining elements to a name, but
-here we bind it to `_`, effectively ignoring it.
+`cheaperPrice`, which is encased in `Some` and returned. We use *list spread
+syntax* (`...`) to indicate that the list can have more than the two elements we
+explicitly matched on.
 
 ## List spread syntax
 
@@ -148,7 +160,15 @@ switch ([1, 2, 3]) {
 The tail of the list is the sublist that remains after you extract the first n
 elements from the front of the list. As you can see, the tail might be the empty
 list (`[]`). In practice, you don't need to bind the tail to a name unless
-you're writing a [custom list function](/todo).
+you're writing a [custom list function](/todo). Often, you'll just bind the tail
+to `_`, effectively ignoring it:
+
+```reason{2}
+switch (["one", "two", "three"]) {
+| [a, b, ..._] => Js.log(a ++ ", " ++ b ++ ", etc") // one, two, etc
+| _ => ()
+};
+```
 
 ## Runtime representation of lists
 
@@ -321,22 +341,17 @@ argument should go. When we put `_` in the first argument position, it overrides
 the default behavior of the pipe last operator. Run `npm run test` to confirm
 that `Discount.getFreeBurger` works the same as before.
 
-# Problems with `List.nth_opt`
+# `List.nth_opt` is unsafe
 
-We should reflect briefly to ask whether this shorter version of
-`Discount.getFreeBurger` is actually better. Pattern matching is very explicit
-and generally easy to read. If you're writing code in a team, readability should
-be a consideration.
-
-But the biggest issue with using `List.nth_opt` is that it can still raise an
+The problem with using `List.nth_opt` is that it can still raise an
 `Invalid_argument` exception if the value of `n` is negative. You can confirm
 this by hovering over `nth_opt` and reading the popup or [read its
 documentation](https://melange.re/v1.0.0/api/re/melange/Stdlib/List/#val-nth_opt).
 While this is unlikely to cause a problem inside `Discount.getFreeBurger`, it's
-best to avoid unsafe functions except in special circumstances that call for it,
-for example if a function needs to be as fast as possible. Of course, it's
-possible to implement a truly safe version of `nth_opt`, but that's an exercise
-left up to the reader.
+best to avoid unsafe functions except in special circumstances, for example if a
+function needs to be as fast as possible. Of course, it's possible to implement
+a completely safe version of `nth_opt`, which is an exercise at the end of this
+chapter.
 
 ---
 
@@ -351,7 +366,21 @@ order.
 
 ## Exercises
 
-<b>1.</b> tbd
+<b>1.</b> There are a couple ways to improve `Discount.getFreeBurger`:
+
+- Instead of `StdLib.compare`, use a type-specific compare function. Examples
+  of a type-specific compare functions are `Bool.compare` or `String.compare`.
+- Use
+  [List.filter_map](https://melange.re/v2.2.0/api/re/melange/Stdlib/List/#val-filter_map)
+
+::: details Solution
+
+<<< Discount.re#get-free-burger-improved
+
+Prefer type-specific compare functions like [Float.compare](https://melange.re/v1.0.0/api/re/melange/Stdlib/Float/#val-compare) over polymorphic
+`compare`.
+
+:::
 
 <b>2.</b> tbd
 
@@ -367,10 +396,10 @@ and [demo](https://react-book.melange.re/demo/src/discounts-lists/) for this cha
 
 -----
 
-[^1]: Inside `Stdlib.List`, there are `fold_left` and `fold_right` functions.
-    "Fold left" means to apply the given fold function starting from the first
-    element and work towards the end of the list, while "fold right" starts from
-    the last element and works backwards through the list.
+[^1]: Inside `List`, there are `fold_left` and `fold_right` functions. "Fold
+    left" means to apply the given fold function starting from the first element
+    and work towards the end of the list, while "fold right" starts from the
+    last element and works backwards towards the front of the list.
 
 [^2]: A quick fix to allow you to write `Array.of_list` would be to add a
     function alias in `Array`:
