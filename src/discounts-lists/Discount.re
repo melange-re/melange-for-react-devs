@@ -1,22 +1,16 @@
 /** Buy 2 burgers, get 1 free */
 let getFreeBurger = (items: list(Item.t)) => {
-  let prices =
-    items
-    |> List.filter(item =>
-         switch (item) {
-         | Item.Burger(_) => true
-         | Sandwich(_)
-         | Hotdog => false
-         }
-       )
-    |> List.map(Item.toPrice)
-    |> List.sort((x, y) => - Float.compare(x, y));
-
-  switch (prices) {
-  | []
-  | [_] => None
-  | [_, cheaperPrice, ..._] => Some(cheaperPrice)
-  };
+  items
+  |> List.filter(item =>
+       switch (item) {
+       | Item.Burger(_) => true
+       | Sandwich(_)
+       | Hotdog => false
+       }
+     )
+  |> List.map(Item.toPrice)
+  |> List.sort((x, y) => - Float.compare(x, y))
+  |> Lst.nth(1);
 };
 
 // Buy 1+ burger with 1+ of every topping, get half off

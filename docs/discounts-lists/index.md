@@ -382,7 +382,32 @@ Prefer type-specific compare functions like [Float.compare](https://melange.re/v
 
 :::
 
-<b>2.</b> tbd
+<b>2.</b> Add a safe `Lst.nth` function which returns the nth element of a list
+encased in `Some`. If the nth element doesn’t exist, return `None`. Make sure
+the function can be used with the pipe last operator without the use of the
+placeholder operator. Refactor `Discount.getFreeBurger` to use your new
+function.
+
+::: tip
+
+Note that `Lst` is not a typo. If we name our new module `List`, it will shadow
+the `List` module that is already available from `Stdlib` being open. Unlike the
+case of our custom `Array` module, we don't need to override any function in the
+existing `List` module.
+
+:::
+
+::: details Solution
+
+Add a new file `Lst.re`:
+
+<<< Lst.re
+
+`Discount.getFreeBurger` could be refactored to:
+
+<<< Discount.re#get-free-burger-nth{12}
+
+:::
 
 <b>3.</b> tbd
 

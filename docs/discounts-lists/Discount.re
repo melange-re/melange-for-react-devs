@@ -70,3 +70,21 @@ let getFreeBurger = (items: list(Item.t)) => {
   };
 };
 // #endregion get-free-burger-improved
+
+ignore(getFreeBurger);
+
+// #region get-free-burger-nth
+let getFreeBurger = (items: list(Item.t)) => {
+  items
+  |> List.filter(item =>
+       switch (item) {
+       | Item.Burger(_) => true
+       | Sandwich(_)
+       | Hotdog => false
+       }
+     )
+  |> List.map(Item.toPrice)
+  |> List.sort((x, y) => - Float.compare(x, y))
+  |> Lst.nth(1);
+};
+// #endregion get-free-burger-nth
