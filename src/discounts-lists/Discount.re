@@ -1,18 +1,3 @@
-/** Buy 2 burgers, get 1 free */
-let getFreeBurger = (items: list(Item.t)) => {
-  items
-  |> List.filter(item =>
-       switch (item) {
-       | Item.Burger(_) => true
-       | Sandwich(_)
-       | Hotdog => false
-       }
-     )
-  |> List.map(Item.toPrice)
-  |> List.sort((x, y) => - Float.compare(x, y))
-  |> Lst.nth(1);
-};
-
 /** Buy n burgers, get n/2 burgers free */
 let getFreeBurgers = (items: list(Item.t)) => {
   let prices =
@@ -32,7 +17,7 @@ let getFreeBurgers = (items: list(Item.t)) => {
     let result =
       prices
       |> List.sort((x, y) => - Float.compare(x, y))
-      |> List.filteri((index, _) => index mod 2 == 0)
+      |> List.filteri((index, _) => index mod 2 == 1)
       |> List.fold_left((+.), 0.0);
     Some(result);
   };

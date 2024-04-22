@@ -12,7 +12,7 @@ module FreeBurger = {
   test("0 burgers, no discount", () =>
     expect
     |> equal(
-         Discount.getFreeBurger([
+         Discount.getFreeBurgers([
            Hotdog,
            Sandwich(Ham),
            Sandwich(Turducken),
@@ -24,7 +24,7 @@ module FreeBurger = {
   test("1 burger, no discount", () =>
     expect
     |> equal(
-         Discount.getFreeBurger([Hotdog, Sandwich(Ham), Burger(burger)]),
+         Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
          None,
        )
   );
@@ -32,7 +32,7 @@ module FreeBurger = {
   test("2 burgers of same price, discount", () =>
     expect
     |> equal(
-         Discount.getFreeBurger([
+         Discount.getFreeBurgers([
            Hotdog,
            Burger(burger),
            Sandwich(Ham),
@@ -45,7 +45,7 @@ module FreeBurger = {
   test("2 burgers of different price, discount of cheaper one", () =>
     expect
     |> equal(
-         Discount.getFreeBurger([
+         Discount.getFreeBurgers([
            Hotdog,
            Burger({...burger, tomatoes: true}), // 15.05
            Sandwich(Ham),
@@ -58,7 +58,7 @@ module FreeBurger = {
   test("3 burgers of different price, return Some(15.15)", () =>
     expect
     |> equal(
-         Discount.getFreeBurger([
+         Discount.getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
            Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
@@ -66,6 +66,26 @@ module FreeBurger = {
            Burger({...burger, bacon: 2}) // 16.00
          ]),
          Some(15.15),
+       )
+  );
+
+  test("7 burgers, return Some(46.75)", () =>
+    expect
+    |> equal(
+         Discount.getFreeBurgers([
+           Burger(burger), // 15
+           Hotdog,
+           Burger({...burger, cheese: 5}), // 15.50
+           Sandwich(Unicorn),
+           Burger({...burger, bacon: 4}), // 17.00
+           Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+           Sandwich(Ham),
+           Burger({...burger, bacon: 2}), // 16.00
+           Burger({...burger, onions: 6}), // 16.20
+           Sandwich(Portabello),
+           Burger({...burger, tomatoes: true}) // 15.05
+         ]),
+         Some(46.75),
        )
   );
 };

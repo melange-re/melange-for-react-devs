@@ -109,7 +109,7 @@ let getFreeBurgers = (items: list(Item.t)) => {
     let result =
       prices
       |> List.sort((x, y) => - Float.compare(x, y))
-      |> List.filteri((index, _) => index mod 2 == 0)
+      |> List.filteri((index, _) => index mod 2 == 1)
       |> List.fold_left((+.), 0.0);
     Some(result);
   };

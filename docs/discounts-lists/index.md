@@ -449,6 +449,12 @@ multiple burgers can be free.
 added in the last exercise, and then add a new test to make sure that the case
 of 4 or more burgers works as expected.
 
+::: details Solution
+
+The updated tests can be found in https://github.com/melange-re/melange-for-react-devs/blob/main/src/discounts-lists/DiscountTests.re
+
+:::
+
 -----
 
 View [source
