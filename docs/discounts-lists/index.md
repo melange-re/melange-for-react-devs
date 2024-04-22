@@ -409,9 +409,45 @@ Add a new file `Lst.re`:
 
 :::
 
-<b>3.</b> tbd
+<b>3.</b> Update the logic of `Discount.getFreeBurger` so that for every pair of
+burgers purchased, one of them is free. You can order the burgers by price
+(descending), and then choose every other burger (starting from the second
+burger) to be free.
 
-<b>4.</b> tbd
+::: details Hint 1
+
+Use
+[List.filteri](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filteri)
+and [mod operator](https://ocaml.org/manual/5.1/expr.html#ss:expr-operators).
+
+:::
+
+::: details Hint 2
+
+Use
+[ListLabels.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left)
+or [List.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-fold_left)
+
+:::
+
+::: details Solution
+
+<<< Discount.re#get-free-burgers
+
+A few points about this solution:
+- `getFreeBurger` is renamed to `getFreeBurgers` to reflect the fact that
+multiple burgers can be free.
+- The callback passed to `List.fold_left` is just the float addition operator
+  (`+.`).
+- The switch expression reappears because it's needed to detect the cases when
+  the discount can't be applied (when there are less than two burgers in the
+  order).
+
+:::
+
+<b>4.</b> Update the tests in `DiscountTests` to work with the new function you
+added in the last exercise, and then add a new test to make sure that the case
+of 4 or more burgers works as expected.
 
 -----
 

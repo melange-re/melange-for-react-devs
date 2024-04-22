@@ -13,6 +13,31 @@ let getFreeBurger = (items: list(Item.t)) => {
   |> Lst.nth(1);
 };
 
+/** Buy n burgers, get n/2 burgers free */
+let getFreeBurgers = (items: list(Item.t)) => {
+  let prices =
+    items
+    |> List.filter_map(item =>
+         switch (item) {
+         | Item.Burger(burger) => Some(Item.Burger.toPrice(burger))
+         | Sandwich(_)
+         | Hotdog => None
+         }
+       );
+
+  switch (prices) {
+  | []
+  | [_] => None
+  | prices =>
+    let result =
+      prices
+      |> List.sort((x, y) => - Float.compare(x, y))
+      |> List.filteri((index, _) => index mod 2 == 0)
+      |> List.fold_left((+.), 0.0);
+    Some(result);
+  };
+};
+
 // Buy 1+ burger with 1+ of every topping, get half off
 let getHalfOff = (items: list(Item.t)) => {
   let meetsCondition =
