@@ -41,6 +41,7 @@ export default defineConfig({
           { text: 'Discounts Using Lists', link: '/discounts-lists/' },
           { text: 'Promo Codes', link: '/promo-codes/' },
           { text: 'Promo Component', link: '/promo-component/' },
+          { text: 'Coupon Codes', link: '/coupon-codes/' },
         ]
       }
     ],
