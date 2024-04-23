@@ -39,6 +39,7 @@ export default defineConfig({
           { text: 'Cram Tests', link: '/cram-tests/' },
           { text: 'Burger Discounts', link: '/burger-discounts/' },
           { text: 'Discounts Using Lists', link: '/discounts-lists/' },
+          { text: 'Coupon Codes', link: '/coupon-codes/' },
         ]
       }
     ],
