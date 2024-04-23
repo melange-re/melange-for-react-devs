@@ -6,6 +6,17 @@ table.order td {
   padding: 0.5em;
 }
 
+.couponCode {
+  border-top: 1px solid gray;
+  text-align: right;
+}
+
+.couponCodeInput {
+  width: 8em;
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
 .total {
   border-top: 1px solid gray;
   font-weight: bold;

@@ -30,6 +30,10 @@ let make = (~items: t) => {
           )
        |> Stdlib.Array.of_list
        |> React.array}
+      <tr className=css##couponCode>
+        <td> {React.string("Coupon code")} </td>
+        <td> <input className=css##couponCodeInput /> </td>
+      </tr>
       <tr className=css##total>
         <td> {React.string("Total")} </td>
         <td> {total |> Format.currency} </td>
