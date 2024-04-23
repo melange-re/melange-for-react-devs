@@ -6,6 +6,7 @@
  (module_systems
   (es6 mjs))
  (runtime_deps
+  Menu.jsx
   (glob_files *.css)))
 
 (cram
