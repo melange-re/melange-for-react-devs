@@ -9,8 +9,8 @@ change the order of function invocations in such a way that the function will
 [accidentally change the input array](/burger-discounts/#arrays-are-mutable).
 You have a test in `DiscountTests` which tests for that possibility, but you
 know that tests are only as reliable as the humans that maintain them. By now,
-you've come to realize that The OCaml Way should be rewrite the function so that
-it **cannot** have side effects.
+you've come to realize that The OCaml Way should be to rewrite the function so
+that it **cannot** have side effects.
 
 ## Intro to lists
 
@@ -42,6 +42,15 @@ Let's refactor `Discount.getFreeBurger` to accept `list(Item.t)` instead of
 
 There are a lot of things to talk about in this piece of code---let's go through
 them one by one.
+
+
+::: tip
+
+This refactor makes sense because the logic inside `Discount.getFreeBurger`
+doesn't need to access random positions within the sequence of items. If that
+was the case, then it would be better to keep using arrays.
+
+:::
 
 ## Documentation comment
 

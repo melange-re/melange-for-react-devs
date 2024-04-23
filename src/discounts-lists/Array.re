@@ -1,4 +1,4 @@
-// Safe array access function
+/** Safe array access function */
 let get: (array('a), int) => option('a) =
   (array, index) =>
     switch (index) {
