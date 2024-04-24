@@ -124,14 +124,15 @@ Inside the "success" branch of the switch expression, we have:
 ```
 
 This pattern will match on lists that have at least two elements. The first
-element is ignored via `_`. The second element is bound to the name
-`cheaperPrice`, which is encased in `Some` and returned. We use *list spread
-syntax* (`...`) to indicate that the list can have more than the two elements we
-explicitly matched on.
+element is ignored via the wildcard patten `_`. The second element is bound to
+the name `cheaperPrice`, which is encased in `Some` and returned. We use *list
+spread syntax* (`...`) to indicate that the list can have more than the two
+elements we explicitly matched on.
 
 ## List spread syntax
 
-The spread operator (`...`) is also used to add elements to the front of a list:
+The spread operator (`...`) can also be used to create a new list by prepending
+elements to an existing list:
 
 ```reason
 let list = [1, 2, 3];
@@ -153,7 +154,7 @@ is really just a shortcut for
 
 :::
 
-When pattern matching, the spread operator allows you to bind the **tail** of
+When pattern matching, the spread operator allows you to bind the *tail* of
 a list to a name:
 
 ```reason
@@ -172,7 +173,7 @@ The tail of the list is the sublist that remains after you extract the first n
 elements from the front of the list. As you can see, the tail might be the empty
 list (`[]`). In practice, you don't need to bind the tail to a name unless
 you're writing a [custom list function](/todo). Often, you'll just bind the tail
-to `_`, effectively ignoring it:
+to the wildcard pattern `_`, effectively ignoring it:
 
 ```reason{2}
 switch (["one", "two", "three"]) {
