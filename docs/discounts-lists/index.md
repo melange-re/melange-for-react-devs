@@ -65,7 +65,9 @@ different format than before:
 This is a **documentation comment**, a special comment that is attached to the
 function it appears above. Go to `DiscountTests` and hover over an invocation of
 `getFreeBurger`---the editor will display a popup showing both the type
-signature and documentation comment of this function.
+signature and documentation comment of this function:
+
+![Function info popup](function-popup.png)
 
 ::: info
 
