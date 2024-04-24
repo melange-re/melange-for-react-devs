@@ -356,7 +356,7 @@ Error: This expression has type int but an expression was expected of type
 
 ## Placeholder operator
 
-This is because of the type signature of `List.nth_opt` is
+This is because the type signature of `List.nth_opt` is
 
 ```text
 list('a) => int => option('a)
@@ -435,26 +435,17 @@ Prefer type-specific compare functions like [Float.compare](https://melange.re/v
 
 :::
 
-<b>2.</b> Add a safe `Lst.nth` function which returns the nth element of a list
-encased in `Some`. If the nth element doesn’t exist, return `None`. Make sure
-the function can be used with the pipe last operator without the use of the
+<b>2.</b> Add a `ListSafe.nth` function which safely returns the nth element of
+a list encased in `Some`. If the nth element doesn’t exist, return `None`. Make
+sure the function can be used with the pipe last operator without the use of the
 placeholder operator. Refactor `Discount.getFreeBurger` to use your new
 function.
 
-::: tip
-
-Note that `Lst` is not a typo. If we name our new module `List`, it will shadow
-the `List` module that is already available from `Stdlib` being open. Unlike the
-case of our custom `Array` module, we don't need to override any function in the
-existing `List` module.
-
-:::
-
 ::: details Solution
 
-Add a new file `Lst.re`:
+Add a new file `ListSafe.re`:
 
-<<< Lst.re
+<<< ListSafe.re
 
 `Discount.getFreeBurger` could be refactored to:
 

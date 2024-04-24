@@ -85,7 +85,7 @@ let getFreeBurger = (items: list(Item.t)) => {
      )
   |> List.map(Item.toPrice)
   |> List.sort((x, y) => - Float.compare(x, y))
-  |> Lst.nth(1);
+  |> ListSafe.nth(1);
 };
 // #endregion get-free-burger-nth
 
