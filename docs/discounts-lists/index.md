@@ -184,15 +184,37 @@ switch (["one", "two", "three"]) {
 
 ## Runtime representation of lists
 
-If you run the code snippets above in the [Melange
-Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGxpc3QgPSBbMSwgMiwgM107CkpzLmxvZyhbMCwgLi4ubGlzdF0pOyAvLyBbMCwgMSwgMiwgM10KSnMubG9nKFstMSwgMCwgLi4ubGlzdF0pOyAvLyBbLTEsIDAsIDEsIDIsIDNdCgpzd2l0Y2ggKFsxLCAyLCAzXSkgewp8IFsxLCAuLi50YWlsXSA9PiBKcy5sb2codGFpbCkgLy8gWzIsIDNdCnwgXyA9PiAoKQp9OwoKc3dpdGNoIChbMSwgMiwgM10pIHsKfCBbMSwgMiwgMywgLi4udGFpbF0gPT4gSnMubG9nKHRhaWwpIC8vIFtdCnwgXyA9PiAoKQp9Owo%3D&live=off),
-you'll see output like this:
+Run this snippet in [Melange
+Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=SnMubG9nMyhBcnJheS5vZl9saXN0KFtdKSwgIi0%2BIiwgW10pOwpKcy5sb2czKEFycmF5Lm9mX2xpc3QoWzQyXSksICItPiIsIFs0Ml0pOwpKcy5sb2czKEFycmF5Lm9mX2xpc3QoWzQsIDUsIDZdKSwgIi0%2BIiwgWzQsIDUsIDZdKTsK&live=off):
+
+```reason
+Js.log3(Array.of_list([]), "->", []);
+Js.log3(Array.of_list([42]), "->", [42]);
+Js.log3(Array.of_list([4, 5, 6]), "->", [4, 5, 6]);
+```
+
+You'll see this output:
 
 ```text
-{"hd":0,"tl":{"hd":1,"tl":{"hd":2,"tl":{"hd":3,"tl":0}}}}
-{"hd":-1,"tl":{"hd":0,"tl":{"hd":1,"tl":{"hd":2,"tl":{"hd":3,"tl":0}}}}}
-{"hd":2,"tl":{"hd":3,"tl":0}}
-0
+[] -> 0
+[42] -> {"hd":42,"tl":0}
+[4,5,6] -> {"hd":4,"tl":{"hd":5,"tl":{"hd":6,"tl":0}}}
+```
+
+The list `[4, 5, 6]` becomes this object in the JS runtime (pretty printed for
+readability):
+
+```json
+{
+  "hd": 4,
+  "tl": {
+    "hd": 5,
+    "tl": {
+      "hd": 6,
+      "tl": 0
+    }
+  }
+}
 ```
 
 An empty list in the JS runtime is represented by `0`. A non-empty list is
