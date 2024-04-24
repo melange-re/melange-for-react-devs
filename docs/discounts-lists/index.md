@@ -421,8 +421,9 @@ an order.
 
 <b>1.</b> There are a couple ways to improve `Discount.getFreeBurger`:
 
-- Instead of `StdLib.compare`, use a type-specific compare function. Examples
-  of a type-specific compare functions are `Bool.compare` or `String.compare`.
+- Instead of `StdLib.compare`, use a type-specific compare function to make the
+  code less brittle. Examples of type-specific compare functions are
+  `Bool.compare` and `String.compare`.
 - Use
   [List.filter_map](https://melange.re/v2.2.0/api/re/melange/Stdlib/List/#val-filter_map)
 
@@ -430,8 +431,13 @@ an order.
 
 <<< Discount.re#get-free-burger-improved
 
-Prefer type-specific compare functions like [Float.compare](https://melange.re/v1.0.0/api/re/melange/Stdlib/Float/#val-compare) over polymorphic
-`compare`.
+Prefer type-specific compare functions like
+[Float.compare](https://melange.re/v1.0.0/api/re/melange/Stdlib/Float/#val-compare)
+over polymorphic `Stdlib.compare`. While `Stdlib.compare` can handle any type,
+its flexibility comes with drawbacks. It can be slower due to its polymorphic
+nature, and might not always offer meaningful comparisons for complex types.
+Additionally, it can raise exceptions if used on non-comparable types like
+functions.
 
 :::
 
