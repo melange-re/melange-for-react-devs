@@ -15,6 +15,20 @@ module Row = {
     </tr>;
 };
 
+module Quantity = {
+  [@react.component]
+  let make = (~value, ~onChange: int => unit) =>
+    <div>
+      <button onClick={_ => onChange(max(value - 1, 1))}>
+        {RR.s({js|➖|js})}
+      </button>
+      <span> {value |> string_of_int |> RR.s} </span>
+      <button onClick={_ => onChange(value + 1)}>
+        {RR.s({js|➕|js})}
+      </button>
+    </div>;
+};
+
 module Pane = {
   [@react.component]
   let make =
@@ -24,20 +38,12 @@ module Pane = {
         ~onClose: unit => unit,
         ~children=React.null,
       ) => {
-    let (quantity, setQuantity) = React.useState(() => 1);
+    let (quantity, setQuantity) = RR.useStateValue(1);
 
     <div>
       <h1> {RR.s(emoji)} </h1>
       <div> children </div>
-      <div>
-        <button onClick={_ => setQuantity(n => max(n - 1, 1))}>
-          {RR.s({js|➖|js})}
-        </button>
-        <span> {quantity |> string_of_int |> RR.s} </span>
-        <button onClick={_ => setQuantity(n => n + 1)}>
-          {RR.s({js|➕|js})}
-        </button>
-      </div>
+      <Quantity value=quantity onChange=setQuantity />
       <div>
         <button onClick={_ => onClose()}> {RR.s({js|❌|js})} </button>
         <button
@@ -53,12 +59,9 @@ module Pane = {
 };
 
 module SandwichCustomizer = {
-  let choices = [
-    (Item.Sandwich.Portabello, {js|🍄|js}),
-    (Ham, {js|🐷|js}),
-    (Unicorn, {js|🦄|js}),
-    (Turducken, {js|🦃🦆🐓|js}),
-  ];
+  let choices =
+    [Item.Sandwich.Portabello, Ham, Unicorn, Turducken]
+    |> List.map(item => (item, item |> Item.Sandwich.toEmoji));
 
   [@react.component]
   let make = (~value: Item.Sandwich.t, ~onChange: Item.Sandwich.t => unit) => {
