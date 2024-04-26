@@ -1,115 +1,150 @@
-// [@mel.module "./Menu.jsx"] [@react.component]
-// external make: unit => React.element = "default";
-
-type options('a) = {
-  item: option('a),
-  quantity: int,
-};
-
-type cartItem = {
-  item: Item.t,
-  quantity: int,
-};
-
-type state = {
-  hotdogQty: int,
-  sandwich: options(Item.Sandwich.t),
-  burger: options(Item.Burger.t),
-  cart: list(cartItem),
-};
+type pane =
+  | Main
+  | Hotdog
+  | Sandwich
+  | Burger;
 
 module Row = {
   [@react.component]
-  let make = (~title, ~quantity, ~enabled, ~onAdd) =>
+  let make = (~title, ~onClick: unit => unit) =>
     <tr>
-      <td> {React.string(title)} </td>
-      <td> <input type_="number" value={quantity |> string_of_int} /> </td>
+      <td> {RR.s(title)} </td>
       <td>
-        <button disabled={!enabled} onClick={_ => onAdd()}>
-          {React.string("Add")}
-        </button>
+        <button onClick={_ => onClick()}> {RR.s({js|➕|js})} </button>
       </td>
     </tr>;
 };
 
+module Pane = {
+  [@react.component]
+  let make =
+      (
+        ~emoji,
+        ~onSubmit: int => unit,
+        ~onClose: unit => unit,
+        ~children=React.null,
+      ) => {
+    let (quantity, setQuantity) = React.useState(() => 1);
+
+    <div>
+      <h1> {RR.s(emoji)} </h1>
+      <div> children </div>
+      <div>
+        <button onClick={_ => setQuantity(n => max(n - 1, 1))}>
+          {RR.s({js|➖|js})}
+        </button>
+        <span> {quantity |> string_of_int |> RR.s} </span>
+        <button onClick={_ => setQuantity(n => n + 1)}>
+          {RR.s({js|➕|js})}
+        </button>
+      </div>
+      <div>
+        <button onClick={_ => onClose()}> {RR.s({js|❌|js})} </button>
+        <button
+          onClick={_ => {
+            onSubmit(quantity);
+            onClose();
+          }}>
+          {RR.s({js|➕🛒|js})}
+        </button>
+      </div>
+    </div>;
+  };
+};
+
+module SandwichCustomizer = {
+  let choices = [
+    (Item.Sandwich.Portabello, {js|🍄|js}),
+    (Ham, {js|🐷|js}),
+    (Unicorn, {js|🦄|js}),
+    (Turducken, {js|🦃🦆🐓|js}),
+  ];
+
+  [@react.component]
+  let make = (~value: Item.Sandwich.t, ~onChange: Item.Sandwich.t => unit) => {
+    <fieldset>
+      {choices
+       |> List.map(((item, label)) =>
+            <div key={"radio-" ++ label}>
+              <label>
+                <input
+                  type_="radio"
+                  checked={item == value}
+                  onClick={_ => onChange(item)}
+                />
+                {RR.s(label)}
+              </label>
+            </div>
+          )
+       |> RR.list}
+    </fieldset>;
+  };
+};
+
+module BurgerCustomizer = {
+  [@react.component]
+  let make = () => <div> {RR.s("Burger")} </div>;
+};
+
 [@react.component]
 let make = () => {
-  let (state, setState) =
+  let (pane, setPane) = RR.useStateValue(Main);
+  let (order: list(Item.t), setOrder) = RR.useStateValue([]);
+  let (sandwich, setSandwich) = RR.useStateValue(Item.Sandwich.Portabello);
+  let (burger, _setBurger) =
     RR.useStateValue({
-      hotdogQty: 1,
-      sandwich: {
-        item: None,
-        quantity: 1,
-      },
-      burger: {
-        item: None,
-        quantity: 1,
-      },
-      cart: [],
+      Item.Burger.lettuce: false,
+      tomatoes: false,
+      bacon: 0,
+      onions: 0,
+      cheese: 0,
     });
+  let onClose = () => setPane(Main);
 
   <div>
-    <h1> {React.string("Menu")} </h1>
-    <table>
-      <tbody>
-        <Row
-          title="Hotdog"
-          quantity={state.hotdogQty}
-          enabled=true
-          onAdd={() =>
-            setState({
-              ...state,
-              cart: state.cart @ [{item: Hotdog, quantity: state.hotdogQty}],
-            })
-          }
-        />
-        <Row
-          title="Sandwich"
-          quantity={state.sandwich.quantity}
-          enabled={state.sandwich.item != None}
-          onAdd={() =>
-            state.sandwich.item
-            |> Option.iter(sandwich =>
-                 setState({
-                   ...state,
-                   cart:
-                     state.cart
-                     @ [
-                       {
-                         item: Sandwich(sandwich),
-                         quantity: state.sandwich.quantity,
-                       },
-                     ],
-                 })
-               )
-          }
-        />
-        <Row
-          title="Burger"
-          quantity={state.burger.quantity}
-          enabled={state.burger.item != None}
-          onAdd={() =>
-            state.burger.item
-            |> Option.iter(burger =>
-                 setState({
-                   ...state,
-                   cart:
-                     state.cart
-                     @ [
-                       {
-                         item: Burger(burger),
-                         quantity: state.burger.quantity,
-                       },
-                     ],
-                 })
-               )
-          }
-        />
-      </tbody>
-    </table>
-    <button>
-      {let cartCount = state.cart |> List.length |> string_of_int;
-       React.string({j|Checkout ($cartCount)|j})}
-    </button>
+    {switch (pane) {
+     | Main =>
+       <div>
+         <h1> {{js|🍽️|js} |> RR.s} </h1>
+         <table>
+           <tbody />
+           <Row title={js|🌭|js} onClick={() => setPane(Hotdog)} />
+           <Row title={js|🥪|js} onClick={() => setPane(Sandwich)} />
+           <Row title={js|🍔|js} onClick={() => setPane(Burger)} />
+         </table>
+         <button>
+           {let orderSize = order |> List.length |> string_of_int;
+            RR.s({j|➡️🛒($orderSize)|j})}
+         </button>
+       </div>
+     | Hotdog =>
+       <Pane
+         emoji={js|🌭|js}
+         onClose
+         onSubmit={quantity =>
+           setOrder(order @ List.init(quantity, _ => Item.Hotdog))
+         }
+       />
+     | Sandwich =>
+       <Pane
+         emoji={js|🥪|js}
+         onClose
+         onSubmit={quantity =>
+           setOrder(
+             order @ List.init(quantity, _ => Item.Sandwich(sandwich)),
+           )
+         }>
+         <SandwichCustomizer value=sandwich onChange=setSandwich />
+       </Pane>
+     | Burger =>
+       <Pane
+         emoji={js|🍔|js}
+         onClose
+         onSubmit={quantity =>
+           setOrder(order @ List.init(quantity, _ => Item.Burger(burger)))
+         }>
+         <BurgerCustomizer />
+       </Pane>
+     }}
   </div>;
 };
