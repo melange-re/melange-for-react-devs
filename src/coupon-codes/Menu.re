@@ -58,7 +58,7 @@ module Pane = {
   };
 };
 
-module SandwichCustomizer = {
+module SandwichPane = {
   let choices = [
     (Item.Sandwich.Portabello, {js|🍄|js}),
     (Ham, {js|🐷|js}),
@@ -67,23 +67,31 @@ module SandwichCustomizer = {
   ];
 
   [@react.component]
-  let make = (~value: Item.Sandwich.t, ~onChange: Item.Sandwich.t => unit) => {
-    <fieldset>
-      {choices
-       |> List.map(((item, label)) =>
-            <div key={"radio-" ++ label}>
-              <label>
-                <input
-                  type_="radio"
-                  checked={item == value}
-                  onClick={_ => onChange(item)}
-                />
-                {RR.s(label)}
-              </label>
-            </div>
-          )
-       |> RR.list}
-    </fieldset>;
+  let make =
+      (~onClose: unit => unit, ~onSubmit: (int, Item.Sandwich.t) => unit) => {
+    let (sandwich, setSandwich) = RR.useStateValue(Item.Sandwich.Portabello);
+
+    <Pane
+      emoji={js|🥪|js}
+      onClose
+      onSubmit={quantity => onSubmit(quantity, sandwich)}>
+      <fieldset>
+        {choices
+         |> List.map(((item, label)) =>
+              <div key={"radio-" ++ label}>
+                <label>
+                  <input
+                    type_="radio"
+                    checked={item == sandwich}
+                    onClick={_ => setSandwich(item)}
+                  />
+                  {RR.s(label)}
+                </label>
+              </div>
+            )
+         |> RR.list}
+      </fieldset>
+    </Pane>;
   };
 };
 
@@ -141,27 +149,80 @@ module BurgerCustomizer = {
   };
 };
 
-let defaultSandwich = Item.Sandwich.Portabello;
-let defaultBurger = {
-  Item.Burger.lettuce: false,
-  tomatoes: false,
-  bacon: 0,
-  onions: 0,
-  cheese: 0,
+module BurgerPane = {
+  module Checkbox = {
+    [@react.component]
+    let make = (~label, ~checked, ~onChange: bool => unit) =>
+      <div>
+        <label>
+          {RR.s(label)}
+          <input
+            type_="checkbox"
+            checked
+            onChange={_ => onChange(!checked)}
+          />
+        </label>
+      </div>;
+  };
+
+  module LabeledQuantity = {
+    [@react.component]
+    let make = (~label, ~value, ~onChange: int => unit) =>
+      <div> <label> {RR.s(label)} </label> <Quantity value onChange /> </div>;
+  };
+
+  [@react.component]
+  let make = (~onClose: unit => unit, ~onSubmit: (int, Item.Burger.t) => unit) => {
+    let (burger, setBurger) =
+      RR.useStateValue({
+        Item.Burger.lettuce: false,
+        tomatoes: false,
+        bacon: 0,
+        onions: 0,
+        cheese: 0,
+      });
+
+    <Pane
+      emoji={js|🍔|js}
+      onClose
+      onSubmit={quantity => onSubmit(quantity, burger)}>
+      <fieldset>
+        <Checkbox
+          label={js|🥬|js}
+          checked={burger.lettuce}
+          onChange={lettuce => setBurger({...burger, lettuce})}
+        />
+        <Checkbox
+          label={js|🍅|js}
+          checked={burger.tomatoes}
+          onChange={tomatoes => setBurger({...burger, tomatoes})}
+        />
+        <LabeledQuantity
+          label={js|🧅|js}
+          value={burger.onions}
+          onChange={onions => setBurger({...burger, onions})}
+        />
+        <LabeledQuantity
+          label={js|🧀|js}
+          value={burger.cheese}
+          onChange={cheese => setBurger({...burger, cheese})}
+        />
+        <LabeledQuantity
+          label={js|🥓|js}
+          value={burger.bacon}
+          onChange={bacon => setBurger({...burger, bacon})}
+        />
+      </fieldset>
+    </Pane>;
+  };
 };
 
 [@react.component]
 let make = () => {
   let (pane, setPane) = RR.useStateValue(Main);
   let (order: list(Item.t), setOrder) = RR.useStateValue([]);
-  let (sandwich, setSandwich) = RR.useStateValue(defaultSandwich);
-  let (burger, setBurger) = RR.useStateValue(defaultBurger);
 
-  let onClose = () => {
-    setPane(Main);
-    setSandwich(defaultSandwich);
-    setBurger(defaultBurger);
-  };
+  let onClose = () => setPane(Main);
 
   <div>
     {switch (pane) {
@@ -188,25 +249,21 @@ let make = () => {
          }
        />
      | Sandwich =>
-       <Pane
-         emoji={js|🥪|js}
+       <SandwichPane
          onClose
-         onSubmit={quantity =>
+         onSubmit={(quantity, sandwich) =>
            setOrder(
              order @ List.init(quantity, _ => Item.Sandwich(sandwich)),
            )
-         }>
-         <SandwichCustomizer value=sandwich onChange=setSandwich />
-       </Pane>
+         }
+       />
      | Burger =>
-       <Pane
-         emoji={js|🍔|js}
+       <BurgerPane
          onClose
-         onSubmit={quantity =>
+         onSubmit={(quantity, burger) =>
            setOrder(order @ List.init(quantity, _ => Item.Burger(burger)))
-         }>
-         <BurgerCustomizer burger onChange=setBurger />
-       </Pane>
+         }
+       />
      }}
   </div>;
 };
