@@ -21,10 +21,15 @@ let applyDiscount = (items, code) =>
   | _ => None
   };
 
+type discount =
+  | NotApplied
+  | Applied(float)
+  | Error;
+
 [@react.component]
 let make = (~items: t) => {
   let (code, setCode) = RR.useStateValue("");
-  let (discount, setDiscount) = RR.useStateValue(None);
+  let (discount, setDiscount) = RR.useStateValue(NotApplied);
 
   let subtotal =
     items
@@ -47,20 +52,29 @@ let make = (~items: t) => {
         <td> {React.string("Coupon code")} </td>
         <td>
           <form
+            className=css##couponCodeForm
             onSubmit={evt => {
               evt |> React.Event.Form.preventDefault;
-              code |> applyDiscount(items) |> setDiscount;
+              let discount =
+                applyDiscount(items, code)
+                |> Option.map(value => Applied(value))
+                |> Option.value(~default=Error);
+              setDiscount(discount);
             }}>
             <input
               className=css##couponCodeInput
               value=code
-              onChange={evt => evt |> RR.getValueFromEvent |> setCode}
+              onChange={evt => {
+                evt |> RR.getValueFromEvent |> setCode;
+                setDiscount(NotApplied);
+              }}
             />
+            {switch (discount) {
+             | NotApplied => React.null
+             | Error => "Could not apply discount" |> RR.s
+             | Applied(discount) => discount |> Float.neg |> Format.currency
+             }}
           </form>
-          {switch (discount) {
-           | None => "Could apply discount" |> RR.s
-           | Some(discount) => discount |> Float.neg |> Format.currency
-           }}
         </td>
       </tr>
       <tr className=css##total>
