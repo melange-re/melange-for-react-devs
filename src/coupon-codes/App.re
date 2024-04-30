@@ -1,15 +1,23 @@
-// let items: Order.t = [
-//   // Sandwich(Portabello),
-//   Sandwich(Unicorn),
-//   Sandwich(Ham),
-//   Sandwich(Turducken),
-//   Hotdog,
-//   Burger({lettuce: true, tomatoes: true, onions: 3, cheese: 2, bacon: 6}),
-//   Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 0, bacon: 0}),
-//   // Burger({lettuce: true, tomatoes: false, onions: 1, cheese: 1, bacon: 1}),
-//   // Burger({lettuce: false, tomatoes: false, onions: 1, cheese: 0, bacon: 0}),
-//   // Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 1, bacon: 0}),
-// ];
+type view =
+  | Menu
+  | Order;
 
 [@react.component]
-let make = () => <div> <Menu /> </div>;
+let make = () => {
+  let (view, setView) = RR.useStateValue(Menu);
+  let (items: list(Item.t), setItems) = RR.useStateValue([]);
+
+  <div>
+    {switch (view) {
+     | Menu =>
+       <Menu
+         items
+         onSubmit={order => {
+           setItems(order);
+           setView(Order);
+         }}
+       />
+     | Order => <Order items onClose={() => setView(Menu)} />
+     }}
+  </div>;
+};

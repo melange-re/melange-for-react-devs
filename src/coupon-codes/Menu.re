@@ -1,4 +1,4 @@
-type pane =
+type view =
   | Main
   | Hotdog
   | Sandwich
@@ -218,24 +218,24 @@ module BurgerPane = {
 };
 
 [@react.component]
-let make = () => {
-  let (pane, setPane) = RR.useStateValue(Main);
-  let (order: list(Item.t), setOrder) = RR.useStateValue([]);
+let make = (~items: list(Item.t), ~onSubmit: list(Item.t) => unit) => {
+  let (view, setView) = RR.useStateValue(Main);
+  let (order: list(Item.t), setOrder) = RR.useStateValue(items);
 
-  let onClose = () => setPane(Main);
+  let onClose = () => setView(Main);
 
   <div>
-    {switch (pane) {
+    {switch (view) {
      | Main =>
        <div>
          <h1> {{js|🍽️|js} |> RR.s} </h1>
          <table>
            <tbody />
-           <Row title={js|🌭|js} onClick={() => setPane(Hotdog)} />
-           <Row title={js|🥪|js} onClick={() => setPane(Sandwich)} />
-           <Row title={js|🍔|js} onClick={() => setPane(Burger)} />
+           <Row title={js|🌭|js} onClick={() => setView(Hotdog)} />
+           <Row title={js|🥪|js} onClick={() => setView(Sandwich)} />
+           <Row title={js|🍔|js} onClick={() => setView(Burger)} />
          </table>
-         <button>
+         <button onClick={_ => onSubmit(order)}>
            {let orderSize = order |> List.length |> string_of_int;
             RR.s({j|➡️🛒($orderSize)|j})}
          </button>
