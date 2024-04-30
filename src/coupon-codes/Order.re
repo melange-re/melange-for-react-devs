@@ -14,9 +14,19 @@ module OrderItem = {
 
 [@mel.module "./order.module.css"] external css: Js.t({..}) = "default";
 
+let applyDiscount = (items, code) =>
+  switch (code |> Js.String.toLowerCase) {
+  | "2burgers1free" => Discount.getFreeBurgers(items)
+  | "halfoff" => Discount.getHalfOff(items)
+  | _ => None
+  };
+
 [@react.component]
 let make = (~items: t) => {
-  let total =
+  let (code, setCode) = RR.useStateValue("");
+  let (discount, setDiscount) = RR.useStateValue(None);
+
+  let subtotal =
     items
     |> ListLabels.fold_left(~init=0., ~f=(acc, order) =>
          acc +. Item.toPrice(order)
@@ -28,15 +38,34 @@ let make = (~items: t) => {
        |> List.mapi((index, item) =>
             <OrderItem key={"item-" ++ string_of_int(index)} item />
           )
-       |> Stdlib.Array.of_list
-       |> React.array}
+       |> RR.list}
+      <tr className=css##total>
+        <td> {React.string("Subtotal")} </td>
+        <td> {subtotal |> Format.currency} </td>
+      </tr>
       <tr className=css##couponCode>
         <td> {React.string("Coupon code")} </td>
-        <td> <input className=css##couponCodeInput /> </td>
+        <td>
+          <form
+            onSubmit={evt => {
+              evt |> React.Event.Form.preventDefault;
+              code |> applyDiscount(items) |> setDiscount;
+            }}>
+            <input
+              className=css##couponCodeInput
+              value=code
+              onChange={evt => evt |> RR.getValueFromEvent |> setCode}
+            />
+          </form>
+          {switch (discount) {
+           | None => "Could apply discount" |> RR.s
+           | Some(discount) => discount |> Float.neg |> Format.currency
+           }}
+        </td>
       </tr>
       <tr className=css##total>
         <td> {React.string("Total")} </td>
-        <td> {total |> Format.currency} </td>
+        <td> {subtotal |> Format.currency} </td>
       </tr>
     </tbody>
   </table>;
