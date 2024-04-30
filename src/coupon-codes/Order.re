@@ -18,13 +18,13 @@ let applyDiscount = (items, code) =>
   switch (code |> Js.String.toLowerCase) {
   | "2burgers1free" => Discount.getFreeBurgers(items)
   | "halfoff" => Discount.getHalfOff(items)
-  | _ => None
+  | _ => Error("Promo code is not valid")
   };
 
 type discount =
   | NotApplied
   | Applied(float)
-  | Error;
+  | Error(string);
 
 [@react.component]
 let make = (~items: t) => {
@@ -56,9 +56,10 @@ let make = (~items: t) => {
             onSubmit={evt => {
               evt |> React.Event.Form.preventDefault;
               let discount =
-                applyDiscount(items, code)
-                |> Option.map(value => Applied(value))
-                |> Option.value(~default=Error);
+                switch (applyDiscount(items, code)) {
+                | Error(message) => Error(message)
+                | Ok(value) => Applied(value)
+                };
               setDiscount(discount);
             }}>
             <input
@@ -71,7 +72,7 @@ let make = (~items: t) => {
             />
             {switch (discount) {
              | NotApplied => React.null
-             | Error => "Could not apply discount" |> RR.s
+             | Error(message) => message |> RR.s
              | Applied(discount) => discount |> Float.neg |> Format.currency
              }}
           </form>

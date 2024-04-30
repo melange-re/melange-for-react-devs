@@ -1,5 +1,5 @@
 Sandwich tests
-  $ node ./output/src/discounts-lists/SandwichTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/coupon-codes/SandwichTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: Item.Sandwich.toEmoji
   ok 1 - Item.Sandwich.toEmoji
@@ -23,7 +23,7 @@ Sandwich tests
   # todo 0
 
 Burger tests
-  $ node ./output/src/discounts-lists/BurgerTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/coupon-codes/BurgerTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: A fully-loaded burger
   ok 1 - A fully-loaded burger
@@ -55,7 +55,7 @@ Burger tests
   # todo 0
 
 Discount tests
-  $ node ./output/src/discounts-lists/DiscountTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/coupon-codes/DiscountTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: 0 burgers, no discount
   ok 1 - 0 burgers, no discount
@@ -73,20 +73,20 @@ Discount tests
   ok 4 - 2 burgers of different price, discount of cheaper one
     ---
     ...
-  # Subtest: 3 burgers of different price, return Some(15.15)
-  ok 5 - 3 burgers of different price, return Some(15.15)
+  # Subtest: 3 burgers of different price, return Ok(15.15)
+  ok 5 - 3 burgers of different price, return Ok(15.15)
     ---
     ...
-  # Subtest: 7 burgers, return Some(46.75)
-  ok 6 - 7 burgers, return Some(46.75)
+  # Subtest: 7 burgers, return Ok(46.75)
+  ok 6 - 7 burgers, return Ok(46.75)
     ---
     ...
-  # Subtest: No burger has 1+ of every topping, return None
-  ok 7 - No burger has 1+ of every topping, return None
+  # Subtest: No burger has 1+ of every topping, return Error
+  ok 7 - No burger has 1+ of every topping, return Error
     ---
     ...
-  # Subtest: One burger has 1+ of every topping, return Some(15.675)
-  ok 8 - One burger has 1+ of every topping, return Some(15.675)
+  # Subtest: One burger has 1+ of every topping, return Ok(15.675)
+  ok 8 - One burger has 1+ of every topping, return Ok(15.675)
     ---
     ...
   1..8
