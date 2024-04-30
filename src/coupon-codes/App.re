@@ -1,12 +1,3 @@
-let firstDataset =
-  Item.[
-    Sandwich(Unicorn),
-    Hotdog,
-    Sandwich(Ham),
-    Sandwich(Turducken),
-    Hotdog,
-  ];
-
 let datasets = {
   let burger =
     Item.Burger.{
@@ -17,7 +8,16 @@ let datasets = {
       bacon: 0,
     };
   [
-    ("No burgers", firstDataset),
+    (
+      "No burgers",
+      Item.[
+        Sandwich(Unicorn),
+        Hotdog,
+        Sandwich(Ham),
+        Sandwich(Turducken),
+        Hotdog,
+      ],
+    ),
     (
       "5 burgers",
       [
@@ -47,7 +47,13 @@ let datasets = {
 
 [@react.component]
 let make = () => {
-  let (items, setItems) = RR.useStateValue(firstDataset);
+  let (items, setItems) =
+    datasets
+    |> ListSafe.head
+    |> Option.map(snd)
+    |> Option.value(~default=[])
+    |> RR.useStateValue;
+
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
     <select
