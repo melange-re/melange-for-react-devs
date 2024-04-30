@@ -1,15 +1,70 @@
-// let items: Order.t = [
-//   // Sandwich(Portabello),
-//   Sandwich(Unicorn),
-//   Sandwich(Ham),
-//   Sandwich(Turducken),
-//   Hotdog,
-//   Burger({lettuce: true, tomatoes: true, onions: 3, cheese: 2, bacon: 6}),
-//   Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 0, bacon: 0}),
-//   // Burger({lettuce: true, tomatoes: false, onions: 1, cheese: 1, bacon: 1}),
-//   // Burger({lettuce: false, tomatoes: false, onions: 1, cheese: 0, bacon: 0}),
-//   // Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 1, bacon: 0}),
-// ];
+let firstDataset =
+  Item.[
+    Sandwich(Unicorn),
+    Hotdog,
+    Sandwich(Ham),
+    Sandwich(Turducken),
+    Hotdog,
+  ];
+
+let datasets = {
+  let burger =
+    Item.Burger.{
+      lettuce: false,
+      tomatoes: false,
+      onions: 0,
+      cheese: 0,
+      bacon: 0,
+    };
+  [
+    ("No burgers", firstDataset),
+    (
+      "5 burgers",
+      [
+        Burger({...burger, tomatoes: true}),
+        Burger({...burger, lettuce: true}),
+        Burger({...burger, bacon: 2}),
+        Burger({...burger, cheese: 3, onions: 9, tomatoes: true}),
+        Burger({...burger, onions: 2}),
+      ],
+    ),
+    (
+      "1 burger with at least one of every topping",
+      [
+        Hotdog,
+        Burger({
+          lettuce: true,
+          tomatoes: true,
+          onions: 1,
+          cheese: 2,
+          bacon: 3,
+        }),
+        Sandwich(Turducken),
+      ],
+    ),
+  ];
+};
 
 [@react.component]
-let make = () => <div> <Menu /> </div>;
+let make = () => {
+  let (items, setItems) = RR.useStateValue(firstDataset);
+  <div>
+    <h1> {RR.s("Order Confirmation")} </h1>
+    <select
+      onChange={evt => {
+        let selectedLabel = evt |> RR.getValueFromEvent;
+        datasets
+        |> List.find_opt(((label, _items)) => label == selectedLabel)
+        |> Option.iter(((_label, items)) => setItems(items));
+      }}>
+      {datasets
+       |> List.map(((label, _items)) =>
+            <option key={"option-" ++ label} value=label>
+              {RR.s(label)}
+            </option>
+          )
+       |> RR.list}
+    </select>
+    <Order items />
+  </div>;
+};
