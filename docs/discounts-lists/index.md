@@ -426,6 +426,7 @@ an order.
   `Bool.compare` and `String.compare`.
 - Use
   [List.filter_map](https://melange.re/v2.2.0/api/re/melange/Stdlib/List/#val-filter_map)
+  in place of `List.filter` and `List.map`.
 
 ::: details Solution
 
@@ -460,9 +461,11 @@ Add a new file `ListSafe.re`:
 :::
 
 <b>3.</b> Update the logic of `Discount.getFreeBurger` so that for every pair of
-burgers purchased, one of them is free. You can order the burgers by price
-(descending), and then choose every other burger (starting from the second
-burger) to be free.
+burgers purchased, one of them is free. Order the burgers by price (descending),
+and then choose every other burger (starting from the second burger) to be free.
+Add this new test to `DiscountTests` and make sure it passes:
+
+<<< DiscountTests.re#get-free-burgers-test
 
 ::: details Hint 1
 
@@ -492,16 +495,6 @@ multiple burgers can be free.
 - The switch expression reappears because it's needed to detect the cases when
   the discount can't be applied (when there are less than two burgers in the
   order).
-
-:::
-
-<b>4.</b> Update the tests in `DiscountTests` to work with the new function you
-added in the last exercise, and then add a new test to make sure that the case
-of 4 or more burgers works as expected.
-
-::: details Solution
-
-The updated tests can be found in https://github.com/melange-re/melange-for-react-devs/blob/main/src/discounts-lists/DiscountTests.re
 
 :::
 
