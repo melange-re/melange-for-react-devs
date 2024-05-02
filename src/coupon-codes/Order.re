@@ -14,22 +14,10 @@ module OrderItem = {
 
 [@mel.module "./order.module.css"] external css: Js.t({..}) = "default";
 
-let applyDiscount = (items, code) =>
-  switch (code |> Js.String.toLowerCase) {
-  | "2burgers1free" => Discount.getFreeBurgers(items)
-  | "halfoff" => Discount.getHalfOff(items)
-  | _ => Error("Promo code is not valid")
-  };
-
-type discount =
-  | NotApplied
-  | Applied(float)
-  | Error(string);
-
 [@react.component]
 let make = (~items: t) => {
   let (code, setCode) = RR.useStateValue("");
-  let (discount, setDiscount) = RR.useStateValue(NotApplied);
+  let (discount, setDiscount) = RR.useStateValue(Some(0.0));
 
   let subtotal =
     items
@@ -55,25 +43,20 @@ let make = (~items: t) => {
             className=css##couponCodeForm
             onSubmit={evt => {
               evt |> React.Event.Form.preventDefault;
-              let discount =
-                switch (applyDiscount(items, code)) {
-                | Error(message) => Error(message)
-                | Ok(value) => Applied(value)
-                };
-              setDiscount(discount);
+              Discount.applyDiscount(code, items) |> setDiscount;
             }}>
             <input
               className=css##couponCodeInput
               value=code
               onChange={evt => {
                 evt |> RR.getValueFromEvent |> setCode;
-                setDiscount(NotApplied);
+                setDiscount(Some(0.0));
               }}
             />
             {switch (discount) {
-             | NotApplied => React.null
-             | Error(message) => message |> RR.s
-             | Applied(discount) => discount |> Float.neg |> Format.currency
+             | None => "Error" |> RR.s
+             | Some(0.0) => React.null
+             | Some(discount) => discount |> Float.neg |> Format.currency
              }}
           </form>
         </td>
