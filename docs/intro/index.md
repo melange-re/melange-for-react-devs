@@ -40,6 +40,7 @@ teaches the language from the ground up and goes much deeper into its features.
 | Sandwich Tests | Add unit tests for sandwich-related logic | opam switch, `opam switch`, `opam install`, `opam list`, `.opam` file, `melange-fest`, `open` module, `module_systems` field, punning, type inference |
 | Cram Tests | Set up cram tests to run your unit tests | cram tests, `cram` stanza, Dune alias, promotion, test output sanitization, sandbox, `expand_aliases_in_sandbox` stanza |
 | Burger Discounts | Implement burger discount logic using arrays | limits of type inference, type annotation of function arguments, full name (asset path), `Stdlib`, record spread syntax, `ignore`, runtime representations of common data types, properties of arrays, override `Array.get` |
+| Discounts Using Lists | Re-implement burger discount logic using lists | properties of lists, pattern matching on lists, list spread syntax, `List` module, `ListLabels` module, runtime representation of lists, documentation comments, placeholder operator |
 
 ...and much more to come!
 
