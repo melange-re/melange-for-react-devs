@@ -381,42 +381,26 @@ Fixed tests:
 <b>3.</b> Recently, some Cafe Emoji customers have gotten into the habit of
 ordering burgers with an absurd number of toppings. You can barely even hold
 these monstrous burgers in your hands, and on the small chance that you manage
-to grab one, it will explode as soon as you bite into it. Madame Jellobutter
-has therefore decided that whenever someone orders a burger with more than 12
-toppings, it will be served in a big bowl. Update the `Item.Burger.toEmoji`
-function so that the following expressions are true:
+to grab one, it will explode as soon as you bite into it. Madame Jellobutter has
+therefore decided that whenever someone orders a burger with more than 12
+toppings, it will be served in a big bowl. Add the following test to
+`BurgerTests`:
 
-```reason
-Item.Burger.toEmoji({
-  lettuce: true,
-  tomatoes: true,
-  onions: 4,
-  cheese: 2,
-  bacon: 5,
-})
-== {js|🍔🥣{🥬,🍅,🧅×4,🧀×2,🥓×5}|js};
+<<< BurgerTests.re#bowl-test
 
-Item.Burger.toEmoji({
-  lettuce: true,
-  tomatoes: true,
-  onions: 4,
-  cheese: 2,
-  bacon: 4,
-})
-== {js|🍔{🥬,🍅,🧅×4,🧀×2,🥓×5}|js};
-```
+Now update `Item.Burger.toEmoji` to make that test pass.
 
-Note that lettuce and tomato each count as 1 topping.
+::: details Hint
+
+Note that `lettuce` and `tomatoes` each count as 1 topping.
+
+:::
 
 ::: details Solution
 
 New version of `Item.Burger.toEmoji`:
 
 <<< Item.re#to-emoji
-
-New test:
-
-<<< BurgerTests.re#bowl-test
 
 :::
 
