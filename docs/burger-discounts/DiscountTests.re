@@ -120,3 +120,81 @@ test("3 burgers of different price, return Some(15.15)", () =>
      )
 );
 // #endregion three-burgers
+
+// #region half-off-tests
+test("No burger has 1 of every topping, return None", () =>
+  expect
+  |> equal(
+       Discount.getHalfOff([|
+         Hotdog,
+         Sandwich(Portabello),
+         Burger({
+           lettuce: true,
+           tomatoes: true,
+           cheese: 1,
+           onions: 1,
+           bacon: 0,
+         }),
+       |]),
+       None,
+     )
+);
+
+test("One burger has 1 of every topping, return Some(15.425)", () =>
+  expect
+  |> equal(
+       Discount.getHalfOff([|
+         Hotdog,
+         Sandwich(Portabello),
+         Burger({
+           lettuce: true,
+           tomatoes: true,
+           cheese: 1,
+           onions: 1,
+           bacon: 1,
+         }),
+       |]),
+       Some(15.425),
+     )
+);
+// #endregion half-off-tests
+
+// #region new-half-off-tests
+module HalfOff = {
+  test("No burger has 1+ of every topping, return None", () =>
+    expect
+    |> equal(
+         Discount.getHalfOff([|
+           Hotdog,
+           Sandwich(Portabello),
+           Burger({
+             lettuce: true,
+             tomatoes: true,
+             cheese: 1,
+             onions: 1,
+             bacon: 0,
+           }),
+         |]),
+         None,
+       )
+  );
+
+  test("One burger has 1+ of every topping, return Some(15.675)", () =>
+    expect
+    |> equal(
+         Discount.getHalfOff([|
+           Hotdog,
+           Sandwich(Portabello),
+           Burger({
+             lettuce: true,
+             tomatoes: true,
+             cheese: 1,
+             onions: 1,
+             bacon: 1,
+           }),
+         |]),
+         Some(15.675),
+       )
+  );
+};
+// #endregion new-half-off-tests
