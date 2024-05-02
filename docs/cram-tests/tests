@@ -1,6 +1,6 @@
 # region first-cram
 Sandwich tests
-  $ node ./output/src/cram-tests/SandwichTests.mjs
+  $ node ./output/src/order-confirmation/SandwichTests.mjs
   TAP version 13
   # Subtest: Item.Sandwich.toEmoji
   ok 1 - Item.Sandwich.toEmoji
@@ -30,7 +30,7 @@ Sandwich tests
 
 # region first-burger-cram
 Burger tests
-  $ node ./output/src/cram-tests/BurgerTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/order-confirmation/BurgerTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: A fully-loaded burger
   ok 1 - A fully-loaded burger

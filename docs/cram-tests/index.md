@@ -191,19 +191,19 @@ like this:
 
  See all the files inside the sandbox
    $ npx tree
-+  cram-tests
++  order-confirmation
 +  └── output
 +      └── src
-+          └── cram-tests
++          └── order-confirmation
 +              └── SandwichTests.mjs
 ```
 
 The sandbox directory only contains a single file
-`output/src/cram-tests/SandwichTests.mjs`. Add another explorative cram test:
+`output/src/order-confirmation/SandwichTests.mjs`. Add another explorative cram test:
 
 ```cram
 Show detail of SandwichTests.mjs
-  $ ls -la ./output/src/cram-tests/SandwichTests.mjs
+  $ ls -la ./output/src/order-confirmation/SandwichTests.mjs
 ```
 
 The output should now look like this:
@@ -220,11 +220,11 @@ The output should now look like this:
 +              └── SandwichTests.mjs
 
  Show detail of SandwichTests.mjs
-   $ ls -la ./output/src/cram-tests/SandwichTests.mjs
-+  lrwxr-xr-x  1 fhsu  staff  86 Mar 16 22:09 ./output/src/cram-tests/SandwichTests.mjs -> ../../../../../../../../default/src/cram-tests/output/src/cram-tests/SandwichTests.mjs
+   $ ls -la ./output/src/order-confirmation/SandwichTests.mjs
++  lrwxr-xr-x  1 fhsu  staff  86 Mar 16 22:09 ./output/src/order-confirmation/SandwichTests.mjs -> ../../../../../../../../default/src/order-confirmation/output/src/order-confirmation/SandwichTests.mjs
 ```
 
-From this, you can see that `./output/src/cram-tests/SandwichTests.mjs` is
+From this, you can see that `./output/src/order-confirmation/SandwichTests.mjs` is
 actually a symbolic link which links to the real file inside your build
 directory, specifically this file:
 
@@ -265,7 +265,7 @@ see a failing test, but no errors appear. You have to add `(alias melange)` to
 (cram
  (deps
   (alias melange)
-  ./output/src/cram-tests/SandwichTests.mjs))
+  ./output/src/order-confirmation/SandwichTests.mjs))
 ```
 
 Now the test finally fails. The presence of `(alias melange)` means that all
@@ -437,12 +437,12 @@ and [demo](https://react-book.melange.re/demo/src/cram-tests/) for this chapter.
     see some logging that indicates that build targets were produced, e.g.
 
     ```shell
-    refmt src/cram-tests/Item.re.ml
-    ppx src/cram-tests/Item.re.pp.ml
-    ocamldep src/cram-tests/.output.mobjs/melange__Item.impl.d
-    melc src/cram-tests/.output.mobjs/melange/melange__Item.{cmi,cmj,cmt}
-    melc src/cram-tests/output/src/cram-tests/Item.mjs
-    melc src/cram-tests/.output.mobjs/melange/melange__SandwichTests.{cmi,cmj,cmt}
-    melc src/cram-tests/.output.mobjs/melange/melange__Order.{cmi,cmj,cmt}
-    melc src/cram-tests/.output.mobjs/melange/melange__Index.{cmi,cmj,cmt}
+    refmt src/order-confirmation/Item.re.ml
+    ppx src/order-confirmation/Item.re.pp.ml
+    ocamldep src/order-confirmation/.output.mobjs/melange__Item.impl.d
+    melc src/order-confirmation/.output.mobjs/melange/melange__Item.{cmi,cmj,cmt}
+    melc src/order-confirmation/output/src/order-confirmation/Item.mjs
+    melc src/order-confirmation/.output.mobjs/melange/melange__SandwichTests.{cmi,cmj,cmt}
+    melc src/order-confirmation/.output.mobjs/melange/melange__Order.{cmi,cmj,cmt}
+    melc src/order-confirmation/.output.mobjs/melange/melange__Index.{cmi,cmj,cmt}
     ```
