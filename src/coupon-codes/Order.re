@@ -18,8 +18,8 @@ module OrderItem = {
   [@react.component]
   let make = (~item: Item.t) =>
     <tr className=Css.item>
-      <Td className=Css.emoji> {item |> Item.toEmoji |> React.string} </Td>
-      <Td className=Css.price> {item |> Item.toPrice |> Format.currency} </Td>
+      <Td className=Css.emoji> {item |> Item.toEmoji |> RR.s} </Td>
+      <Td className=Css.price> {item |> Item.toPrice |> RR.currency} </Td>
     </tr>;
 };
 
@@ -55,13 +55,13 @@ let make = (~items: t) => {
           )
        |> RR.list}
       <tr className=Css.total>
-        <Td> {React.string("Subtotal")} </Td>
-        <Td> {subtotal |> Format.currency} </Td>
+        <Td> {RR.s("Subtotal")} </Td>
+        <Td> {subtotal |> RR.currency} </Td>
       </tr>
       <Promo items onApply=setDiscount />
       <tr className=Css.total>
-        <Td> {React.string("Total")} </Td>
-        <Td> {subtotal -. discount |> Format.currency} </Td>
+        <Td> {RR.s("Total")} </Td>
+        <Td> {subtotal -. discount |> RR.currency} </Td>
       </tr>
     </tbody>
   </table>;

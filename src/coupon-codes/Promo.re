@@ -36,7 +36,7 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
   let (discount, setDiscount) = RR.useStateValue(Some(0.0));
 
   <tr className=Css.promo>
-    <Td> {React.string("Promo code")} </Td>
+    <Td> {RR.s("Promo code")} </Td>
     <Td>
       <form
         className=Css.form
@@ -62,7 +62,7 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
          | Some(0.0) => React.null
          | Some(discount) =>
            <div className=Css.success>
-             {discount |> Float.neg |> Format.currency}
+             {discount |> Float.neg |> RR.currency}
            </div>
          }}
       </form>

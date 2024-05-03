@@ -49,8 +49,8 @@ let getHalfOff = (items: list(Item.t)) => {
   };
 };
 
-let applyDiscount = (code, items) =>
-  switch (code |> Js.String.toLowerCase) {
+let applyDiscount = (promoCode, items) =>
+  switch (promoCode |> Js.String.toLowerCase) {
   | "free" => getFreeBurgers(items) |> Result.to_option
   | "half" => getHalfOff(items) |> Result.to_option
   | _ => None
