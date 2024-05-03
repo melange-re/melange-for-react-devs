@@ -29,7 +29,7 @@ export default defineConfig({
           { text: 'Counter', link: '/counter/' },
           { text: 'Numeric Types', link: '/numeric-types/' },
           { text: 'Celsius Converter', link: '/celsius-converter-exception/' },
-          { text: 'Celsius Converter using Option', link: '/celsius-converter-option/' },
+          { text: 'Celsius Converter Using Option', link: '/celsius-converter-option/' },
           { text: 'Introduction to Dune', link: '/intro-to-dune/' },
           { text: 'Order Confirmation', link: '/order-confirmation/' },
           { text: 'Styling with CSS', link: '/styling-with-css/' },

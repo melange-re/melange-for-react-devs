@@ -1,4 +1,4 @@
-# Celsius Converter using Option
+# Celsius Converter Using Option
 
 After all the changes we made in the last chapter, your `CelsiusConverter.re`
 might look something like this:

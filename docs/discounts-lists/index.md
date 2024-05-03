@@ -12,7 +12,7 @@ know that tests are only as reliable as the humans that maintain them. By now,
 you've come to realize that The OCaml Way should be to rewrite the function so
 that it **cannot** have side effects.
 
-## Intro to lists
+## Introduction to lists
 
 A [list](https://reasonml.github.io/docs/en/basic-structures#list) is a
 sequential data structure that can often be used in place of an array. In OCaml,
@@ -124,7 +124,7 @@ Inside the "success" branch of the switch expression, we have:
 ```
 
 This pattern will match on lists that have at least two elements. The first
-element is ignored via the wildcard patten `_`. The second element is bound to
+element is ignored via the wildcard pattern `_`. The second element is bound to
 the name `cheaperPrice`, which is encased in `Some` and returned. We use *list
 spread syntax* (`...`) to indicate that the list can have more than the two
 elements we explicitly matched on.
@@ -310,14 +310,14 @@ Because `Stdlib` is automatically opened, normally we can just call
 `Array.of_list`, but we have to use the full name `Stdlib.Array.of_list` because
 our custom `Array` module takes precedence[^2].
 
-To get all your code compiling again, you have to also refactor `Index`. But
-there all you have to do is change the array delimiters (`[||]`) to list
-delimiters (`[]`).
+To get all your code compiling again, you must also fix the code in
+`Index`---but all you have to do in there is change the array delimiters
+(`[||]`) to list delimiters (`[]`).
 
 ## `List.nth_opt`
 
-If we peruse the `List` module a bit, we'll find a function that can make
-`Discount.getFreeBurger` shorter:
+If we peruse the `List` module a bit, we'll find a function that can simplify
+the logic in `Discount.getFreeBurger`:
 [List.nth](https://melange.re/v1.0.0/api/re/melange/Stdlib/List/#val-nth). It
 takes an index `n` that returns the `n`-th element of a list. However, from
 previous experience, we don't want to use unsafe functions like this.
@@ -398,22 +398,23 @@ an order.
 
 - Lists are immutable
 - You can pattern match on a whole list, even if you don't know its length
+- Uses of list spread syntax (`...`):
+  - Create new lists by prepending elements to existing lists
+  - Pattern match on the tail of a list
+- The delimiters for list literals are `[]`
 - The `List` module contains most of the functions you'll need for
   dealing with lists
+- The `ListLabels` module contains the same functions as in `List`, but they
+  have labeled arguments instead of positional arguments
+- The names of equivalent functions in `List` and `Js.Array` might not match
 - The runtime representation of lists:
   - Empty list → `0`
   - Nonempty list → a JavaScript object with the fields `hd` (for head) and `tl`
     (for tail)
-- The delimiters for list literals are `[]`
-- You can use list spread syntax (`...`) to add elements to the front of a list
-  or pattern match on the tail of a list
-  - The names of equivalent functions might not match the names in `Js.Array`
-- Documentation comments show up in editor hover popups and generated
+- Documentation comments:
+  - Show up in editor hover popups and generated
   documentation pages
-  - They can be attached to functions, modules, types, and
-  variables
-- The `ListLabels` module contains the same functions as in `List`, but they
-  have labeled arguments instead of positional arguments
+  - Can be attached to functions, modules, types, and variables
 - The placeholder operator (`_`) can be used to override the position of the
   piped argument when using the pipe last operator
 
@@ -426,6 +427,7 @@ an order.
   `Bool.compare` and `String.compare`.
 - Use
   [List.filter_map](https://melange.re/v2.2.0/api/re/melange/Stdlib/List/#val-filter_map)
+  in place of `List.filter` and `List.map`.
 
 ::: details Solution
 
@@ -457,12 +459,18 @@ Add a new file `ListSafe.re`:
 
 <<< Discount.re#get-free-burger-nth{12}
 
+Note that we no longer need the switch expression anymore because
+`ListSafe.nth(1)` will automatically return `None` if there are 0 or 1 items in
+the given list.
+
 :::
 
 <b>3.</b> Update the logic of `Discount.getFreeBurger` so that for every pair of
-burgers purchased, one of them is free. You can order the burgers by price
-(descending), and then choose every other burger (starting from the second
-burger) to be free.
+burgers purchased, one of them is free. Order the burgers by price (descending),
+and then choose every other burger (starting from the second burger) to be free.
+Add this new test to `DiscountTests` and make sure it passes:
+
+<<< DiscountTests.re#get-free-burgers-test
 
 ::: details Hint 1
 
@@ -492,16 +500,6 @@ multiple burgers can be free.
 - The switch expression reappears because it's needed to detect the cases when
   the discount can't be applied (when there are less than two burgers in the
   order).
-
-:::
-
-<b>4.</b> Update the tests in `DiscountTests` to work with the new function you
-added in the last exercise, and then add a new test to make sure that the case
-of 4 or more burgers works as expected.
-
-::: details Solution
-
-The updated tests can be found in https://github.com/melange-re/melange-for-react-devs/blob/main/src/discounts-lists/DiscountTests.re
 
 :::
 

@@ -495,7 +495,9 @@ the switch expression entirely.
 
 <b>3.</b> Add a new function `Discount.getHalfOff` that gives you a discount of
 half off the entire meal if there’s at least one burger that has one of every
-topping.
+topping. Add these new tests to `DiscountTests` and make sure they pass:
+
+<<< DiscountTests.re#half-off-tests
 
 ::: details Hint
 
@@ -511,7 +513,11 @@ Use [Js.Array.some](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-some)
 
 <b>4.</b> Update `Discount.getHalfOff` so that it returns a discount of one half
 off the entire meal if there’s at least one burger that has **at least** one of
-every topping. Also add a couple of tests for this function in `DiscountTests`.
+every topping. While you're at it, update the relevant tests in `DiscountTests`:
+
+<<< DiscountTests.re#new-half-off-tests
+
+Note the use of submodule `HalfOff` to group these two tests together.
 
 ::: details Hint
 
@@ -522,11 +528,6 @@ Use [when](https://reasonml.github.io/docs/en/pattern-matching#when) guard
 ::: details Solution
 
 <<< Discount.re#get-half-off
-
-See
-[DiscountTests.re](https://github.com/melange-re/melange-for-react-devs/blob/main/src/burger-discounts/DiscountTests.re)
-to see how the tests are implemented. Note the use of a submodule to group the
-`Discount.getHalfOff` tests together.
 
 :::
 
