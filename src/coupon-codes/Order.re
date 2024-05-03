@@ -5,14 +5,25 @@ module Td = [%styled.td {|
 |}];
 
 module OrderItem = {
-  [@mel.module "./order-item.module.css"]
-  external css: Js.t({..}) = "default";
+  module Css = {
+    let item = [%cx {|
+      border-top: 1px solid lightgray;
+    |}];
+
+    let emoji = [%cx {|
+      font-size: 2em;
+    |}];
+
+    let price = [%cx {|
+      text-align: right;
+    |}];
+  };
 
   [@react.component]
   let make = (~item: Item.t) =>
-    <tr className=css##item>
-      <Td className=css##emoji> {item |> Item.toEmoji |> React.string} </Td>
-      <Td className=css##price> {item |> Item.toPrice |> Format.currency} </Td>
+    <tr className=Css.item>
+      <Td className=Css.emoji> {item |> Item.toEmoji |> React.string} </Td>
+      <Td className=Css.price> {item |> Item.toPrice |> Format.currency} </Td>
     </tr>;
 };
 
@@ -70,6 +81,7 @@ let make = (~items: t) => {
     |> ListLabels.fold_left(~init=0., ~f=(acc, order) =>
          acc +. Item.toPrice(order)
        );
+  let total = subtotal -. Option.value(~default=0.0, discount);
 
   <table className=Css.order>
     <tbody>
@@ -115,7 +127,7 @@ let make = (~items: t) => {
       </tr>
       <tr className=Css.total>
         <Td> {React.string("Total")} </Td>
-        <Td> {subtotal |> Format.currency} </Td>
+        <Td> {total |> Format.currency} </Td>
       </tr>
     </tbody>
   </table>;
