@@ -1,5 +1,5 @@
 module Css = {
-  let promoRow = [%cx
+  let promo = [%cx
     {|
     border-top: 1px solid gray;
     text-align: right;
@@ -7,7 +7,7 @@ module Css = {
     |}
   ];
 
-  let promoInput = [%cx
+  let input = [%cx
     {|
     width: 8em;
     font-family: monospace;
@@ -15,7 +15,7 @@ module Css = {
     |}
   ];
 
-  let promoForm = [%cx
+  let form = [%cx
     {|
     display: flex;
     flex-direction: column;
@@ -25,9 +25,9 @@ module Css = {
     |}
   ];
 
-  let promoError = [%cx {|color: red;|}];
+  let error = [%cx {|color: red;|}];
 
-  let promoSuccess = [%cx {|color: green;|}];
+  let success = [%cx {|color: green;|}];
 };
 
 [@react.component]
@@ -35,11 +35,11 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
   let (discount, setDiscount) = RR.useStateValue(Some(0.0));
 
-  <tr className=Css.promoRow>
+  <tr className=Css.promo>
     <Td> {React.string("Promo code")} </Td>
     <Td>
       <form
-        className=Css.promoForm
+        className=Css.form
         onSubmit={evt => {
           evt |> React.Event.Form.preventDefault;
           let discount = Discount.applyDiscount(code, items);
@@ -47,7 +47,7 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
           discount |> Option.iter(onApply);
         }}>
         <input
-          className=Css.promoInput
+          className=Css.input
           value=code
           onChange={evt => {
             evt |> RR.getValueFromEvent |> setCode;
@@ -56,12 +56,12 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
         />
         {switch (discount) {
          | None =>
-           <div className=Css.promoError>
+           <div className=Css.error>
              {"Error processing promo code" |> RR.s}
            </div>
          | Some(0.0) => React.null
          | Some(discount) =>
-           <div className=Css.promoSuccess>
+           <div className=Css.success>
              {discount |> Float.neg |> Format.currency}
            </div>
          }}

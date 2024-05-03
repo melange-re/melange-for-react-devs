@@ -46,7 +46,6 @@ let make = (~items: t) => {
     |> ListLabels.fold_left(~init=0., ~f=(acc, order) =>
          acc +. Item.toPrice(order)
        );
-  let total = subtotal -. discount;
 
   <table className=Css.order>
     <tbody>
@@ -62,7 +61,7 @@ let make = (~items: t) => {
       <Promo items onApply=setDiscount />
       <tr className=Css.total>
         <Td> {React.string("Total")} </Td>
-        <Td> {total |> Format.currency} </Td>
+        <Td> {subtotal -. discount |> Format.currency} </Td>
       </tr>
     </tbody>
   </table>;

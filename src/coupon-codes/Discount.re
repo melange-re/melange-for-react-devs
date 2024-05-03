@@ -12,7 +12,7 @@ let getFreeBurgers = (items: list(Item.t)) => {
 
   switch (prices) {
   | []
-  | [_] => Error("You must buy at least 2 burgers to use this promo code")
+  | [_] => Error("Buy at least 2 burgers")
   | prices =>
     let result =
       prices
@@ -38,10 +38,7 @@ let getHalfOff = (items: list(Item.t)) => {
        );
 
   switch (meetsCondition) {
-  | false =>
-    Error(
-      "You must buy a burger with at least 1 of every topping to use this promo code",
-    )
+  | false => Error("Buy a burger with at least 1 of every topping")
   | true =>
     let total =
       items

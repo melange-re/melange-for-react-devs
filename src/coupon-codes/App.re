@@ -1,12 +1,3 @@
-let burger =
-  Item.Burger.{
-    lettuce: false,
-    tomatoes: false,
-    onions: 0,
-    cheese: 0,
-    bacon: 0,
-  };
-
 let datasets = {
   [
     (
@@ -21,13 +12,23 @@ let datasets = {
     ),
     (
       "5 burgers",
-      [
-        Burger({...burger, tomatoes: true}),
-        Burger({...burger, lettuce: true}),
-        Burger({...burger, bacon: 2}),
-        Burger({...burger, cheese: 3, onions: 9, tomatoes: true}),
-        Burger({...burger, onions: 2}),
-      ],
+      {
+        let burger =
+          Item.Burger.{
+            lettuce: false,
+            tomatoes: false,
+            onions: 0,
+            cheese: 0,
+            bacon: 0,
+          };
+        [
+          Burger({...burger, tomatoes: true}),
+          Burger({...burger, lettuce: true}),
+          Burger({...burger, bacon: 2}),
+          Burger({...burger, cheese: 3, onions: 9, tomatoes: true}),
+          Burger({...burger, onions: 2}),
+        ];
+      },
     ),
     (
       "1 burger with at least one of every topping",
@@ -47,7 +48,7 @@ let datasets = {
 };
 
 [@react.component]
-let make = () => {
+let make = () =>
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
     {datasets
@@ -63,4 +64,3 @@ let make = () => {
         })
      |> RR.list}
   </div>;
-};
