@@ -1,12 +1,13 @@
+let burger =
+  Item.Burger.{
+    lettuce: false,
+    tomatoes: false,
+    onions: 0,
+    cheese: 0,
+    bacon: 0,
+  };
+
 let datasets = {
-  let burger =
-    Item.Burger.{
-      lettuce: false,
-      tomatoes: false,
-      onions: 0,
-      cheese: 0,
-      bacon: 0,
-    };
   [
     (
       "No burgers",
@@ -47,30 +48,19 @@ let datasets = {
 
 [@react.component]
 let make = () => {
-  let (items, setItems) =
-    datasets
-    |> ListSafe.head
-    |> Option.map(snd)
-    |> Option.value(~default=[])
-    |> RR.useStateValue;
-
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
-    <select
-      onChange={evt => {
-        let selectedLabel = evt |> RR.getValueFromEvent;
-        datasets
-        |> List.find_opt(((label, _items)) => label == selectedLabel)
-        |> Option.iter(((_label, items)) => setItems(items));
-      }}>
-      {datasets
-       |> List.map(((label, _items)) =>
-            <option key={"option-" ++ label} value=label>
-              {RR.s(label)}
-            </option>
-          )
-       |> RR.list}
-    </select>
-    <Order items />
+    {datasets
+     |> List.map(((label, items)) => {
+          let slug =
+            label
+            |> Js.String.toLowerCase
+            |> Js.String.replaceByRe(~regexp=[%re "/ /g"], ~replacement="-");
+          <div key={"order-" ++ slug}>
+            <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
+            <Order items />
+          </div>;
+        })
+     |> RR.list}
   </div>;
 };
