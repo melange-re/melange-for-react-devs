@@ -42,7 +42,8 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
         className=Css.form
         onSubmit={evt => {
           evt |> React.Event.Form.preventDefault;
-          let discount = Discount.applyDiscount(code, items);
+          let discount =
+            Discount.applyDiscount(~code, ~items, ~date=Js.Date.make());
           setDiscount(discount);
           discount |> Option.iter(onApply);
         }}>
@@ -57,7 +58,7 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
         {switch (discount) {
          | None =>
            <div className=Css.error>
-             {"Error processing promo code" |> RR.s}
+             {RR.s("Error processing promo code")}
            </div>
          | Some(0.0) => React.null
          | Some(discount) =>
