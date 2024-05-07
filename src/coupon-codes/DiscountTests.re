@@ -17,7 +17,7 @@ module FreeBurger = {
            Sandwich(Ham),
            Sandwich(Turducken),
          ]),
-         Error("You must buy at least 2 burgers to use this promo code"),
+         Error("Buy at least 2 burgers"),
        )
   );
 
@@ -25,7 +25,7 @@ module FreeBurger = {
     expect
     |> deepEqual(
          Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
-         Error("You must buy at least 2 burgers to use this promo code"),
+         Error("Buy at least 2 burgers"),
        )
   );
 
@@ -105,9 +105,7 @@ module HalfOff = {
              bacon: 0,
            }),
          ]),
-         Error(
-           "You must buy a burger with at least 1 of every topping to use this promo code",
-         ),
+         Error("Buy a burger with at least 1 of every topping"),
        )
   );
 
@@ -128,4 +126,51 @@ module HalfOff = {
          Ok(15.675),
        )
   );
+};
+
+module ApplyDiscount = {
+  let items = [
+    Item.Burger({
+      lettuce: true,
+      onions: 1,
+      cheese: 1,
+      tomatoes: true,
+      bacon: 1,
+    }),
+    Burger({lettuce: false, onions: 0, cheese: 0, tomatoes: false, bacon: 0}),
+  ];
+
+  test({|"free" promo code works in May but not other months|}, () => {
+    for (month in 0 to 11) {
+      let date =
+        Js.Date.makeWithYMD(
+          ~year=2024.,
+          ~month=float_of_int(month),
+          ~date=10.,
+        );
+
+      expect
+      |> equal(
+           Discount.applyDiscount(~code="free", ~date, ~items),
+           month == 4 ? Some(15.0) : None,
+         );
+    }
+  });
+
+  test({|"half" promo code works on May 28 but not other days of May|}, () => {
+    for (dayOfMonth in 1 to 31) {
+      let date =
+        Js.Date.makeWithYMD(
+          ~year=2024.,
+          ~month=4.0,
+          ~date=float_of_int(dayOfMonth),
+        );
+
+      expect
+      |> equal(
+           Discount.applyDiscount(~code="half", ~date, ~items),
+           dayOfMonth == 28 ? Some(15.425) : None,
+         );
+    }
+  });
 };

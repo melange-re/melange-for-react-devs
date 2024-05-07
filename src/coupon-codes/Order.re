@@ -38,7 +38,7 @@ module Css = {
 };
 
 [@react.component]
-let make = (~items: t) => {
+let make = (~items: t, ~date: Js.Date.t) => {
   let (discount, setDiscount) = RR.useStateValue(0.0);
 
   let subtotal =
@@ -58,7 +58,7 @@ let make = (~items: t) => {
         <Td> {RR.s("Subtotal")} </Td>
         <Td> {subtotal |> RR.currency} </Td>
       </tr>
-      <Promo items onApply=setDiscount />
+      <Promo items date onApply=setDiscount />
       <tr className=Css.total>
         <Td> {RR.s("Total")} </Td>
         <Td> {subtotal -. discount |> RR.currency} </Td>

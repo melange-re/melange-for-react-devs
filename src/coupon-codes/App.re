@@ -47,20 +47,46 @@ let datasets = {
   ];
 };
 
+let getSlug = title =>
+  title
+  |> Js.String.toLowerCase
+  |> Js.String.replaceByRe(~regexp=[%re "/ /g"], ~replacement="-");
+
 [@react.component]
-let make = () =>
+let make = () => {
+  let (date, setDate) =
+    RR.useStateValue(Js.Date.fromString("2024-05-28T00:00"));
+
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
+    <input
+      type_="date"
+      value={date |> Js.Date.toISOString |> Js.String.substring(~end_=10)}
+      onChange={evt =>
+        evt
+        |> RR.getValueFromEvent
+        |> (s => s ++ "T00:00" |> Js.Date.fromString)
+        |> setDate
+      }
+    />
     {datasets
      |> List.map(((label, items)) => {
-          let slug =
-            label
-            |> Js.String.toLowerCase
-            |> Js.String.replaceByRe(~regexp=[%re "/ /g"], ~replacement="-");
+          let slug = label |> getSlug;
           <div key={"order-" ++ slug}>
             <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
-            <Order items />
+            <Order items date />
+          </div>;
+        })
+     |> RR.list}
+    <h2> {RR.s("Promo")} </h2>
+    {datasets
+     |> List.map(((label, items)) => {
+          let slug = "promo-" ++ getSlug(label);
+          <div key=slug>
+            <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
+            <Promo items date onApply={value => Js.log(value)} />
           </div>;
         })
      |> RR.list}
   </div>;
+};

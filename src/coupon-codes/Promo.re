@@ -31,7 +31,7 @@ module Css = {
 };
 
 [@react.component]
-let make = (~items: list(Item.t), ~onApply: float => unit) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
   let (discount, setDiscount) = RR.useStateValue(Some(0.0));
 
@@ -42,8 +42,7 @@ let make = (~items: list(Item.t), ~onApply: float => unit) => {
         className=Css.form
         onSubmit={evt => {
           evt |> React.Event.Form.preventDefault;
-          let discount =
-            Discount.applyDiscount(~code, ~items, ~date=Js.Date.make());
+          let discount = Discount.applyDiscount(~code, ~items, ~date);
           setDiscount(discount);
           discount |> Option.iter(onApply);
         }}>

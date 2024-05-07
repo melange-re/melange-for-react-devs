@@ -51,11 +51,11 @@ let getHalfOff = (items: list(Item.t)) => {
 
 let applyDiscount = (~code, ~items, ~date) => {
   let month = date |> Js.Date.getMonth;
-  let date = date |> Js.Date.getDate;
+  let dayOfMonth = date |> Js.Date.getDate;
 
   switch (code |> Js.String.toLowerCase) {
   | "free" when month == 4.0 => getFreeBurgers(items) |> Result.to_option
-  | "half" when month == 4.0 && date == 28.0 =>
+  | "half" when month == 4.0 && dayOfMonth == 28.0 =>
     getHalfOff(items) |> Result.to_option
   | _ => None
   };
