@@ -23,7 +23,7 @@ let getFreeBurgers = (items: list(Item.t)) => {
   };
 };
 
-// Buy 1+ burger with 1+ of every topping, get half off
+/** Buy 1+ burger with 1+ of every topping, get half off */
 let getHalfOff = (items: list(Item.t)) => {
   let meetsCondition =
     items
