@@ -63,9 +63,17 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
            <div className=Css.error> {RR.s("Invalid code")} </div>
          | Error(ExpiredCode) =>
            <div className=Css.error> {RR.s("Expired code")} </div>
-         | Error(BuyMore(message)) =>
+         | Error(BuyMore(code)) =>
            <div className=Css.error>
-             {"Buy at least " ++ message |> RR.s}
+             {"Buy "
+              ++ (
+                switch (code) {
+                | `one_burger => "at least 1 more burger"
+                | `two_burgers => "at least 2 burgers"
+                | `mega_burger => "a burger with every topping"
+                }
+              )
+              |> RR.s}
            </div>
          | Ok(0.0) => React.null
          | Ok(discount) =>

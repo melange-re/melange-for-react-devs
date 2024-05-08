@@ -17,7 +17,7 @@ module FreeBurger = {
            Sandwich(Ham),
            Sandwich(Turducken),
          ]),
-         Error(BuyMore("2 burgers")),
+         Error(BuyMore(`two_burgers)),
        )
   );
 
@@ -25,7 +25,7 @@ module FreeBurger = {
     expect
     |> deepEqual(
          Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
-         Error(BuyMore("1 burger")),
+         Error(BuyMore(`one_burger)),
        )
   );
 
@@ -105,7 +105,7 @@ module HalfOff = {
              bacon: 0,
            }),
          ]),
-         Error(BuyMore("burger that has every topping")),
+         Error(BuyMore(`mega_burger)),
        )
   );
 

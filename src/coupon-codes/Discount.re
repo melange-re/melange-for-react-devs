@@ -1,5 +1,5 @@
-type error =
-  | BuyMore(string)
+type error('code) =
+  | BuyMore('code)
   | InvalidCode
   | ExpiredCode;
 
@@ -16,8 +16,8 @@ let getFreeBurgers = (items: list(Item.t)) => {
        );
 
   switch (prices) {
-  | [] => Error(BuyMore("2 burgers"))
-  | [_] => Error(BuyMore("1 burger"))
+  | [] => Error(BuyMore(`two_burgers))
+  | [_] => Error(BuyMore(`one_burger))
   | prices =>
     let result =
       prices
@@ -43,7 +43,7 @@ let getHalfOff = (items: list(Item.t)) => {
        );
 
   switch (meetsCondition) {
-  | false => Error(BuyMore("burger that has every topping"))
+  | false => Error(BuyMore(`mega_burger))
   | true =>
     let total =
       items
