@@ -49,6 +49,7 @@ let getHalfOff = (items: list(Item.t)) => {
   };
 };
 
+// deprecated
 let applyDiscount = (~code, ~items, ~date) => {
   let month = date |> Js.Date.getMonth;
   let dayOfMonth = date |> Js.Date.getDate;
@@ -58,5 +59,18 @@ let applyDiscount = (~code, ~items, ~date) => {
   | "half" when month == 4.0 && dayOfMonth == 28.0 =>
     getHalfOff(items) |> Result.to_option
   | _ => None
+  };
+};
+
+let getDiscountFunction = (~code, ~date) => {
+  let month = date |> Js.Date.getMonth;
+  let dayOfMonth = date |> Js.Date.getDate;
+
+  switch (code |> Js.String.toLowerCase) {
+  | "free" when month == 4.0 => Ok(getFreeBurgers)
+  | "half" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
+  | "free"
+  | "half" => Error("Code expired")
+  | _ => Error("Invalid code")
   };
 };

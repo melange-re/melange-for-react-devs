@@ -59,16 +59,7 @@ let make = () => {
 
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
-    <input
-      type_="date"
-      value={date |> Js.Date.toISOString |> Js.String.substring(~end_=10)}
-      onChange={evt =>
-        evt
-        |> RR.getValueFromEvent
-        |> (s => s ++ "T00:00" |> Js.Date.fromString)
-        |> setDate
-      }
-    />
+    <DateInput date onChange=setDate />
     {datasets
      |> List.map(((label, items)) => {
           let slug = label |> getSlug;

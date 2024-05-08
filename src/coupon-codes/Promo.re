@@ -33,7 +33,7 @@ module Css = {
 [@react.component]
 let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
-  let (discount, setDiscount) = RR.useStateValue(Some(0.0));
+  let (discount, setDiscount) = RR.useStateValue(Ok(0.0));
 
   <tr className=Css.promo>
     <Td> {RR.s("Promo code")} </Td>
@@ -42,25 +42,26 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
         className=Css.form
         onSubmit={evt => {
           evt |> React.Event.Form.preventDefault;
-          let discount = Discount.applyDiscount(~code, ~items, ~date);
-          setDiscount(discount);
-          discount |> Option.iter(onApply);
+          switch (Discount.getDiscountFunction(~code, ~date)) {
+          | Error(_) as err => setDiscount(err)
+          | Ok(discountFunc) =>
+            let discount = discountFunc(items);
+            setDiscount(discount);
+            discount |> Result.iter(onApply);
+          };
         }}>
         <input
           className=Css.input
           value=code
           onChange={evt => {
             evt |> RR.getValueFromEvent |> setCode;
-            setDiscount(Some(0.0));
+            setDiscount(Ok(0.0));
           }}
         />
         {switch (discount) {
-         | None =>
-           <div className=Css.error>
-             {RR.s("Error processing promo code")}
-           </div>
-         | Some(0.0) => React.null
-         | Some(discount) =>
+         | Error(message) => <div className=Css.error> {RR.s(message)} </div>
+         | Ok(0.0) => React.null
+         | Ok(discount) =>
            <div className=Css.success>
              {discount |> Float.neg |> RR.currency}
            </div>
