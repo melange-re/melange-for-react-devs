@@ -59,7 +59,14 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
           }}
         />
         {switch (discount) {
-         | Error(message) => <div className=Css.error> {RR.s(message)} </div>
+         | Error(Discount.InvalidCode) =>
+           <div className=Css.error> {RR.s("Invalid code")} </div>
+         | Error(ExpiredCode) =>
+           <div className=Css.error> {RR.s("Expired code")} </div>
+         | Error(BuyMore(message)) =>
+           <div className=Css.error>
+             {"Buy at least " ++ message |> RR.s}
+           </div>
          | Ok(0.0) => React.null
          | Ok(discount) =>
            <div className=Css.success>

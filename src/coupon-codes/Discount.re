@@ -1,3 +1,8 @@
+type error =
+  | BuyMore(string)
+  | InvalidCode
+  | ExpiredCode;
+
 /** Buy n burgers, get n/2 burgers free */
 let getFreeBurgers = (items: list(Item.t)) => {
   let prices =
@@ -11,8 +16,8 @@ let getFreeBurgers = (items: list(Item.t)) => {
        );
 
   switch (prices) {
-  | []
-  | [_] => Error("Buy at least 2 burgers")
+  | [] => Error(BuyMore("2 burgers"))
+  | [_] => Error(BuyMore("1 burger"))
   | prices =>
     let result =
       prices
@@ -38,7 +43,7 @@ let getHalfOff = (items: list(Item.t)) => {
        );
 
   switch (meetsCondition) {
-  | false => Error("Buy a burger with at least 1 of every topping")
+  | false => Error(BuyMore("burger that has every topping"))
   | true =>
     let total =
       items
@@ -46,19 +51,6 @@ let getHalfOff = (items: list(Item.t)) => {
            total +. Item.toPrice(item)
          );
     Ok(total /. 2.0);
-  };
-};
-
-// deprecated
-let applyDiscount = (~code, ~items, ~date) => {
-  let month = date |> Js.Date.getMonth;
-  let dayOfMonth = date |> Js.Date.getDate;
-
-  switch (code |> Js.String.toLowerCase) {
-  | "free" when month == 4.0 => getFreeBurgers(items) |> Result.to_option
-  | "half" when month == 4.0 && dayOfMonth == 28.0 =>
-    getHalfOff(items) |> Result.to_option
-  | _ => None
   };
 };
 
@@ -70,7 +62,7 @@ let getDiscountFunction = (~code, ~date) => {
   | "free" when month == 4.0 => Ok(getFreeBurgers)
   | "half" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
   | "free"
-  | "half" => Error("Code expired")
-  | _ => Error("Invalid code")
+  | "half" => Error(ExpiredCode)
+  | _ => Error(InvalidCode)
   };
 };

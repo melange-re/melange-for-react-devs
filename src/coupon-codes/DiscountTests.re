@@ -17,7 +17,7 @@ module FreeBurger = {
            Sandwich(Ham),
            Sandwich(Turducken),
          ]),
-         Error("Buy at least 2 burgers"),
+         Error(BuyMore("2 burgers")),
        )
   );
 
@@ -25,7 +25,7 @@ module FreeBurger = {
     expect
     |> deepEqual(
          Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
-         Error("Buy at least 2 burgers"),
+         Error(BuyMore("1 burger")),
        )
   );
 
@@ -105,7 +105,7 @@ module HalfOff = {
              bacon: 0,
            }),
          ]),
-         Error("Buy a burger with at least 1 of every topping"),
+         Error(BuyMore("burger that has every topping")),
        )
   );
 
@@ -128,18 +128,7 @@ module HalfOff = {
   );
 };
 
-module ApplyDiscount = {
-  let items = [
-    Item.Burger({
-      lettuce: true,
-      onions: 1,
-      cheese: 1,
-      tomatoes: true,
-      bacon: 1,
-    }),
-    Burger({lettuce: false, onions: 0, cheese: 0, tomatoes: false, bacon: 0}),
-  ];
-
+module GetDiscount = {
   test({|"free" promo code works in May but not other months|}, () => {
     for (month in 0 to 11) {
       let date =
@@ -150,9 +139,9 @@ module ApplyDiscount = {
         );
 
       expect
-      |> equal(
-           Discount.applyDiscount(~code="free", ~date, ~items),
-           month == 4 ? Some(15.0) : None,
+      |> deepEqual(
+           Discount.getDiscountFunction(~code="free", ~date),
+           month == 4 ? Ok(Discount.getFreeBurgers) : Error(ExpiredCode),
          );
     }
   });
@@ -167,9 +156,9 @@ module ApplyDiscount = {
         );
 
       expect
-      |> equal(
-           Discount.applyDiscount(~code="half", ~date, ~items),
-           dayOfMonth == 28 ? Some(15.425) : None,
+      |> deepEqual(
+           Discount.getDiscountFunction(~code="half", ~date),
+           dayOfMonth == 28 ? Ok(Discount.getHalfOff) : Error(ExpiredCode),
          );
     }
   });
