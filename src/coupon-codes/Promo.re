@@ -28,6 +28,9 @@ module Css = {
   let error = [%cx {|color: red;|}];
 
   let success = [%cx {|color: green;|}];
+
+  let buyMore = [%cx {|color: purple|}];
+  let buyWhat = [%cx {|text-decoration: underline;|}];
 };
 
 [@react.component]
@@ -63,17 +66,16 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
            <div className=Css.error> {RR.s("Invalid code")} </div>
          | Error(ExpiredCode) =>
            <div className=Css.error> {RR.s("Expired code")} </div>
-         | Error(BuyMore(code)) =>
-           <div className=Css.error>
-             {"Buy "
-              ++ (
+         | Error(Buy(code)) =>
+           <div className=Css.buyMore>
+             {let buyWhat =
                 switch (code) {
                 | `one_burger => "at least 1 more burger"
                 | `two_burgers => "at least 2 burgers"
                 | `mega_burger => "a burger with every topping"
-                }
-              )
-              |> RR.s}
+                };
+
+              {j|To use this promo, buy $buyWhat.|j} |> RR.s}
            </div>
          | Ok(0.0) => React.null
          | Ok(discount) =>
