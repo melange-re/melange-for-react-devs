@@ -1,5 +1,5 @@
 Sandwich tests
-  $ node ./output/src/discounts-lists/SandwichTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/promo-codes/SandwichTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: Item.Sandwich.toEmoji
   ok 1 - Item.Sandwich.toEmoji
@@ -23,7 +23,7 @@ Sandwich tests
   # todo 0
 
 Burger tests
-  $ node ./output/src/discounts-lists/BurgerTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/promo-codes/BurgerTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: A fully-loaded burger
   ok 1 - A fully-loaded burger
@@ -55,7 +55,7 @@ Burger tests
   # todo 0
 
 Discount tests
-  $ node ./output/src/discounts-lists/DiscountTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/promo-codes/DiscountTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: 0 burgers, no discount
   ok 1 - 0 burgers, no discount
@@ -89,10 +89,14 @@ Discount tests
   ok 8 - One burger has 1+ of every topping, return Some(15.675)
     ---
     ...
-  1..8
-  # tests 8
+  # Subtest: FREE promo code works in May but not other months
+  ok 9 - FREE promo code works in May but not other months
+    ---
+    ...
+  1..9
+  # tests 9
   # suites 0
-  # pass 8
+  # pass 9
   # fail 0
   # cancelled 0
   # skipped 0

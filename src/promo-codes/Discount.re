@@ -48,3 +48,14 @@ let getHalfOff = (items: list(Item.t)) => {
     Some(total /. 2.0);
   };
 };
+
+let getDiscountFunction = (code, date) => {
+  let month = date |> Js.Date.getMonth;
+
+  switch (code |> Js.String.toUpperCase) {
+  | "FREE" when month == 4.0 => Ok(getFreeBurgers)
+  | "FREE" => Error("Expired code")
+  | "HALF" => Ok(getHalfOff)
+  | _ => Error("Invalid code")
+  };
+};

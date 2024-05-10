@@ -1,14 +1,14 @@
 # Promo Codes
 
 As International Burger Day looms ever closer, Madame Jellobutter is eager to
-start her burger-related promotions. She passed out flyers at a recent music
-festival and she even bought ads on local billboards (she's very old school when
-it comes to advertising). Depending on the ad, potential customers will either
-see the promo code FREE, which corresponds to the "buy n burgers, get n/2
-burgers free" discount, or HALF, which corresponds to the "buy a burger with
-everything on it and get half off the entire order" discount.
+start her burger-related promotions. She bought ads on local billboards and she
+even put on a giant burger costume to pass flyers at a local music festival[^1].
+Depending on the ad, potential customers will either see the promo code FREE,
+which corresponds to the "buy n burgers, get n/2 burgers free" discount, or
+HALF, which corresponds to the "buy a burger with everything on it and get half
+off the entire order" discount.
 
-## `Discount.getDiscountFunction` function
+## `getDiscountFunction` function
 
 Let's start by adding a function that maps a given promo code to its
 corresponding discount function:
@@ -49,6 +49,76 @@ because both the `Ok` and `Error` constructors of the
 [Stdlib.result](https://melange.re/v3.0.0/api/re/melange/Stdlib/#type-result)
 type are always in scope (since `Stdlib` is opened by default).
 
+## `getDiscountFunction` test
+
+We should add a test for `getDiscountFunction` that checks its temporal
+behavior:
+
+<<< DiscountTests.re#get-discount-module
+
+This is the first for loop we've seen so far! It loops over every month of the
+year and checks that `getDiscountFunction` returns `Ok(Discount.getFreeBurgers)`
+for May and `Error("Expired code")` for all other months.
+
+It's actually fairly rare to see for loops in most OCaml code, because iterating
+over lists, arrays, and other sequential data structures is using done via
+functions. When you need to iterate over a sequence of numbers, as in this
+example, it might make sense.
+
+## Runtime representation of `result`
+
+Run the tests (`npm run test`) and you'll see this error:
+
+```diff
++      Values have same structure but are not reference-equal:
++
++      {
++        TAG: 1,
++        _0: 'Expired code'
++      }
++
++    code: 'ERR_ASSERTION'
++    name: 'AssertionError'
++    expected:
++      TAG: 1
++      _0: 'Expired code'
++    actual:
++      TAG: 1
++      _0: 'Expired code'
+```
+
+The `result` type is a variant type with two constructors `Ok` and `Error`, and
+both of these constructors have an argument. This means that both of them are
+represented as objects in the JavaScript runtime:
+
+| OCaml source | JavaScript runtime |
+|--------------|--------------------|
+| `Ok(Discount.getFreeBurgers)` | `{TAG: 0, _0: Discount.getFreeBurgers}` |
+| `Error("Expired code")` | `{TAG: 1, _0: "Expired code"}` |
+
+To compare objects, we must rely on
+[Fest.deepEqual](https://ahrefs.github.io/melange-fest/reason/Fest/index.html#val-deepEqual)
+instead of
+[Fest.equal](https://ahrefs.github.io/melange-fest/reason/Fest/index.html#val-equal):
+
+```reason
+expect
+|> equal( // [!code --]
+|> deepEqual( // [!code ++]
+      Discount.getDiscountFunction("FREE", date),
+      month == 4 ? Ok(Discount.getFreeBurgers) : Error("Expired code"),
+    );
+```
+
+## Refactor discount functions
+
+Update `Discount.getFreeBurgers` to use result instead of option:
+
+<<< Discount.re#get-free-burgers
+
+Likewise `Discount.getHalfOff`:
+
+<<< Discount.re#get-half-off
 
 ---
 
@@ -76,4 +146,5 @@ and [demo](https://react-book.melange.re/demo/src/promo-codes/) for this chapter
 
 -----
 
-footnotes
+[^1]: It was quite a sight to see a giant burger running around a music
+    festival, being chased by juggalos!
