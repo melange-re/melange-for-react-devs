@@ -89,14 +89,18 @@ Discount tests
   ok 8 - One burger has 1+ of every topping, return Some(15.675)
     ---
     ...
-  # Subtest: FREE promo code works in May but not other months
-  ok 9 - FREE promo code works in May but not other months
+  # Subtest: Invalid promo code return Error
+  ok 9 - Invalid promo code return Error
     ---
     ...
-  1..9
-  # tests 9
+  # Subtest: FREE promo code works in May but not other months
+  ok 10 - FREE promo code works in May but not other months
+    ---
+    ...
+  1..10
+  # tests 10
   # suites 0
-  # pass 9
+  # pass 10
   # fail 0
   # cancelled 0
   # skipped 0

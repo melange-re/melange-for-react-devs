@@ -129,6 +129,18 @@ module HalfOff = {
 };
 
 module GetDiscount = {
+  test("Invalid promo code return Error", () => {
+    let date = Js.Date.make();
+    ["", "FREEDOM", "UNICORN", "POO"]
+    |> List.iter(code =>
+         expect
+         |> deepEqual(
+              Discount.getDiscountFunction(code, date),
+              Error("Invalid code"),
+            )
+       );
+  });
+
   test("FREE promo code works in May but not other months", () => {
     for (month in 0 to 11) {
       let date =
