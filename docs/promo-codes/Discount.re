@@ -70,42 +70,49 @@ let getFreeBurgers = (items: list(Item.t)) => {
 };
 // #endregion get-free-burgers
 
-// #region get-half-off
-let getHalfOff = (items: list(Item.t)) => {
-  let meetsCondition =
-    items
-    |> List.exists(
-         fun
-         | Item.Burger({lettuce: true, tomatoes: true, onions, cheese, bacon})
-             when onions > 0 && cheese > 0 && bacon > 0 =>
-           true
-         | Burger(_)
-         | Sandwich(_)
-         | Hotdog => false,
-       );
+let getHalfOff = (_items: list(Item.t)) => Ok(0.0);
 
-  switch (meetsCondition) {
-  | false => Error("To enjoy this promo, buy a burger that has every topping")
-  | true =>
-    let total =
-      items
-      |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
-           total +. Item.toPrice(item)
-         );
-    Ok(total /. 2.0);
-  };
-};
-// #endregion get-half-off
+// #region error-type
+type error =
+  | ExpiredCode
+  | InvalidCode;
+// #endregion error-type
 
+// #region use-error-type
 let getDiscountFunction = (code, date) => {
   let month = date |> Js.Date.getMonth;
-  let dayOfMonth = date |> Js.Date.getDate;
 
   switch (code |> Js.String.toUpperCase) {
   | "FREE" when month == 4.0 => Ok(getFreeBurgers)
-  | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
-  | "FREE"
-  | "HALF" => Error("Code expired")
-  | _ => Error("Invalid code")
+  | "FREE" => Error(ExpiredCode)
+  | "HALF" => Ok(getHalfOff)
+  | _ => Error(InvalidCode)
   };
 };
+// #endregion use-error-type
+
+// #region get-free-burgers-poly
+let getFreeBurgers = (items: list(Item.t)) => {
+  let prices =
+    items
+    |> List.filter_map(item =>
+         switch (item) {
+         | Item.Burger(burger) => Some(Item.Burger.toPrice(burger))
+         | Sandwich(_)
+         | Hotdog => None
+         }
+       );
+
+  switch (prices) {
+  | [] => Error(`NeedTwoBurgers)
+  | [_] => Error(`NeedOneBurger)
+  | prices =>
+    let result =
+      prices
+      |> List.sort((x, y) => - Float.compare(x, y))
+      |> List.filteri((index, _) => index mod 2 == 1)
+      |> List.fold_left((+.), 0.0);
+    Ok(result);
+  };
+};
+// #endregion get-free-burgers-poly

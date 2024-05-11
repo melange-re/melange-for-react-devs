@@ -75,7 +75,7 @@ Here we iterate over a few invalid promo codes using `List.map` and check that
 
 ## Native syntax in error messages
 
-But there is a big problem with this code, which is that it won't compile:
+But this code won't compile:
 
 ```text
 File "docs/order-confirmation/DiscountTests.re", lines 7-14, characters 4-9:
@@ -100,6 +100,9 @@ is how the type notations map between native and Reason syntaxes:
 | `unit list` | `list(unit)` |
 | `float option` | `option(float)` |
 | `int option list` | `list(option(int))` |
+
+Basically, when you see nested types in error messages, reverse the order of the
+types and add parentheses.
 
 ## `List.iter` function
 
@@ -186,15 +189,80 @@ This is the first for loop we've seen so far! This is one of the few scenarios
 in OCaml where a for loop makes sense: iterating over a sequence of numbers and
 calling a side-effect function on each number.
 
+## Add `error` type
+
+Right now, `Discount.getDiscountFunction` returns two types of errors:
+`Error("Expired code")` and `Error("Invalid code")`, which have the same type.
+But our code will be less brittle if these two different kinds of errors also
+have different types. Add a new type `error` to `Discount`:
+
+<<< Discount.re#error-type
+
+After which you can update `Discount.getDiscountFunction` to use the new type
+inside the `Error` constructor:
+
+<<< Discount.re#use-error-type{6,8}
+
 ## Refactor discount functions
 
 Update `Discount.getFreeBurgers` to use result instead of option:
 
-<<< Discount.re#get-free-burgers
+<<< Discount.re#get-free-burgers{13-14,21}
 
-Likewise `Discount.getHalfOff`:
+This is a straightforward refactor, but to fix your tests, you would need to
+reproduce the error messages verbatim in `DiscountTests`, e.g.:
 
-<<< Discount.re#get-half-off
+```reason
+test("0 burgers, no discount", () =>
+  expect
+  |> equal(
+        Discount.getFreeBurgers([
+          Hotdog,
+          Sandwich(Ham),
+          Sandwich(Turducken),
+        ]),
+        Error("To enjoy this promo, buy at least 2 burgers"),
+      )
+);
+```
+
+You would need to change your tests every time the error messages change, but
+that's a presentation issue, not directly related to a function whose primary
+job is to calculate and return a number.
+
+## Polymorphic variants
+
+Instead of using a string as the argument for the `Error` constructor, you can
+instead use a *polymorphic variant*:
+
+<<< Discount.re#get-free-burgers-poly{13-14}
+
+Polymorphic variants are similar to the variants you've seen before, the main
+difference being that you don't need to declare the constructors beforehand.
+Instead, you can just freely use polymorphic variant constructors inside a
+function, and the type of the function is inferred from the usage. For example,
+the type of `Discount.getFreeBurgers` is now
+
+```reason
+list(Item.t) => result(float, [> `NeedOneBurger | `NeedTwoBurgers ])
+```
+
+::: tip
+
+The name of a polymorphic variant constructor must start with the backtick (`` `
+``) character.
+
+:::
+
+Of course, we could have used normal variants here, but we would've needed to
+define a new type that contains one constructor for every error message we'd
+need, something like
+
+```reason
+type discountError =
+  | NeedOneBurger
+  | NeedTwoBurgers;
+```
 
 ---
 

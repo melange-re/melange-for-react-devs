@@ -1,5 +1,21 @@
 open Fest;
 
+module Discount = {
+  type error =
+    | ExpiredCode
+    | InvalidCode;
+
+  let getFreeBurgers = (_items: list(Item.t)) => Some(0.0);
+
+  let getHalfOff = (_items: list(Item.t)) => Some(0.0);
+
+  let getDiscountFunction = (code, _date) =>
+    switch (code) {
+    | "" => Ok(getFreeBurgers)
+    | _ => Error("")
+    };
+};
+
 test("Invalid promo code return Error", () => {
   let date = Js.Date.make();
   // #region ignore-list
