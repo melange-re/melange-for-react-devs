@@ -36,18 +36,27 @@ The function now takes a `date` argument and returns `None` if the promo code is
 FREE and the given date isn't within the month of May. This logic is technically
 correct, but there's a slight problem: it leaves no way to inform the user of
 the reason for the promo code not working. Whether the user misspelled the promo
-code or entered it on June 1, the only feedback they'd get is that it didn't
+code or entered it on June 1, the only feedback they'd get is that it doesn't
 work, but they wouldn't know why. We can remedy this by returning `result`
 instead of `option`:
 
 <<< Discount.re#get-discount-return-result{6,8}
 
-Basically, we replaced `Some` with `Ok` and `None` with `Error`. But when we
-return the `Error` constructor, we also supply a specific error message that can
-be shown in the UI. We didn't need to type annotate anything in this function
-because both the `Ok` and `Error` constructors of the
-[Stdlib.result](https://melange.re/v3.0.0/api/re/melange/Stdlib/#type-result)
-type are always in scope (since `Stdlib` is opened by default).
+## Difference between option and result
+
+The `Ok` constructor of `result` is equivalent to the `Some` constructor of
+`option`. The `Error` constructor of result differs from the `None` constructor
+of `option` by having an argument. `None` can only signal that an error
+happened, but `Error` can signal **what** went wrong.
+
+::: tip
+
+We don't need to type annotate anything when using the `Ok` and `Error`
+constructors because they are always in scope, due to the [result
+type](https://melange.re/v3.0.0/api/re/melange/Stdlib/#type-result) being
+defined in `Stdlib` (which is open by default).
+
+:::
 
 ## Test for invalid promo codes
 
@@ -102,7 +111,7 @@ is how the type notations map between native and Reason syntaxes:
 | `int option list` | `list(option(int))` |
 
 Basically, when you see nested types in error messages, reverse the order of the
-types and add parentheses.
+types and add parentheses to translate it to the syntax you're familiar with.
 
 ## `List.iter` function
 
@@ -203,6 +212,9 @@ inside the `Error` constructor:
 
 <<< Discount.re#use-error-type{6,8}
 
+Returning different error constructors encased by `Error` is the safe
+alternative to raising different exceptions.
+
 ## Refactor discount functions
 
 Update `Discount.getFreeBurgers` to use result instead of option:
@@ -254,15 +266,76 @@ The name of a polymorphic variant constructor must start with the backtick (`` `
 
 :::
 
-Of course, we could have used normal variants here, but we would've needed to
-define a new type that contains one constructor for every error message we'd
-need, something like
+Refactor `Discount.getHalfOff` to return `result` as well:
 
 ```reason
-type discountError =
-  | NeedOneBurger
-  | NeedTwoBurgers;
+switch (meetsCondition) {
+| false => None // [!code --]
+| false => Error(`NeedMegaBurger) // [!code ++]
+| true =>
+  let total =
+    items
+    |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
+          total +. Item.toPrice(item)
+        );
+  Some(total /. 2.0); // [!code --]
+  Ok(total /. 2.0); // [!code ++]
 ```
+
+The type of `Discount.getHalfOff` is now
+
+```reason
+list(Item.t) => result(float, [> `NeedMegaBurger ])
+```
+
+## Fixing the tests
+
+Fixing the tests is mostly a mechanical exercise of:
+
+- Replace `Some` with `Ok`
+- Replace `None` with `Error(something)`
+- Replace `equal` with `deepEqual`
+
+However, there is a little wrinkle. What if you misspell one of the polymorphic
+variant constructors?
+
+```reason{5}
+test("1 burger, no discount", () =>
+  expect
+  |> deepEqual(
+       Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
+       Error(`NeedOneBurgers),
+     );
+```
+
+The constructor should be called `` `NeedOneBurger`` but here it's been misspelled
+as `` `NeedOneBurgers``, yet it still compiles! This is due to the open-ended
+nature of polymorphic variants. The compiler knows that
+`Discount.getFreeBurgers` won't ever return ``Error(`NeedOneBurgers)``, but
+because the constructors for polymorphic variants don't need to be defined
+up-front, it has no way to know that the function will **never** return
+``Error(`NeedOneBurgers)`` in the future.
+
+## Runtime representation of polymorphic variants
+
+If you run the test with the misspelling, you'll get this error (shortened for
+clarity):
+
+```diff
++    expected:
++      TAG: 1
++      _0: 'NeedOneBurgers'
++    actual:
++      TAG: 1
++      _0: 'NeedOneBurger'
+```
+
+You can see that polymorphic variant constructors without arguments are just
+strings in the JS runtime, which will come in handy for [JS interop](/todo).
+
+Just in case you're curious, the runtime representation for polymorphic variant
+constructors with arguments is an object with `NAME` and `VAL` fields. For
+example, `foo(42)` becomes `{"NAME": "foo", "VAL": 42}`.
 
 ---
 

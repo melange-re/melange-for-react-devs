@@ -11,15 +11,15 @@ let getFreeBurgers = (items: list(Item.t)) => {
        );
 
   switch (prices) {
-  | []
-  | [_] => None
+  | [] => Error(`NeedTwoBurgers)
+  | [_] => Error(`NeedOneBurger)
   | prices =>
     let result =
       prices
       |> List.sort((x, y) => - Float.compare(x, y))
       |> List.filteri((index, _) => index mod 2 == 1)
       |> List.fold_left((+.), 0.0);
-    Some(result);
+    Ok(result);
   };
 };
 
@@ -38,14 +38,14 @@ let getHalfOff = (items: list(Item.t)) => {
        );
 
   switch (meetsCondition) {
-  | false => None
+  | false => Error(`NeedMegaBurger)
   | true =>
     let total =
       items
       |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
            total +. Item.toPrice(item)
          );
-    Some(total /. 2.0);
+    Ok(total /. 2.0);
   };
 };
 

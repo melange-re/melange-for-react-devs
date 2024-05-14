@@ -11,53 +11,53 @@ module FreeBurger = {
 
   test("0 burgers, no discount", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getFreeBurgers([
            Hotdog,
            Sandwich(Ham),
            Sandwich(Turducken),
          ]),
-         None,
+         Error(`NeedTwoBurgers),
        )
   );
 
   test("1 burger, no discount", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
-         None,
+         Error(`NeedOneBurger),
        )
   );
 
   test("2 burgers of same price, discount", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getFreeBurgers([
            Hotdog,
            Burger(burger),
            Sandwich(Ham),
            Burger(burger),
          ]),
-         Some(15.),
+         Ok(15.),
        )
   );
 
   test("2 burgers of different price, discount of cheaper one", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getFreeBurgers([
            Hotdog,
            Burger({...burger, tomatoes: true}), // 15.05
            Sandwich(Ham),
            Burger({...burger, bacon: 2}) // 16.00
          ]),
-         Some(15.05),
+         Ok(15.05),
        )
   );
 
-  test("3 burgers of different price, return Some(15.15)", () =>
+  test("3 burgers of different price, return Ok(15.15)", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
@@ -65,13 +65,13 @@ module FreeBurger = {
            Sandwich(Ham),
            Burger({...burger, bacon: 2}) // 16.00
          ]),
-         Some(15.15),
+         Ok(15.15),
        )
   );
 
-  test("7 burgers, return Some(46.75)", () =>
+  test("7 burgers, return Ok(46.75)", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
@@ -85,15 +85,15 @@ module FreeBurger = {
            Sandwich(Portabello),
            Burger({...burger, tomatoes: true}) // 15.05
          ]),
-         Some(46.75),
+         Ok(46.75),
        )
   );
 };
 
 module HalfOff = {
-  test("No burger has 1+ of every topping, return None", () =>
+  test("No burger has 1+ of every topping, return Error(`NeedMegaBurger)", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getHalfOff([
            Hotdog,
            Sandwich(Portabello),
@@ -105,13 +105,13 @@ module HalfOff = {
              bacon: 0,
            }),
          ]),
-         None,
+         Error(`NeedMegaBurger),
        )
   );
 
-  test("One burger has 1+ of every topping, return Some(15.675)", () =>
+  test("One burger has 1+ of every topping, return Ok(15.675)", () =>
     expect
-    |> equal(
+    |> deepEqual(
          Discount.getHalfOff([
            Hotdog,
            Sandwich(Portabello),
@@ -123,7 +123,7 @@ module HalfOff = {
              bacon: 2,
            }),
          ]),
-         Some(15.675),
+         Ok(15.675),
        )
   );
 };

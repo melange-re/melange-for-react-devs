@@ -73,20 +73,20 @@ Discount tests
   ok 4 - 2 burgers of different price, discount of cheaper one
     ---
     ...
-  # Subtest: 3 burgers of different price, return Some(15.15)
-  ok 5 - 3 burgers of different price, return Some(15.15)
+  # Subtest: 3 burgers of different price, return Ok(15.15)
+  ok 5 - 3 burgers of different price, return Ok(15.15)
     ---
     ...
-  # Subtest: 7 burgers, return Some(46.75)
-  ok 6 - 7 burgers, return Some(46.75)
+  # Subtest: 7 burgers, return Ok(46.75)
+  ok 6 - 7 burgers, return Ok(46.75)
     ---
     ...
-  # Subtest: No burger has 1+ of every topping, return None
-  ok 7 - No burger has 1+ of every topping, return None
+  # Subtest: No burger has 1+ of every topping, return Error(`NeedMegaBurger)
+  ok 7 - No burger has 1+ of every topping, return Error(`NeedMegaBurger)
     ---
     ...
-  # Subtest: One burger has 1+ of every topping, return Some(15.675)
-  ok 8 - One burger has 1+ of every topping, return Some(15.675)
+  # Subtest: One burger has 1+ of every topping, return Ok(15.675)
+  ok 8 - One burger has 1+ of every topping, return Ok(15.675)
     ---
     ...
   # Subtest: Invalid promo code return Error
