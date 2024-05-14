@@ -16,8 +16,8 @@ let getFreeBurgers = (items: list(Item.t)) => {
        );
 
   switch (prices) {
-  | [] => Error(Buy(`two_burgers))
-  | [_] => Error(Buy(`one_burger))
+  | [] => Error(Buy(`TwoBurgers))
+  | [_] => Error(Buy(`OneBurger))
   | prices =>
     let result =
       prices
@@ -43,7 +43,7 @@ let getHalfOff = (items: list(Item.t)) => {
        );
 
   switch (meetsCondition) {
-  | false => Error(Buy(`mega_burger))
+  | false => Error(Buy(`MegaBurger))
   | true =>
     let total =
       items

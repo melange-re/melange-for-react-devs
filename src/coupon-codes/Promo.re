@@ -33,6 +33,13 @@ module Css = {
   let buyWhat = [%cx {|text-decoration: underline;|}];
 };
 
+let applyDiscount = (~code, ~date, ~items) => {
+  switch (Discount.getDiscountFunction(~code, ~date)) {
+  | Error(_) as err => err
+  | Ok(discountFunc) => discountFunc(items)
+  };
+};
+
 [@react.component]
 let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
@@ -45,13 +52,9 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
         className=Css.form
         onSubmit={evt => {
           evt |> React.Event.Form.preventDefault;
-          switch (Discount.getDiscountFunction(~code, ~date)) {
-          | Error(_) as err => setDiscount(err)
-          | Ok(discountFunc) =>
-            let discount = discountFunc(items);
-            setDiscount(discount);
-            discount |> Result.iter(onApply);
-          };
+          let discount = applyDiscount(~code, ~date, ~items);
+          setDiscount(discount);
+          discount |> Result.iter(onApply);
         }}>
         <input
           className=Css.input
@@ -70,9 +73,9 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
            <div className=Css.buyMore>
              {let buyWhat =
                 switch (code) {
-                | `one_burger => "at least 1 more burger"
-                | `two_burgers => "at least 2 burgers"
-                | `mega_burger => "a burger with every topping"
+                | `OneBurger => "at least 1 more burger"
+                | `TwoBurgers => "at least 2 burgers"
+                | `MegaBurger => "a burger with every topping"
                 };
 
               {j|To use this promo, buy $buyWhat.|j} |> RR.s}
