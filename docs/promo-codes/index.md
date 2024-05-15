@@ -10,8 +10,8 @@ off the entire order" discount.
 
 ## `getDiscountFunction` function
 
-Let's start by adding a function that maps a given promo code to its
-corresponding discount function:
+Add a new function that maps a given promo code to its corresponding discount
+function:
 
 <<< Discount.re#simple-get-discount
 
@@ -33,21 +33,22 @@ month of May, so you change `Discount.getDiscountFunction` accordingly:
 ## `result` type
 
 The function now takes a `date` argument and returns `None` if the promo code is
-FREE and the given date isn't within the month of May. This logic is technically
-correct, but there's a slight problem: it leaves no way to inform the user of
-the reason for the promo code not working. Whether the user misspelled the promo
-code or entered it on June 1, the only feedback they'd get is that it doesn't
-work, but they wouldn't know why. We can remedy this by returning `result`
-instead of `option`:
+FREE and the given date isn't within the month of May. This logic is correct,
+but there's still a flaw: when an error occurs, there's no way to inform the
+user of the reason for error. Whether the user misspells the promo code or
+enters it on June 1, the only feedback they'd get is that it doesn't work, but
+they wouldn't know why. We can remedy this by returning `result` instead of
+`option`:
 
 <<< Discount.re#get-discount-return-result{6,8}
 
-## Difference between option and result
+## `option` vs `result`
 
-The `Ok` constructor of `result` is equivalent to the `Some` constructor of
-`option`. The `Error` constructor of result differs from the `None` constructor
-of `option` by having an argument. `None` can only signal that an error
-happened, but `Error` can signal **what** went wrong.
+Other than the name, the `Ok` constructor of `result` is semantically equivalent
+to the `Some` constructor of `option`. So the main difference is that the
+`Error` constructor of `result` takes an argument, while the `None` constructor
+of `option` cannot take an argument. In short, `None` can only signal that
+there's an error, but `Error` can signal **what the error is**.
 
 ::: tip
 
@@ -60,7 +61,7 @@ defined in `Stdlib` (which is open by default).
 
 ## Test for invalid promo codes
 
-Let's add tests for `Discount.getDiscountFunction` in a new submodule called
+Add tests for `Discount.getDiscountFunction` in a new submodule called
 `DiscountTests.GetDiscount`:
 
 ```reason
@@ -84,7 +85,7 @@ Here we iterate over a few invalid promo codes using `List.map` and check that
 
 ## Native syntax in error messages
 
-But this code won't compile:
+Regrettably, this code doesn't compile:
 
 ```text
 File "docs/order-confirmation/DiscountTests.re", lines 7-14, characters 4-9:
@@ -100,7 +101,7 @@ Error: This expression has type unit list
        but an expression was expected of type unit
 ```
 
-The error message might seem slightly cryptic because it's using native OCaml
+This error message might seem a little cryptic because it's using native OCaml
 syntax and not the Reason syntax that we cover in this book. For reference, this
 is how the type notations map between native and Reason syntaxes:
 
@@ -111,11 +112,12 @@ is how the type notations map between native and Reason syntaxes:
 | `int option list` | `list(option(int))` |
 
 Basically, when you see nested types in error messages, reverse the order of the
-types and add parentheses to translate it to the syntax you're familiar with.
+types and add parentheses to translate it from native to Reason syntax.
 
 ## `List.iter` function
 
-Returning to the error message, if we translate it to Reason syntax, it says:
+Returning to the error message, if we translate it to Reason syntax, it's
+saying:
 
 > Error: This expression has type `list(unit)` but an expression was expected of
 > type `unit`
@@ -136,7 +138,7 @@ returns `unit`, which doesn't need to be ignored.
 
 ## Runtime representation of `result`
 
-Run the tests (`npm run test`) and you'll get an error:
+Run the tests (`npm run test`) and you'll get an error (truncated for clarity):
 
 ```diff
 +      Values have same structure but are not reference-equal:
@@ -158,14 +160,14 @@ Run the tests (`npm run test`) and you'll get an error:
 
 The `result` type is a variant type with two constructors `Ok` and `Error`, and
 both of these constructors have an argument. This means that both of them are
-represented as objects in the JavaScript runtime:
+represented as objects in the JavaScript runtime, e.g.:
 
 | OCaml source | JavaScript runtime |
 |--------------|--------------------|
 | `Ok(4567)` | `{TAG: 0, _0: 4567}` |
 | `Error("Expired code")` | `{TAG: 1, _0: "Expired code"}` |
 
-Since we are comparing objects, we must rely on
+Since we are comparing objects and not values, we must use
 [Fest.deepEqual](https://ahrefs.github.io/melange-fest/reason/Fest/index.html#val-deepEqual)
 instead of
 [Fest.equal](https://ahrefs.github.io/melange-fest/reason/Fest/index.html#val-equal):
@@ -202,8 +204,8 @@ calling a side-effect function on each number.
 
 Right now, `Discount.getDiscountFunction` returns two types of errors:
 `Error("Expired code")` and `Error("Invalid code")`, which have the same type.
-But our code will be less brittle if these two different kinds of errors also
-have different types. Add a new type `error` to `Discount`:
+Our code will be less brittle if these two different kinds of errors also have
+different types. Add a new type `error` to `Discount`:
 
 <<< Discount.re#error-type
 
@@ -217,7 +219,7 @@ alternative to raising different exceptions.
 
 ## Refactor discount functions
 
-Update `Discount.getFreeBurgers` to use result instead of option:
+Update `Discount.getFreeBurgers` to also use `result` instead of `option`:
 
 <<< Discount.re#get-free-burgers{13-14,21}
 
@@ -238,9 +240,9 @@ test("0 burgers, no discount", () =>
 );
 ```
 
-You would need to change your tests every time the error messages change, but
-that's a presentation issue, not directly related to a function whose primary
-job is to calculate and return a number.
+You would need to change your tests every time the error message changes, which
+is annoying. But error messages don't necessarily need to be inside
+`Discount.getFreeBurgers`, they could be moved into the UI logic instead.
 
 ## Polymorphic variants
 
@@ -251,9 +253,9 @@ instead use a *polymorphic variant*:
 
 Polymorphic variants are similar to the variants you've seen before, the main
 difference being that you don't need to declare the constructors beforehand.
-Instead, you can just freely use polymorphic variant constructors inside a
-function, and the type of the function is inferred from the usage. For example,
-the type of `Discount.getFreeBurgers` is now
+Instead, you can freely use polymorphic variant constructors inside a function,
+and the type of the function is inferred from the usage. For example, the type
+of `Discount.getFreeBurgers` is now
 
 ```reason
 list(Item.t) => result(float, [> `NeedOneBurger | `NeedTwoBurgers ])
@@ -266,7 +268,7 @@ The name of a polymorphic variant constructor must start with the backtick (`` `
 
 :::
 
-Refactor `Discount.getHalfOff` to return `result` as well:
+Refactor `Discount.getHalfOff` to return `result` as well[^2]:
 
 ```reason
 switch (meetsCondition) {
@@ -290,10 +292,10 @@ list(Item.t) => result(float, [> `NeedMegaBurger ])
 
 ## Fixing the tests
 
-Fixing the tests is mostly a mechanical exercise of:
+Fixing the tests is mostly a mechanical and consists of these steps:
 
 - Replace `Some` with `Ok`
-- Replace `None` with `Error(something)`
+- Replace `None` with ``Error(`SomeConstructor)``
 - Replace `equal` with `deepEqual`
 
 However, there is a little wrinkle. What if you misspell one of the polymorphic
@@ -331,19 +333,31 @@ clarity):
 ```
 
 You can see that polymorphic variant constructors without arguments are just
-strings in the JS runtime, which will come in handy for [JS interop](/todo).
+strings in the JS runtime.
 
-Just in case you're curious, the runtime representation for polymorphic variant
+For reference, the runtime representation for polymorphic variant
 constructors with arguments is an object with `NAME` and `VAL` fields. For
-example, `foo(42)` becomes `{"NAME": "foo", "VAL": 42}`.
+example, `` `foo(42)`` becomes `{"NAME": "foo", "VAL": 42}`.
+
+## Variants vs polymorphic variants
+
+Variants are always going to be more reliable than polymorphic variants because
+you must define them using `type` before you can use them, meaning if you ever
+misspell a constructor, you'll get an error. Polymorphic variants are more
+flexible and convenient but allow you to make silly mistakes. However, we will
+see in the next chapter that polymorphic variants are just as type-safe as
+variants.
 
 ---
 
-Summary
+Espectáculo! You've made your discount logic more expressive by converting it to
+use `result` instead of `option`. You've also started to experience the power of
+polymorphic variants. In the next chapter, we'll build a new ReasonReact
+component that uses our discount functions.
 
 ## Overview
 
-tbd
+- tbd
 
 ## Exercises
 
@@ -363,5 +377,9 @@ and [demo](https://react-book.melange.re/demo/src/promo-codes/) for this chapter
 
 -----
 
-[^1]: It was quite a sight to see a giant burger running around a music
-    festival, being chased by juggalos!
+[^1]: It was quite a sight to see a giant burger zipping around the fairgrounds
+    on a Segway while being being chased by a small army of juggalos.
+
+[^2]: Instead of creating a polymorphic variant constructor out of the phrase
+    "burger that has every topping", we save ourselves some typing by using the
+    much shorter "megaburger".
