@@ -42,6 +42,9 @@ module DiscountLabel = {
            | `OneBurger => "at least 1 more burger"
            | `TwoBurgers => "at least 2 burgers"
            | `MegaBurger => "a burger with every topping"
+           | `MissingSandwichTypes(missing) =>
+             (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
+             ++ " sandwiches"
            };
 
          {j|Buy $buyWhat to enjoy this promo.|j} |> RR.s}

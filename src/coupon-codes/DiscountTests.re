@@ -90,13 +90,12 @@ module FreeBurger = {
   );
 };
 
-module HalfOff = {
-  test("No burger has 1+ of every topping, return Error", () =>
+module SandwichHalfOff = {
+  test("No sandwiches, return Error", () =>
     expect
     |> deepEqual(
-         Discount.getHalfOff([
+         Discount.getSandwichHalfOff([
            Hotdog,
-           Sandwich(Portabello),
            Burger({
              lettuce: true,
              tomatoes: true,
@@ -104,15 +103,24 @@ module HalfOff = {
              onions: 1,
              bacon: 0,
            }),
+           Hotdog,
          ]),
-         Error(`MegaBurger),
+         Error(
+           `MissingSandwichTypes([
+             "portabello",
+             "ham",
+             "unicorn",
+             "turducken",
+           ]),
+         ),
        )
   );
 
-  test("One burger has 1+ of every topping, return Ok(15.675)", () =>
+  test("All sandwiches, return Ok", () =>
     expect
     |> deepEqual(
-         Discount.getHalfOff([
+         Discount.getSandwichHalfOff([
+           Sandwich(Turducken),
            Hotdog,
            Sandwich(Portabello),
            Burger({
@@ -122,31 +130,36 @@ module HalfOff = {
              onions: 1,
              bacon: 2,
            }),
+           Sandwich(Unicorn),
+           Sandwich(Ham),
          ]),
-         Ok(15.675),
+         Ok(70.675),
        )
   );
 };
 
 module GetDiscount = {
-  test({|"free" promo code works in May but not other months|}, () => {
-    for (month in 0 to 11) {
-      let date =
-        Js.Date.makeWithYMD(
-          ~year=2024.,
-          ~month=float_of_int(month),
-          ~date=10.,
-        );
+  test("FREE promo code works in May but not other months", () => {
+    List.init(12, i => i)
+    |> List.iter(month => {
+         let date =
+           Js.Date.makeWithYMD(
+             ~year=2024.,
+             ~month=float_of_int(month),
+             ~date=10.,
+           );
 
-      expect
-      |> deepEqual(
-           Discount.getDiscountFunction(~code="free", ~date),
-           month == 4 ? Ok(Discount.getFreeBurgers) : Error(ExpiredCode),
-         );
-    }
+         expect
+         |> deepEqual(
+              Discount.getDiscountFunction(~code="free", ~date),
+              month == 4 ? Ok(Discount.getFreeBurgers) : Error(ExpiredCode),
+            );
+       })
   });
 
-  test({|"half" promo code works on May 28 but not other days of May|}, () => {
+  test(
+    "HALF promo code returns getHalfOff on May 28 but not other days of May",
+    () => {
     for (dayOfMonth in 1 to 31) {
       let date =
         Js.Date.makeWithYMD(
@@ -159,6 +172,26 @@ module GetDiscount = {
       |> deepEqual(
            Discount.getDiscountFunction(~code="half", ~date),
            dayOfMonth == 28 ? Ok(Discount.getHalfOff) : Error(ExpiredCode),
+         );
+    }
+  });
+
+  test(
+    "HALF promo code returns getSandwichHalfOff on Nov 3 but not other days of Nov",
+    () => {
+    for (dayOfMonth in 1 to 30) {
+      let date =
+        Js.Date.makeWithYMD(
+          ~year=2024.,
+          ~month=10.0,
+          ~date=float_of_int(dayOfMonth),
+        );
+
+      expect
+      |> deepEqual(
+           Discount.getDiscountFunction(~code="half", ~date),
+           dayOfMonth == 3
+             ? Ok(Discount.getSandwichHalfOff) : Error(ExpiredCode),
          );
     }
   });

@@ -81,26 +81,30 @@ Discount tests
   ok 6 - 7 burgers, return Ok(46.75)
     ---
     ...
-  # Subtest: No burger has 1+ of every topping, return Error
-  ok 7 - No burger has 1+ of every topping, return Error
+  # Subtest: No sandwiches, return Error
+  ok 7 - No sandwiches, return Error
     ---
     ...
-  # Subtest: One burger has 1+ of every topping, return Ok(15.675)
-  ok 8 - One burger has 1+ of every topping, return Ok(15.675)
+  # Subtest: All sandwiches, return Ok
+  ok 8 - All sandwiches, return Ok
     ---
     ...
-  # Subtest: "free" promo code works in May but not other months
-  ok 9 - "free" promo code works in May but not other months
+  # Subtest: FREE promo code works in May but not other months
+  ok 9 - FREE promo code works in May but not other months
     ---
     ...
-  # Subtest: "half" promo code works on May 28 but not other days of May
-  ok 10 - "half" promo code works on May 28 but not other days of May
+  # Subtest: HALF promo code returns getHalfOff on May 28 but not other days of May
+  ok 10 - HALF promo code returns getHalfOff on May 28 but not other days of May
     ---
     ...
-  1..10
-  # tests 10
+  # Subtest: HALF promo code returns getSandwichHalfOff on Nov 3 but not other days of Nov
+  ok 11 - HALF promo code returns getSandwichHalfOff on Nov 3 but not other days of Nov
+    ---
+    ...
+  1..11
+  # tests 11
   # suites 0
-  # pass 10
+  # pass 11
   # fail 0
   # cancelled 0
   # skipped 0
