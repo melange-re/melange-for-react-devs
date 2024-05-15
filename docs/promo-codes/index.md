@@ -242,7 +242,8 @@ test("0 burgers, no discount", () =>
 
 You would need to change your tests every time the error message changes, which
 is annoying. But error messages don't necessarily need to be inside
-`Discount.getFreeBurgers`, they could be moved into the UI logic instead.
+`Discount.getFreeBurgers`, there should be a way to indicate what an error is
+without using the actual error message.
 
 ## Polymorphic variants
 
@@ -310,10 +311,10 @@ test("1 burger, no discount", () =>
      );
 ```
 
-The constructor should be called `` `NeedOneBurger`` but here it's been misspelled
-as `` `NeedOneBurgers``, yet it still compiles! This is due to the open-ended
-nature of polymorphic variants. The compiler knows that
-`Discount.getFreeBurgers` won't ever return ``Error(`NeedOneBurgers)``, but
+The constructor should be called `` `NeedOneBurger`` but here it's been
+misspelled as `` `NeedOneBurgers``, yet it still compiles! This is due to the
+open-ended nature of polymorphic variants. The compiler knows that
+`Discount.getFreeBurgers` currently can't return ``Error(`NeedOneBurgers)``, but
 because the constructors for polymorphic variants don't need to be defined
 up-front, it has no way to know that the function will **never** return
 ``Error(`NeedOneBurgers)`` in the future.
@@ -357,7 +358,30 @@ component that uses our discount functions.
 
 ## Overview
 
-- tbd
+- The `result` type is similar to `option`, except that the "failure"
+  constructor takes an argument
+  - The `Ok` constructor becomes an object in the JS runtime
+  - The `Error` constructor becomes an object in the JS runtime
+  - Inside tests, `result` values must be compared using `Fest.deepEqual`
+
+-Functions in the `Stdlib.String` module won't always Unicode characters
+correctly, so prefer to use the functions in `Js.String`
+- Compilation error messages use OCaml's native syntax when describing types
+  - Convert from native to Reason syntax by reversing the order of the types and
+    inserting parentheses between them
+- `List.iter` is useful for running a side-effect function on every element of a
+  list. It's better than `List.map` for this use case because the return value
+  doesn't need to be `ignore`d.
+- For loops are useful for the narrow use case of running a side-effect function
+  on a sequence of numbers
+- Polymorphic variants are like the variants we've already seen but with some
+  differences:
+  - The constructors don't need to defined before they are used
+  - The constructors must start with the backtick (`` ` ``) character
+  - A polymorphic variant constructor without arguments becomes a string in the
+    JS runtime
+  - A polymorphic variant constructor with argument(s) becomes an object in the
+    JS runtime. The keys in the object are `NAME` and `VAL`.
 
 ## Exercises
 
