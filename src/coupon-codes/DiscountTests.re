@@ -17,7 +17,7 @@ module FreeBurger = {
            Sandwich(Ham),
            Sandwich(Turducken),
          ]),
-         Error(Buy(`two_burgers)),
+         Error(`TwoBurgers),
        )
   );
 
@@ -25,7 +25,7 @@ module FreeBurger = {
     expect
     |> deepEqual(
          Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
-         Error(Buy(`one_burger)),
+         Error(`OneBurger),
        )
   );
 
@@ -105,7 +105,7 @@ module HalfOff = {
              bacon: 0,
            }),
          ]),
-         Error(Buy(`mega_burger)),
+         Error(`MegaBurger),
        )
   );
 

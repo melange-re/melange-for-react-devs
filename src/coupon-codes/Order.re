@@ -35,6 +35,14 @@ module Css = {
     text-align: right;
     |}
   ];
+
+  let promo = [%cx
+    {|
+    border-top: 1px solid gray;
+    text-align: right;
+    vertical-align: top;
+    |}
+  ];
 };
 
 [@react.component]
@@ -58,7 +66,10 @@ let make = (~items: t, ~date: Js.Date.t) => {
         <Td> {RR.s("Subtotal")} </Td>
         <Td> {subtotal |> RR.currency} </Td>
       </tr>
-      <Promo items date onApply=setDiscount />
+      <tr className=Css.promo>
+        <Td> {RR.s("Promo code")} </Td>
+        <Td> <Promo items date onApply=setDiscount /> </Td>
+      </tr>
       <tr className=Css.total>
         <Td> {RR.s("Total")} </Td>
         <Td> {subtotal -. discount |> RR.currency} </Td>
