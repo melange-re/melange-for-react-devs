@@ -101,10 +101,14 @@ Discount tests
   ok 11 - HALF promo code returns getHalfOff on May 28 but not other days of May
     ---
     ...
-  1..11
-  # tests 11
+  # Subtest: HALF promo code returns getSandwichHalfOff on Nov 3 but not other days of Nov
+  ok 12 - HALF promo code returns getSandwichHalfOff on Nov 3 but not other days of Nov
+    ---
+    ...
+  1..12
+  # tests 12
   # suites 0
-  # pass 11
+  # pass 12
   # fail 0
   # cancelled 0
   # skipped 0

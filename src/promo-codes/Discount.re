@@ -105,6 +105,7 @@ let getDiscountFunction = (code, date) => {
   switch (code |> Js.String.toUpperCase) {
   | "FREE" when month == 4.0 => Ok(getFreeBurgers)
   | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
+  | "HALF" when month == 10.0 && dayOfMonth == 3.0 => Ok(getSandwichHalfOff)
   | "FREE"
   | "HALF" => Error(ExpiredCode)
   | _ => Error(InvalidCode)

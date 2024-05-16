@@ -134,6 +134,8 @@ let getDiscountFunction = (code, date) => {
 };
 // #endregion half-promo-may-28
 
+ignore(getDiscountFunction);
+
 // #region get-sandwich-half-off
 type sandwichTracker = {
   portabello: bool,
@@ -180,3 +182,19 @@ let getSandwichHalfOff = (items: list(Item.t)) => {
   };
 };
 // #endregion get-sandwich-half-off
+
+// #region half-promo-nov-3
+let getDiscountFunction = (code, date) => {
+  let month = date |> Js.Date.getMonth;
+  let dayOfMonth = date |> Js.Date.getDate;
+
+  switch (code |> Js.String.toUpperCase) {
+  | "FREE" when month == 4.0 => Ok(getFreeBurgers)
+  | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
+  | "HALF" when month == 10.0 && dayOfMonth == 3.0 => Ok(getSandwichHalfOff)
+  | "FREE"
+  | "HALF" => Error(ExpiredCode)
+  | _ => Error(InvalidCode)
+  };
+};
+// #endregion half-promo-nov-3

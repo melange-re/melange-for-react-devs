@@ -438,7 +438,13 @@ and
 `Ok(getSandwichHalfOff)` only if the promo code is "HALF" and the date is
 November 3, World Sandwich Day. Make sure it passes the following test:
 
-tbd
+<<< DiscountTests.re#half-promo-nov-3
+
+::: details Solution
+
+<<< Discount.re#half-promo-nov-3
+
+:::
 
 -----
 
