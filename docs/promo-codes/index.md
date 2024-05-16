@@ -407,16 +407,36 @@ International Burger Day. Make sure it passes the following test:
 :::
 
 <b>3.</b> Add a new function `Discount.getSandwichHalfOff` that takes half off
-the entire order if you order at least one of every type of sandwich. The promo
-code for it is also "HALF" but `Discount.getDiscountFunction` only returns
-`Ok(getSandwichHalfOff)` on November 3, World Sandwich Day. Make sure it passes
-the following test:
+the entire order if you order at least one of every type of sandwich. Make sure
+it passes the following test:
 
-tbd
+<<< DiscountTests.re#get-sandwich-half-off
 
-<b>4.</b> Refine the error value `Discount.getSandwichHalfOff` by stating  which
-sandwich types need to be added to the order to fulfill the conditions for the
-discount. Make sure it passes the following test:
+::: details Hint 1
+
+Add a new record type that keeps track of which sandwich types have been
+encountered in the order.
+
+:::
+
+::: details Hint 2
+
+Use
+[List.filter_map](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filter_map)
+and
+[ListLabels.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left).
+
+:::
+
+::: details Solution
+
+<<< Discount.re#get-sandwich-half-off
+
+:::
+
+<b>4.</b> Modify `Discount.getDiscountFunction` so that it returns
+`Ok(getSandwichHalfOff)` only if the promo code is "HALF" and the date is
+November 3, World Sandwich Day. Make sure it passes the following test:
 
 tbd
 

@@ -133,3 +133,50 @@ let getDiscountFunction = (code, date) => {
   };
 };
 // #endregion half-promo-may-28
+
+// #region get-sandwich-half-off
+type sandwichTracker = {
+  portabello: bool,
+  ham: bool,
+  unicorn: bool,
+  turducken: bool,
+};
+
+/** Buy 1+ of every type of sandwich, get half off */
+let getSandwichHalfOff = (items: list(Item.t)) => {
+  let tracker =
+    items
+    |> List.filter_map(
+         fun
+         | Item.Sandwich(sandwich) => Some(sandwich)
+         | Burger(_)
+         | Hotdog => None,
+       )
+    |> ListLabels.fold_left(
+         ~init={
+           portabello: false,
+           ham: false,
+           unicorn: false,
+           turducken: false,
+         },
+         ~f=(tracker, sandwich: Item.Sandwich.t) =>
+         switch (sandwich) {
+         | Portabello => {...tracker, portabello: true}
+         | Ham => {...tracker, ham: true}
+         | Unicorn => {...tracker, unicorn: true}
+         | Turducken => {...tracker, turducken: true}
+         }
+       );
+
+  switch (tracker) {
+  | {portabello: true, ham: true, unicorn: true, turducken: true} =>
+    let total =
+      items
+      |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
+           total +. Item.toPrice(item)
+         );
+    Ok(total /. 2.0);
+  | _ => Error(`MissingSandwichTypes)
+  };
+};
+// #endregion get-sandwich-half-off
