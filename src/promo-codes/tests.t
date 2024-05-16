@@ -97,10 +97,14 @@ Discount tests
   ok 10 - FREE promo code works in May but not other months
     ---
     ...
-  1..10
-  # tests 10
+  # Subtest: HALF promo code returns getHalfOff on May 28 but not other days of May
+  ok 11 - HALF promo code returns getHalfOff on May 28 but not other days of May
+    ---
+    ...
+  1..11
+  # tests 11
   # suites 0
-  # pass 10
+  # pass 11
   # fail 0
   # cancelled 0
   # skipped 0

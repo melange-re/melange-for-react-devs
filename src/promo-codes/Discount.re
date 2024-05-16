@@ -55,11 +55,13 @@ let getHalfOff = (items: list(Item.t)) => {
 
 let getDiscountFunction = (code, date) => {
   let month = date |> Js.Date.getMonth;
+  let dayOfMonth = date |> Js.Date.getDate;
 
   switch (code |> Js.String.toUpperCase) {
   | "FREE" when month == 4.0 => Ok(getFreeBurgers)
-  | "FREE" => Error(ExpiredCode)
-  | "HALF" => Ok(getHalfOff)
+  | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
+  | "FREE"
+  | "HALF" => Error(ExpiredCode)
   | _ => Error(InvalidCode)
   };
 };

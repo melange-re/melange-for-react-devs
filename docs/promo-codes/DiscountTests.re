@@ -82,10 +82,31 @@ test("FREE promo code works in May but not other months", () => {
 
          expect
          |> deepEqual(
-              Discount.getDiscountFunction("free", date),
+              Discount.getDiscountFunction("FREE", date),
               month == 4 ? Ok(Discount.getFreeBurgers) : Error(ExpiredCode),
             );
        })
   });
   // #endregion free-promo-may-list-iter
+
+  // #region half-promo-may-28
+  test(
+    "HALF promo code returns getHalfOff on May 28 but not other days of May",
+    () => {
+    for (dayOfMonth in 1 to 31) {
+      let date =
+        Js.Date.makeWithYMD(
+          ~year=2024.,
+          ~month=4.0,
+          ~date=float_of_int(dayOfMonth),
+        );
+
+      expect
+      |> deepEqual(
+           Discount.getDiscountFunction("HALF", date),
+           dayOfMonth == 28 ? Ok(Discount.getHalfOff) : Error(ExpiredCode),
+         );
+    }
+  });
+  // #endregion half-promo-may-28
 };

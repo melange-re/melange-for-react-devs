@@ -396,9 +396,15 @@ correctly, so prefer to use the functions in `Js.String`
 
 <b>2.</b> Modify `Discount.getDiscountFunction` so that it returns
 `Ok(getHalfOff)` only if the promo code is "HALF" and the date is May 28,
-Internation Burger Day. Make sure it passes the following test:
+International Burger Day. Make sure it passes the following test:
 
-tbd
+<<< DiscountTests.re#half-promo-may-28
+
+::: details Solution
+
+<<< Discount.re#half-promo-may-28
+
+:::
 
 <b>3.</b> Add a new function `Discount.getSandwichHalfOff` that takes half off
 the entire order if you order at least one of every type of sandwich. The promo
