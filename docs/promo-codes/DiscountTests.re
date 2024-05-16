@@ -111,25 +111,41 @@ test("FREE promo code works in May but not other months", () => {
   // #endregion half-promo-may-28
 
   // #region get-sandwich-half-off
-  test(
-    "HALF promo code returns getSandwichHalfOff on Nov 3 but not other days of Nov",
-    () => {
-    for (dayOfMonth in 1 to 30) {
-      let date =
-        Js.Date.makeWithYMD(
-          ~year=2024.,
-          ~month=10.0,
-          ~date=float_of_int(dayOfMonth),
-        );
-
+  module SandwichHalfOff = {
+    test("Not all sandwiches, return Error", () =>
       expect
       |> deepEqual(
-           Discount.getDiscountFunction("HALF", date),
-           dayOfMonth == 3
-             ? Ok(Discount.getSandwichHalfOff) : Error(ExpiredCode),
-         );
-    }
-  });
+           Discount.getSandwichHalfOff([
+             Sandwich(Unicorn),
+             Hotdog,
+             Sandwich(Portabello),
+             Sandwich(Ham),
+           ]),
+           Error(`MissingSandwichTypes),
+         )
+    );
+
+    test("All sandwiches, return Ok", () =>
+      expect
+      |> deepEqual(
+           Discount.getSandwichHalfOff([
+             Sandwich(Turducken),
+             Hotdog,
+             Sandwich(Portabello),
+             Burger({
+               lettuce: true,
+               tomatoes: true,
+               cheese: 1,
+               onions: 1,
+               bacon: 2,
+             }),
+             Sandwich(Unicorn),
+             Sandwich(Ham),
+           ]),
+           Ok(70.675),
+         )
+    );
+  };
   // #endregion get-sandwich-half-off
 
   // #region half-promo-nov-3

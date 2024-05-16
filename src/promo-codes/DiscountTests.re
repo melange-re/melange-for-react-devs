@@ -128,6 +128,42 @@ module HalfOff = {
   );
 };
 
+module SandwichHalfOff = {
+  test("Not all sandwiches, return Error", () =>
+    expect
+    |> deepEqual(
+         Discount.getSandwichHalfOff([
+           Sandwich(Unicorn),
+           Hotdog,
+           Sandwich(Portabello),
+           Sandwich(Ham),
+         ]),
+         Error(`MissingSandwichTypes),
+       )
+  );
+
+  test("All sandwiches, return Ok", () =>
+    expect
+    |> deepEqual(
+         Discount.getSandwichHalfOff([
+           Sandwich(Turducken),
+           Hotdog,
+           Sandwich(Portabello),
+           Burger({
+             lettuce: true,
+             tomatoes: true,
+             cheese: 1,
+             onions: 1,
+             bacon: 2,
+           }),
+           Sandwich(Unicorn),
+           Sandwich(Ham),
+         ]),
+         Ok(70.675),
+       )
+  );
+};
+
 module GetDiscount = {
   test("Invalid promo code return Error", () => {
     let date = Js.Date.make();

@@ -415,7 +415,7 @@ International Burger Day. Make sure it passes the following test:
 
 <b>3.</b> Add a new function `Discount.getSandwichHalfOff` that takes half off
 the entire order if you order at least one of every type of sandwich. Make sure
-it passes the following test:
+it passes the following tests:
 
 <<< DiscountTests.re#get-sandwich-half-off
 
