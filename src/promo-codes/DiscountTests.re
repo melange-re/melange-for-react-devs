@@ -136,25 +136,26 @@ module GetDiscount = {
          expect
          |> deepEqual(
               Discount.getDiscountFunction(code, date),
-              Error("Invalid code"),
+              Error(InvalidCode),
             )
        );
   });
 
   test("FREE promo code works in May but not other months", () => {
-    for (month in 0 to 11) {
-      let date =
-        Js.Date.makeWithYMD(
-          ~year=2024.,
-          ~month=float_of_int(month),
-          ~date=10.,
-        );
+    List.init(12, i => i)
+    |> List.iter(month => {
+         let date =
+           Js.Date.makeWithYMD(
+             ~year=2024.,
+             ~month=float_of_int(month),
+             ~date=10.,
+           );
 
-      expect
-      |> deepEqual(
-           Discount.getDiscountFunction("FREE", date),
-           month == 4 ? Ok(Discount.getFreeBurgers) : Error("Expired code"),
-         );
-    }
+         expect
+         |> deepEqual(
+              Discount.getDiscountFunction("free", date),
+              month == 4 ? Ok(Discount.getFreeBurgers) : Error(ExpiredCode),
+            );
+       })
   });
 };

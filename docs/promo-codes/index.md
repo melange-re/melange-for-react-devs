@@ -385,13 +385,34 @@ correctly, so prefer to use the functions in `Js.String`
 
 ## Exercises
 
-<b>1.</b> tbd
+<b>1.</b> Rewrite the “FREE promo code works in May but not other months” to use
+`List.iter` instead of a for loop.
 
-<b>2.</b> tbd
+::: details Solution
 
-<b>3.</b> tbd
+<<< DiscountTests.re#free-promo-may-list-iter
 
-<b>4.</b> tbd
+:::
+
+<b>2.</b> Modify `Discount.getDiscountFunction` so that it returns
+`Ok(getHalfOff)` only if the promo code is "HALF" and the date is May 28,
+Internation Burger Day. Make sure it passes the following test:
+
+tbd
+
+<b>3.</b> Add a new function `Discount.getSandwichHalfOff` that takes half off
+the entire order if you order at least one of every type of sandwich. The promo
+code for it is also "HALF" but `Discount.getDiscountFunction` only returns
+`Ok(getSandwichHalfOff)` on November 3, World Sandwich Day. Make sure it passes
+the following test:
+
+tbd
+
+<b>4.</b> Refine the error value `Discount.getSandwichHalfOff` by stating  which
+sandwich types need to be added to the order to fulfill the conditions for the
+discount. Make sure it passes the following test:
+
+tbd
 
 -----
 

@@ -91,6 +91,8 @@ let getDiscountFunction = (code, date) => {
 };
 // #endregion use-error-type
 
+ignore(getDiscountFunction);
+
 // #region get-free-burgers-poly
 let getFreeBurgers = (items: list(Item.t)) => {
   let prices =
@@ -116,3 +118,14 @@ let getFreeBurgers = (items: list(Item.t)) => {
   };
 };
 // #endregion get-free-burgers-poly
+
+let getDiscountFunction = (code, date) => {
+  let month = date |> Js.Date.getMonth;
+
+  switch (code |> Js.String.toUpperCase) {
+  | "FREE" when month == 4.0 => Ok(getFreeBurgers)
+  | "FREE" => Error(ExpiredCode)
+  | "HALF" => Ok(getHalfOff)
+  | _ => Error(InvalidCode)
+  };
+};

@@ -1,3 +1,7 @@
+type error =
+  | InvalidCode
+  | ExpiredCode;
+
 /** Buy n burgers, get n/2 burgers free */
 let getFreeBurgers = (items: list(Item.t)) => {
   let prices =
@@ -54,8 +58,8 @@ let getDiscountFunction = (code, date) => {
 
   switch (code |> Js.String.toUpperCase) {
   | "FREE" when month == 4.0 => Ok(getFreeBurgers)
-  | "FREE" => Error("Expired code")
+  | "FREE" => Error(ExpiredCode)
   | "HALF" => Ok(getHalfOff)
-  | _ => Error("Invalid code")
+  | _ => Error(InvalidCode)
   };
 };
