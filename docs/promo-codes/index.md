@@ -388,6 +388,13 @@ correctly, so prefer to use the functions in `Js.String`
 <b>1.</b> Rewrite the “FREE promo code works in May but not other months” to use
 `List.iter` instead of a for loop.
 
+::: details Hint
+
+Use
+[List.init](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-init).
+
+:::
+
 ::: details Solution
 
 <<< DiscountTests.re#free-promo-may-list-iter
