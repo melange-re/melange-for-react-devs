@@ -2,7 +2,7 @@
 
 As International Burger Day looms ever closer, Madame Jellobutter is eager to
 start her burger-related promotions. She bought ads on local billboards and she
-even put on a giant burger costume to pass flyers at a local music festival[^1].
+even wore a giant burger costume to pass flyers at a local music festival[^1].
 Depending on the ad, potential customers will either see the promo code FREE,
 which corresponds to the "buy n burgers, get n/2 burgers free" discount, or
 HALF, which corresponds to the "buy a burger with everything on it and get half
@@ -19,16 +19,16 @@ Instead of
 [Js.String.toUpperCase](https://melange.re/v3.0.0/api/re/melange/Js/String/#val-toLowerCase),
 we could've used
 [String.uppercase_ascii](https://melange.re/v3.0.0/api/re/melange/Stdlib/String/#val-uppercase_ascii),
-but its name implies, `String.uppercase_ascii` can only handle strings
+but as its name implies, `String.uppercase_ascii` can only handle strings
 containing ASCII characters. This is a common restriction for functions in the
 [Stdlib.String](https://melange.re/v3.0.0/api/re/melange/Stdlib/String/) module,
-so for most string operations you should prefer the functions in
+so for most string operations, you should prefer the functions in
 [Js.String](https://melange.re/v3.0.0/api/re/melange/Js/String/).
 
 Madame Jellobutter informs you that the FREE promotion is only active during the
 month of May, so you change `Discount.getDiscountFunction` accordingly:
 
-<<< Discount.re#get-discount-with-date{1,5-6}
+<<< Discount.re#get-discount-with-date{1,5}
 
 ## `result` type
 

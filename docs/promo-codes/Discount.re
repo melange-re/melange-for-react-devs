@@ -20,7 +20,6 @@ let getDiscountFunction = (code, date) => {
 
   switch (code |> Js.String.toUpperCase) {
   | "FREE" when month == 4.0 => Some(getFreeBurgers)
-  | "FREE" => None
   | "HALF" => Some(getHalfOff)
   | _ => None
   };
