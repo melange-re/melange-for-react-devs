@@ -363,8 +363,7 @@ component that uses our discount functions.
   - The `Ok` constructor becomes an object in the JS runtime
   - The `Error` constructor becomes an object in the JS runtime
   - Inside tests, `result` values must be compared using `Fest.deepEqual`
-
--Functions in the `Stdlib.String` module won't always Unicode characters
+- Functions in the `Stdlib.String` module won't always handle Unicode characters
 correctly, so prefer to use the functions in `Js.String`
 - Compilation error messages use OCaml's native syntax when describing types
   - Convert from native to Reason syntax by reversing the order of the types and
@@ -462,7 +461,7 @@ and [demo](https://react-book.melange.re/demo/src/promo-codes/) for this chapter
 -----
 
 [^1]: It was quite a sight to see a giant burger zipping around the fairgrounds
-    on a Segway while being being chased by a small army of juggalos.
+    on a Segway while being chased by a small army of juggalos.
 
 [^2]: Instead of creating a polymorphic variant constructor out of the phrase
     "burger that has every topping", we save ourselves some typing by using the
