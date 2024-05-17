@@ -29,6 +29,7 @@ export default defineConfig({
         'cram-tests': resolve(__dirname, 'src/cram-tests/index.html'),
         'burger-discounts': resolve(__dirname, 'src/burger-discounts/index.html'),
         'discounts-lists': resolve(__dirname, 'src/discounts-lists/index.html'),
+        'promo-codes': resolve(__dirname, 'src/promo-codes/index.html'),
       },
     },
   },
