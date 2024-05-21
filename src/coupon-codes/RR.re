@@ -13,3 +13,6 @@ let list = list => list |> Stdlib.Array.of_list |> React.array;
 
 /** Render a float as currency */
 let currency = value => value |> Js.Float.toFixed(~digits=2) |> React.string;
+
+/** Render option(React.element) */
+let option = opt => opt |> Option.value(~default=React.null);

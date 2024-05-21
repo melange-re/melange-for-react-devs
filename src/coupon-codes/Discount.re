@@ -1,5 +1,4 @@
 type error('code) =
-  | Buy([> ] as 'code)
   | InvalidCode
   | ExpiredCode;
 

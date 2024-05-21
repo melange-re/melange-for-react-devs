@@ -4,13 +4,17 @@ module DiscountLabel = {
   };
 
   [@react.component]
-  let make = (~discount: result(float, Discount.error('a))) => {
+  let make = (~discount: result(float, [> ])) => {
     switch (discount) {
-    | Error(InvalidCode) =>
+    | Ok(discount) =>
+      <div className=[%cx {|color: green;|}]>
+        {discount |> Float.neg |> RR.currency}
+      </div>
+    | Error(`Code(Discount.InvalidCode)) =>
       <div className=Css.error> {RR.s("Invalid code")} </div>
-    | Error(ExpiredCode) =>
+    | Error(`Code(ExpiredCode)) =>
       <div className=Css.error> {RR.s("Expired code")} </div>
-    | Error(Buy(code)) =>
+    | Error(`Buy(code)) =>
       <div className=[%cx {|color: purple|}]>
         {RR.s("Buy ")}
         <span className=[%cx {|text-decoration: underline;|}]>
@@ -28,60 +32,21 @@ module DiscountLabel = {
         </span>
         {RR.s(" to enjoy this promo.")}
       </div>
-    | Ok(0.0) => React.null
-    | Ok(discount) =>
-      <div className=[%cx {|color: green;|}]>
-        {discount |> Float.neg |> RR.currency}
-      </div>
     };
   };
-};
-
-let applyDiscount_switch = (~code, ~date, ~items) => {
-  switch (Discount.getDiscountFunction(~code, ~date)) {
-  | Error(_) as err => err
-  | Ok(discountFunc) =>
-    switch (discountFunc(items)) {
-    | Ok(_) as ok => ok
-    | Error(err) => Error(Discount.Buy(err))
-    }
-  };
-};
-
-let applyDiscount_map_error = (~code, ~date, ~items) => {
-  switch (Discount.getDiscountFunction(~code, ~date)) {
-  | Error(_) as err => err
-  | Ok(discountFunc) =>
-    discountFunc(items) |> Result.map_error(err => Discount.Buy(err))
-  };
-};
-
-let applyDiscount_bind = (~code, ~date, ~items) => {
-  Result.bind(Discount.getDiscountFunction(~code, ~date), discountFunc =>
-    discountFunc(items) |> Result.map_error(err => Discount.Buy(err))
-  );
-};
-
-let resultFlatMap = (fn, result) => Result.bind(result, fn);
-
-let applyDiscount = (~code, ~date, ~items) => {
-  Discount.getDiscountFunction(~code, ~date)
-  |> resultFlatMap(discountFunc =>
-       discountFunc(items) |> Result.map_error(err => Discount.Buy(err))
-     );
-};
-
-let ( let* ) = Result.bind;
-
-let applyDiscount_let = (~code, ~date, ~items) => {
-  let* discountFunc = Discount.getDiscountFunction(~code, ~date);
-  discountFunc(items) |> Result.map_error(err => Discount.Buy(err));
 };
 
 [@react.component]
 let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
-  let (discount, setDiscount) = RR.useStateValue(Ok(0.0));
+  let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
+
+  let getDiscount = code =>
+    switch (Discount.getDiscountFunction(~code, ~date)) {
+    | Error(err) => Error(`Code(err))
+    | Ok(discountFunc) =>
+      discountFunc(items) |> Result.map_error(err => `Buy(err))
+    };
 
   <form
     className=[%cx
@@ -95,9 +60,8 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
     ]
     onSubmit={evt => {
       evt |> React.Event.Form.preventDefault;
-      let discount = applyDiscount(~code, ~date, ~items);
-      setDiscount(discount);
-      discount |> Result.iter(onApply);
+      setSubmittedCode(Some(code));
+      getDiscount(code) |> Result.iter(onApply);
     }}>
     <input
       className=[%cx
@@ -110,9 +74,12 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       value=code
       onChange={evt => {
         evt |> RR.getValueFromEvent |> setCode;
-        setDiscount(Ok(0.0));
+        setSubmittedCode(None);
       }}
     />
-    <DiscountLabel discount />
+    {submittedCode
+     |> Option.map(getDiscount)
+     |> Option.map(discount => <DiscountLabel discount />)
+     |> RR.option}
   </form>;
 };
