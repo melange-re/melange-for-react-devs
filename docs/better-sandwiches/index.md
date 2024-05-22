@@ -134,7 +134,7 @@ put shorter branches before longer branches:
 
 The approach using `Js.Array.join` works, but readability could be improved by
 using a [quoted string literal with the quoted string identifier
-`j`](https://melange.re/v3.0.0/communicate-with-javascript.html#strings):
+`j`](https://melange.re/v4.0.0/communicate-with-javascript.html#strings):
 
 <<< Item.re#to-emoji-j-string-literal{5-13}
 
@@ -149,7 +149,7 @@ multi-line expressions in branches unless you add `{}` around them.
 
 The OCaml standard library also provides a type-safe way to do string
 interpolation in the form of the
-[Printf.sprintf](https://melange.re/v3.0.0/api/re/melange/Stdlib/Printf/index.html#val-sprintf)
+[Printf.sprintf](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-sprintf)
 function:
 
 <<< Item.re#to-emoji-sprintf
@@ -159,7 +159,7 @@ literals:
 
 - Since it's just a function, you can pass expressions into it
 - It supports [conversion
-  specifications](https://melange.re/v3.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
+  specifications](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
   like `%s`, `%i`, `%d`, etc which concisely handle basic string conversion
   logic for all primitive data types. This can often make your code shorter and
   easier to understand.
@@ -256,7 +256,7 @@ added is cheaper or more expensive *depending on the day of the week*.
 ::: details Hint 1
 
 Look at the functions in the
-[Js.Date](https://melange.re/v3.0.0/api/re/melange/Js/Date/) module.
+[Js.Date](https://melange.re/v4.0.0/api/re/melange/Js/Date/) module.
 
 :::
 
@@ -307,12 +307,12 @@ let player: Js.t({..}) = {
 
 Use `Printf.sprintf` instead and improve the program as suggested by the
 comments. You can edit the program interactively in [Melange
-Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKbGV0IHJlc3VsdCA9IGNvbXB1dGUoNDAuLCA0Ny4pIHw%2BIHN0cmluZ19vZl9mbG9hdDsKSnMubG9nKHtqfHJlc3VsdCB0byAzIGRlY2ltYWwgcGxhY2VzID0gJChyZXN1bHQpfGp9KTsKCi8vIFJld3JpdGUgdXNpbmcgUHJpbnRmLnNwcmludGYKbGV0IHBsYXllcjogSnMudCh7Li59KSA9IHsKICAibmFtZSI6ICJXaWxidXIiLAogICJsZXZlbCI6IDkwMDEyMzQsCiAgImltbW9ydGFsIjogZmFsc2UsCn07CnsKICBsZXQgbmFtZSA9IHBsYXllciMjbmFtZTsKICAvLyBib251czogdXNlIHRoZSBmbGFnIHRoYXQgbWFrZXMgbG9uZyBudW1iZXJzIG1vcmUgcmVhZGFibGUKICBsZXQgbGV2ZWwgPSBwbGF5ZXIjI2xldmVsIHw%2BIHN0cmluZ19vZl9pbnQ7IAogIGxldCBpbW1vcnRhbCA9IHBsYXllciMjaW1tb3J0YWwgfD4gc3RyaW5nX29mX2Jvb2w7CiAgSnMubG9nKHtqfFBsYXllcjogbmFtZT0kKG5hbWUpLCBsZXZlbD0kKGxldmVsKSwgaW1tb3J0YWw9JChpbW1vcnRhbCl8an0pOwp9Owo%3D&live=off).
+Playground](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKbGV0IHJlc3VsdCA9IGNvbXB1dGUoNDAuLCA0Ny4pIHw%2BIHN0cmluZ19vZl9mbG9hdDsKSnMubG9nKHtqfHJlc3VsdCB0byAzIGRlY2ltYWwgcGxhY2VzID0gJChyZXN1bHQpfGp9KTsKCi8vIFJld3JpdGUgdXNpbmcgUHJpbnRmLnNwcmludGYKbGV0IHBsYXllcjogSnMudCh7Li59KSA9IHsKICAibmFtZSI6ICJXaWxidXIiLAogICJsZXZlbCI6IDkwMDEyMzQsCiAgImltbW9ydGFsIjogZmFsc2UsCn07CnsKICBsZXQgbmFtZSA9IHBsYXllciMjbmFtZTsKICAvLyBib251czogdXNlIHRoZSBmbGFnIHRoYXQgbWFrZXMgbG9uZyBudW1iZXJzIG1vcmUgcmVhZGFibGUKICBsZXQgbGV2ZWwgPSBwbGF5ZXIjI2xldmVsIHw%2BIHN0cmluZ19vZl9pbnQ7IAogIGxldCBpbW1vcnRhbCA9IHBsYXllciMjaW1tb3J0YWwgfD4gc3RyaW5nX29mX2Jvb2w7CiAgSnMubG9nKHtqfFBsYXllcjogbmFtZT0kKG5hbWUpLCBsZXZlbD0kKGxldmVsKSwgaW1tb3J0YWw9JChpbW1vcnRhbCl8an0pOwp9Owo%3D&live=off).
 
 ::: details Hint
 
 Consult the [conversion specification
-documentation](https://melange.re/v3.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf).
+documentation](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf).
 
 :::
 
@@ -320,7 +320,7 @@ documentation](https://melange.re/v3.0.0/api/re/melange/Stdlib/Printf/index.html
 
 After replacing the `{j||j}` quoted string literals with
 `Printf.sprintf` and improving it a bit, you might end up with something [like
-this](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKCJyZXN1bHQgdG8gMyBkZWNpbWFsIHBsYWNlcyA9ICUwLjNmIiwgY29tcHV0ZSg0MC4sIDQ3LikpLAopOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZgpsZXQgcGxheWVyOiBKcy50KHsuLn0pID0gewogICJuYW1lIjogIldpbGJ1ciIsCiAgImxldmVsIjogOTAwMTIzNCwKICAiaW1tb3J0YWwiOiBmYWxzZSwKfTsKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKAogICAgIlBsYXllcjogbmFtZT0lcywgbGV2ZWw9JSNkLCBpbW1vcnRhbD0lQiIsCiAgICBwbGF5ZXIjI25hbWUsCiAgICBwbGF5ZXIjI2xldmVsLAogICAgcGxheWVyIyNpbW1vcnRhbCwKICApLAopOwo%3D&live=off).
+this](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGNvbXB1dGUgPSAoYSwgYikgPT4gKGEgKy4gMTAuKSAvLiBiOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZiwgbGltaXQgcmVzdWx0IHRvIDMgZGVjaW1hbCBwbGFjZXMKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKCJyZXN1bHQgdG8gMyBkZWNpbWFsIHBsYWNlcyA9ICUwLjNmIiwgY29tcHV0ZSg0MC4sIDQ3LikpLAopOwoKLy8gUmV3cml0ZSB1c2luZyBQcmludGYuc3ByaW50ZgpsZXQgcGxheWVyOiBKcy50KHsuLn0pID0gewogICJuYW1lIjogIldpbGJ1ciIsCiAgImxldmVsIjogOTAwMTIzNCwKICAiaW1tb3J0YWwiOiBmYWxzZSwKfTsKSnMubG9nKAogIFByaW50Zi5zcHJpbnRmKAogICAgIlBsYXllcjogbmFtZT0lcywgbGV2ZWw9JSNkLCBpbW1vcnRhbD0lQiIsCiAgICBwbGF5ZXIjI25hbWUsCiAgICBwbGF5ZXIjI2xldmVsLAogICAgcGxheWVyIyNpbW1vcnRhbCwKICApLAopOwo%3D&live=off).
 
 :::
 

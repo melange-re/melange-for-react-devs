@@ -43,7 +43,7 @@ comes from the name of the module.
 The `make` function has the type `unit => React.element`, meaning it takes `()`
 as the only argument and returns an object of type `React.element`. You'll need
 to decorate `make` with the
-[attribute](https://melange.re/v3.0.0/communicate-with-javascript.html#attributes)
+[attribute](https://melange.re/v4.0.0/communicate-with-javascript.html#attributes)
 `@react.component`. We'll go into the details [later](/todo), but for now
 let's just say that `@react.component` is there to reduce boilerplate and make
 our code more readable and easier to maintain.
@@ -102,7 +102,7 @@ read from left to right:
 {counter |> Int.to_string |> React.string}
 ```
 
-This uses the [pipe last operator](https://melange.re/v3.0.0/communicate-with-javascript.html#pipe-last),
+This uses the [pipe last operator](https://melange.re/v4.0.0/communicate-with-javascript.html#pipe-last),
 which is useful for chaining function calls.
 
 ## Basic styling

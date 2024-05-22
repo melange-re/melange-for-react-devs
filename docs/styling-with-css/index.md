@@ -17,7 +17,7 @@ Add a new file
 In OCaml, there is no syntax to import from files, because all modules within a
 project are visible to all other modules[^2]. However, we can make use of
 JavaScript's `import` syntax by using the [mel.raw extension
-node](https://melange.re/v3.0.0/communicate-with-javascript.html#generate-raw-javascript),
+node](https://melange.re/v4.0.0/communicate-with-javascript.html#generate-raw-javascript),
 which allows us to embed raw JavaScript in our OCaml code. Add the following
 line to the top of `Order.re`:
 
@@ -52,7 +52,7 @@ The problem is that Vite is serving the app from the build directory at
 `order-item.css` file isn't in that build directory.
 
 To solve this, we can add the [runtime_deps
-field](https://melange.re/v3.0.0/build-system.html#handling-assets) to our
+field](https://melange.re/v4.0.0/build-system.html#handling-assets) to our
 `melange.emit` stanza in `src/order-confirmation/dune`:
 
 ```dune{7}
@@ -117,7 +117,7 @@ Fortunately, Melange provides a more reliable way to import frontend assets.
 ## Import using `external`
 
 At the top of `Order.re`, replace our first `mel.raw` extension node with an
-[external](https://melange.re/v3.0.0/communicate-with-javascript.html#external-functions)
+[external](https://melange.re/v4.0.0/communicate-with-javascript.html#external-functions)
 declaration:
 
 ```reason
@@ -140,9 +140,9 @@ Let's break down the individual parts of the `external` declaration:
 [@mel.module "./order-item.css"] external _css: unit = "default";
 ```
 
-- [mel.module](https://melange.re/v3.0.0/communicate-with-javascript.html#using-functions-from-other-javascript-modules)
+- [mel.module](https://melange.re/v4.0.0/communicate-with-javascript.html#using-functions-from-other-javascript-modules)
   is an
-  [attribute](https://melange.re/v3.0.0/communicate-with-javascript.html#attributes)
+  [attribute](https://melange.re/v4.0.0/communicate-with-javascript.html#attributes)
   that tells the `external` declaration which module to import from
 - The `external` keyword tells OCaml this is a declaration for a value defined
   outside of OCaml, i.e. it comes from JavaScript[^4]
@@ -157,9 +157,9 @@ Let's break down the individual parts of the `external` declaration:
 ::: tip
 
 A quick way to check what an `external` declaration compiles to is to use
-the [Melange Playground](https://melange.re/v3.0.0/playground/). For example,
+the [Melange Playground](https://melange.re/v4.0.0/playground/). For example,
 here's a
-[link](https://melange.re/v3.0.0/playground/?language=Reason&code=W0BtZWwubW9kdWxlICIuL29yZGVyLWl0ZW0uY3NzIl0gZXh0ZXJuYWwgX2NzczogdW5pdCA9ICJkZWZhdWx0Ijs%3D&live=off)
+[link](https://melange.re/v4.0.0/playground/?language=Reason&code=W0BtZWwubW9kdWxlICIuL29yZGVyLWl0ZW0uY3NzIl0gZXh0ZXJuYWwgX2NzczogdW5pdCA9ICJkZWZhdWx0Ijs%3D&live=off)
 to the `external` declaration we just added.
 
 :::
@@ -202,7 +202,7 @@ inside the `OrderComponent` module, since that's the only place it's used.
 
 We have not seen the last of `external` declarations, as they are the primary
 way in which OCaml interacts with code written in JavaScript. See the [Melange
-docs](https://melange.re/v3.0.0/communicate-with-javascript.html#external-functions)
+docs](https://melange.re/v4.0.0/communicate-with-javascript.html#external-functions)
 for more details.
 
 ## Class names must be the same
