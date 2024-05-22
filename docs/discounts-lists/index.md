@@ -476,7 +476,7 @@ Add this new test to `DiscountTests` and make sure it passes:
 
 Use
 [List.filteri](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filteri)
-and [mod operator](https://ocaml.org/manual/5.1/expr.html#ss:expr-operators).
+and [mod operator](https://v2.ocaml.org/manual/expr.html#ss:expr-operators).
 
 :::
 

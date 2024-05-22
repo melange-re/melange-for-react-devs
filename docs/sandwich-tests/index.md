@@ -44,7 +44,7 @@ depends: [
   "ocaml" {>= "5.1.1"}
   "reason" {>= "3.10.0"}
   "dune" {>= "3.8"}
-  "melange" {>= "3.0.0-51"}
+  "melange" {>= "4.0.0-51"}
   "reason-react" {>= "0.14.0"}
   "reason-react-ppx" {>= "0.14.0"}
   "melange-fest" {>= "0.1.0"} // [!code ++]
@@ -79,7 +79,7 @@ The output will look something like this:
 
 ```
 #  switch                     compiler                   description
-→  ~/melange-for-react-devs   ocaml-base-compiler.5.1.1  ~/melange-for-react-devs
+→  ~/melange-for-react-devs   ocaml-base-compiler.5.2.0  ~/melange-for-react-devs
    default                    ocaml.5.1.0                default
 
 [NOTE] Current switch has been selected based on the current directory.
