@@ -23,7 +23,7 @@ Js.log(bar);
 
 ## Melange Playground
 
-[Melange Playground](https://melange.re/v3.0.0/playground/) is an interactive
+[Melange Playground](https://melange.re/v4.0.0/playground/) is an interactive
 environment for running OCaml code and seeing its output. Paste this into the
 source code editor on the left side:
 
@@ -96,9 +96,9 @@ your friends! As you type in the source editor, it will store your code in the
 snippet we started with:
 
 <a
-href="https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off"
+href="https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off"
 target="_blank" rel="noreferrer
-noopener">https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off</a>
+noopener">https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGZvbyA9IDQyOwpsZXQgYmFyID0gNDIuMTsKSnMubG9nKGZvbyk7CkpzLmxvZyhiYXIpOw%3D%3D&live=off</a>
 
 ## Comparison operators
 
@@ -175,7 +175,7 @@ Js.log(Js.typeof(foo)); // prints "number"
 Js.log(Js.typeof(bar)); // prints "number"
 ```
 
-Refer to the [Melange docs](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
+Refer to the [Melange docs](https://melange.re/v4.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
 for a complete rundown of how OCaml types get translated to JavaScript types.
 
 ## Widgets in the Playground
@@ -200,7 +200,7 @@ And then update the JSX in our `make` function to use the style objects in
 <<< Snippets.re#render-with-styles{1-2,5,8}
 
 
-Here's the [playground link](https://melange.re/v3.0.0/playground/?language=Reason&code=bW9kdWxlIFN0eWxlcyA9IHsKICBsZXQgbWFrZSA9IFJlYWN0RE9NLlN0eWxlLm1ha2U7CgogIGxldCByb290ID0KICAgIG1ha2UoCiAgICAgIH5mb250U2l6ZT0iMmVtIiwKICAgICAgfnBhZGRpbmc9IjFlbSIsCiAgICAgIH5kaXNwbGF5PSJmbGV4IiwKICAgICAgfmdyaWRHYXA9IjFlbSIsCiAgICAgIH5hbGlnbkl0ZW1zPSJjZW50ZXIiLAogICAgICAoKSwKICAgICk7CgogIGxldCBidXR0b24gPQogICAgbWFrZSgKICAgICAgfmZvbnRTaXplPSIxZW0iLAogICAgICB%2BYm9yZGVyPSIxcHggc29saWQgd2hpdGUiLAogICAgICB%2BYm9yZGVyUmFkaXVzPSIwLjVlbSIsCiAgICAgIH5wYWRkaW5nPSIwLjVlbSIsCiAgICAgICgpLAogICAgKTsKCiAgbGV0IG51bWJlciA9IG1ha2Uofm1pbldpZHRoPSIyZW0iLCB%2BdGV4dEFsaWduPSJjZW50ZXIiLCAoKSk7Cn07Cgptb2R1bGUgQ291bnRlciA9IHsKICBbQHJlYWN0LmNvbXBvbmVudF0KICBsZXQgbWFrZSA9ICgpID0%2BIHsKICAgIGxldCAoY291bnRlciwgc2V0Q291bnRlcikgPSBSZWFjdC51c2VTdGF0ZSgoKSA9PiAwKTsKCiAgICA8ZGl2IHN0eWxlPVN0eWxlcy5yb290PgogICAgICA8YnV0dG9uIHN0eWxlPVN0eWxlcy5idXR0b24gb25DbGljaz17X2V2dCA9PiBzZXRDb3VudGVyKHYgPT4gdiAtIDEpfT4KICAgICAgICB7UmVhY3Quc3RyaW5nKCItIil9CiAgICAgIDwvYnV0dG9uPgogICAgICA8c3BhbiBzdHlsZT1TdHlsZXMubnVtYmVyPgogICAgICAgIHtjb3VudGVyIHw%2BIEludC50b19zdHJpbmcgfD4gUmVhY3Quc3RyaW5nfQogICAgICA8L3NwYW4%2BCiAgICAgIDxidXR0b24gc3R5bGU9U3R5bGVzLmJ1dHRvbiBvbkNsaWNrPXtfZXZ0ID0%2BIHNldENvdW50ZXIodiA9PiB2ICsgMSl9PgogICAgICAgIHtSZWFjdC5zdHJpbmcoIisiKX0KICAgICAgPC9idXR0b24%2BCiAgICA8L2Rpdj47CiAgfTsKfTsKCnN3aXRjaCAoUmVhY3RET00ucXVlcnlTZWxlY3RvcigiI3ByZXZpZXciKSkgewp8IE5vbmUgPT4gSnMubG9nKCJGYWlsZWQgdG8gc3RhcnQgUmVhY3Q6IGNvdWxkbid0IGZpbmQgdGhlICNwcmV2aWV3IGVsZW1lbnQiKQp8IFNvbWUocm9vdCkgPT4KICBsZXQgcm9vdCA9IFJlYWN0RE9NLkNsaWVudC5jcmVhdGVSb290KHJvb3QpOwogIFJlYWN0RE9NLkNsaWVudC5yZW5kZXIocm9vdCwgPENvdW50ZXIgLz4pOwp9Owo%3D&live=on) for the fully-styled Counter component.
+Here's the [playground link](https://melange.re/v4.0.0/playground/?language=Reason&code=bW9kdWxlIFN0eWxlcyA9IHsKICBsZXQgbWFrZSA9IFJlYWN0RE9NLlN0eWxlLm1ha2U7CgogIGxldCByb290ID0KICAgIG1ha2UoCiAgICAgIH5mb250U2l6ZT0iMmVtIiwKICAgICAgfnBhZGRpbmc9IjFlbSIsCiAgICAgIH5kaXNwbGF5PSJmbGV4IiwKICAgICAgfmdyaWRHYXA9IjFlbSIsCiAgICAgIH5hbGlnbkl0ZW1zPSJjZW50ZXIiLAogICAgICAoKSwKICAgICk7CgogIGxldCBidXR0b24gPQogICAgbWFrZSgKICAgICAgfmZvbnRTaXplPSIxZW0iLAogICAgICB%2BYm9yZGVyPSIxcHggc29saWQgd2hpdGUiLAogICAgICB%2BYm9yZGVyUmFkaXVzPSIwLjVlbSIsCiAgICAgIH5wYWRkaW5nPSIwLjVlbSIsCiAgICAgICgpLAogICAgKTsKCiAgbGV0IG51bWJlciA9IG1ha2Uofm1pbldpZHRoPSIyZW0iLCB%2BdGV4dEFsaWduPSJjZW50ZXIiLCAoKSk7Cn07Cgptb2R1bGUgQ291bnRlciA9IHsKICBbQHJlYWN0LmNvbXBvbmVudF0KICBsZXQgbWFrZSA9ICgpID0%2BIHsKICAgIGxldCAoY291bnRlciwgc2V0Q291bnRlcikgPSBSZWFjdC51c2VTdGF0ZSgoKSA9PiAwKTsKCiAgICA8ZGl2IHN0eWxlPVN0eWxlcy5yb290PgogICAgICA8YnV0dG9uIHN0eWxlPVN0eWxlcy5idXR0b24gb25DbGljaz17X2V2dCA9PiBzZXRDb3VudGVyKHYgPT4gdiAtIDEpfT4KICAgICAgICB7UmVhY3Quc3RyaW5nKCItIil9CiAgICAgIDwvYnV0dG9uPgogICAgICA8c3BhbiBzdHlsZT1TdHlsZXMubnVtYmVyPgogICAgICAgIHtjb3VudGVyIHw%2BIEludC50b19zdHJpbmcgfD4gUmVhY3Quc3RyaW5nfQogICAgICA8L3NwYW4%2BCiAgICAgIDxidXR0b24gc3R5bGU9U3R5bGVzLmJ1dHRvbiBvbkNsaWNrPXtfZXZ0ID0%2BIHNldENvdW50ZXIodiA9PiB2ICsgMSl9PgogICAgICAgIHtSZWFjdC5zdHJpbmcoIisiKX0KICAgICAgPC9idXR0b24%2BCiAgICA8L2Rpdj47CiAgfTsKfTsKCnN3aXRjaCAoUmVhY3RET00ucXVlcnlTZWxlY3RvcigiI3ByZXZpZXciKSkgewp8IE5vbmUgPT4gSnMubG9nKCJGYWlsZWQgdG8gc3RhcnQgUmVhY3Q6IGNvdWxkbid0IGZpbmQgdGhlICNwcmV2aWV3IGVsZW1lbnQiKQp8IFNvbWUocm9vdCkgPT4KICBsZXQgcm9vdCA9IFJlYWN0RE9NLkNsaWVudC5jcmVhdGVSb290KHJvb3QpOwogIFJlYWN0RE9NLkNsaWVudC5yZW5kZXIocm9vdCwgPENvdW50ZXIgLz4pOwp9Owo%3D&live=on) for the fully-styled Counter component.
 
 -----
 
@@ -258,7 +258,7 @@ low]`, where `high` is signed, `low` is unsigned.
 ::: details Hint
 
 Take a look at the standard library's [Int64
-module](https://melange.re/v3.0.0/api/re/melange/Stdlib/Int64/index.html).
+module](https://melange.re/v4.0.0/api/re/melange/Stdlib/Int64/index.html).
 
 :::
 

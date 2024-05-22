@@ -101,13 +101,13 @@ haven't quite gotten used to OCaml syntax yet.
 If we enter a value with a lot of decimals in it, e.g. `21.1223456`, we'll
 get a Fahrenheit value with a lot of decimals in it as well. We can limit the
 number of decimals in the converted value using
-[Js.Float.toFixed](https://melange.re/v3.0.0/api/re/melange/Js/Float/index.html#val-toFixed):
+[Js.Float.toFixed](https://melange.re/v4.0.0/api/re/melange/Js/Float/index.html#val-toFixed):
 
 <<< Snippets.re#fixed-precision{8,11}
 
 `Js.Float.toFixed` is a function that has one positional argument
 and one [labeled
-argument](https://melange.re/v3.0.0/communicate-with-javascript.html#labeled-arguments).
+argument](https://melange.re/v4.0.0/communicate-with-javascript.html#labeled-arguments).
 In this case, the labeled argument is named `digits` and it's receiving a value
 of `2`. It's not possible to pass in the value of a labeled argument without
 using the `~label=value` syntax. We'll see more of labeled arguments in the
@@ -146,7 +146,7 @@ Try changing `{js|°C = |js}` to `"°C = "`.
 
 Changing it to `"°C = "` will result in a bit of gibberish being rendered  in
 the browser: `Â°C`. We can't rely on normal OCaml strings to [deal with Unicode
-correctly](https://melange.re/v3.0.0/communicate-with-javascript.html#strings),
+correctly](https://melange.re/v4.0.0/communicate-with-javascript.html#strings),
 so any string that contains non-ASCII text must be delimited using `{js||js}`
 and not `""`. This kind of string constant is called a `{js||js}` *quoted string
 literal* and it is specific to Melange, meaning it is not available in native
@@ -229,11 +229,11 @@ Js.log(addFive(10));
 ```
 
 What do you think it outputs? Run it in [Melange
-Playground](https://melange.re/v3.0.0/playground) to confirm your hypothesis.
+Playground](https://melange.re/v4.0.0/playground) to confirm your hypothesis.
 
 ::: details Solution
 
-Playground: [Define an addFive function using partial application](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
+Playground: [Define an addFive function using partial application](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGFkZEZpdmUgPSAoKykoNSk7CkpzLmxvZyhhZGRGaXZlKDIpKTsKSnMubG9nKGFkZEZpdmUoNykpOwpKcy5sb2coYWRkRml2ZSgxMCkpOw%3D%3D&live=off)
 
 :::
 
@@ -244,7 +244,7 @@ that result to binary.
 ::: details Hint
 
 Use the
-[Js.Int.toString](https://melange.re/v3.0.0/api/re/melange/Js/Int/#val-toString)
+[Js.Int.toString](https://melange.re/v4.0.0/api/re/melange/Js/Int/#val-toString)
 function.
 
 :::
@@ -252,7 +252,7 @@ function.
 ::: details Solution
 
 Playground: [Define a function that subtracts from 10 and converts to
-binary](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nKH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
+binary](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGNvb2xGdW5jdGlvbiA9IHggPT4geCB8PiAoKC0pKDEwKSkgfD4gSnMuSW50LnRvU3RyaW5nKH5yYWRpeD0yKTsKSnMubG9nKGNvb2xGdW5jdGlvbigxKSk7CkpzLmxvZyhjb29sRnVuY3Rpb24oNSkpOw%3D%3D&live=off)
 
 :::
 
@@ -266,5 +266,5 @@ and [demo](https://react-book.melange.re/demo/src/celsius-converter-exception/) 
 
 [^1]:
     See [Using Js.t
-    objects](https://melange.re/v3.0.0/communicate-with-javascript.html#using-js-t-objects) for more
+    objects](https://melange.re/v4.0.0/communicate-with-javascript.html#using-js-t-objects) for more
     details.

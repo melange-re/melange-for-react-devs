@@ -104,7 +104,7 @@ let map = (func, option) =>
 
 You may be interested in browsing the many other helper functions related to
 `option` in the standard library's [Option
-module](https://melange.re/v3.0.0/api/re/melange/Stdlib/Option/).
+module](https://melange.re/v4.0.0/api/re/melange/Stdlib/Option/).
 
 At this point, your switch expression might look like this:
 
@@ -132,7 +132,7 @@ nesting of conditionals to a minimum and making your code more readable.
 Hooray! Our Celsius converter is finally complete. Later, we'll see how to
 [create a component that can convert back and forth between Celsius and
 Fahrenheit](/todo). But first, we'll explore [Dune, the build
-system](https://melange.re/v3.0.0/build-system.html) used by Melange.
+system](https://melange.re/v4.0.0/build-system.html) used by Melange.
 
 ## Overview
 
@@ -176,14 +176,14 @@ Add another `Some(fahrenheit)` branch with a `when` guard:
 :::
 
 <b>3.</b> Use
-[Js.Float.fromString](https://melange.re/v3.0.0/api/re/melange/Js/Float/#val-fromString)
+[Js.Float.fromString](https://melange.re/v4.0.0/api/re/melange/Js/Float/#val-fromString)
 instead of `float_of_string_opt` to parse a string to float. Note that
 `Js.Float.fromString` does not return `None` if it fails to parse a string to a
 valid float.
 
 ::: details Hint
 
-Use [Js.Float.isNaN](https://melange.re/v3.0.0/api/re/melange/Js/Float/#val-isNaN).
+Use [Js.Float.isNaN](https://melange.re/v4.0.0/api/re/melange/Js/Float/#val-isNaN).
 
 :::
 

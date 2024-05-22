@@ -9,7 +9,7 @@ unit tests.
 ## Install `melange-fest` via opam
 
 After asking around in the `#melange` channel of the [Reason Discord
-chatroom](https://melange.re/v3.0.0/community.html#community), you get a
+chatroom](https://melange.re/v4.0.0/community.html#community), you get a
 recommendation from user MonadicFanatic1984 to try out
 [melange-fest](https://github.com/ahrefs/melange-fest), a library that allows
 you to write tests in OCaml and run them in [Node test
@@ -44,7 +44,7 @@ depends: [
   "ocaml" {>= "5.1.1"}
   "reason" {>= "3.10.0"}
   "dune" {>= "3.8"}
-  "melange" {>= "3.0.0-51"}
+  "melange" {>= "4.0.0-51"}
   "reason-react" {>= "0.14.0"}
   "reason-react-ppx" {>= "0.14.0"}
   "melange-fest" {>= "0.1.0"} // [!code ++]
@@ -331,10 +331,10 @@ date-dependent logic for Turducken sandwiches.
 ::: details Hint
 
 Use
-[Js.Date.makeWithYMD](https://melange.re/v3.0.0/api/re/melange/Js/Date/#val-makeWithYMD)
+[Js.Date.makeWithYMD](https://melange.re/v4.0.0/api/re/melange/Js/Date/#val-makeWithYMD)
 and `Js.Array.map` to generate a whole week's worth of dates. Here's a [relevant
 playground
-example](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGRhdGVzID0KICBbfDEuLCAyLiwgMy4sIDQuLCA1LiwgNi4sIDcufF0KICB8PiBKcy5BcnJheS5tYXAofmY9ZGF0ZSA9PgogICAgICAgSnMuRGF0ZS5tYWtlV2l0aFlNRCh%2BeWVhcj0yMDI0Liwgfm1vbnRoPTAuLCB%2BZGF0ZSkKICAgICApOwoKZGF0ZXMKfD4gSnMuQXJyYXkuZm9yRWFjaCh%2BZj1kYXRlID0%2BCiAgICAgSnMubG9nMihKcy5EYXRlLmdldERheShkYXRlKSwgSnMuRGF0ZS50b1N0cmluZyhkYXRlKSkKICAgKTsK&live=off).
+example](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGRhdGVzID0KICBbfDEuLCAyLiwgMy4sIDQuLCA1LiwgNi4sIDcufF0KICB8PiBKcy5BcnJheS5tYXAofmY9ZGF0ZSA9PgogICAgICAgSnMuRGF0ZS5tYWtlV2l0aFlNRCh%2BeWVhcj0yMDI0Liwgfm1vbnRoPTAuLCB%2BZGF0ZSkKICAgICApOwoKZGF0ZXMKfD4gSnMuQXJyYXkuZm9yRWFjaCh%2BZj1kYXRlID0%2BCiAgICAgSnMubG9nMihKcy5EYXRlLmdldERheShkYXRlKSwgSnMuRGF0ZS50b1N0cmluZyhkYXRlKSkKICAgKTsK&live=off).
 
 :::
 

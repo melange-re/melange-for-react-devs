@@ -16,14 +16,14 @@ function:
 <<< Discount.re#simple-get-discount
 
 Instead of
-[Js.String.toUpperCase](https://melange.re/v3.0.0/api/re/melange/Js/String/#val-toLowerCase),
+[Js.String.toUpperCase](https://melange.re/v4.0.0/api/re/melange/Js/String/#val-toLowerCase),
 we could've used
-[String.uppercase_ascii](https://melange.re/v3.0.0/api/re/melange/Stdlib/String/#val-uppercase_ascii),
+[String.uppercase_ascii](https://melange.re/v4.0.0/api/re/melange/Stdlib/String/#val-uppercase_ascii),
 but as its name implies, `String.uppercase_ascii` can only handle strings
 containing ASCII characters. This is a common restriction for functions in the
-[Stdlib.String](https://melange.re/v3.0.0/api/re/melange/Stdlib/String/) module,
+[Stdlib.String](https://melange.re/v4.0.0/api/re/melange/Stdlib/String/) module,
 so for most string operations, you should prefer the functions in
-[Js.String](https://melange.re/v3.0.0/api/re/melange/Js/String/).
+[Js.String](https://melange.re/v4.0.0/api/re/melange/Js/String/).
 
 Madame Jellobutter informs you that the FREE promotion is only active during the
 month of May, so you change `Discount.getDiscountFunction` accordingly:
@@ -54,7 +54,7 @@ there's an error, but `Error` can signal **what the error is**.
 
 We don't need to type annotate anything when using the `Ok` and `Error`
 constructors because they are always in scope, due to the [result
-type](https://melange.re/v3.0.0/api/re/melange/Stdlib/#type-result) being
+type](https://melange.re/v4.0.0/api/re/melange/Stdlib/#type-result) being
 defined in `Stdlib` (which is open by default).
 
 :::
@@ -129,7 +129,7 @@ the value using `ignore`:
 <<< DiscountTests.re#ignore-list
 
 An even better solution would be to use
-[List.iter](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-iter):
+[List.iter](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-iter):
 
 <<< DiscountTests.re#list-iter{2}
 
@@ -390,7 +390,7 @@ correctly, so prefer to use the functions in `Js.String`
 ::: details Hint
 
 Use
-[List.init](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-init).
+[List.init](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-init).
 
 :::
 
@@ -428,9 +428,9 @@ encountered in the order.
 ::: details Hint 2
 
 Use
-[List.filter_map](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filter_map)
+[List.filter_map](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-filter_map)
 and
-[ListLabels.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left).
+[ListLabels.fold_left](https://melange.re/v4.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left).
 
 :::
 

@@ -21,9 +21,9 @@ lists](https://en.wikipedia.org/wiki/Linked_list#Singly_linked_list). The main
 limitation is that they don't allow constant-time access to any element except
 the first one (also known as the *head* of a list). Most operations on lists go
 through the [Stdlib.List
-module](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/), which has many
+module](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/), which has many
 functions that are equivalent to the ones you've already used in
-[Js.Array](https://melange.re/v3.0.0/api/re/melange/Js/Array/).
+[Js.Array](https://melange.re/v4.0.0/api/re/melange/Js/Array/).
 
 ::: tip
 
@@ -86,17 +86,17 @@ generators like [odoc](https://ocaml.github.io/odoc/).
 ## `List` functions
 
 We replaced these functions with their counterparts in the [List
-module](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/):
+module](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/):
 
 - `Js.Array.filter` →
-  [List.filter](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filter).
+  [List.filter](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-filter).
   Note that `List.filter` doesn’t accept the labeled argument `~f`, because the
   functions inside `List` don't use labeled arguments.
 - `Js.Array.map` →
-  [List.map](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-map).
+  [List.map](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-map).
   `List.map` also doesn’t accept the labeled argument `~f`.
 - `Js.Array.sortInPlaceWith` →
-  [List.sort](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-sort).
+  [List.sort](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-sort).
   `List.sort` returns a brand new list, because, unlike
 `Js.Array.sortInPlaceWith`, it doesn’t modify its argument (and it can’t, since
   lists are immutable).
@@ -185,7 +185,7 @@ switch (["one", "two", "three"]) {
 ## Runtime representation of lists
 
 Run this snippet in [Melange
-Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=SnMubG9nMyhBcnJheS5vZl9saXN0KFtdKSwgIi0%2BIiwgW10pOwpKcy5sb2czKEFycmF5Lm9mX2xpc3QoWzQyXSksICItPiIsIFs0Ml0pOwpKcy5sb2czKEFycmF5Lm9mX2xpc3QoWzQsIDUsIDZdKSwgIi0%2BIiwgWzQsIDUsIDZdKTsK&live=off):
+Playground](https://melange.re/v4.0.0/playground/?language=Reason&code=SnMubG9nMyhBcnJheS5vZl9saXN0KFtdKSwgIi0%2BIiwgW10pOwpKcy5sb2czKEFycmF5Lm9mX2xpc3QoWzQyXSksICItPiIsIFs0Ml0pOwpKcy5sb2czKEFycmF5Lm9mX2xpc3QoWzQsIDUsIDZdKSwgIi0%2BIiwgWzQsIDUsIDZdKTsK&live=off):
 
 ```reason
 Js.log3(Array.of_list([]), "->", []);
@@ -252,11 +252,11 @@ Let's now refactor `Discount.getHalfOff` to use lists:
 Again, we swap out array functions for list functions:
 
 - `Js.Array.some` →
-  [List.exists](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-exists).
+  [List.exists](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-exists).
   Note that this is one of several functions in `List` that have different names
   than their counterparts in `Js.Array`.
 - `Js.Array.reduce` →
-  [List.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-fold_left).
+  [List.fold_left](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-fold_left).
   Despite its name, `fold_left`[^1] has the same meaning as `reduce`.
 
 Remember to fix the `Discount.getHalfOff` tests inside `DiscountTests`, and then
@@ -294,7 +294,7 @@ Again, we’re mostly just replacing array functions with list functions:
 
 - `Js.Array.reduce` → `ListLabels.fold_left`
 - `Js.Array.mapi` →
-  [List.mapi](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-mapi).
+  [List.mapi](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-mapi).
   Note that the order of the callback arguments has been reversed. For
   `Js.Array.mapi` it’s `(item, index)`, but for `List.mapi` it’s `(index,
   item)`.
@@ -475,16 +475,16 @@ Add this new test to `DiscountTests` and make sure it passes:
 ::: details Hint 1
 
 Use
-[List.filteri](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-filteri)
-and [mod operator](https://ocaml.org/manual/5.1/expr.html#ss:expr-operators).
+[List.filteri](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-filteri)
+and [mod operator](https://v2.ocaml.org/manual/expr.html#ss:expr-operators).
 
 :::
 
 ::: details Hint 2
 
 Use
-[ListLabels.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left)
-or [List.fold_left](https://melange.re/v3.0.0/api/re/melange/Stdlib/List/#val-fold_left)
+[ListLabels.fold_left](https://melange.re/v4.0.0/api/re/melange/Stdlib/ListLabels/#val-fold_left)
+or [List.fold_left](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-fold_left)
 
 :::
 

@@ -4,7 +4,7 @@ Now that you have a set of unit tests for sandwich-related logic, you realize it
 would be nice to have some unit tests for burger-related logic as well. But
 adding a new command to your `test` npm script doesn't feel like The OCaml Way,
 so you hop on the [Reason Discord
-chatroom](https://melange.re/v3.0.0/community.html#community) to ask for advice.
+chatroom](https://melange.re/v4.0.0/community.html#community) to ask for advice.
 MonadicFanatic1984 once again comes to your aid and points you toward *cram
 tests*.
 

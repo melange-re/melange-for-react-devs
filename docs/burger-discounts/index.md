@@ -41,17 +41,17 @@ is no second burger, it returns `None`.
 
 The functions used in `Discount.getFreeBurger` are:
 
-- [Js.Array.sortInPlaceWith](https://melange.re/v3.0.0/api/re/melange/Js/Array/index.html#val-sortInPlaceWith)
+- [Js.Array.sortInPlaceWith](https://melange.re/v4.0.0/api/re/melange/Js/Array/index.html#val-sortInPlaceWith)
   takes a callback function `~f` with type signature `('a, 'a) => int` (accept
   two arguments of the same type and return `int`). It's used to sort the items
   by price (highest to lowest).
-- [Stdlib.compare](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-compare)
+- [Stdlib.compare](https://melange.re/v4.0.0/api/re/melange/Stdlib/#val-compare)
   has type signature `('a, 'a) => int`. It's a polymorphic function capable of
   comparing many types, including `bool`, `int`, `string`, etc. Note that you
   can always just write `compare` instead of `Stdlib.compare`, because the
   [`Stdlib` module is always opened by
-  default](https://melange.re/v3.0.0/api/re/melange/Stdlib/).
-- [Js.Array.filter](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-filter)
+  default](https://melange.re/v4.0.0/api/re/melange/Stdlib/).
+- [Js.Array.filter](https://melange.re/v4.0.0/api/re/melange/Js/Array/#val-filter)
   takes a callback function `~f` with type signature `'a => bool`. It's used to
   make sure all items in the `burgers` array are all burgers.
 
@@ -216,7 +216,7 @@ return value is `()` (the [unit
 value](https://reasonml.github.io/docs/en/overview#unit)). However, inside this
 test, we are calling `Discount.getFreeBurger` to test its side effects, so the
 return value isn't needed; as such, we can explicitly discard it by using
-[Stdlib.ignore](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-ignore)[^2]:
+[Stdlib.ignore](https://melange.re/v4.0.0/api/re/melange/Stdlib/#val-ignore)[^2]:
 
 ```reason
 Discount.getFreeBurger(items) |> ignore;
@@ -278,7 +278,7 @@ contains all the items, are turned into JS arrays.
 Variant constructors in the runtime don't always have the `TAG` field. That
 field only appears when there's more than one variant constructor with an
 argument. See [Data types and runtime
-representation](https://melange.re/v3.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
+representation](https://melange.re/v4.0.0/communicate-with-javascript.html#data-types-and-runtime-representation)
 for more details.
 
 :::
@@ -363,8 +363,8 @@ In OCaml, the array access operator `[]` is just a function call. That is,
 `burger[0]` is completely equivalent to `Array.get(burger, 0)`.
 
 Since the [`Stdlib` module is opened by
-default](https://melange.re/v3.0.0/api/re/melange/Stdlib/), the
-[Stdlib.Array.get](https://melange.re/v3.0.0/api/re/melange/Stdlib/Array/#val-get)
+default](https://melange.re/v4.0.0/api/re/melange/Stdlib/), the
+[Stdlib.Array.get](https://melange.re/v4.0.0/api/re/melange/Stdlib/Array/#val-get)
 function is used for `Array.get`, but it's possible to override this by defining
 our own `Array` module. Add a new file `src/order-confirmation/Array.re`:
 
@@ -416,7 +416,7 @@ variable, e.g.
 <<< Discount.re#return-variant-at-end
 
 See [full example on Melange
-Playground](https://melange.re/v3.0.0/playground/?language=Reason&code=bGV0IGNpcGhlckdyZWV0aW5nID0gbmFtZSA9PiB7CiAgc3dpdGNoIChTdHJpbmcudHJpbShuYW1lKSkgewogIHwgIiIgPT4gTm9uZQogIHwgbmFtZSA9PgogICAgbGV0IHJlc3VsdCA9CiAgICAgIG5hbWUKICAgICAgfD4gU3RyaW5nLnNwbGl0X29uX2NoYXIoJyAnKQogICAgICB8PiBMaXN0Lm1hcChTdHJpbmcubWFwKGMgPT4gYyB8PiBDaGFyLmNvZGUgfD4gKCspKDEpIHw%2BIENoYXIuY2hyKSkKICAgICAgfD4gU3RyaW5nLmNvbmNhdCgiICIpCiAgICAgIHw%2BIFN0cmluZy5jYXQoIkhlbGxvLCAiKTsKCiAgICBTb21lKHJlc3VsdCk7CiAgfTsKfTsKCkpzLmxvZyhjaXBoZXJHcmVldGluZygiIikpOwpKcy5sb2coY2lwaGVyR3JlZXRpbmcoIlhhdmllciBMZXJveSIpKTsK&live=off).
+Playground](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGNpcGhlckdyZWV0aW5nID0gbmFtZSA9PiB7CiAgc3dpdGNoIChTdHJpbmcudHJpbShuYW1lKSkgewogIHwgIiIgPT4gTm9uZQogIHwgbmFtZSA9PgogICAgbGV0IHJlc3VsdCA9CiAgICAgIG5hbWUKICAgICAgfD4gU3RyaW5nLnNwbGl0X29uX2NoYXIoJyAnKQogICAgICB8PiBMaXN0Lm1hcChTdHJpbmcubWFwKGMgPT4gYyB8PiBDaGFyLmNvZGUgfD4gKCspKDEpIHw%2BIENoYXIuY2hyKSkKICAgICAgfD4gU3RyaW5nLmNvbmNhdCgiICIpCiAgICAgIHw%2BIFN0cmluZy5jYXQoIkhlbGxvLCAiKTsKCiAgICBTb21lKHJlc3VsdCk7CiAgfTsKfTsKCkpzLmxvZyhjaXBoZXJHcmVldGluZygiIikpOwpKcy5sb2coY2lwaGVyR3JlZXRpbmcoIlhhdmllciBMZXJveSIpKTsK&live=off).
 
 ---
 
@@ -469,7 +469,7 @@ Also refactor the "failure" pattern match so there's no wildcard.
 
 ::: details Hint
 
-Use [Js.Array.map](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-map)
+Use [Js.Array.map](https://melange.re/v4.0.0/api/re/melange/Js/Array/#val-map)
 
 :::
 
@@ -501,7 +501,7 @@ topping. Add these new tests to `DiscountTests` and make sure they pass:
 
 ::: details Hint
 
-Use [Js.Array.some](https://melange.re/v3.0.0/api/re/melange/Js/Array/#val-some)
+Use [Js.Array.some](https://melange.re/v4.0.0/api/re/melange/Js/Array/#val-some)
 
 :::
 
@@ -554,6 +554,6 @@ and [demo](https://react-book.melange.re/demo/src/burger-discounts/) for this ch
     approach.
 
 [^3]: Technically [`option` is a
-    variant](https://melange.re/v3.0.0/api/re/melange/Stdlib/Option/#type-t),
+    variant](https://melange.re/v4.0.0/api/re/melange/Stdlib/Option/#type-t),
     but Melange treats them as a special case---`option` values are never
     represented as JS objects in the runtime.
