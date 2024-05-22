@@ -19,13 +19,20 @@ module Css = {
 };
 
 [@react.component]
-let make = (~items as _items: list(Item.t), ~date: Js.Date.t) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
   let discountFunc =
     submittedCode
     |> Option.map(code => Discount.getDiscountFunction(~code, ~date));
+
+  let discount =
+    switch (discountFunc) {
+    | None
+    | Some(Error(_)) => None
+    | Some(Ok(discountFunc)) => Some(discountFunc(items))
+    };
 
   <form
     className=Css.form
@@ -45,13 +52,21 @@ let make = (~items as _items: list(Item.t), ~date: Js.Date.t) => {
      | None
      | Some(Ok(_)) => React.null
      | Some(Error(error)) =>
-       <div className=[%cx {|color: red;|}]>
+       <div className=[%cx {|color: red|}]>
          {let errorType =
             switch (error) {
             | Discount.InvalidCode => "Invalid"
             | ExpiredCode => "Expired"
             };
           {j|$errorType promo code|j} |> RR.s}
+       </div>
+     }}
+    {switch (discount) {
+     | None => React.null
+     | Some(Ok(value)) => value |> Float.neg |> string_of_float |> RR.s
+     | Some(Error(_code)) =>
+       <div className=[%cx {|color: purple|}]>
+         {RR.s("Todo: discount error message")}
        </div>
      }}
   </form>;
