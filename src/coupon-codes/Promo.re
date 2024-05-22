@@ -4,17 +4,17 @@ module DiscountLabel = {
   };
 
   [@react.component]
-  let make = (~discount: result(float, [> ])) => {
+  let make = (~discount: [> ]) => {
     switch (discount) {
-    | Ok(discount) =>
+    | `Discount(discount) =>
       <div className=[%cx {|color: green;|}]>
         {discount |> Float.neg |> RR.currency}
       </div>
-    | Error(`Code(Discount.InvalidCode)) =>
+    | `CodeError(Discount.InvalidCode) =>
       <div className=Css.error> {RR.s("Invalid code")} </div>
-    | Error(`Code(ExpiredCode)) =>
+    | `CodeError(ExpiredCode) =>
       <div className=Css.error> {RR.s("Expired code")} </div>
-    | Error(`Buy(code)) =>
+    | `DiscountError(code) =>
       <div className=[%cx {|color: purple|}]>
         {RR.s("Buy ")}
         <span className=[%cx {|text-decoration: underline;|}]>
@@ -43,9 +43,12 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
 
   let getDiscount = code =>
     switch (Discount.getDiscountFunction(~code, ~date)) {
-    | Error(err) => Error(`Code(err))
+    | Error(err) => `CodeError(err)
     | Ok(discountFunc) =>
-      discountFunc(items) |> Result.map_error(err => `Buy(err))
+      switch (discountFunc(items)) {
+      | Error(err) => `DiscountError(err)
+      | Ok(value) => `Discount(value)
+      }
     };
 
   <form
@@ -61,7 +64,11 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
     onSubmit={evt => {
       evt |> React.Event.Form.preventDefault;
       setSubmittedCode(Some(code));
-      getDiscount(code) |> Result.iter(onApply);
+      switch (getDiscount(code)) {
+      | `CodeError(_)
+      | `DiscountError(_) => ()
+      | `Discount(value) => onApply(value)
+      };
     }}>
     <input
       className=[%cx
@@ -79,7 +86,6 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
     />
     {submittedCode
      |> Option.map(getDiscount)
-     |> Option.map(discount => <DiscountLabel discount />)
-     |> RR.option}
+     |> RR.option(discount => <DiscountLabel discount />)}
   </form>;
 };

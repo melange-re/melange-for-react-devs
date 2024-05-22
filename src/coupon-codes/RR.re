@@ -15,4 +15,5 @@ let list = list => list |> Stdlib.Array.of_list |> React.array;
 let currency = value => value |> Js.Float.toFixed(~digits=2) |> React.string;
 
 /** Render option(React.element) */
-let option = opt => opt |> Option.value(~default=React.null);
+let option = (fn, opt) =>
+  opt |> Option.map(fn) |> Option.value(~default=React.null);
