@@ -271,3 +271,15 @@ let _ =
     Some(result);
     // #endregion return-variant-at-end
   };
+
+let _ =
+  name => {
+    // #region use-ok-some
+    name
+    |> String.split_on_char(' ')
+    |> List.map(String.map(c => c |> Char.code |> (+)(1) |> Char.chr))
+    |> String.concat(" ")
+    |> String.cat("Hello, ")
+    |> Option.some;
+                  // #endregion use-ok-some
+  };
