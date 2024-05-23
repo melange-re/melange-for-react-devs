@@ -1,4 +1,4 @@
-type error('code) =
+type error =
   | InvalidCode
   | ExpiredCode;
 

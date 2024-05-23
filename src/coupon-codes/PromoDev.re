@@ -23,15 +23,18 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
-  let discountFunc =
-    submittedCode
-    |> Option.map(code => Discount.getDiscountFunction(~code, ~date));
-
   let discount =
-    switch (discountFunc) {
-    | None
-    | Some(Error(_)) => None
-    | Some(Ok(discountFunc)) => Some(discountFunc(items))
+    switch (submittedCode) {
+    | None => `NoSubmittedCode
+    | Some(code) =>
+      switch (Discount.getDiscountFunction(~code, ~date)) {
+      | Error(error) => `CodeError(error)
+      | Ok(discountFunc) =>
+        switch (discountFunc(items)) {
+        | Error(error) => `DiscountError(error)
+        | Ok(value) => `Discount(value)
+        }
+      }
     };
 
   <form
@@ -48,10 +51,13 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
         setSubmittedCode(None);
       }}
     />
-    {switch (discountFunc) {
-     | None
-     | Some(Ok(_)) => React.null
-     | Some(Error(error)) =>
+    {switch (discount) {
+     | `NoSubmittedCode => React.null
+     | `Discount(discount) =>
+       <div className=[%cx {|color: green;|}]>
+         {discount |> Float.neg |> RR.currency}
+       </div>
+     | `CodeError(error) =>
        <div className=[%cx {|color: red|}]>
          {let errorType =
             switch (error) {
@@ -60,11 +66,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
             };
           {j|$errorType promo code|j} |> RR.s}
        </div>
-     }}
-    {switch (discount) {
-     | None => React.null
-     | Some(Ok(value)) => value |> Float.neg |> string_of_float |> RR.s
-     | Some(Error(_code)) =>
+     | `DiscountError(_code) =>
        <div className=[%cx {|color: purple|}]>
          {RR.s("Todo: discount error message")}
        </div>

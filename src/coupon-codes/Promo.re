@@ -10,10 +10,15 @@ module DiscountLabel = {
       <div className=[%cx {|color: green;|}]>
         {discount |> Float.neg |> RR.currency}
       </div>
-    | `CodeError(Discount.InvalidCode) =>
-      <div className=Css.error> {RR.s("Invalid code")} </div>
-    | `CodeError(ExpiredCode) =>
-      <div className=Css.error> {RR.s("Expired code")} </div>
+    | `CodeError(error) =>
+      <div className=[%cx {|color: red|}]>
+        {let errorType =
+           switch (error) {
+           | Discount.InvalidCode => "Invalid"
+           | ExpiredCode => "Expired"
+           };
+         {j|$errorType promo code|j} |> RR.s}
+      </div>
     | `DiscountError(code) =>
       <div className=[%cx {|color: purple|}]>
         {RR.s("Buy ")}
