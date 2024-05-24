@@ -41,6 +41,7 @@ teaches the language from the ground up and goes much deeper into its features.
 | Cram Tests | Set up cram tests to run your unit tests | cram tests, `cram` stanza, Dune alias, promotion, test output sanitization, sandbox, `expand_aliases_in_sandbox` stanza |
 | Burger Discounts | Implement burger discount logic using arrays | limits of type inference, type annotation of function arguments, full name (asset path), `Stdlib`, record spread syntax, `ignore`, runtime representations of common data types, properties of arrays, override `Array.get` |
 | Discounts Using Lists | Re-implement burger discount logic using lists | properties of lists, pattern matching on lists, list spread syntax, `List` module, `ListLabels` module, runtime representation of lists, documentation comments, placeholder operator |
+| Promo Codes | Implement promo and discount logic using Result | built-in Result type, translating error message to Reason syntax, `List.iter`, for  loops, polymorphic variants, runtime representations of Result and polymorphic variants |
 
 ...and much more to come!
 
