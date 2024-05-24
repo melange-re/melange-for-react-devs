@@ -125,26 +125,32 @@ test("FREE promo code works in May but not other months", () => {
          )
     );
 
-    test("All sandwiches, return Ok", () =>
+    test("All sandwiches, return Ok", () => {
+      let items = [
+        Item.Sandwich(Turducken),
+        Hotdog,
+        Sandwich(Portabello),
+        Burger({
+          lettuce: true,
+          tomatoes: true,
+          cheese: 1,
+          onions: 1,
+          bacon: 2,
+        }),
+        Sandwich(Unicorn),
+        Sandwich(Ham),
+      ];
       expect
       |> deepEqual(
-           Discount.getSandwichHalfOff([
-             Sandwich(Turducken),
-             Hotdog,
-             Sandwich(Portabello),
-             Burger({
-               lettuce: true,
-               tomatoes: true,
-               cheese: 1,
-               onions: 1,
-               bacon: 2,
-             }),
-             Sandwich(Unicorn),
-             Sandwich(Ham),
-           ]),
-           Ok(70.675),
-         )
-    );
+           Discount.getSandwichHalfOff(items),
+           {
+             // Don't use hardcoded value since Item.toPrice is non-deterministic
+             let sum =
+               items |> List.map(Item.toPrice) |> List.fold_left((+.), 0.0);
+             Ok(sum /. 2.0);
+           },
+         );
+    });
   };
   // #endregion get-sandwich-half-off
 

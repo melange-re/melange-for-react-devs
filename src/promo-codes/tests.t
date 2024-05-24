@@ -85,8 +85,8 @@ Discount tests
   ok 7 - No burger has 1+ of every topping, return Error(`NeedMegaBurger)
     ---
     ...
-  # Subtest: One burger has 1+ of every topping, return Ok(15.675)
-  ok 8 - One burger has 1+ of every topping, return Ok(15.675)
+  # Subtest: One burger has 1+ of every topping, return Ok
+  ok 8 - One burger has 1+ of every topping, return Ok
     ---
     ...
   # Subtest: Not all sandwiches, return Error

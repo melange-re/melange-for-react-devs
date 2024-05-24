@@ -409,14 +409,19 @@ Error This expression should not be a constructor, the expected type is int -> '
 ```
 
 Variant constructors like `Some` are not functions, so they can't be used with
-the pipe last (`|>`) operator. If you have have a long chain of function
-invocations but you need to return a variant at the end, consider using an extra
-variable, e.g.
+the pipe last (`|>`) operator. If you have a long chain of function invocations
+but you need to return a variant at the end, consider using an extra variable,
+e.g.
 
 <<< Discount.re#return-variant-at-end
 
 See [full example on Melange
 Playground](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGNpcGhlckdyZWV0aW5nID0gbmFtZSA9PiB7CiAgc3dpdGNoIChTdHJpbmcudHJpbShuYW1lKSkgewogIHwgIiIgPT4gTm9uZQogIHwgbmFtZSA9PgogICAgbGV0IHJlc3VsdCA9CiAgICAgIG5hbWUKICAgICAgfD4gU3RyaW5nLnNwbGl0X29uX2NoYXIoJyAnKQogICAgICB8PiBMaXN0Lm1hcChTdHJpbmcubWFwKGMgPT4gYyB8PiBDaGFyLmNvZGUgfD4gKCspKDEpIHw%2BIENoYXIuY2hyKSkKICAgICAgfD4gU3RyaW5nLmNvbmNhdCgiICIpCiAgICAgIHw%2BIFN0cmluZy5jYXQoIkhlbGxvLCAiKTsKCiAgICBTb21lKHJlc3VsdCk7CiAgfTsKfTsKCkpzLmxvZyhjaXBoZXJHcmVldGluZygiIikpOwpKcy5sb2coY2lwaGVyR3JlZXRpbmcoIlhhdmllciBMZXJveSIpKTsK&live=off).
+
+When the variant type you're using is `option`, though, you can still chain
+functions by using the `Option.some` helper function:
+
+<<< Discount.re#use-ok-some
 
 ---
 

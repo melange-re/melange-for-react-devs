@@ -2,11 +2,11 @@
 
 As International Burger Day looms ever closer, Madame Jellobutter is eager to
 start her burger-related promotions. She bought ads on local billboards and she
-even wore a giant burger costume to pass flyers at a local music festival[^1].
-Depending on the ad, potential customers will either see the promo code FREE,
-which corresponds to the "buy n burgers, get n/2 burgers free" discount, or
-HALF, which corresponds to the "buy a burger with everything on it and get half
-off the entire order" discount.
+even wore a giant burger costume to pass out flyers at a local music
+festival[^1]. Depending on the ad, potential customers will either see the promo
+code FREE, which corresponds to the "buy n burgers, get n/2 burgers free"
+discount, or HALF, which corresponds to the "buy a burger with everything on it
+and get half off the entire order" discount.
 
 ## `getDiscountFunction` function
 
