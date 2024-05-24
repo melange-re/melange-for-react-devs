@@ -40,6 +40,7 @@ export default defineConfig({
           { text: 'Burger Discounts', link: '/burger-discounts/' },
           { text: 'Discounts Using Lists', link: '/discounts-lists/' },
           { text: 'Promo Codes', link: '/promo-codes/' },
+          { text: 'Promo Component', link: '/promo-component/' },
         ]
       }
     ],
