@@ -109,23 +109,23 @@ module HalfOff = {
        )
   );
 
-  test("One burger has 1+ of every topping, return Ok(15.675)", () =>
+  test("One burger has 1+ of every topping, return Ok", () => {
+    let items = [
+      Item.Hotdog,
+      Sandwich(Portabello),
+      Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 2}),
+    ];
     expect
     |> deepEqual(
-         Discount.getHalfOff([
-           Hotdog,
-           Sandwich(Portabello),
-           Burger({
-             lettuce: true,
-             tomatoes: true,
-             cheese: 1,
-             onions: 1,
-             bacon: 2,
-           }),
-         ]),
-         Ok(15.675),
-       )
-  );
+         Discount.getHalfOff(items),
+         {
+           // Don't use hardcoded value since Item.toPrice is non-deterministic
+           let sum =
+             items |> List.map(Item.toPrice) |> List.fold_left((+.), 0.0);
+           Ok(sum /. 2.0);
+         },
+       );
+  });
 };
 
 module SandwichHalfOff = {
@@ -142,26 +142,26 @@ module SandwichHalfOff = {
        )
   );
 
-  test("All sandwiches, return Ok", () =>
+  test("All sandwiches, return Ok", () => {
+    let items = [
+      Item.Sandwich(Turducken),
+      Hotdog,
+      Sandwich(Portabello),
+      Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 2}),
+      Sandwich(Unicorn),
+      Sandwich(Ham),
+    ];
     expect
     |> deepEqual(
-         Discount.getSandwichHalfOff([
-           Sandwich(Turducken),
-           Hotdog,
-           Sandwich(Portabello),
-           Burger({
-             lettuce: true,
-             tomatoes: true,
-             cheese: 1,
-             onions: 1,
-             bacon: 2,
-           }),
-           Sandwich(Unicorn),
-           Sandwich(Ham),
-         ]),
-         Ok(70.675),
-       )
-  );
+         Discount.getSandwichHalfOff(items),
+         {
+           // Don't use hardcoded value since Item.toPrice is non-deterministic
+           let sum =
+             items |> List.map(Item.toPrice) |> List.fold_left((+.), 0.0);
+           Ok(sum /. 2.0);
+         },
+       );
+  });
 };
 
 module GetDiscount = {

@@ -111,21 +111,23 @@ module HalfOff = {
        )
   );
 
-  test("One burger has 1+ of every topping, return Some(15.675)", () =>
+  test("One burger has 1+ of every topping, return Some", () => {
+    let items = [|
+      Item.Hotdog,
+      Sandwich(Portabello),
+      Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 2}),
+    |];
     expect
     |> equal(
-         Discount.getHalfOff([|
-           Hotdog,
-           Sandwich(Portabello),
-           Burger({
-             lettuce: true,
-             tomatoes: true,
-             cheese: 1,
-             onions: 1,
-             bacon: 2,
-           }),
-         |]),
-         Some(15.675),
-       )
-  );
+         Discount.getHalfOff(items),
+         {
+           // Don't use hardcoded value since Item.toPrice is non-deterministic
+           let sum =
+             items
+             |> Js.Array.map(~f=Item.toPrice)
+             |> Js.Array.reduce(~init=0.0, ~f=(+.));
+           Some(sum /. 2.0);
+         },
+       );
+  });
 };

@@ -85,8 +85,8 @@ Discount tests
   ok 7 - No burger has 1+ of every topping, return None
     ---
     ...
-  # Subtest: One burger has 1+ of every topping, return Some(15.675)
-  ok 8 - One burger has 1+ of every topping, return Some(15.675)
+  # Subtest: One burger has 1+ of every topping, return Some
+  ok 8 - One burger has 1+ of every topping, return Some
     ---
     ...
   1..8
