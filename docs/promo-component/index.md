@@ -9,8 +9,8 @@ tools.
 
 ## `styled-ppx` package
 
-You meet a cool dude named Dave at the hackathon and he introduces you to his
-OCaml package, [styled-ppx](https://ocaml.org/p/styled-ppx). It lets you write
+At the hackathon, you meet a cool human named Dave who introduces you to his
+[styled-ppx](https://ocaml.org/p/styled-ppx) OCaml package. It lets you write
 type-safe CSS inside OCaml! It’s inspired by
 [Emotion](https://emotion.sh/docs/introduction) (and uses Emotion under the
 hood).
@@ -41,7 +41,7 @@ Add `"styled-ppx" {>= "0.56.0"}` to the `depends` section of your `.opam` file.
 ## `RR` utility module
 
 While having lunch during the hackathon, fellow hackathon attendee
-FunctorPunk29[^2] suggests that you create a dedicated module for your
+FunctorPunk[^2] suggests that you create a dedicated module for your
 ReasonReact-related helper functions. Add a new file `RR.re`:
 
 <<< RR.re#initial-functions
@@ -57,6 +57,35 @@ Whatever is inside the brackets gets rendered in a monospace source code font.
 This is one example of the [markup
 language](https://v2.ocaml.org/releases/5.0/manual/ocamldoc.html#ss:ocamldoc-formatting)
 used inside documentation comments.
+
+## `Promo` component
+
+Add new file `Promo.re`:
+
+<<< Promo.re#first-version
+
+## Rename arguments using `as` keyword
+
+This is our first time seeing the `as` keyword, which is used to rename function
+arguments (among other things). It's equivalent to doing this:
+
+```reason
+[@react.component]
+let make = (~items: list(Item.t), ~date: Js.Date.t) => {
+  let _items = items;
+  let _date = date;
+```
+
+The renamed variables are only visible within the function, the caller of the
+function must still use the original names for the arguments.
+
+If we don't rename `~items` and `~dates` arguments, the compiler will give us
+the "unused variable items" error. So we temporarily rename them to names
+starting with underscores so the compiler won't complain about their non-usage.
+
+## `React.useReducer`
+
+One of the neat things you learn from FunctorPunk is that
 
 ---
 
