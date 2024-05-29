@@ -3,46 +3,14 @@
 Madame Jellobutter has been pretty impressed with your work so far, so she sends
 you on an all-expenses paid trip to an [OCaml
 Hackathon](https://fun-ocaml.com/). You learn a lot, make several new friends,
-and you even meet MonadicFanatic1984 in person![^1] You eagerly star to improve
-your development experience based on the things you've been learning during the
-hackathon.
-
-## `styled-ppx` package
-
-At the hackathon, you meet a cool human named Dave who introduces you to
-[styled-ppx](https://ocaml.org/p/styled-ppx), the OCaml package he authored to
-let you write type-safe CSS inside OCaml. It’s inspired by
-[Emotion](https://emotion.sh/docs/introduction), also uses Emotion under the
-hood.
-
-To install `styled-ppx`, open your terminal and run:
-
-```bash
-npm install @emotion/css
-opam install styled-ppx
-```
-
-After those commands finish, see what version of `styled-ppx` was installed by
-running `opam list`:
-
-```text{4}
-...
-stdune                3.15.2      Dune's unstable standard library
-stringext             1.6.0       Extra string functions for OCaml
-styled-ppx            0.56.0      Type-safe styled components for ReScript and Melange
-time_now              v0.16.0     Reports the current time
-topkg                 1.0.7       The transitory OCaml software packager
-...
-```
-
-Add `"styled-ppx" {>= "0.56.0"}` to the `depends` section of your `.opam` file.
-(Adjust the version based on what you see  from `ocaml list`.)
+and you even meet MonadicFanatic1984 in person![^1] You're extremely psyched to
+start applying the things you learn during the hackathon.
 
 ## `RR` utility module
 
-While having lunch during the hackathon, fellow hackathon attendee
-FunctorPunk[^2] suggests that you create a dedicated module for your
-ReasonReact-related helper functions. Add a new file `RR.re`:
+While having lunch during the hackathon, fellow attendee FunctorPunk[^2]
+suggests that you create a dedicated module for your ReasonReact-related helper
+functions. Add a new file `RR.re`:
 
 <<< RR.re#initial-functions
 
@@ -131,6 +99,93 @@ Here we rename `~items` to `_`, effectively ignoring it, and also do the same
 for `~date`. Note that this renaming only extends to the scope of the function
 itself.
 
+## `styled-ppx` package
+
+During dinner, you meet a cool human named Dave who introduces you to
+[styled-ppx](https://ocaml.org/p/styled-ppx), the package he authored to allow
+writing type-safe CSS inside OCaml. It’s inspired by
+[Emotion](https://emotion.sh/docs/introduction), and also uses Emotion under the
+hood.
+
+To install `styled-ppx`, open your terminal and run:
+
+```bash
+npm install @emotion/css
+opam install styled-ppx
+```
+
+After those commands finish, see what version of `styled-ppx` was installed by
+running `opam list`:
+
+```text{4}
+...
+stdune                3.15.2      Dune's unstable standard library
+stringext             1.6.0       Extra string functions for OCaml
+styled-ppx            0.56.0      Type-safe styled components for ReScript and Melange
+time_now              v0.16.0     Reports the current time
+topkg                 1.0.7       The transitory OCaml software packager
+...
+```
+
+Add `"styled-ppx" {>= "0.56.0"}` to the `depends` section of your `.opam` file.
+(Adjust the version based on what you see  from `ocaml list`.)
+
+To make sure that the version of `@emotion/css` you got from npm is compatible
+with the version of `styled-ppx` you got from opam, run
+
+```bash
+npm run check-npm-deps
+```
+
+You should see some output like this:
+
+```text
+Ok: opam package "reason-react.0.14.0" requires npm package: "react-dom" with constraint "^18.0.0", version installed: "18.2.0"
+Ok: opam package "reason-react.0.14.0" requires npm package: "react" with constraint "^18.0.0", version installed: "18.2.0"
+Ok: opam package "styled-ppx.0.56.0" requires npm package: "@emotion/css" with constraint ">=11.0.0", version installed: "11.11.2"
+```
+
+::: warning
+
+The output from `npm run check-npm-deps` might not show anything for
+`styled-ppx` yet, that should be fixed soon.
+
+:::
+
+## Add styles to `Promo`
+
+Try adding a style to `Promo`'s `form` element:
+
+```reason
+<form
+  className=[%cx {|display: flex; flex-direction: column;|}] // [!code ++]
+  onSubmit={evt => evt |> React.Event.Form.preventDefault}>
+```
+
+You'll get a compilation error:
+
+```
+File "src/order-confirmation/Promo.re", line 6, characters 16-18:
+6 |     className=[%cx {|display: flex; flex-direction: column;|}]
+                    ^^
+Error: Uninterpreted extension 'cx'.
+```
+
+`styled-ppx` is installed, but it can't be used until the `libraries` and
+`preprocess/pps` stanzas of your `dune` file have been updated:
+
+```dune
+(libraries reason-react melange-fest styled-ppx.emotion)
+ (preprocess
+  (pps melange.ppx reason-react-ppx styled-ppx))
+```
+
+For reference:
+
+- Adding `styled-ppx` in `preprocess/pps` enables the `%cx` extension node
+- Adding `styled-ppx.css` in `libraries` enables the `Css` and `CssJs` modules
+
+If you run `npm run serve', you'll see that the styles are now applied.
 
 ---
 
