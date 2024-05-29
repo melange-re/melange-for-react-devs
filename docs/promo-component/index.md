@@ -3,17 +3,17 @@
 Madame Jellobutter has been pretty impressed with your work so far, so she sends
 you on an all-expenses paid trip to an [OCaml
 Hackathon](https://fun-ocaml.com/). You learn a lot, make several new friends,
-and you even meet MonadicFanatic1984 in person![^1] After you return from the
-trip, you're excited to improve your development experience by upgrading your
-tools.
+and you even meet MonadicFanatic1984 in person![^1] You eagerly star to improve
+your development experience based on the things you've been learning during the
+hackathon.
 
 ## `styled-ppx` package
 
-At the hackathon, you meet a cool human named Dave who introduces you to his
-[styled-ppx](https://ocaml.org/p/styled-ppx) OCaml package. It lets you write
-type-safe CSS inside OCaml! It’s inspired by
-[Emotion](https://emotion.sh/docs/introduction) (and uses Emotion under the
-hood).
+At the hackathon, you meet a cool human named Dave who introduces you to
+[styled-ppx](https://ocaml.org/p/styled-ppx), the OCaml package he authored to
+let you write type-safe CSS inside OCaml. It’s inspired by
+[Emotion](https://emotion.sh/docs/introduction), also uses Emotion under the
+hood.
 
 To install `styled-ppx`, open your terminal and run:
 
@@ -47,7 +47,12 @@ ReasonReact-related helper functions. Add a new file `RR.re`:
 <<< RR.re#initial-functions
 
 These are all functions we used before, but now they're in one handy place, and
-we added documentation comments to them. Note the use of square brackets (`[]`):
+we added documentation comments to them. Note that you can now delete the
+`Format` module, since its `currency` function is now in `RR`.
+
+## Documentation comment markup language
+
+In a couple of the documentation comments, we used square brackets (`[]`):
 
 ```text
 /** Alias for [React.string] */
@@ -64,28 +69,37 @@ Add new file `Promo.re`:
 
 <<< Promo.re#first-version
 
-## Rename arguments using `as` keyword
-
-This is our first time seeing the `as` keyword, which is used to rename function
-arguments (among other things). It's equivalent to doing this:
-
-```reason
-[@react.component]
-let make = (~items: list(Item.t), ~date: Js.Date.t) => {
-  let _items = items;
-  let _date = date;
-```
-
-The renamed variables are only visible within the function, the caller of the
-function must still use the original names for the arguments.
-
-If we don't rename `~items` and `~dates` arguments, the compiler will give us
-the "unused variable items" error. So we temporarily rename them to names
-starting with underscores so the compiler won't complain about their non-usage.
+For now, it just shows an input that allows the user to enter a promo code.
 
 ## `React.useReducer`
 
-One of the neat things you learn from FunctorPunk is that
+Another neat trick you learn from FunctorPunk is that you can substitute
+[React.useState](https://reasonml.github.io/reason-react/docs/en/usestate-hook)[^3]
+with
+[React.useReducer](https://reasonml.github.io/reason-react/docs/en/usereducer-hook):
+
+<<< Promo.re#use-reducer{3-4,9}
+
+The advantage of this is that you can update state by passing a value instead of
+a callback. To make it even nicer, we can also rename `dispatch` to `setCode`
+and use function chaining inside the `onChange` callback:
+
+<<< Promo.re#set-code{3-4,9}
+
+## `RR.useStateValue` helper function
+
+We can add a new helper function `RR.useStateValue` that allows us to more
+easily use this pattern:
+
+<<< RR.re#use-state-value
+
+The state setup code in `Promo` then becomes very simple:
+
+```reason
+let (code, setCode) = // [!code --]
+    React.useReducer((_state, newState) => newState, ""); // [!code --]
+let (code, setCode) = RR.useStateValue(""); // [!code ++]
+```
 
 ---
 
@@ -118,6 +132,9 @@ and [demo](https://react-book.melange.re/demo/src/promo-component/) for this cha
     developing the mad scientist's website, and he escaped because he wanted to
     migrate the website to Melange but the mad scientist didn't approve.
 
-[2^]: In real life, FunctorPunk29 is a cybernetically-enhanced wombat who
+[^2]: In real life, FunctorPunk29 is a cybernetically-enhanced wombat who
     escaped from a mad scientist's laboratory (no, not the same one). He escaped
     because FREEDOM.
+
+[^3]: `React.useReducer` is just the ReasonReact binding for React's [useReducer
+    hook](https://react.dev/reference/react/useReducer).
