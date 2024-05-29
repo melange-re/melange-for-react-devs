@@ -48,3 +48,14 @@ let make = () => {
   </form>;
 };
 // #endregion set-code
+
+ignore(make);
+
+// #region ignore
+[@react.component]
+let make = (~items: list(Item.t), ~date: Js.Date.t) => {
+  ignore(items);
+  ignore(date);
+  // #endregion ignore
+  <div />;
+};

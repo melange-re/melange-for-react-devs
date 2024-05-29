@@ -101,6 +101,37 @@ let (code, setCode) = // [!code --]
 let (code, setCode) = RR.useStateValue(""); // [!code ++]
 ```
 
+## Add `Promo` to `Index`
+
+The `Promo` component isn't finished yet, but let's add it to `Index` so that we
+can see how it looks as we're building it:
+
+<<< Index.re#make{4-5}
+
+We know that, sooner or later, we must pass `items` and `date` to `Promo`, so we
+just do it now. However, this breaks the build because `Promo` doesn't yet
+define those props.
+
+## Temporarily ignore props
+
+We can quickfix it by adding the `~items` and `~date` props to `Promo.make` and
+then immediately `ignore`ing them in the body of the function:
+
+<<< Promo.re#ignore
+
+A more concise way to temporarily ignore props is to use the `as` keyword in the
+function argument list:
+
+```reason
+[@react.component]
+let make = (~items as _: list(Item.t), ~date as _: Js.Date.t) => {
+```
+
+Here we rename `~items` to `_`, effectively ignoring it, and also do the same
+for `~date`. Note that this renaming only extends to the scope of the function
+itself.
+
+
 ---
 
 summary
