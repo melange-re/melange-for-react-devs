@@ -59,3 +59,36 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   // #endregion ignore
   <div />;
 };
+
+// #region style-submodule
+module Style = {
+  let form = [%cx {|
+    display: flex;
+    flex-direction: column;
+  |}];
+
+  let input = [%cx
+    {|
+    font-family: monospace;
+    text-transform: uppercase;
+    |}
+  ];
+};
+// #endregion style-submodule
+
+let _ =
+  () => {
+    let (code, setCode) = RR.useStateValue("");
+    // #region updated-jsx
+    <form
+      className=Style.form
+      onSubmit={evt => evt |> React.Event.Form.preventDefault}>
+      <input
+        className=Style.input
+        value=code
+        onChange={evt => evt |> RR.getValueFromEvent |> setCode}
+      />
+      {RR.s("Todo: Discount value or error")}
+    </form>;
+    // #endregion updated-jsx
+  };

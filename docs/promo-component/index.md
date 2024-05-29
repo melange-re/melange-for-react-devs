@@ -187,6 +187,52 @@ For reference:
 
 If you run `npm run serve', you'll see that the styles are now applied.
 
+
+## `Promo.Style` submodule
+
+Although you can use the `%cx` extension node inline within your JSX, it's
+usually a good idea to put all of them in a `Style` submodule within your
+component module:
+
+<<< Promo.re#style-submodule
+
+Then update your JSX:
+
+<<< Promo.re#updated-jsx{2,5}
+
+Using a `Style` submodule encourages reuse of class names and tends to make your
+JSX more readable.
+
+## `styled-ppx` is type-safe
+
+The strings we pass to the `%cx` extension must be valid CSS and each property
+must have a valid value. To see this in action, change the value of the
+`flex-direction` property:
+
+```css
+flex-direction: column; // [!code --]
+flex-direction: col; // [!code ++]
+```
+
+You'll get this compilation error:
+
+```text
+File "src/order-confirmation/Promo.re", lines 3-4, characters 37-43:
+2 | ...................
+3 | .................;
+4 |     flex-direction: col.
+Error: Property 'flex-direction' has an invalid value: 'col'
+```
+
+Change some of the other properties to invalid values and see what happens.
+
+## Install `vscode-styled-ppx` extension
+
+Now that we're writing our CSS inside our OCaml code, the CSS is no longer
+highlighted. Fortunately, it's not an issue if for VS Code users, just install
+the [vscode-styled-ppx
+extension](https://marketplace.visualstudio.com/items?itemName=davesnx.vscode-styled-ppx).
+
 ---
 
 summary
