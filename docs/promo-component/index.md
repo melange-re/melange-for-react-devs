@@ -257,7 +257,8 @@ and `date`:
 
 <<< Promo.re#discount-function
 
-We have to use `Option.map` since `submittedCode`'s type is `option(string)`. Also, we must stop ignoring the `date` prop in order to use its value:
+We have to use `Option.map` since `submittedCode`'s type is `option(string)`.
+Also, we must stop ignoring the `date` prop in order to use its value:
 
 ```reason
 [@react.component]
@@ -271,10 +272,44 @@ Render `discountFunction` under the `input`:
 
 <<< Promo.re#render-discount-function
 
-Practically speaking, `discountFunction` is only rendered when it's in the error
-state. We also need to the new `error` class name to the `Style` submodule:
+We only render `discountFunction` when it's in the error state. We also need to
+add the new `codeError` class name to the `Style` submodule:
 
-<<< Promo.re#error-class-name
+<<< Promo.re#code-error-class-name
+
+This will make promo code error messages be rendered in red.
+
+## Add `discount` derived value
+
+Add a `discount` variable that derives its value from `discountFunction` and
+`items`:
+
+<<< Promo.re#discount
+
+To use the value of the `items` prop, we must stop ignoring it:
+
+```reason
+[@react.component]
+let make = (~items as _: list(Item.t), ~date: Js.Date.t) => { // [!code --]
+let make = (~items: list(Item.t), ~date: Js.Date.t) => { // [!code ++]
+```
+
+## Render `discount`
+
+Render `discount` under where we render `discountFunction`:
+
+<<< Promo.re#render-discount
+
+When `discount` is of the form `Some(Ok(value))`, then the discount must exist
+and we show its value with a minus in front to indicate the amount that will be
+subtracted from the order's total value. When `discount` is of the form
+`Some(Error(code))`, then an error occurred and we should render an error
+message based on the value of `code` (this is left as an exercise)
+
+We also need to add `discountError` to `Style` submodule, which will cause the
+discount error to be rendered in purple:
+
+<<< Promo.re#discount-error-class-name
 
 ---
 

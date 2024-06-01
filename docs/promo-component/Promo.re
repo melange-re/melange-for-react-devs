@@ -138,13 +138,18 @@ module Css = {
 };
 
 module Style' = {
-  let error = "";
+  // #region code-error-class-name
+  let codeError = [%cx {|color: red|}];
+  // #endregion code-error-class-name
+
+  // #region discount-error-class-name
+  let discountError = [%cx {|color: purple|}];
+  // #endregion discount-error-class-name
 };
 
 let _ =
-  () => {
+  discountFunction => {
     module Style = Style';
-    let discountFunction = Some(Error(Discount.InvalidCode));
 
     <>
       // #region render-discount-function
@@ -153,7 +158,7 @@ let _ =
        | None
        | Some(Ok(_)) => React.null
        | Some(Error(error)) =>
-         <div className=Style.error>
+         <div className=Style.codeError>
            {let errorType =
               switch (error) {
               | Discount.InvalidCode => "Invalid"
@@ -166,10 +171,45 @@ let _ =
     </>;
   };
 
-let _ = {
-  // #region error-class-name
-  let error = [%cx {|color: red|}];
-  // #endregion error-class-name
+let _ =
+  (submittedCode, date, items) => {
+    // #region discount
 
-  ignore(error);
-};
+    let discountFunction =
+      submittedCode
+      |> Option.map(code => Discount.getDiscountFunction(code, date));
+
+    let discount =
+      switch (discountFunction) {
+      | None
+      | Some(Error(_)) => None
+      | Some(Ok(discountFunction)) => Some(discountFunction(items))
+      };
+    // #endregion discount
+
+    ignore(discount);
+  };
+
+[@warning "-8"]
+let _ =
+  (discountFunction, discount) => {
+    module Style = Style';
+
+    <>
+      // #region render-discount
+      {switch (discountFunction) {
+       | None
+       | Some(Ok(_)) => React.null
+       /* ... */
+       }}
+      {switch (discount) {
+       | None => React.null
+       | Some(Ok(value)) => value |> Float.neg |> string_of_float |> RR.s
+       | Some(Error(_code)) =>
+         <div className=Style.discountError>
+           {RR.s("Todo: discount error message")}
+         </div>
+       }}
+      // #endregion render-discount
+    </>;
+  };

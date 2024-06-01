@@ -11,17 +11,26 @@ module Style = {
     |}
   ];
 
-  let error = [%cx {|color: red|}];
+  let codeError = [%cx {|color: red|}];
+
+  let discountError = [%cx {|color: purple|}];
 };
 
 [@react.component]
-let make = (~items as _: list(Item.t), ~date: Js.Date.t) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
   let discountFunction =
     submittedCode
     |> Option.map(code => Discount.getDiscountFunction(code, date));
+
+  let discount =
+    switch (discountFunction) {
+    | None
+    | Some(Error(_)) => None
+    | Some(Ok(discountFunction)) => Some(discountFunction(items))
+    };
 
   <form
     className=Style.form
@@ -41,13 +50,21 @@ let make = (~items as _: list(Item.t), ~date: Js.Date.t) => {
      | None
      | Some(Ok(_)) => React.null
      | Some(Error(error)) =>
-       <div className=Style.error>
+       <div className=Style.codeError>
          {let errorType =
             switch (error) {
             | Discount.InvalidCode => "Invalid"
             | ExpiredCode => "Expired"
             };
           {j|$errorType promo code|j} |> RR.s}
+       </div>
+     }}
+    {switch (discount) {
+     | None => React.null
+     | Some(Ok(value)) => value |> Float.neg |> string_of_float |> RR.s
+     | Some(Error(_code)) =>
+       <div className=Style.discountError>
+         {RR.s("Todo: discount error message")}
        </div>
      }}
   </form>;
