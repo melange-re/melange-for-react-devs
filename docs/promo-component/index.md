@@ -1,10 +1,10 @@
 # Promo Component
 
-Madame Jellobutter has been pretty impressed with your work so far, so she sends
-you on an all-expenses paid trip to an [OCaml
+Your work so far has left a deep impressin on Madame Jellobutter, so much so
+that she even sends you on an all-expenses paid trip to an [OCaml
 Hackathon](https://fun-ocaml.com/). You learn a lot, make several new friends,
 and you even meet MonadicFanatic1984 in person![^1] You're extremely psyched to
-start applying the things you learn during the hackathon.
+start applying the things you're learn during the hackathon.
 
 ## `RR` utility module
 
@@ -42,9 +42,11 @@ For now, it just shows an input that allows the user to enter a promo code.
 ## `React.useReducer`
 
 Another neat trick you learn from FunctorPunk is that you can substitute
-[React.useState](https://reasonml.github.io/reason-react/docs/en/usestate-hook)[^3]
+[React.useState](https://reasonml.github.io/reason-react/docs/en/usestate-hook)
 with
-[React.useReducer](https://reasonml.github.io/reason-react/docs/en/usereducer-hook):
+[React.useReducer](https://reasonml.github.io/reason-react/docs/en/usereducer-hook)[^3]
+when defining [state
+variables](https://react.dev/learn/state-a-components-memory#adding-a-state-variable):
 
 <<< Promo.re#use-reducer{3-4,9}
 
@@ -56,8 +58,8 @@ and use function chaining inside the `onChange` callback:
 
 ## `RR.useStateValue` helper function
 
-We can add a new helper function `RR.useStateValue` that allows us to more
-easily use this pattern:
+This state variable pattern can be made more convenient by adding new helper
+function `RR.useStateValue`:
 
 <<< RR.re#use-state-value
 
@@ -224,7 +226,7 @@ File "src/order-confirmation/Promo.re", lines 3-4, characters 37-43:
 Error: Property 'flex-direction' has an invalid value: 'col'
 ```
 
-Change some of the other properties to invalid values and see what happens.
+Introduce some other errors to your CSS code and see what happens.
 
 ## Install `vscode-styled-ppx` extension
 
@@ -232,6 +234,47 @@ Now that we're writing our CSS inside our OCaml code, the CSS is no longer
 highlighted. Fortunately, it's not an issue if for VS Code users, just install
 the [vscode-styled-ppx
 extension](https://marketplace.visualstudio.com/items?itemName=davesnx.vscode-styled-ppx).
+
+## Add `submittedCode` state variable
+
+Add a new state variable named `submittedCode`:
+
+<<< Promo.re#submitted-code{2,8,15}
+
+Basically, `submittedCode` is:
+
+- `None` if the user hasn't submitted a promo code
+- `Some(code)` if the user has submitted a promo code
+
+Pressing the `Enter` key while editing the input submits the promo code, and
+editing the input cancels the submitted promo code (sets `submittedCode` back to
+`None).
+
+## Add `discountFunction` derived value
+
+Add a `discountFunction` variable that derives its value from `submittedCode`
+and `date`:
+
+<<< Promo.re#discount-function
+
+We have to use `Option.map` since `submittedCode`'s type is `option(string)`. Also, we must stop ignoring the `date` prop in order to use its value:
+
+```reason
+[@react.component]
+let make = (~items as _: list(Item.t), ~date as _: Js.Date.t) => { // [!code --]
+let make = (~items as _: list(Item.t), ~date: Js.Date.t) => { // [!code ++]
+```
+
+## Render `discountFunction`
+
+Render `discountFunction` under the `input`:
+
+<<< Promo.re#render-discount-function
+
+Practically speaking, `discountFunction` is only rendered when it's in the error
+state. We also need to the new `error` class name to the `Style` submodule:
+
+<<< Promo.re#error-class-name
 
 ---
 
@@ -264,9 +307,9 @@ and [demo](https://react-book.melange.re/demo/src/promo-component/) for this cha
     developing the mad scientist's website, and he escaped because he wanted to
     migrate the website to Melange but the mad scientist didn't approve.
 
-[^2]: In real life, FunctorPunk29 is a cybernetically-enhanced wombat who
+[^2]: FunctorPunk is a cybernetically-enhanced wombat who
     escaped from a mad scientist's laboratory (no, not the same one). He escaped
     because FREEDOM.
 
-[^3]: `React.useReducer` is just the ReasonReact binding for React's [useReducer
+[^3]: `React.useReducer` is the ReasonReact binding for React's [useReducer
     hook](https://react.dev/reference/react/useReducer).
