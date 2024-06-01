@@ -213,3 +213,33 @@ let _ =
       // #endregion render-discount
     </>;
   };
+
+let _ =
+  (discountFunction, discount) => {
+    module Style = Style';
+
+    <>
+      // #region render-tuple
+      {switch (discountFunction, discount) {
+       | (Some(Error(error)), _) =>
+         <div className=Style.codeError>
+           {let errorType =
+              switch (error) {
+              | Discount.InvalidCode => "Invalid"
+              | ExpiredCode => "Expired"
+              };
+            {j|$errorType promo code|j} |> RR.s}
+         </div>
+       | (_, Some(Error(_code))) =>
+         <div className=Style.discountError>
+           {RR.s("Todo: discount error message")}
+         </div>
+       | (Some(_), Some(Ok(value))) =>
+         value |> Float.neg |> string_of_float |> RR.s
+       | (None, None)
+       | (Some(_), None)
+       | (None, Some(_)) => React.null
+       }}
+      // #endregion render-tuple
+    </>;
+  };

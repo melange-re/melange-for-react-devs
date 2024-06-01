@@ -311,6 +311,17 @@ discount error to be rendered in purple:
 
 <<< Promo.re#discount-error-class-name
 
+## Use one switch expression
+
+The current rendering logic is unsatisfactory. On first glance, it looks as if
+`discountFunction` is rendered first, and then `discount` is rendered. But in
+reality, only one of the derived variables is ever rendered at a time. That
+suggests that we could use a single switch expression for the render logic. One
+way to do it is to make the tuple `(discountFunction, discount)` be the input to
+the switch expression:
+
+<<< Promo.re#render-tuple
+
 ---
 
 summary
