@@ -301,10 +301,11 @@ Render `discount` under where we render `discountFunction`:
 <<< Promo.re#render-discount
 
 When `discount` is of the form `Some(Ok(value))`, then the discount must exist
-and we show its value with a minus in front to indicate the amount that will be
-subtracted from the order's total value. When `discount` is of the form
+and we show its value (with a minus sign in front to indicate that the amount
+that will be subtracted from the total value). When `discount` is of the form
 `Some(Error(code))`, then an error occurred and we should render an error
-message based on the value of `code` (this is left as an exercise)
+message based on the value of `code` (this is left as an exercise at the end of
+the chapter).
 
 We also need to add `discountError` to `Style` submodule, which will cause the
 discount error to be rendered in purple:
@@ -316,15 +317,95 @@ discount error to be rendered in purple:
 The current rendering logic is unsatisfactory. On first glance, it looks as if
 `discountFunction` is rendered first, and then `discount` is rendered. But in
 reality, only one of the derived variables is ever rendered at a time. That
-suggests that we could use a single switch expression for the render logic. One
-way to do it is to make the tuple `(discountFunction, discount)` be the input to
-the switch expression:
+suggests that we could use a single switch expression for the render logic. It's
+helpful to list the four mutually-exclusive states we need to render:
+
+| State | What to render |
+| ---- | ---- |
+| No promo code submitted | Nothing |
+| Promo code invalid or expired | Error message, e.g. "Invalid promo code" |
+| Error applying discount | Error message, e.g. "Buy at least one more burger to enjoy this promotion" |
+| Discount | The value of the discount with a minus sign in front |
+
+One way to refactor to a single switch expression is to make the tuple
+`(discountFunction, discount)` be the input to the switch expression:
 
 <<< Promo.re#render-tuple
 
+This works, but that is a lot of pattern matching to render just four states.
+
+## Use a single `discount` derived variable
+
+We cannot have better rendering logic without first refactoring the derived
+variables. Replace `discountFunction` and `discount` with just a single derived
+variable `discount`:
+
+<<< Promo.re#discount-poly
+
+Here we used three nested switch expressions to explicitly map the values from
+all the inputs to the four mutually-exclusive states we want to render. The flow
+of data goes like this:
+
+1. If `submittedCode` is `None`, return `` `NoSubmittedCode``
+1. If `submittedCode` is `Some(code)`, then invoke
+   `Discount.getDiscountFunction(code, date)`
+   1. If the result of `Discount.getDiscountFunction(code, date)` is
+      `Error(error)`, then return `` `CodeError(error)``
+   1. If the result of `Discount.getDiscountFunction(code, date)` is
+      `Ok(discountFunction)` then invoke `discountFunction(items)`
+      1. If the result of `discountFunction(items)` is `Error(error)`, then
+         return `` `DiscountError(error)``
+      1. If the result of `discountFunction(items)` is `Ok(value)`, then return
+         `` `Discount(value)``
+
+Because we use polymorphic variant constructors, we don't need to define a new
+type. If you hover over the `discount` variable in your editor you'll see that
+its inferred type is:
+
+```reason
+[> `CodeError(Discount.error)
+ | `Discount(float)
+ | `DiscountError([> `MissingSandwichTypes
+                   | `NeedMegaBurger
+                   | `NeedOneBurger
+                   | `NeedTwoBurgers ])
+ | `NoSubmittedCode ]
+```
+
+## Render `discount` polymorphic variant
+
+Now change the switch expression in your render logic to take the `discount`
+polymorphic variant as its only input:
+
+<<< Promo.re#render-discount-poly
+
+The pattern matching is now more concise and more readable, and it is still
+type-safe. Try commenting out the `` `NoSubmittedCode`` branch and you'll get a
+compilation error:
+
+```text
+File "src/order-confirmation/Promo.re", lines 52-68, characters 4-7:
+52 | ....{switch (discount) {
+53 |      //  | `NoSubmittedCode => React.null
+54 |      | `Discount(discount) => discount |> Float.neg |> RR.currency
+55 |      | `CodeError(error) =>
+56 |        <div className=Style.codeError>
+...
+65 |        <div className=Style.discountError>
+66 |          {RR.s("Todo: discount error message")}
+67 |        </div>
+68 |      }}
+Error (warning 8 [partial-match]): this pattern-matching is not exhaustive.
+Here is an example of a case that is not matched:
+`NoSubmittedCode
+```
+
 ---
 
-summary
+Muy bueno! You've created a `Promo` component that can be used to submit promo
+codes and see the discounts they produce when applied to an order, along with
+any errors that might occur. In the next chapter, we'll integrate this `Promo`
+component into your `Order` component.
 
 ## Overview
 

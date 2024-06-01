@@ -204,7 +204,7 @@ let _ =
        }}
       {switch (discount) {
        | None => React.null
-       | Some(Ok(value)) => value |> Float.neg |> string_of_float |> RR.s
+       | Some(Ok(value)) => value |> Float.neg |> RR.currency
        | Some(Error(_code)) =>
          <div className=Style.discountError>
            {RR.s("Todo: discount error message")}
@@ -234,12 +234,59 @@ let _ =
          <div className=Style.discountError>
            {RR.s("Todo: discount error message")}
          </div>
-       | (Some(_), Some(Ok(value))) =>
-         value |> Float.neg |> string_of_float |> RR.s
+       | (Some(_), Some(Ok(value))) => value |> Float.neg |> RR.currency
        | (None, None)
        | (Some(_), None)
        | (None, Some(_)) => React.null
        }}
       // #endregion render-tuple
+    </>;
+  };
+
+let _ =
+  (submittedCode, date, items) => {
+    // #region discount-poly
+    let discount =
+      switch (submittedCode) {
+      | None => `NoSubmittedCode
+      | Some(code) =>
+        switch (Discount.getDiscountFunction(code, date)) {
+        | Error(error) => `CodeError(error)
+        | Ok(discountFunction) =>
+          switch (discountFunction(items)) {
+          | Error(error) => `DiscountError(error)
+          | Ok(value) => `Discount(value)
+          }
+        }
+      };
+    // #endregion discount-poly
+
+    ignore(discount);
+  };
+
+let _ =
+  discount => {
+    module Style = Style';
+
+    <>
+      // #region render-discount-poly
+      {switch (discount) {
+       | `NoSubmittedCode => React.null
+       | `Discount(discount) => discount |> Float.neg |> RR.currency
+       | `CodeError(error) =>
+         <div className=Style.codeError>
+           {let errorType =
+              switch (error) {
+              | Discount.InvalidCode => "Invalid"
+              | ExpiredCode => "Expired"
+              };
+            {j|$errorType promo code|j} |> RR.s}
+         </div>
+       | `DiscountError(_code) =>
+         <div className=Style.discountError>
+           {RR.s("Todo: discount error message")}
+         </div>
+       }}
+      // #endregion render-discount-poly
     </>;
   };
