@@ -413,7 +413,23 @@ component into your `Order` component.
 
 ## Exercises
 
-<b>1.</b> tbd
+<b>1.</b> Render the different error messages for the `` `DiscountError`` branch
+of `Promo`'s switch expression. Here's what message should be shown for each
+constructor:
+
+| Polymorphic variant constructor | Message |
+| ------------------------------- | ------- |
+| `` `NeedOneBurger`` | Buy at least 1 more burger to enjoy this promotion |
+| `` `NeedTwoBurgers`` | Buy at least 1 more burgers to enjoy this promotion |
+| `` `NeedMegaBurger`` | Buy a burger with every topping to enjoy this promotion |
+| `` `MissingSandwichTypes`` | Buy every sandwich to enjoy this promotion  |
+
+::: details Solution
+
+<<< Promo.re#discount-error-message
+
+:::
+
 
 <b>2.</b> tbd
 

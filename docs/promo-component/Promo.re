@@ -290,3 +290,27 @@ let _ =
       // #endregion render-discount-poly
     </>;
   };
+
+let _ =
+  discount => {
+    module Style = Style';
+
+    <>
+      // #region discount-error-message
+      {switch (discount) {
+       /* ... */
+       | `DiscountError(code) =>
+         let buyWhat =
+           switch (code) {
+           | `NeedOneBurger => "at least 1 more burger"
+           | `NeedTwoBurgers => "at least 2 burgers"
+           | `NeedMegaBurger => "a burger with every topping"
+           | `MissingSandwichTypes => "every sandwich"
+           };
+         <div className=Style.discountError>
+           {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}
+         </div>;
+       }}
+      // #endregion discount-error-message
+    </>;
+  };

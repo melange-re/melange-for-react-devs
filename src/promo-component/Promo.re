@@ -61,10 +61,17 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
             };
           {j|$errorType promo code|j} |> RR.s}
        </div>
-     | `DiscountError(_code) =>
+     | `DiscountError(code) =>
+       let buyWhat =
+         switch (code) {
+         | `NeedOneBurger => "at least 1 more burger"
+         | `NeedTwoBurgers => "at least 2 burgers"
+         | `NeedMegaBurger => "a burger with every topping"
+         | `MissingSandwichTypes => "every sandwich"
+         };
        <div className=Style.discountError>
-         {RR.s("Todo: discount error message")}
-       </div>
+         {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}
+       </div>;
      }}
   </form>;
 };
