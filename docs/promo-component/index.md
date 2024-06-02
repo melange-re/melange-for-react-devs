@@ -15,8 +15,7 @@ functions. Add a new file `RR.re`:
 <<< RR.re#initial-functions
 
 These are all functions we used before, but now they're in one handy place, and
-we added documentation comments to them. Note that you can now delete the
-`Format` module, since its `currency` function is now in `RR`.
+we added documentation comments to them.
 
 ## Documentation comment markup language
 
@@ -430,8 +429,31 @@ constructor:
 
 :::
 
+<b>2.</b> Refactor the `Order` component to use `styled-ppx` and your new `RR`
+helper function module.
 
-<b>2.</b> tbd
+::: details Hint
+
+`styled-ppx` supports [nested
+selectors](https://styled-ppx.vercel.app/reference/selectors).
+
+:::
+
+::: details Solution
+
+After refactoring, `Order.re` might look something like this:
+
+<<< @/../src/promo-component/Order.re
+
+You should do some cleanup:
+
+- Delete `Format` module, since its `currency` function is now in `RR`.
+- Delete `order-item.module.css` and `order.module.css` files, since they are no
+  longer used.
+- Delete the `melange.emit/runtime_deps` stanza from your `dune` file, since
+  there are no more `.css` files to copy into the build directory.
+
+:::
 
 <b>3.</b> tbd
 

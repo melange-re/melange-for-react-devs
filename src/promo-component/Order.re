@@ -1,18 +1,39 @@
 type t = list(Item.t);
 
 module OrderItem = {
-  [@mel.module "./order-item.module.css"]
-  external css: Js.t({..}) = "default";
+  module Style = {
+    let item = [%cx {|border-top: 1px solid lightgray;|}];
+    let emoji = [%cx {|font-size: 2em;|}];
+    let price = [%cx {|text-align: right;|}];
+  };
 
   [@react.component]
   let make = (~item: Item.t) =>
-    <tr className=css##item>
-      <td className=css##emoji> {item |> Item.toEmoji |> React.string} </td>
-      <td className=css##price> {item |> Item.toPrice |> Format.currency} </td>
+    <tr className=Style.item>
+      <td className=Style.emoji> {item |> Item.toEmoji |> RR.s} </td>
+      <td className=Style.price> {item |> Item.toPrice |> RR.currency} </td>
     </tr>;
 };
 
-[@mel.module "./order.module.css"] external css: Js.t({..}) = "default";
+module Style = {
+  let order = [%cx
+    {|
+    border-collapse: collapse;
+
+    td {
+      padding: 0.5em;
+    }
+    |}
+  ];
+
+  let total = [%cx
+    {|
+    border-top: 1px solid gray;
+    font-weight: bold;
+    text-align: right;
+    |}
+  ];
+};
 
 [@react.component]
 let make = (~items: t) => {
@@ -22,17 +43,16 @@ let make = (~items: t) => {
          acc +. Item.toPrice(order)
        );
 
-  <table className=css##order>
+  <table className=Style.order>
     <tbody>
       {items
        |> List.mapi((index, item) =>
             <OrderItem key={"item-" ++ string_of_int(index)} item />
           )
-       |> Stdlib.Array.of_list
-       |> React.array}
-      <tr className=css##total>
-        <td> {React.string("Total")} </td>
-        <td> {total |> Format.currency} </td>
+       |> RR.list}
+      <tr className=Style.total>
+        <td> {RR.s("Total")} </td>
+        <td> {total |> RR.currency} </td>
       </tr>
     </tbody>
   </table>;

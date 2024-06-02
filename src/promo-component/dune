@@ -4,9 +4,7 @@
  (preprocess
   (pps melange.ppx reason-react-ppx styled-ppx))
  (module_systems
-  (es6 mjs))
- (runtime_deps
-  (glob_files *.css)))
+  (es6 mjs)))
 
 (cram
  (deps
