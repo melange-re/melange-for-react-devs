@@ -8,10 +8,12 @@ module OrderItem = {
   };
 
   [@react.component]
-  let make = (~item: Item.t) =>
+  let make = (~item: Item.t, ~date: Js.Date.t) =>
     <tr className=Style.item>
       <td className=Style.emoji> {item |> Item.toEmoji |> RR.s} </td>
-      <td className=Style.price> {item |> Item.toPrice |> RR.currency} </td>
+      <td className=Style.price>
+        {item |> Item.toPrice(~date) |> RR.currency}
+      </td>
     </tr>;
 };
 
@@ -36,18 +38,18 @@ module Style = {
 };
 
 [@react.component]
-let make = (~items: t) => {
+let make = (~items: t, ~date: Js.Date.t) => {
   let total =
     items
     |> ListLabels.fold_left(~init=0., ~f=(acc, order) =>
-         acc +. Item.toPrice(order)
+         acc +. Item.toPrice(order, ~date)
        );
 
   <table className=Style.order>
     <tbody>
       {items
        |> List.mapi((index, item) =>
-            <OrderItem key={"item-" ++ string_of_int(index)} item />
+            <OrderItem key={"item-" ++ string_of_int(index)} item date />
           )
        |> RR.list}
       <tr className=Style.total>

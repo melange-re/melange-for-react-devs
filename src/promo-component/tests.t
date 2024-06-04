@@ -1,5 +1,5 @@
 Sandwich tests
-  $ node ./output/src/promo-codes/SandwichTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/promo-component/SandwichTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: Item.Sandwich.toEmoji
   ok 1 - Item.Sandwich.toEmoji
@@ -23,7 +23,7 @@ Sandwich tests
   # todo 0
 
 Burger tests
-  $ node ./output/src/promo-codes/BurgerTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/promo-component/BurgerTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: A fully-loaded burger
   ok 1 - A fully-loaded burger
@@ -55,7 +55,7 @@ Burger tests
   # todo 0
 
 Discount tests
-  $ node ./output/src/promo-codes/DiscountTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/promo-component/DiscountTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: 0 burgers, no discount
   ok 1 - 0 burgers, no discount

@@ -1,6 +1,11 @@
 open Fest;
 
+// 2024 June 3 is a Monday
+let june3 = Js.Date.fromString("2024-06-03T00:00");
+
 module FreeBurger = {
+  let getFreeBurgers = Discount.getFreeBurgers(~date=june3);
+
   let burger: Item.Burger.t = {
     lettuce: false,
     onions: 0,
@@ -12,11 +17,7 @@ module FreeBurger = {
   test("0 burgers, no discount", () =>
     expect
     |> deepEqual(
-         Discount.getFreeBurgers([
-           Hotdog,
-           Sandwich(Ham),
-           Sandwich(Turducken),
-         ]),
+         getFreeBurgers([Hotdog, Sandwich(Ham), Sandwich(Turducken)]),
          Error(`NeedTwoBurgers),
        )
   );
@@ -24,7 +25,7 @@ module FreeBurger = {
   test("1 burger, no discount", () =>
     expect
     |> deepEqual(
-         Discount.getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
+         getFreeBurgers([Hotdog, Sandwich(Ham), Burger(burger)]),
          Error(`NeedOneBurger),
        )
   );
@@ -32,7 +33,7 @@ module FreeBurger = {
   test("2 burgers of same price, discount", () =>
     expect
     |> deepEqual(
-         Discount.getFreeBurgers([
+         getFreeBurgers([
            Hotdog,
            Burger(burger),
            Sandwich(Ham),
@@ -45,7 +46,7 @@ module FreeBurger = {
   test("2 burgers of different price, discount of cheaper one", () =>
     expect
     |> deepEqual(
-         Discount.getFreeBurgers([
+         getFreeBurgers([
            Hotdog,
            Burger({...burger, tomatoes: true}), // 15.05
            Sandwich(Ham),
@@ -58,7 +59,7 @@ module FreeBurger = {
   test("3 burgers of different price, return Ok(15.15)", () =>
     expect
     |> deepEqual(
-         Discount.getFreeBurgers([
+         getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
            Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
@@ -72,7 +73,7 @@ module FreeBurger = {
   test("7 burgers, return Ok(46.75)", () =>
     expect
     |> deepEqual(
-         Discount.getFreeBurgers([
+         getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
            Burger({...burger, cheese: 5}), // 15.50
@@ -94,17 +95,20 @@ module HalfOff = {
   test("No burger has 1+ of every topping, return Error(`NeedMegaBurger)", () =>
     expect
     |> deepEqual(
-         Discount.getHalfOff([
-           Hotdog,
-           Sandwich(Portabello),
-           Burger({
-             lettuce: true,
-             tomatoes: true,
-             cheese: 1,
-             onions: 1,
-             bacon: 0,
-           }),
-         ]),
+         Discount.getHalfOff(
+           ~date=june3,
+           [
+             Hotdog,
+             Sandwich(Portabello),
+             Burger({
+               lettuce: true,
+               tomatoes: true,
+               cheese: 1,
+               onions: 1,
+               bacon: 0,
+             }),
+           ],
+         ),
          Error(`NeedMegaBurger),
        )
   );
@@ -112,17 +116,20 @@ module HalfOff = {
   test("One burger has 1+ of every topping, return Ok(15.675)", () =>
     expect
     |> deepEqual(
-         Discount.getHalfOff([
-           Hotdog,
-           Sandwich(Portabello),
-           Burger({
-             lettuce: true,
-             tomatoes: true,
-             cheese: 1,
-             onions: 1,
-             bacon: 2,
-           }),
-         ]),
+         Discount.getHalfOff(
+           ~date=june3,
+           [
+             Hotdog,
+             Sandwich(Portabello),
+             Burger({
+               lettuce: true,
+               tomatoes: true,
+               cheese: 1,
+               onions: 1,
+               bacon: 2,
+             }),
+           ],
+         ),
          Ok(15.675),
        )
   );
@@ -132,12 +139,15 @@ module SandwichHalfOff = {
   test("Not all sandwiches, return Error", () =>
     expect
     |> deepEqual(
-         Discount.getSandwichHalfOff([
-           Sandwich(Unicorn),
-           Hotdog,
-           Sandwich(Portabello),
-           Sandwich(Ham),
-         ]),
+         Discount.getSandwichHalfOff(
+           ~date=june3,
+           [
+             Sandwich(Unicorn),
+             Hotdog,
+             Sandwich(Portabello),
+             Sandwich(Ham),
+           ],
+         ),
          Error(`MissingSandwichTypes),
        )
   );
@@ -145,20 +155,23 @@ module SandwichHalfOff = {
   test("All sandwiches, return Ok", () =>
     expect
     |> deepEqual(
-         Discount.getSandwichHalfOff([
-           Sandwich(Turducken),
-           Hotdog,
-           Sandwich(Portabello),
-           Burger({
-             lettuce: true,
-             tomatoes: true,
-             cheese: 1,
-             onions: 1,
-             bacon: 2,
-           }),
-           Sandwich(Unicorn),
-           Sandwich(Ham),
-         ]),
+         Discount.getSandwichHalfOff(
+           ~date=june3,
+           [
+             Sandwich(Turducken),
+             Hotdog,
+             Sandwich(Portabello),
+             Burger({
+               lettuce: true,
+               tomatoes: true,
+               cheese: 1,
+               onions: 1,
+               bacon: 2,
+             }),
+             Sandwich(Unicorn),
+             Sandwich(Ham),
+           ],
+         ),
          Ok(70.675),
        )
   );

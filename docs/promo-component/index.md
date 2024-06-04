@@ -429,7 +429,44 @@ constructor:
 
 :::
 
-<b>2.</b> Refactor the `Order` component to use `styled-ppx` and your new `RR`
+<b>2.</b> Right now, `Item.toPrice` is a nondeterministic function---it returns
+a different price for a turducken sandwiches depending on the day of the
+week[^4]. This makes writing some discount tests more complicated than
+necessary, and could cause more problems down the road. Refactor `Item.toPrice`
+by adding a labeled argument `~date`, then:
+
+- Fix the resulting compilation errors by adding `~date` arguments to parent
+  functions.
+- Simplify the tests that have the `// Don't use hardcoded value since
+  Item.toPrice is non-deterministic` comment.
+
+::: details Hint
+
+Let the compiler guide you.
+
+:::
+
+::: details Solution
+
+Most of the changes are fairly mechanical, consisting of adding a `~date`
+argument up the function call chain until you get to `Index.App.make`. Refer to
+the [source code for this
+chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/promo-component/)
+to see all the gory details.
+
+There are at least a couple points of interest. Inside
+`DiscountTests.FreeBurger`, we create a helper function that uses partial
+application to avoid having to write `Discount.getFreeBurgers(~date=june3)` over
+and over:
+
+<<< DiscountTests.re#get-free-burgers
+
+TODO: Describe the problem with using partial application in
+`Discount.getDiscountFunction`.
+
+:::
+
+<b>3.</b> Refactor the `Order` component to use `styled-ppx` and your new `RR`
 helper function module.
 
 ::: details Hint
@@ -455,10 +492,6 @@ You should do some cleanup:
 
 :::
 
-<b>3.</b> tbd
-
-<b>4.</b> tbd
-
 -----
 
 View [source
@@ -478,3 +511,5 @@ and [demo](https://react-book.melange.re/demo/src/promo-component/) for this cha
 
 [^3]: `React.useReducer` is the ReasonReact binding for React's [useReducer
     hook](https://react.dev/reference/react/useReducer).
+
+[^4]: Recall the long-running Turducken Tuesdays promotion.

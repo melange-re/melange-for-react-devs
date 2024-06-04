@@ -84,9 +84,9 @@ type t =
   | Burger(Burger.t)
   | Hotdog;
 
-let toPrice = t => {
+let toPrice = (~date: Js.Date.t, t) => {
   switch (t) {
-  | Sandwich(sandwich) => Sandwich.toPrice(sandwich, ~date=Js.Date.make())
+  | Sandwich(sandwich) => Sandwich.toPrice(sandwich, ~date)
   | Burger(burger) => Burger.toPrice(burger)
   | Hotdog => 5.
   };

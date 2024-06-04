@@ -13,13 +13,16 @@ module App = {
   ];
 
   [@react.component]
-  let make = () =>
+  let make = () => {
+    let date = Js.Date.fromString("2024-05-10T00:00");
+
     <div>
       <h1> {RR.s("Promo")} </h1>
-      <Promo items date={Js.Date.fromString("2024-05-10T00:00")} />
+      <Promo items date />
       <h1> {RR.s("Order confirmation")} </h1>
-      <Order items />
+      <Order items date />
     </div>;
+  };
 };
 
 let node = ReactDOM.querySelector("#root");

@@ -3,7 +3,7 @@ type error =
   | ExpiredCode;
 
 /** Buy n burgers, get n/2 burgers free */
-let getFreeBurgers = (items: list(Item.t)) => {
+let getFreeBurgers = (items: list(Item.t), ~date as _: Js.Date.t) => {
   let prices =
     items
     |> List.filter_map(item =>
@@ -28,7 +28,7 @@ let getFreeBurgers = (items: list(Item.t)) => {
 };
 
 /** Buy 1+ burger with 1+ of every topping, get half off */
-let getHalfOff = (items: list(Item.t)) => {
+let getHalfOff = (items: list(Item.t), ~date: Js.Date.t) => {
   let meetsCondition =
     items
     |> List.exists(
@@ -47,7 +47,7 @@ let getHalfOff = (items: list(Item.t)) => {
     let total =
       items
       |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
-           total +. Item.toPrice(item)
+           total +. Item.toPrice(item, ~date)
          );
     Ok(total /. 2.0);
   };
@@ -61,7 +61,7 @@ type sandwichTracker = {
 };
 
 /** Buy 1+ of every type of sandwich, get half off */
-let getSandwichHalfOff = (items: list(Item.t)) => {
+let getSandwichHalfOff = (items: list(Item.t), ~date: Js.Date.t) => {
   let tracker =
     items
     |> List.filter_map(
@@ -91,7 +91,7 @@ let getSandwichHalfOff = (items: list(Item.t)) => {
     let total =
       items
       |> ListLabels.fold_left(~init=0.0, ~f=(total, item) =>
-           total +. Item.toPrice(item)
+           total +. Item.toPrice(item, ~date)
          );
     Ok(total /. 2.0);
   | _ => Error(`MissingSandwichTypes)
