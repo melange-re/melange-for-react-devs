@@ -1,10 +1,10 @@
 # Promo Component
 
-Your work so far has left a deep impressin on Madame Jellobutter, so much so
+Your work so far has left a deep impression on Madame Jellobutter, so much so
 that she even sends you on an all-expenses paid trip to an [OCaml
-Hackathon](https://fun-ocaml.com/). You learn a lot, make several new friends,
-and you even meet MonadicFanatic1984 in person![^1] You're extremely psyched to
-start applying the things you're learn during the hackathon.
+Hackathon](https://fun-ocaml.com/). As soon as you arrive, you make several new
+friends, and you even meet MonadicFanatic1984 in person![^1] You're extremely
+psyched to start applying the things you're learning during the hackathon.
 
 ## `RR` utility module
 
@@ -14,12 +14,12 @@ functions. Add a new file `RR.re`:
 
 <<< RR.re#initial-functions
 
-These are all functions we used before, but now they're in one handy place, and
-we added documentation comments to them.
+These are all functions we used before, but now they're in one handy place and
+also have documentation comments.
 
 ## Documentation comment markup language
 
-In a couple of the documentation comments, we used square brackets (`[]`):
+In a couple of the documentation comments, you see square brackets (`[]`):
 
 ```text
 /** Alias for [React.string] */
@@ -57,8 +57,8 @@ and use function chaining inside the `onChange` callback:
 
 ## `RR.useStateValue` helper function
 
-This state variable pattern can be made more convenient by adding new helper
-function `RR.useStateValue`:
+This state variable pattern can be made more convenient by adding a new helper
+function called `RR.useStateValue`:
 
 <<< RR.re#use-state-value
 
@@ -115,7 +115,7 @@ npm install @emotion/css
 opam install styled-ppx
 ```
 
-After those commands finish, see what version of `styled-ppx` was installed by
+After these commands finish, see what version of `styled-ppx` was installed by
 running `opam list`:
 
 ```text{4}
@@ -183,11 +183,11 @@ Error: Uninterpreted extension 'cx'.
 
 For reference:
 
-- Adding `styled-ppx` in `preprocess/pps` enables the `%cx` extension node
-- Adding `styled-ppx.css` in `libraries` enables the `Css` and `CssJs` modules
+- Add `styled-ppx.emotion` to `libraries` to enable the `Css` and `CssJs`
+  modules
+- Add `styled-ppx` to `preprocess/pps` to enable the `%cx` extension node
 
-If you run `npm run serve', you'll see that the styles are now applied.
-
+If you run `npm run serve`, you'll see that the styles are now applied.
 
 ## `Promo.Style` submodule
 
@@ -230,8 +230,8 @@ Introduce some other errors to your CSS code and see what happens.
 ## Install `vscode-styled-ppx` extension
 
 Now that we're writing our CSS inside our OCaml code, the CSS is no longer
-highlighted. Fortunately, it's not an issue if for VS Code users, just install
-the [vscode-styled-ppx
+highlighted. VS Code users can resolve this by simply installing Dave's
+[vscode-styled-ppx
 extension](https://marketplace.visualstudio.com/items?itemName=davesnx.vscode-styled-ppx).
 
 ## Add `submittedCode` state variable
@@ -240,16 +240,16 @@ Add a new state variable named `submittedCode`:
 
 <<< Promo.re#submitted-code{2,8,15}
 
-Basically, `submittedCode` is:
+A breakdown:
 
-- `None` if the user hasn't submitted a promo code
-- `Some(code)` if the user has submitted a promo code
+- The initial value of `submittedCode` is `None`, meaning the user hasn't yet
+  submitted a promo code
+- Pressing the `Enter` key while editing the input submits the promo code,
+  setting `submittedCode` to `Some(code)`
+- Editing the input cancels the submitted promo code by setting `submittedCode`
+  back to `None`
 
-Pressing the `Enter` key while editing the input submits the promo code, and
-editing the input cancels the submitted promo code (sets `submittedCode` back to
-`None).
-
-## Add `discountFunction` derived value
+## Add `discountFunction` derived variable
 
 Add a `discountFunction` variable that derives its value from `submittedCode`
 and `date`:
@@ -271,14 +271,14 @@ Render `discountFunction` under the `input`:
 
 <<< Promo.re#render-discount-function
 
-We only render `discountFunction` when it's in the error state. We also need to
-add the new `codeError` class name to the `Style` submodule:
+We only render `discountFunction` when it's in the error state.
+
+We also need to add the `codeError` class name to the `Style` submodule, which
+will cause promo code error messages to be rendered in red:
 
 <<< Promo.re#code-error-class-name
 
-This will make promo code error messages be rendered in red.
-
-## Add `discount` derived value
+## Add `discount` derived variable
 
 Add a `discount` variable that derives its value from `discountFunction` and
 `items`:
@@ -299,25 +299,25 @@ Render `discount` under where we render `discountFunction`:
 
 <<< Promo.re#render-discount
 
-When `discount` is of the form `Some(Ok(value))`, then the discount must exist
-and we show its value (with a minus sign in front to indicate that the amount
-that will be subtracted from the total value). When `discount` is of the form
-`Some(Error(code))`, then an error occurred and we should render an error
-message based on the value of `code` (this is left as an exercise at the end of
-the chapter).
+- When `discount` is of the form `Some(Ok(value))`, then the discount must exist
+  and we show its value (with a minus sign in front to indicate that the amount
+  will be subtracted from the total value).
+- When `discount` is of the form `Some(Error(code))`, then an error occurred and
+  we should render an error message based on the value of `code` (this is left
+  as an exercise at the end of the chapter).
 
-We also need to add `discountError` to `Style` submodule, which will cause the
-discount error to be rendered in purple:
+We also need to add `discountError` to the `Style` submodule, which will cause
+the discount error to be rendered in purple:
 
 <<< Promo.re#discount-error-class-name
 
 ## Use one switch expression
 
 The current rendering logic is unsatisfactory. On first glance, it looks as if
-`discountFunction` is rendered first, and then `discount` is rendered. But in
-reality, only one of the derived variables is ever rendered at a time. That
-suggests that we could use a single switch expression for the render logic. It's
-helpful to list the four mutually-exclusive states we need to render:
+`discountFunction` is rendered first, and then `discount` is rendered below it.
+But in reality, only one of the derived variables is ever rendered at a time.
+That suggests that we could use a single switch expression for the render logic.
+It's helpful to list the four mutually-exclusive states we need to render:
 
 | State | What to render |
 | ---- | ---- |
@@ -326,12 +326,12 @@ helpful to list the four mutually-exclusive states we need to render:
 | Error applying discount | Error message, e.g. "Buy at least one more burger to enjoy this promotion" |
 | Discount | The value of the discount with a minus sign in front |
 
-One way to refactor to a single switch expression is to make the tuple
-`(discountFunction, discount)` be the input to the switch expression:
+One way to refactor to a single switch expression is to change the input of the
+switch expression to be the tuple `(discountFunction, discount)`:
 
 <<< Promo.re#render-tuple
 
-This works, but that is a lot of pattern matching to render just four states.
+This works, but it's a lot of pattern matching to render just four states.
 
 ## Use a single `discount` derived variable
 
@@ -351,7 +351,7 @@ of data goes like this:
    1. If the result of `Discount.getDiscountFunction(code, date)` is
       `Error(error)`, then return `` `CodeError(error)``
    1. If the result of `Discount.getDiscountFunction(code, date)` is
-      `Ok(discountFunction)` then invoke `discountFunction(items)`
+      `Ok(discountFunction)`, then invoke `discountFunction(items)`
       1. If the result of `discountFunction(items)` is `Error(error)`, then
          return `` `DiscountError(error)``
       1. If the result of `discountFunction(items)` is `Ok(value)`, then return
@@ -402,9 +402,9 @@ Here is an example of a case that is not matched:
 ---
 
 Muy bueno! You've created a `Promo` component that can be used to submit promo
-codes and see the discounts they produce when applied to an order, along with
-any errors that might occur. In the next chapter, we'll integrate this `Promo`
-component into your `Order` component.
+codes and see the discounts they produce, along with any errors that might
+occur. In the next chapter, we'll integrate this `Promo` component into your
+`Order` component.
 
 ## Overview
 
@@ -430,10 +430,10 @@ constructor:
 :::
 
 <b>2.</b> Right now, `Item.toPrice` is a nondeterministic function---it returns
-a different price for a turducken sandwiches depending on the day of the
-week[^4]. This makes writing some discount tests more complicated than
-necessary, and could cause more problems down the road. Refactor `Item.toPrice`
-by adding a labeled argument `~date`, then:
+a different price for a turducken sandwich depending on the day of the week[^4].
+This makes writing some discount tests more complicated than necessary, and
+could cause more problems down the road. Refactor `Item.toPrice` by adding a
+labeled argument `~date`, then:
 
 - Fix the resulting compilation errors by adding `~date` arguments to parent
   functions.
@@ -442,7 +442,7 @@ by adding a labeled argument `~date`, then:
 
 ::: details Hint
 
-Let the compiler guide you.
+Let the compilation errors guide your refactoring.
 
 :::
 
@@ -502,7 +502,7 @@ and [demo](https://react-book.melange.re/demo/src/promo-component/) for this cha
 
 [^1]: MonadicFanatic1984 in real life is a genetically-modified gorilla who
     escaped from a mad scientist's laboratory. He used to be in charge of
-    developing the mad scientist's website, and he escaped because he wanted to
+    developing the mad scientist's website until he escaped because he wanted to
     migrate the website to Melange but the mad scientist didn't approve.
 
 [^2]: FunctorPunk is a cybernetically-enhanced wombat who
@@ -512,4 +512,5 @@ and [demo](https://react-book.melange.re/demo/src/promo-component/) for this cha
 [^3]: `React.useReducer` is the ReasonReact binding for React's [useReducer
     hook](https://react.dev/reference/react/useReducer).
 
-[^4]: Recall the long-running Turducken Tuesdays promotion.
+[^4]: Recall the long-running Turducken Tuesdays promotion, in which turducken
+    sandwiches are half off every Tuesday.

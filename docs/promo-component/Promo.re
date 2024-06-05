@@ -221,6 +221,7 @@ let _ =
     <>
       // #region render-tuple
       {switch (discountFunction, discount) {
+       | (Some(_), Some(Ok(value))) => value |> Float.neg |> RR.currency
        | (Some(Error(error)), _) =>
          <div className=Style.codeError>
            {let errorType =
@@ -234,7 +235,6 @@ let _ =
          <div className=Style.discountError>
            {RR.s("Todo: discount error message")}
          </div>
-       | (Some(_), Some(Ok(value))) => value |> Float.neg |> RR.currency
        | (None, None)
        | (Some(_), None)
        | (None, Some(_)) => React.null
