@@ -429,7 +429,34 @@ constructor:
 
 :::
 
-<b>2.</b> Right now, `Item.toPrice` is a nondeterministic function---it returns
+<b>2.</b> Refactor the `Order` component to use `styled-ppx` and your new `RR`
+helper function module.
+
+::: details Hint
+
+`styled-ppx` supports [nested
+selectors](https://styled-ppx.vercel.app/reference/selectors).
+
+:::
+
+::: details Solution
+
+After refactoring, `Order.re` might look something like this:
+
+<<< Order.re
+
+You should do some cleanup:
+
+- Delete `Format` module, since it has been replaced by `RR`.
+- Delete `order-item.module.css` and `order.module.css` files, since they are no
+  longer used.
+- Delete the `melange.emit/runtime_deps` stanza from your `dune` file, since
+  there are no more `.css` files to copy into the build directory.
+
+:::
+
+
+<b>3.</b> Right now, `Item.toPrice` is a nondeterministic function---it returns
 a different price for a turducken sandwich depending on the day of the week[^4].
 This makes writing some discount tests more complicated than necessary, and
 could cause more problems down the road. Refactor `Item.toPrice` by adding a
@@ -463,32 +490,6 @@ and over:
 
 TODO: Describe the problem with using partial application in
 `Discount.getDiscountFunction`.
-
-:::
-
-<b>3.</b> Refactor the `Order` component to use `styled-ppx` and your new `RR`
-helper function module.
-
-::: details Hint
-
-`styled-ppx` supports [nested
-selectors](https://styled-ppx.vercel.app/reference/selectors).
-
-:::
-
-::: details Solution
-
-After refactoring, `Order.re` might look something like this:
-
-<<< @/../src/promo-component/Order.re
-
-You should do some cleanup:
-
-- Delete `Format` module, since its `currency` function is now in `RR`.
-- Delete `order-item.module.css` and `order.module.css` files, since they are no
-  longer used.
-- Delete the `melange.emit/runtime_deps` stanza from your `dune` file, since
-  there are no more `.css` files to copy into the build directory.
 
 :::
 
