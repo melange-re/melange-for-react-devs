@@ -463,9 +463,11 @@ could cause more problems down the road. Refactor `Item.toPrice` by adding a
 labeled argument `~date`, then:
 
 - Fix the resulting compilation errors by adding `~date` arguments to parent
-  functions.
-- Simplify the tests that have the `// Don't use hardcoded value since
-  Item.toPrice is non-deterministic` comment.
+  functions
+- Simplify the tests that have this comment: `// Don't use hardcoded value since
+  Item.toPrice is non-deterministic`
+- You might break the tests in `DiscountTests.GetDiscount`, don't worry about
+  that for now. We'll fix those tests in the following exercise.
 
 ::: details Hint
 
@@ -473,25 +475,39 @@ Let the compilation errors guide your refactoring.
 
 :::
 
+::: details Hint
+
+Feel free to make liberal use of partial application.
+
+:::
+
 ::: details Solution
 
 Most of the changes are fairly mechanical, consisting of adding a `~date`
-argument up the function call chain until you get to `Index.App.make`. Refer to
-the [source code for this
-chapter](https://github.com/melange-re/melange-for-react-devs/blob/main/src/promo-component/)
-to see all the gory details.
+argument up the function call chain until you get to `Index.App.make`.
 
-There are at least a couple points of interest. Inside
-`DiscountTests.FreeBurger`, we create a helper function that uses partial
-application to avoid having to write `Discount.getFreeBurgers(~date=june3)` over
-and over:
+There is at least one point of interest---you can opt to not give
+`Discount.getFreeBurgers` a `~data` argument, since it only computes prices of
+burgers, which don't fluctuate with time. But then you must use partial
+application in `Discount.getDiscountFunction`:
 
-<<< DiscountTests.re#get-free-burgers
+<<< Discount.re#get-discount-function{7,9}
 
-TODO: Describe the problem with using partial application in
-`Discount.getDiscountFunction`.
+The indirect consequence of this is that tests like this fail:
+
+<<< DiscountTests.re#test-half-promo
+
+Comparing two partially-applied functions for strict equality will always fail,
+because they are two newly-created objects. See [this playground
+snippet](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGZvbyA9IChhLCB%2BYikgPT4gYSArIGI7CgovLyBVc2Ugc3RyaWN0IGVxdWFsaXR5ICg9PT0pIHdoZW4gY29tcGFyaW5nIGZ1bmN0aW9ucwpKcy5sb2coZm9vID09PSBmb28pOyAvLyB0cnVlCkpzLmxvZyhmb28ofmI9MSkgPT09IGZvbyh%2BYj0xKSk7IC8vIGZhbHNl&live=off)
+for a simple demonstration of this.
+
+The next exercise will explore how we can make the tests pass without adding an
+extraneous `~date` argument to `Discount.getFreeBurgers`.
 
 :::
+
+<b>4.</b> tbd
 
 -----
 

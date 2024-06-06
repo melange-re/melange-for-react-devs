@@ -4,7 +4,7 @@ open Fest;
 let june3 = Js.Date.fromString("2024-06-03T00:00");
 
 module FreeBurger = {
-  let getFreeBurgers = Discount.getFreeBurgers(~date=june3);
+  let getFreeBurgers = Discount.getFreeBurgers;
 
   let burger: Item.Burger.t = {
     lettuce: false,
@@ -222,7 +222,8 @@ module GetDiscount = {
       expect
       |> deepEqual(
            Discount.getDiscountFunction("HALF", date),
-           dayOfMonth == 28 ? Ok(Discount.getHalfOff) : Error(ExpiredCode),
+           dayOfMonth == 28
+             ? Ok(Discount.getHalfOff(~date)) : Error(ExpiredCode),
          );
     }
   });
@@ -242,7 +243,7 @@ module GetDiscount = {
       |> deepEqual(
            Discount.getDiscountFunction("HALF", date),
            dayOfMonth == 3
-             ? Ok(Discount.getSandwichHalfOff) : Error(ExpiredCode),
+             ? Ok(Discount.getSandwichHalfOff(~date)) : Error(ExpiredCode),
          );
     }
   });

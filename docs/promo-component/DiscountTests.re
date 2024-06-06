@@ -1,18 +1,25 @@
 open Fest;
 
-// #region get-free-burgers
-let june3 = Js.Date.fromString("2024-06-03T00:00");
+module GetDiscount = {
+  // #region test-half-promo
+  test(
+    "HALF promo code returns getHalfOff on May 28 but not other days of May",
+    () => {
+    for (dayOfMonth in 1 to 31) {
+      let date =
+        Js.Date.makeWithYMD(
+          ~year=2024.,
+          ~month=4.0,
+          ~date=float_of_int(dayOfMonth),
+        );
 
-module FreeBurger = {
-  let getFreeBurgers = Discount.getFreeBurgers(~date=june3);
-
-  test("0 burgers, no discount", () =>
-    expect
-    |> deepEqual(
-         getFreeBurgers([Hotdog, Sandwich(Ham), Sandwich(Turducken)]),
-         Error(`NeedTwoBurgers),
-       )
-  );
-  // ...
+      expect
+      |> deepEqual(
+           Discount.getDiscountFunction("HALF", date),
+           dayOfMonth == 28
+             ? Ok(Discount.getHalfOff(~date)) : Error(ExpiredCode),
+         );
+    }
+  });
+  // #endregion test-half-promo
 };
-// #endregion get-free-burgers

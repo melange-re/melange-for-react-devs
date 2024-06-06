@@ -3,7 +3,7 @@ type error =
   | ExpiredCode;
 
 /** Buy n burgers, get n/2 burgers free */
-let getFreeBurgers = (items: list(Item.t), ~date as _: Js.Date.t) => {
+let getFreeBurgers = (items: list(Item.t)) => {
   let prices =
     items
     |> List.filter_map(item =>
@@ -104,8 +104,9 @@ let getDiscountFunction = (code, date) => {
 
   switch (code |> Js.String.toUpperCase) {
   | "FREE" when month == 4.0 => Ok(getFreeBurgers)
-  | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff)
-  | "HALF" when month == 10.0 && dayOfMonth == 3.0 => Ok(getSandwichHalfOff)
+  | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff(~date))
+  | "HALF" when month == 10.0 && dayOfMonth == 3.0 =>
+    Ok(getSandwichHalfOff(~date))
   | "FREE"
   | "HALF" => Error(ExpiredCode)
   | _ => Error(InvalidCode)

@@ -28,7 +28,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
       switch (Discount.getDiscountFunction(code, date)) {
       | Error(error) => `CodeError(error)
       | Ok(discountFunction) =>
-        switch (discountFunction(items, ~date)) {
+        switch (discountFunction(items)) {
         | Error(error) => `DiscountError(error)
         | Ok(value) => `Discount(value)
         }
