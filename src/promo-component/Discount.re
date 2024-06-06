@@ -98,17 +98,21 @@ let getSandwichHalfOff = (items: list(Item.t), ~date: Js.Date.t) => {
   };
 };
 
-let getDiscountFunction = (code, date) => {
+let getDiscountPair = (code, date) => {
   let month = date |> Js.Date.getMonth;
   let dayOfMonth = date |> Js.Date.getDate;
 
   switch (code |> Js.String.toUpperCase) {
-  | "FREE" when month == 4.0 => Ok(getFreeBurgers)
-  | "HALF" when month == 4.0 && dayOfMonth == 28.0 => Ok(getHalfOff(~date))
+  | "FREE" when month == 4.0 => Ok((`FreeBurgers, getFreeBurgers))
+  | "HALF" when month == 4.0 && dayOfMonth == 28.0 =>
+    Ok((`HalfOff, getHalfOff(~date)))
   | "HALF" when month == 10.0 && dayOfMonth == 3.0 =>
-    Ok(getSandwichHalfOff(~date))
+    Ok((`SandwichHalfOff, getSandwichHalfOff(~date)))
   | "FREE"
   | "HALF" => Error(ExpiredCode)
   | _ => Error(InvalidCode)
   };
 };
+
+let getDiscountFunction = (code, date) =>
+  getDiscountPair(code, date) |> Result.map(snd);

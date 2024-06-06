@@ -507,7 +507,53 @@ extraneous `~date` argument to `Discount.getFreeBurgers`.
 
 :::
 
-<b>4.</b> tbd
+<b>4.</b> Fix the tests in `DiscountTests.GetDiscount` that were broken by your
+refactoring in the previous exercise.
+
+::: details Hint
+
+Make a helper function that is similar to `Discount.getDiscountFunction` but
+can return something like this: ``Ok((`FreeBurgers, getFreeBurgers))``
+
+:::
+
+::: details Hint
+
+Use
+[Result.map](https://melange.re/v3.0.0/api/re/melange/Stdlib/Result/#val-map),
+[fst](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-fst), and
+[snd](https://melange.re/v3.0.0/api/re/melange/Stdlib/#val-snd).
+
+:::
+
+::: details Solution
+
+Inside `Discount`, define a helper function called `getDiscountPair`,
+and redefine `getDiscountFunction` using it:
+
+<<< Discount.re#get-discount-function-pair{6,8,10}
+
+The type signature of `getDiscountFunction` remains unchanged, returning a
+function encased in `Ok` when it succeeds. In contrast, `getDiscountPair`
+returns a 2-tuple encased in `Ok`:
+
+- The first element of the tuple is a polymorphic variant constructor indicating
+  which function was returned, e.g. `` `FreeBurger``, `` `HalOff``, etc.
+- The second element of the tuple is the discount function
+
+The polymorphic constructor serves to give test code something to compare
+against:
+
+<<< DiscountTests.re#use-discount-function-pair{2-3,20-21}
+
+Recall that the runtime representation of a polymorphic constructor without
+arguments is just a string. They can be compared using `Fest.deepEqual` without
+any surprises.
+
+Run `npm run test` to verify that all tests are passing again.
+
+:::
+
 
 -----
 

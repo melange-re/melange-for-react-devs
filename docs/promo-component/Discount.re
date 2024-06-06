@@ -24,3 +24,26 @@ let getDiscountFunction = (code, date) => {
   };
 };
 // #endregion get-discount-function
+
+ignore(getDiscountFunction);
+
+// #region get-discount-function-pair
+let getDiscountPair = (code, date) => {
+  let month = date |> Js.Date.getMonth;
+  let dayOfMonth = date |> Js.Date.getDate;
+
+  switch (code |> Js.String.toUpperCase) {
+  | "FREE" when month == 4.0 => Ok((`FreeBurgers, getFreeBurgers))
+  | "HALF" when month == 4.0 && dayOfMonth == 28.0 =>
+    Ok((`HalfOff, getHalfOff(~date)))
+  | "HALF" when month == 10.0 && dayOfMonth == 3.0 =>
+    Ok((`SandwichHalfOff, getSandwichHalfOff(~date)))
+  | "FREE"
+  | "HALF" => Error(ExpiredCode)
+  | _ => Error(InvalidCode)
+  };
+};
+
+let getDiscountFunction = (code, date) =>
+  getDiscountPair(code, date) |> Result.map(snd);
+// #endregion get-discount-function-pair

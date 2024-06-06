@@ -178,15 +178,15 @@ module SandwichHalfOff = {
 };
 
 module GetDiscount = {
+  let getDiscountFunction = (code, date) =>
+    Discount.getDiscountPair(code, date) |> Result.map(fst);
+
   test("Invalid promo code return Error", () => {
     let date = Js.Date.make();
     ["", "FREEDOM", "UNICORN", "POO"]
     |> List.iter(code =>
          expect
-         |> deepEqual(
-              Discount.getDiscountFunction(code, date),
-              Error(InvalidCode),
-            )
+         |> deepEqual(getDiscountFunction(code, date), Error(InvalidCode))
        );
   });
 
@@ -202,8 +202,8 @@ module GetDiscount = {
 
          expect
          |> deepEqual(
-              Discount.getDiscountFunction("FREE", date),
-              month == 4 ? Ok(Discount.getFreeBurgers) : Error(ExpiredCode),
+              getDiscountFunction("FREE", date),
+              month == 4 ? Ok(`FreeBurgers) : Error(ExpiredCode),
             );
        })
   });
@@ -221,9 +221,8 @@ module GetDiscount = {
 
       expect
       |> deepEqual(
-           Discount.getDiscountFunction("HALF", date),
-           dayOfMonth == 28
-             ? Ok(Discount.getHalfOff(~date)) : Error(ExpiredCode),
+           getDiscountFunction("HALF", date),
+           dayOfMonth == 28 ? Ok(`HalfOff) : Error(ExpiredCode),
          );
     }
   });
@@ -241,9 +240,8 @@ module GetDiscount = {
 
       expect
       |> deepEqual(
-           Discount.getDiscountFunction("HALF", date),
-           dayOfMonth == 3
-             ? Ok(Discount.getSandwichHalfOff(~date)) : Error(ExpiredCode),
+           getDiscountFunction("HALF", date),
+           dayOfMonth == 3 ? Ok(`SandwichHalfOff) : Error(ExpiredCode),
          );
     }
   });
