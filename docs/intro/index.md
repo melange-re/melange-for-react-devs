@@ -42,6 +42,7 @@ teaches the language from the ground up and goes much deeper into its features.
 | Burger Discounts | Implement burger discount logic using arrays | limits of type inference, type annotation of function arguments, full name (asset path), `Stdlib`, record spread syntax, `ignore`, runtime representations of common data types, properties of arrays, override `Array.get` |
 | Discounts Using Lists | Re-implement burger discount logic using lists | properties of lists, pattern matching on lists, list spread syntax, `List` module, `ListLabels` module, runtime representation of lists, documentation comments, placeholder operator |
 | Promo Codes | Implement promo and discount logic using Result | built-in Result type, translating error message to Reason syntax, `List.iter`, for  loops, polymorphic variants, runtime representations of Result and polymorphic variants |
+| Promo Component | Create a promo component that renders Results using polymorphic variant | Documentation comment markup language, `React.useReducer`, `as` keyword to ignore arguments, `opam-check-npm-deps`, `Result.map`, render mutually-exclusive states using polymorphic variant constructors |
 
 ...and much more to come!
 
