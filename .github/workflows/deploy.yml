@@ -38,7 +38,7 @@ jobs:
           cache: npm
       - uses: ocaml/setup-ocaml@v2
         with:
-          ocaml-compiler: 5.1.1
+          ocaml-compiler: 5.2.0
       - name: Install all deps
         run: npm run install:npm-opam
       - name: Format check
