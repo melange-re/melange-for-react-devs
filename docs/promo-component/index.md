@@ -146,6 +146,13 @@ Ok: opam package "reason-react.0.14.0" requires npm package: "react" with constr
 Ok: opam package "styled-ppx.0.56.0" requires npm package: "@emotion/css" with constraint ">=11.0.0", version installed: "11.11.2"
 ```
 
+::: tip
+
+Underneath the covers, `npm run check-npm-deps` is just running `opam exec
+opam-check-npm-deps`.
+
+:::
+
 ::: warning
 
 The output from `npm run check-npm-deps` might not show anything for
@@ -408,7 +415,28 @@ occur. In the next chapter, we'll integrate this `Promo` component into your
 
 ## Overview
 
-- tbd
+- Documentation comments have a markup language
+- Use `React.useReducer` to create state variables that can be set without
+  callback functions
+  - You should create a helper function to make this pattern more convenient to
+    use
+- Temporarily ignore function arguments using the `as` keyword, e.g. `~items as
+  _` will cause the `~items` argument to be ignored
+- The `styled-ppx` package allows you to write type-safe CSS inside your OCaml
+  code
+  - You must add some extra values to the `libraries` and `preprocess/pps`
+    fields of your `dune` file to use `styled-ppx`
+  - Write your CSS inside the `%cx` extension node
+  - It's a good idea to group the class names you create using `%cx` inside a
+    submodule of your component module (you can name it `Style` or something
+    similar)
+  - Install the `vscode-styled-ppx` VS Code extension to get syntax highlighting
+    for CSS written inside `%cx`
+- Run `opam exec opam-check-npm-deps` to check that your NPM dependencies are
+  compatible with your Melange packages
+- A good strategy for rendering mutually-exclusive states is to create a single
+  switch expression that maps your inputs to each state, where each state is
+  represented by a different polymorphic variant constructor.
 
 ## Exercises
 
@@ -462,12 +490,12 @@ This makes writing some discount tests more complicated than necessary, and
 could cause more problems down the road. Refactor `Item.toPrice` by adding a
 labeled argument `~date`, then:
 
-- Fix the resulting compilation errors by adding `~date` arguments to parent
-  functions
+- Fix the resulting compilation errors by adding `~date` arguments to functions
+  higher on the call chain
 - Simplify the tests that have this comment: `// Don't use hardcoded value since
   Item.toPrice is non-deterministic`
-- You might break the tests in `DiscountTests.GetDiscount`, don't worry about
-  that for now. We'll fix those tests in the following exercise.
+- You might break the tests in `DiscountTests.GetDiscount`, but don't worry
+  about that for now. We'll fix those tests in the following exercise.
 
 ::: details Hint
 
@@ -487,7 +515,7 @@ Most of the changes are fairly mechanical, consisting of adding a `~date`
 argument up the function call chain until you get to `Index.App.make`.
 
 There is at least one point of interest---you can opt to not give
-`Discount.getFreeBurgers` a `~data` argument, since it only computes prices of
+`Discount.getFreeBurgers` a `~date` argument, since it only computes prices of
 burgers, which don't fluctuate with time. But then you must use partial
 application in `Discount.getDiscountFunction`:
 
@@ -500,7 +528,7 @@ The indirect consequence of this is that tests like this fail:
 Comparing two partially-applied functions for strict equality will always fail,
 because they are two newly-created objects. See [this playground
 snippet](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGZvbyA9IChhLCB%2BYikgPT4gYSArIGI7CgovLyBVc2Ugc3RyaWN0IGVxdWFsaXR5ICg9PT0pIHdoZW4gY29tcGFyaW5nIGZ1bmN0aW9ucwpKcy5sb2coZm9vID09PSBmb28pOyAvLyB0cnVlCkpzLmxvZyhmb28ofmI9MSkgPT09IGZvbyh%2BYj0xKSk7IC8vIGZhbHNl&live=off)
-for a simple demonstration of this.
+for a concise demonstration of this.
 
 The next exercise will explore how we can make the tests pass without adding an
 extraneous `~date` argument to `Discount.getFreeBurgers`.
@@ -538,7 +566,7 @@ function encased in `Ok` when it succeeds. In contrast, `getDiscountPair`
 returns a 2-tuple encased in `Ok`:
 
 - The first element of the tuple is a polymorphic variant constructor indicating
-  which function was returned, e.g. `` `FreeBurger``, `` `HalOff``, etc.
+  which function was returned, e.g. `` `FreeBurger``, `` `HalfOff``, etc.
 - The second element of the tuple is the discount function
 
 The polymorphic constructor serves to give test code something to compare
