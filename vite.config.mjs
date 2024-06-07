@@ -30,6 +30,7 @@ export default defineConfig({
         'burger-discounts': resolve(__dirname, 'src/burger-discounts/index.html'),
         'discounts-lists': resolve(__dirname, 'src/discounts-lists/index.html'),
         'promo-codes': resolve(__dirname, 'src/promo-codes/index.html'),
+        'promo-component': resolve(__dirname, 'src/promo-component/index.html'),
       },
     },
   },
