@@ -1,4 +1,6 @@
-module Css = {
+// Did not implement onApply yet
+
+module Style = {
   let form = [%cx
     {|
     display: flex;
@@ -15,7 +17,11 @@ module Css = {
     text-transform: uppercase;
     |}
   ];
-  let error = [%cx {|color: red;|}];
+
+  let discount = [%cx {|color: green;|}];
+  let promoError = [%cx {|color: red|}];
+  let discountError = [%cx {|color: purple|}];
+  let buyWhat = [%cx {|text-decoration: underline|}];
 };
 
 [@react.component]
@@ -38,13 +44,13 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
     };
 
   <form
-    className=Css.form
+    className=Style.form
     onSubmit={evt => {
       evt |> React.Event.Form.preventDefault;
       setSubmittedCode(Some(code));
     }}>
     <input
-      className=Css.input
+      className=Style.input
       value=code
       onChange={evt => {
         evt |> RR.getValueFromEvent |> setCode;
@@ -54,11 +60,11 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
     {switch (discount) {
      | `NoSubmittedCode => React.null
      | `Discount(discount) =>
-       <div className=[%cx {|color: green;|}]>
+       <div className=Style.discount>
          {discount |> Float.neg |> RR.currency}
        </div>
      | `CodeError(error) =>
-       <div className=[%cx {|color: red|}]>
+       <div className=Style.promoError>
          {let errorType =
             switch (error) {
             | Discount.InvalidCode => "Invalid"
@@ -66,9 +72,23 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
             };
           {j|$errorType promo code|j} |> RR.s}
        </div>
-     | `DiscountError(_code) =>
-       <div className=[%cx {|color: purple|}]>
-         {RR.s("Todo: discount error message")}
+     | `DiscountError(code) =>
+       <div className=Style.discountError>
+         {RR.s("Buy ")}
+         <span className=Style.buyWhat>
+           {(
+              switch (code) {
+              | `OneBurger => "at least 1 more burger"
+              | `TwoBurgers => "at least 2 burgers"
+              | `MegaBurger => "a burger with every topping"
+              | `MissingSandwichTypes(missing) =>
+                (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
+                ++ " sandwiches"
+              }
+            )
+            |> RR.s}
+         </span>
+         {RR.s(" to enjoy this promo.")}
        </div>
      }}
   </form>;

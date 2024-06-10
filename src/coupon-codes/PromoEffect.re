@@ -1,5 +1,3 @@
-// Did not implement onApply yet
-
 module Style = {
   let form = [%cx
     {|
@@ -29,7 +27,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
-  let getDiscount = submittedCode =>
+  let discount =
     switch (submittedCode) {
     | None => `NoSubmittedCode
     | Some(code) =>
@@ -43,18 +41,24 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       }
     };
 
-  <form
-    className=Style.form
-    onSubmit={evt => {
-      evt |> React.Event.Form.preventDefault;
-      let newSubmittedCode = Some(code);
-      setSubmittedCode(newSubmittedCode);
-      switch (getDiscount(newSubmittedCode)) {
+  React.useEffect1(
+    () => {
+      switch (discount) {
       | `NoSubmittedCode
       | `CodeError(_)
       | `DiscountError(_) => ()
       | `Discount(value) => onApply(value)
       };
+      None;
+    },
+    [|discount|],
+  );
+
+  <form
+    className=Style.form
+    onSubmit={evt => {
+      evt |> React.Event.Form.preventDefault;
+      setSubmittedCode(Some(code));
     }}>
     <input
       className=Style.input
@@ -64,7 +68,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
         setSubmittedCode(None);
       }}
     />
-    {switch (getDiscount(submittedCode)) {
+    {switch (discount) {
      | `NoSubmittedCode => React.null
      | `Discount(discount) =>
        <div className=Style.discount>
