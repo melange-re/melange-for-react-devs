@@ -17,3 +17,6 @@ let currency = value => value |> Js.Float.toFixed(~digits=2) |> React.string;
 /** Render option(React.element) */
 let option = (fn, opt) =>
   opt |> Option.map(fn) |> Option.value(~default=React.null);
+
+/** Helper for [React.useEffect1] */
+let useEffect1 = (func, dep) => React.useEffect1(func, [|dep|]);

@@ -43,6 +43,19 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
       }
     };
 
+  RR.useEffect1(
+    () => {
+      switch (discount) {
+      | `NoSubmittedCode
+      | `CodeError(_)
+      | `DiscountError(_) => ()
+      | `Discount(_value) => Js.log2("useEffect", discount)
+      };
+      None;
+    },
+    discount,
+  );
+
   <form
     className=Style.form
     onSubmit={evt => {

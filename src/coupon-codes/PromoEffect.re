@@ -41,7 +41,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       }
     };
 
-  React.useEffect1(
+  RR.useEffect1(
     () => {
       switch (discount) {
       | `NoSubmittedCode
@@ -51,7 +51,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       };
       None;
     },
-    [|discount|],
+    discount,
   );
 
   <form

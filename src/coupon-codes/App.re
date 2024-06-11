@@ -60,6 +60,16 @@ let make = () => {
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
     <DateInput date onChange=setDate />
+    <h2> {RR.s("PromoPure")} </h2>
+    {datasets
+     |> List.map(((label, items)) => {
+          let slug = "promo-" ++ getSlug(label);
+          <div key=slug>
+            <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
+            <PromoPure items date />
+          </div>;
+        })
+     |> RR.list}
     <h2> {RR.s("Promo")} </h2>
     {datasets
      |> List.map(((label, items)) => {
