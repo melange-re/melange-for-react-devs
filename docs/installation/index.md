@@ -12,6 +12,35 @@ Linux](https://learn.microsoft.com/en-us/windows/wsl/)
     - There are also [many other editors](https://melange.re/v4.0.0/getting-started.html#editor-integration)
       which can support OCaml
 
+## GNU `patch`
+
+Your system might already have a `patch` binary, but we need `patch` to
+specifically run [GNU patch](https://savannah.gnu.org/projects/patch/). Run this
+in your shell:
+
+```bash
+patch --version
+```
+
+If it returns something like
+
+```text
+GNU patch 2.7.6
+Copyright (C) 2003, 2009-2012 Free Software Foundation, Inc.
+Copyright (C) 1988 Larry Wall
+
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Larry Wall and Paul Eggert
+```
+
+then you're good to go. Otherwise, you need to install GNU patch and make sure
+that running `patch` will invoke it. How you do it depends on your operating
+system. For example, on Macs you can install from [Homebrew](https://brew.sh/)
+by running `brew install gpatch`.
+
 ## Opam
 
 We need [opam](https://opam.ocaml.org/), the OCaml Package Manager. There are
