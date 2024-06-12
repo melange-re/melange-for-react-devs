@@ -85,9 +85,9 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
          <span className=Style.buyWhat>
            {(
               switch (code) {
-              | `OneBurger => "at least 1 more burger"
-              | `TwoBurgers => "at least 2 burgers"
-              | `MegaBurger => "a burger with every topping"
+              | `NeedOneBurger => "at least 1 more burger"
+              | `NeedTwoBurgers => "at least 2 burgers"
+              | `NeedMegaBurger => "a burger with every topping"
               | `MissingSandwichTypes(missing) =>
                 (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
                 ++ " sandwiches"

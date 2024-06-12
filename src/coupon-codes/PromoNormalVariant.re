@@ -1,3 +1,5 @@
+// Did not implement onApply yet
+
 module Style = {
   let form = [%cx
     {|
@@ -22,47 +24,43 @@ module Style = {
   let buyWhat = [%cx {|text-decoration: underline|}];
 };
 
+type discount('a) =
+  | CodeError(Discount.error)
+  | Discount(float)
+  | DiscountError(
+      [>
+        | `MissingSandwichTypes(list(string))
+        | `NeedMegaBurger
+        | `NeedOneBurger
+        | `NeedTwoBurgers
+      ] as 'a,
+    )
+  | NoSubmittedCode;
+
+// type discount('a) =
+//   | CodeError(Discount.error)
+//   | Discount(float)
+//   | DiscountError('a)
+//   | NoSubmittedCode;
+
 [@react.component]
-let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
   let discount =
     switch (submittedCode) {
-    | None => `NoSubmittedCode
+    | None => NoSubmittedCode
     | Some(code) =>
       switch (Discount.getDiscountFunction(~code, ~date)) {
-      | Error(error) => `CodeError(error)
+      | Error(error) => CodeError(error)
       | Ok(discountFunc) =>
         switch (discountFunc(items)) {
-        | Error(error) => `DiscountError(error)
-        | Ok(value) => `Discount(value)
+        | Error(error) => DiscountError(error)
+        | Ok(value) => Discount(value)
         }
       }
     };
-
-  // Will only fire when submittedCode changes
-  RR.useEffect1(
-    () => {
-      Js.log2("useEffect1", submittedCode);
-      None;
-    },
-    submittedCode,
-  );
-
-  // Can fire more than once when submittedCode changes
-  RR.useEffect1(
-    () => {
-      switch (discount) {
-      | `NoSubmittedCode
-      | `CodeError(_)
-      | `DiscountError(_) => ()
-      | `Discount(value) => onApply(value)
-      };
-      None;
-    },
-    discount,
-  );
 
   <form
     className=Style.form
@@ -79,12 +77,12 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       }}
     />
     {switch (discount) {
-     | `NoSubmittedCode => React.null
-     | `Discount(discount) =>
+     | NoSubmittedCode => React.null
+     | Discount(discount) =>
        <div className=Style.discount>
          {discount |> Float.neg |> RR.currency}
        </div>
-     | `CodeError(error) =>
+     | CodeError(error) =>
        <div className=Style.promoError>
          {let errorType =
             switch (error) {
@@ -93,7 +91,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
             };
           {j|$errorType promo code|j} |> RR.s}
        </div>
-     | `DiscountError(code) =>
+     | DiscountError(code) =>
        <div className=Style.discountError>
          {RR.s("Buy ")}
          <span className=Style.buyWhat>
