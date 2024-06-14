@@ -49,7 +49,9 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
       | `NoSubmittedCode
       | `CodeError(_)
       | `DiscountError(_) => ()
-      | `Discount(_value) => Js.log2("useEffect", discount)
+      | `Discount(_value) =>
+        //Js.log2("useEffect", discount)
+        ()
       };
       None;
     },

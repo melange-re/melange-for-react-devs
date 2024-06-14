@@ -44,8 +44,8 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
   // Will only fire when submittedCode changes
   RR.useEffect1(
     () => {
-      Js.log2("useEffect1", submittedCode);
-      None;
+      // Js.log2("useEffect1", submittedCode);
+      None
     },
     submittedCode,
   );

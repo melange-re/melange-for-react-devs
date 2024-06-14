@@ -24,24 +24,24 @@ module Style = {
   let buyWhat = [%cx {|text-decoration: underline|}];
 };
 
-type discount('a) =
-  | CodeError(Discount.error)
-  | Discount(float)
-  | DiscountError(
-      [>
-        | `MissingSandwichTypes(list(string))
-        | `NeedMegaBurger
-        | `NeedOneBurger
-        | `NeedTwoBurgers
-      ] as 'a,
-    )
-  | NoSubmittedCode;
-
 // type discount('a) =
 //   | CodeError(Discount.error)
 //   | Discount(float)
-//   | DiscountError('a)
+//   | DiscountError(
+//       [>
+//         | `MissingSandwichTypes(list(string))
+//         | `NeedMegaBurger
+//         | `NeedOneBurger
+//         | `NeedTwoBurgers
+//       ] as 'a,
+//     )
 //   | NoSubmittedCode;
+
+type discount('a) =
+  | CodeError(Discount.error)
+  | Discount(float)
+  | DiscountError([> ] as 'a)
+  | NoSubmittedCode;
 
 [@react.component]
 let make = (~items: list(Item.t), ~date: Js.Date.t) => {

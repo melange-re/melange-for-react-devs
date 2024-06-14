@@ -68,16 +68,7 @@ let make = (~items: t, ~date: Js.Date.t) => {
       </tr>
       <tr className=Css.promo>
         <Td> {RR.s("Promo code")} </Td>
-        <Td>
-          <Promo
-            items
-            date
-            onApply={v => {
-              Js.log2("onApply", v);
-              setDiscount(v);
-            }}
-          />
-        </Td>
+        <Td> <Promo items date onApply=setDiscount /> </Td>
       </tr>
       <tr className=Css.total>
         <Td> {RR.s("Total")} </Td>

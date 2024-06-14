@@ -11,11 +11,7 @@ let make = (~date: Js.Date.t, ~onChange: Js.Date.t => unit) => {
     required=true
     value={date |> Js.Date.toISOString |> Js.String.substring(~end_=10)}
     onChange={evt =>
-      evt
-      |> RR.getValueFromEvent
-      |> fromString
-      |> Option.value(~default=date)
-      |> onChange
+      evt |> RR.getValueFromEvent |> fromString |> Option.iter(onChange)
     }
   />;
 };
