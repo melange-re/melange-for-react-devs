@@ -1,3 +1,12 @@
+let burger =
+  Item.Burger.{
+    lettuce: false,
+    tomatoes: false,
+    onions: 0,
+    cheese: 0,
+    bacon: 0,
+  };
+
 let datasets = {
   [
     (
@@ -10,26 +19,28 @@ let datasets = {
         Hotdog,
       ],
     ),
-    (
-      "5 burgers",
-      {
-        let burger =
-          Item.Burger.{
-            lettuce: false,
-            tomatoes: false,
-            onions: 0,
-            cheese: 0,
-            bacon: 0,
-          };
-        [
-          Burger({...burger, tomatoes: true}),
-          Burger({...burger, lettuce: true}),
-          Burger({...burger, bacon: 2}),
-          Burger({...burger, cheese: 3, onions: 9, tomatoes: true}),
-          Burger({...burger, onions: 2}),
-        ];
-      },
-    ),
+    {
+      let burger =
+        Item.Burger.{
+          lettuce: false,
+          tomatoes: false,
+          onions: 0,
+          cheese: 0,
+          bacon: 0,
+        };
+      (
+        "5 burgers",
+        {
+          [
+            Burger({...burger, tomatoes: true}),
+            Burger({...burger, lettuce: true}),
+            Burger({...burger, bacon: 2}),
+            Burger({...burger, cheese: 3, onions: 9, tomatoes: true}),
+            Burger({...burger, onions: 2}),
+          ];
+        },
+      );
+    },
     (
       "1 burger with at least one of every topping",
       [
@@ -41,6 +52,17 @@ let datasets = {
           cheese: 2,
           bacon: 3,
         }),
+        Sandwich(Turducken),
+      ],
+    ),
+    (
+      "All sandwiches",
+      [
+        Sandwich(Ham),
+        Hotdog,
+        Sandwich(Portabello),
+        Sandwich(Unicorn),
+        Hotdog,
         Sandwich(Turducken),
       ],
     ),
@@ -70,16 +92,16 @@ let make = () => {
           </div>;
         })
      |> RR.list}
-    <h2> {RR.s("PromoPure")} </h2>
-    {datasets
-     |> List.map(((label, items)) => {
-          let slug = "promo-pure-" ++ getSlug(label);
-          <div key=slug>
-            <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
-            <PromoPure items date />
-          </div>;
-        })
-     |> RR.list}
+    // <h2> {RR.s("PromoPure")} </h2>
+    // {datasets
+    //  |> List.map(((label, items)) => {
+    //       let slug = "promo-pure-" ++ getSlug(label);
+    //       <div key=slug>
+    //         <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
+    //         <PromoPure items date />
+    //       </div>;
+    //     })
+    //  |> RR.list}
     <h2> {RR.s("Promo")} </h2>
     {datasets
      |> List.map(((label, items)) => {
