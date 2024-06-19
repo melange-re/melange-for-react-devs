@@ -74,6 +74,20 @@ let getSlug = title =>
   |> Js.String.toLowerCase
   |> Js.String.replaceByRe(~regexp=[%re "/ /g"], ~replacement="-");
 
+module DateAndOrder = {
+  [@react.component]
+  let make = (~label: string, ~slug: string, ~items: list(Item.t)) => {
+    let (date, setDate) =
+      RR.useStateValue(Js.Date.fromString("2024-05-28T00:00"));
+
+    <div key={"order-" ++ slug}>
+      <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
+      <DateInput date onChange=setDate />
+      <Order items date />
+    </div>;
+  };
+};
+
 [@react.component]
 let make = () => {
   let (date, setDate) =
@@ -116,10 +130,7 @@ let make = () => {
     {datasets
      |> List.map(((label, items)) => {
           let slug = label |> getSlug;
-          <div key={"order-" ++ slug}>
-            <a name=slug href={"#" ++ slug}> <h2> {label |> RR.s} </h2> </a>
-            <Order items date />
-          </div>;
+          <DateAndOrder key=slug slug label items />;
         })
      |> RR.list}
   </div>;
