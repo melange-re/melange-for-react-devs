@@ -16,12 +16,19 @@ module Style = {
   let discountError = [%cx {|color: purple|}];
 };
 
+type discount('a) = [
+  | `CodeError(Discount.error)
+  | `Discount(float)
+  | `DiscountError('a)
+  | `NoSubmittedCode
+];
+
 [@react.component]
 let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
-  let discount =
+  let discount: discount(_) =
     switch (submittedCode) {
     | None => `NoSubmittedCode
     | Some(code) =>
