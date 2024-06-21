@@ -27,7 +27,7 @@ In a couple of the documentation comments, you see square brackets (`[]`):
 
 Whatever is inside the brackets gets rendered in a monospace source code font.
 This is one example of the [markup
-language](https://v2.ocaml.org/releases/5.0/manual/ocamldoc.html#ss:ocamldoc-formatting)
+language](https://ocaml.org/manual/5.2/ocamldoc.html#ss:ocamldoc-formatting)
 used inside documentation comments.
 
 ## `Promo` component

@@ -26,7 +26,7 @@ line to the top of `Order.re`:
 ```
 
 The `{||}` string literal is known as a [quoted
-string literal](https://v2.ocaml.org/manual/lex.html#sss:stringliterals), and it
+string literal](https://ocaml.org/manual/5.2/lex.html#sss:stringliterals), and it
 is used to represent strings of arbitrary content without escaping[^3]. They are
 similar to the `{js||js}` string literals we first saw in the [Celsius
 Converter](/celsius-converter-exception/#solutions) chapter, with the difference

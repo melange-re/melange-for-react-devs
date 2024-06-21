@@ -336,7 +336,7 @@ chapter.
 [^1]: Technically, undeclared variables produce a warning and it's possible to
   tell OCaml to not treat them as compilation errors. A common way to do this is
   via the [built-in `warning`
-  attribute](https://v2.ocaml.org/manual/attributes.html#ss:builtin-attributes).
+  attribute](https://ocaml.org/manual/5.2/attributes.html#ss:builtin-attributes).
 
 [^2]: You may be wondering why a unicorn sandwich costs $80. Well, that is just
   the price of ethically-sourced unicorn meat. All the "guests" at the
