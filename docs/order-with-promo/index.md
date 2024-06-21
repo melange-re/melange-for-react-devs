@@ -10,8 +10,20 @@ But first, let's see how to create an explicit type for the `discount` derived
 variable inside `Promo`. We do so not because we have to, but because it will
 give us some more insight into OCaml's type system.
 
-Your first instinct might be to hover over the `discount` variable and copy and
-paste the inferred type:
+When we hover over the `discount` variable, we see this:
+
+```reason
+[> `CodeError(Discount.error)
+ | `Discount(float)
+ | `DiscountError([> `MissingSandwichTypes
+                   | `NeedMegaBurger
+                   | `NeedOneBurger
+                   | `NeedTwoBurgers ])
+ | `NoSubmittedCode ]
+```
+
+The easiest thing to do is to create a new `discount` type and assign it to that
+type expression:
 
 ```reason
 type discount = [>
@@ -99,9 +111,9 @@ type discount('a) = [
 ```
 
 Now `discount` is a *type constructor* that takes a *type variable* named `'a`.
-A type constructor is not a concrete type---it's more useful to think of it as
+A type constructor is not a fixed type---it's more useful to think of it as
 function that takes a type and outputs a new type. This is reinforced by the
-compilation error we now see:
+compilation error we get:
 
 ```text
 31 |   let discount: discount =
@@ -127,6 +139,92 @@ discount([> `MissingSandwichTypes
           | `NeedOneBurger
           | `NeedTwoBurgers ])
 ```
+
+## The meaning of `>`
+
+Once again, we see `>`. In polymorphic variant type expressions, it means "allow
+more than". It means that tags other than the four that are listed are allowed.
+For example, this type would be allowed:
+
+```reason{5-6}
+discount([| `MissingSandwichTypes
+          | `NeedMegaBurger
+          | `NeedOneBurger
+          | `NeedTwoBurgers
+          | `HoneyButter
+          | `KewpieMayo ])
+```
+
+Generally, you won't need to use `>` in your own type definitions, but it often
+appears when the compiler is allowed to infer the type of a variable or function
+that uses polymorphic variants.
+
+## Implicit type variable
+
+Let's come back to the question of why the original attempt at a type definition
+is syntactically invalid:
+
+```reason
+type discount = [>
+  | `CodeError(Discount.error)
+  | `Discount(float)
+  | `DiscountError(
+      [>
+        | `MissingSandwichTypes
+        | `NeedMegaBurger
+        | `NeedOneBurger
+        | `NeedTwoBurgers
+      ],
+    )
+  | `NoSubmittedCode
+];
+```
+
+The reason is that whenever you have `>`, you implicitly have a type variable.
+So the above code is equivalent to this:
+
+```reason{13}
+type discount = [>
+  | `CodeError(Discount.error)
+  | `Discount(float)
+  | `DiscountError(
+      [>
+        | `MissingSandwichTypes
+        | `NeedMegaBurger
+        | `NeedOneBurger
+        | `NeedTwoBurgers
+      ],
+    )
+  | `NoSubmittedCode
+] as 'a;
+```
+
+Now the error message makes a bit more sense:
+
+> Error: A type variable is unbound in this type declaration.
+
+The type variable exists, but it doesn't appear as an argument of the `discount`
+type constructor. Once it's added, it compiles:
+
+```reason{1}
+type discount('a) =
+  [>
+    | `CodeError(Discount.error)
+    | `Discount(float)
+    | `DiscountError(
+        [>
+          | `MissingSandwichTypes
+          | `NeedMegaBurger
+          | `NeedOneBurger
+          | `NeedTwoBurgers
+        ],
+      )
+    | `NoSubmittedCode
+  ] as 'a;
+```
+
+This is somewhat like accidentally using a variable in a function but forgetting
+to add that variable to the function's argument list.
 
 
 
