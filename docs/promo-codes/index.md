@@ -253,10 +253,10 @@ instead use a *polymorphic variant*:
 <<< Discount.re#get-free-burgers-poly{13-14}
 
 Polymorphic variants are similar to the variants you've seen before, the main
-difference being that you don't need to declare the constructors beforehand.
-Instead, you can freely use polymorphic variant constructors inside a function,
-and the type of the function is inferred from the usage. For example, the type
-of `Discount.getFreeBurgers` is now
+difference being that you don't need to define the *variant tags* beforehand.
+Instead, you can freely use variant tags (like `` `NeedTwoBurgers`` and ``
+`NeedOneBurger``) inside a function, and the type of the function is inferred
+from the usage. For example, the type of `Discount.getFreeBurgers` is now
 
 ```reason
 list(Item.t) => result(float, [> `NeedOneBurger | `NeedTwoBurgers ])
@@ -264,8 +264,7 @@ list(Item.t) => result(float, [> `NeedOneBurger | `NeedTwoBurgers ])
 
 ::: tip
 
-The name of a polymorphic variant constructor must start with the backtick (`` `
-``) character.
+The name of a variant tag must start with the backtick (`` ` ``) character.
 
 :::
 
@@ -293,14 +292,14 @@ list(Item.t) => result(float, [> `NeedMegaBurger ])
 
 ## Fixing the tests
 
-Fixing the tests is mostly a mechanical and consists of these steps:
+Fixing the tests is mostly a mechanical effort and consists of these steps:
 
 - Replace `Some` with `Ok`
-- Replace `None` with ``Error(`SomeConstructor)``
+- Replace `None` with ``Error(`SomeTag)``
 - Replace `equal` with `deepEqual`
 
-However, there is a little wrinkle. What if you misspell one of the polymorphic
-variant constructors?
+However, there is a little wrinkle. What if you misspell one of the variant
+tags?
 
 ```reason{5}
 test("1 burger, no discount", () =>
@@ -315,9 +314,9 @@ The constructor should be called `` `NeedOneBurger`` but here it's been
 misspelled as `` `NeedOneBurgers``, yet it still compiles! This is due to the
 open-ended nature of polymorphic variants. The compiler knows that
 `Discount.getFreeBurgers` currently can't return ``Error(`NeedOneBurgers)``, but
-because the constructors for polymorphic variants don't need to be defined
-up-front, it has no way to know that the function will **never** return
-``Error(`NeedOneBurgers)`` in the future.
+because variant tags don't need to be defined up-front, it has no way to know
+that the function will **never** return ``Error(`NeedOneBurgers)`` in the
+future.
 
 ## Runtime representation of polymorphic variants
 
@@ -333,12 +332,12 @@ clarity):
 +      _0: 'NeedOneBurger'
 ```
 
-You can see that polymorphic variant constructors without arguments are just
-strings in the JS runtime.
+You can see that variant tags without arguments are just strings in the JS
+runtime.
 
-For reference, the runtime representation for polymorphic variant
-constructors with arguments is an object with `NAME` and `VAL` fields. For
-example, `` `foo(42)`` becomes `{"NAME": "foo", "VAL": 42}`.
+For reference, the runtime representation of a variant tag with an argument is
+an object with `NAME` and `VAL` fields. For example, `` `foo(42)`` becomes
+`{"NAME": "foo", "VAL": 42}`.
 
 ## Variants vs polymorphic variants
 
@@ -375,12 +374,11 @@ correctly, so prefer to use the functions in `Js.String`
   on a sequence of numbers
 - Polymorphic variants are like the variants we've already seen but with some
   differences:
-  - The constructors don't need to defined before they are used
-  - The constructors must start with the backtick (`` ` ``) character
-  - A polymorphic variant constructor without arguments becomes a string in the
-    JS runtime
-  - A polymorphic variant constructor with argument(s) becomes an object in the
-    JS runtime. The keys in the object are `NAME` and `VAL`.
+  - The variant tags don't need to defined before they are used
+  - A tag must start with the backtick (`` ` ``) character
+  - A variant tag without arguments becomes a string in the JS runtime
+  - A variant tag with argument(s) becomes an object in the JS runtime. The keys
+    in the object are `NAME` and `VAL`.
 
 ## Exercises
 
@@ -463,6 +461,6 @@ and [demo](https://react-book.melange.re/demo/src/promo-codes/) for this chapter
 [^1]: It was quite a sight to see a giant burger zipping around the fairgrounds
     on a Segway while being chased by a small army of juggalos.
 
-[^2]: Instead of creating a polymorphic variant constructor out of the phrase
-    "burger that has every topping", we save ourselves some typing by using the
-    much shorter "megaburger".
+[^2]: Instead of creating a variant tag out of the phrase "burger that has every
+    topping", we save ourselves some typing by using the much shorter
+    "megaburger".
