@@ -337,7 +337,7 @@ switch (burgers) {
 ```
 
 OCaml [only allows you to pattern match on arrays of fixed
-length](https://v2.ocaml.org/manual/patterns.html#sss:pat-array), so to fix
+length](https://ocaml.org/manual/5.2/patterns.html#sss:pat-array), so to fix
 this, we must instead match on a tuple of the first and second elements of the
 array:
 
@@ -546,7 +546,7 @@ and [demo](https://react-book.melange.re/demo/src/burger-discounts/) for this ch
 
 [^1]: The official term for something like `Item.Burger` (module name followed
     by value name) is [access
-    path](https://v2.ocaml.org/manual/names.html#sss:refer-named), but this term
+    path](https://ocaml.org/manual/5.2/names.html#sss:refer-named), but this term
     isn't widely used.
 
 [^2]: Another valid way to discard the return value of a function is:

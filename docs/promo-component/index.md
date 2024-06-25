@@ -27,7 +27,7 @@ In a couple of the documentation comments, you see square brackets (`[]`):
 
 Whatever is inside the brackets gets rendered in a monospace source code font.
 This is one example of the [markup
-language](https://v2.ocaml.org/releases/5.0/manual/ocamldoc.html#ss:ocamldoc-formatting)
+language](https://ocaml.org/manual/5.2/ocamldoc.html#ss:ocamldoc-formatting)
 used inside documentation comments.
 
 ## `Promo` component
@@ -364,9 +364,9 @@ of data goes like this:
       1. If the result of `discountFunction(items)` is `Ok(value)`, then return
          `` `Discount(value)``
 
-Because we use polymorphic variant constructors, we don't need to define a new
-type. If you hover over the `discount` variable in your editor you'll see that
-its inferred type is:
+Because we use polymorphic variant tags, we don't need to define a new type. If
+you hover over the `discount` variable in your editor you'll see that its
+inferred type is:
 
 ```reason
 [> `CodeError(Discount.error)
@@ -436,15 +436,15 @@ occur. In the next chapter, we'll integrate this `Promo` component into your
   compatible with your Melange packages
 - A good strategy for rendering mutually-exclusive states is to create a single
   switch expression that maps your inputs to each state, where each state is
-  represented by a different polymorphic variant constructor.
+  represented by a different variant tag.
 
 ## Exercises
 
 <b>1.</b> Render the different error messages for the `` `DiscountError`` branch
 of `Promo`'s switch expression. Here's what message should be shown for each
-constructor:
+tag:
 
-| Polymorphic variant constructor | Message |
+| Variant tag | Message |
 | ------------------------------- | ------- |
 | `` `NeedOneBurger`` | Buy at least 1 more burger to enjoy this promotion |
 | `` `NeedTwoBurgers`` | Buy at least 1 more burgers to enjoy this promotion |
@@ -565,18 +565,17 @@ The type signature of `getDiscountFunction` remains unchanged, returning a
 function encased in `Ok` when it succeeds. In contrast, `getDiscountPair`
 returns a 2-tuple encased in `Ok`:
 
-- The first element of the tuple is a polymorphic variant constructor indicating
-  which function was returned, e.g. `` `FreeBurger``, `` `HalfOff``, etc.
+- The first element of the tuple is a variant tag indicating which function was
+  returned, e.g. `` `FreeBurger``, `` `HalfOff``, etc.
 - The second element of the tuple is the discount function
 
-The polymorphic constructor serves to give test code something to compare
-against:
+The variant tag serves to give test code something to compare against:
 
 <<< DiscountTests.re#use-discount-function-pair{2-3,20-21}
 
-Recall that the runtime representation of a polymorphic constructor without
-arguments is just a string. They can be compared using `Fest.deepEqual` without
-any surprises.
+Recall that the runtime representation of a variant tag without arguments is
+just a string. They can be compared using `Fest.deepEqual` without any
+surprises.
 
 Run `npm run test` to verify that all tests are passing again.
 
