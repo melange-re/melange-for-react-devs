@@ -105,7 +105,7 @@ discount([> `MissingSandwichTypes
           | `NeedTwoBurgers ])
 ```
 
-## The meaning of `>`
+## `>` = "allow more than"
 
 Once again, we see `>`. In polymorphic variant type expressions, it means "allow
 more than". In this case, it means that tags other than the four that are listed
@@ -134,7 +134,7 @@ is syntactically invalid:
 The reason is that whenever you have `>`, you implicitly have a type variable.
 So the above code is equivalent to this:
 
-<<< Types.re#explicit-type-var{13}
+<<< Types.re#explicit-type-var{14}
 
 Now the error message makes a bit more sense:
 
@@ -147,6 +147,34 @@ type constructor. Once it's added, it compiles:
 
 This is somewhat like accidentally using a variable in a function but forgetting
 to add that variable to the function's argument list.
+
+## Do you need to make a type for `discount`?
+
+When using a polymorphic variant type, you don't generally need to explicitly
+define a type. [Later](/todo), we'll show you an example when you must define
+types to take advantage of the more advanced features of polymorphic variants.
+
+## Add `DateInput` component
+
+To see different promotions in action, we want to be able to change easily
+change the date in our demo, so add a new file `DateInput.re`:
+
+<<< DateInput.re
+
+Note how the `type` prop of `input` has been renamed to `type_`, because in
+OCaml, `type` is a reserved keyword and can't be used as an argument name.
+But don't worry, it will still say `type` in the generated JS output.
+
+## Add `Demo` component
+
+Move the contents of `Index.App` into a new file called `Demo.re`. In the
+process, add our newly-created `DateInput` component:
+
+<<< Demo.re{16-17,21}
+
+Change `Index` to use the new `Demo` component:
+
+<<< Index.re{7}
 
 ---
 
