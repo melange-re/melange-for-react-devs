@@ -24,7 +24,8 @@ type discount('a) = [
 ];
 
 [@react.component]
-let make = (~items: list(Item.t), ~date: Js.Date.t) => {
+let make =
+    (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit=_ => ()) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
@@ -41,6 +42,19 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
         }
       }
     };
+
+  RR.useEffect1(
+    () => {
+      switch (discount) {
+      | `NoSubmittedCode
+      | `CodeError(_)
+      | `DiscountError(_) => ()
+      | `Discount(value) => onApply(value)
+      };
+      None;
+    },
+    discount,
+  );
 
   <form
     className=Style.form

@@ -1,19 +1,11 @@
-// #region initial-functions
-/** Get string value from the given event's target */
-let getValueFromEvent = (evt): string => React.Event.Form.target(evt)##value;
+let getValueFromEvent = _evt => "";
 
-/** Alias for [React.string] */
 let s = React.string;
 
-/** Render a list of [React.element]s */
-let list = list => list |> Stdlib.Array.of_list |> React.array;
-
-/** Render a float as currency */
-let currency = value => value |> Js.Float.toFixed(~digits=2) |> React.string;
-// #endregion initial-functions
-
-// #region use-state-value
-/** Like [React.useState] but doesn't use callback functions */
 let useStateValue = initial =>
   React.useReducer((_state, newState) => newState, initial);
-// #endregion use-state-value
+
+// #region use-effect-1
+/** Helper for [React.useEffect1] */
+let useEffect1 = (func, dep) => React.useEffect1(func, [|dep|]);
+// #endregion use-effect-1

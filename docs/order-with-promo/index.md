@@ -150,14 +150,16 @@ to add that variable to the function's argument list.
 
 ## Do you need to make a type for `discount`?
 
-When using a polymorphic variant type, you don't generally need to explicitly
-define a type. [Later](/todo), we'll show you an example when you must define
-types to take advantage of the more advanced features of polymorphic variants.
+When using a polymorphic variant, you don't generally need to explicitly define
+a type. But it doesn't hurt to do so, and can serve as a sort of "documentation"
+by showing all your variant tags in one place. [Later](/todo), we'll show you an
+example of when you must define types to take advantage of the more advanced
+features of polymorphic variants.
 
 ## Add `DateInput` component
 
-To see different promotions in action, we want to be able to change easily
-change the date in our demo, so add a new file `DateInput.re`:
+To see different promotions in action, we want to be able to easily change the
+date in our demo, so add a new file `DateInput.re`:
 
 <<< DateInput.re
 
@@ -175,6 +177,100 @@ process, add our newly-created `DateInput` component:
 Change `Index` to use the new `Demo` component:
 
 <<< Index.re{7}
+
+## Add `onApply` prop to `Promo`
+
+Add an `onApply` prop to `Promo`, which will be invoked when a promo code is
+successfully submitted and results in a discount:
+
+<<< Promo.re#add-on-apply{3}
+
+This causes a compilation error because the `Order` component doesn't provide a
+value for that prop yet. We can temporarily silence the error by giving
+`onApply` a default value:
+
+<<< Promo.re#default-value{6}
+
+The default value we've provided, `_ => ()`, is basically a no-op. We can remove
+this default value once we're ready to use `onApply` inside `Order`.
+
+## Add `React.useEffect1`
+
+Your first instinct might be to add a `useEffect` hook that invokes `onApply`
+when `discount` has a value of the form `` `Discount(value) ``:
+
+<<< Promo.re#use-effect
+
+## `useEffect*` functions
+
+`React.useEffect1` is a one of the binding functions for React's [useEffect
+hook](https://react.dev/reference/react/useEffect). The number `1` at the end of
+the function indicates how many dependencies this function is supposed to take.
+Accordingly, there are also `React.useEffect0`, `React.useEffect2`, etc, all the
+way up to `React.useEffect7`[^1].
+
+All `React.useEffect*` functions accept a callback as their first argument, the
+type of which is:
+
+```reason
+unit => option(unit => unit)
+```
+
+The callback's return type is `option(unit => unit)` so that you can return a
+cleanup function encased in `Some`. When you don't need to return a cleanup
+function, you can just return `None`.
+
+## `useEffect*` dependencies
+
+The second argument for all `React.useEffect*` functions except
+`React.useEffect0` is for the dependencies. For example, the type of
+`React.useEffect2` is:
+
+```reason
+(unit => option(unit => unit), ('a, 'b)) => unit
+```
+
+And the type of `React.useEffect3` is:
+
+```reason
+(unit => option(unit => unit), ('a, 'b, 'c)) => unit
+```
+
+You see that they both take a tuple as their dependencies argument. That's
+because the elements of OCaml tuples can be of different types (unlike OCaml
+arrays, whose elements must all be of the same type). In the JS runtime, though,
+tuples just get turned into JS arrays.
+
+::: tip
+
+Every time you add or remove a dependency from your `useEffect` hook, you'll
+need to use a different `React.useEffect*` function (the one that corresponds to
+how many dependencies you now have).
+
+:::
+
+## Why does `useEffect1` accept an array?
+
+As you've seen, `React.useEffect2`, `React.useEffect3`, etc all accept a tuple
+argument for their dependencies. However, `React.useEffect1` is the odd man out,
+because it accepts an array! The reason is that one-element OCaml tuples don't
+become arrays in the JS runtime, they instead take on the value of their single
+element. So in this case, `React.useEffect1` must take an array so that the
+generated JS code does the right thing. However, this creates the unfortunate
+possibility that you accidentally pass in an empty array as the dependency for
+`React.useEffect1`.
+
+## `RR.useEffect1` helper function
+
+You can sidestep this possibility by adding a helper function to your `RR`
+module:
+
+<<< RR.re#use-effect-1
+
+You can refactor `Promo` to use your new helper function:
+
+<<< Promo.re#use-effect-helper{1,11}
+
 
 ---
 
@@ -202,4 +298,7 @@ and [demo](https://react-book.melange.re/demo/src/order-with-promo/) for this ch
 
 -----
 
-footnotes
+[^1]: If you happen to need more than 7 dependencies, you can define your own
+   binding function based on the [current binding
+   functions](https://github.com/reasonml/reason-react/blob/713ab6cdb1644fb44e2c0c8fdcbef31007b37b8d/src/React.rei#L248-L255).
+   We'll cover bindings in more detail [later](/todo).
