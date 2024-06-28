@@ -91,3 +91,42 @@ let _ =
     // #endregion submitted-code-dep
     ();
   };
+
+let _ =
+  (date, items) => {
+    // #region get-discount
+    let getDiscount =
+      fun
+      | None => `NoSubmittedCode
+      | Some(code) =>
+        switch (Discount.getDiscountFunction(code, date)) {
+        | Error(error) => `CodeError(error)
+        | Ok(discountFunc) =>
+          switch (discountFunc(items)) {
+          | Error(error) => `DiscountError(error)
+          | Ok(value) => `Discount(value)
+          }
+        };
+    // #endregion get-discount
+
+    ignore(getDiscount);
+  };
+
+let _ =
+  (getDiscount, onApply, code, setSubmittedCode) => {
+    <form
+      // #region on-submit
+      onSubmit={evt => {
+        evt |> React.Event.Form.preventDefault;
+        let newSubmittedCode = Some(code);
+        setSubmittedCode(newSubmittedCode);
+        switch (getDiscount(newSubmittedCode)) {
+        | `NoSubmittedCode
+        | `CodeError(_)
+        | `DiscountError(_) => ()
+        | `Discount(value) => onApply(value)
+        };
+      }}
+      // #endregion on-submit
+    />;
+  };

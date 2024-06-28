@@ -355,6 +355,30 @@ case](../burger-discounts/#runtime-representation-of-option):
 Therefore, an `option` value is never an object, and can be safely used as a
 dependency for React hooks.
 
+## You don't need an Effect
+
+The above discussion was academic, because we [don't actually need an Effect to
+handle user
+events](https://react.dev/learn/you-might-not-need-an-effect#how-to-remove-unnecessary-effects).
+Let's delete the call to `RR.useEffect1` and start over.
+
+A better place to call `onApply` is from within the `form`'s `onSubmit`
+callback. Replace the `discount` reactive value with a `getDiscount` function:
+
+<<< Promo.re#get-discount
+
+Call `getDiscount` within the `onSubmit` callback function:
+
+<<< Promo.re#on-submit
+
+Inside the render logic, change the input of the switch expression from
+`discount` to `getDiscount(submittedCode)`:
+
+```reason
+{switch (discount) { // [!code --]
+{switch (getDiscount(submittedCode)) { // [!code ++]
+```
+
 ---
 
 summary
