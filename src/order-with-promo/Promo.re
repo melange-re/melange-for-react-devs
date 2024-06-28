@@ -24,8 +24,7 @@ type discount('a) = [
 ];
 
 [@react.component]
-let make =
-    (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit=_ => ()) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 

@@ -19,8 +19,6 @@ let make = () => {
   <div>
     <h1> {RR.s("Order confirmation")} </h1>
     <DateInput date onChange=setDate />
-    <h2> {RR.s("Promo")} </h2>
-    <Promo items date />
     <h2> {RR.s("Order")} </h2>
     <Order items date />
   </div>;

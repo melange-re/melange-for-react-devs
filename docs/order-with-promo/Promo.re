@@ -1,5 +1,6 @@
 [@react.component]
-let make = (~items as _: list(Item.t), ~date as _: Js.Date.t) => <div />;
+let make = (~items as _: list(Item.t), ~date as _: Js.Date.t, ~onApply as _) =>
+  <div />;
 
 [@warning "-27"]
 module AddOnApply = {
@@ -8,20 +9,6 @@ module AddOnApply = {
   let make =
       (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) =>
     // #endregion add-on-apply
-    <div />;
-};
-
-[@warning "-27"]
-module DefaultValue = {
-  // #region default-value
-  [@react.component]
-  let make =
-      (
-        ~items: list(Item.t),
-        ~date: Js.Date.t,
-        ~onApply: float => unit=_ => (),
-      ) =>
-    // #endregion default-value
     <div />;
 };
 

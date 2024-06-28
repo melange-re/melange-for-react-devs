@@ -178,6 +178,20 @@ Change `Index` to use the new `Demo` component:
 
 <<< Index.re{7}
 
+## Add `Promo` to `Order`
+
+Add the `Promo` component to the `Order` component:
+
+<<< Order.re#make{3,22-25,28}
+
+A breakdown:
+
+- Create a new state variable called `discount`
+- Set the value of `discount` through `Promo`'s `onApply` callback prop (we'll
+  add this prop in the next step)
+- Subtract `discount` from `subtotal` when rendering the total price of the
+  order
+
 ## Add `onApply` prop to `Promo`
 
 Add an `onApply` prop to `Promo`, which will be invoked when a promo code is
@@ -185,19 +199,10 @@ successfully submitted and results in a discount:
 
 <<< Promo.re#add-on-apply{3}
 
-This causes a compilation error because the `Order` component doesn't provide a
-value for that prop yet. We can temporarily silence the error by giving
-`onApply` a default value:
-
-<<< Promo.re#default-value{6}
-
-The default value we've provided, `_ => ()`, is basically a no-op. We can remove
-this default value once we're ready to use `onApply` inside `Order`.
-
 ## Add `React.useEffect1`
 
-Your first instinct might be to add a `useEffect` hook that invokes `onApply`
-when `discount` has a value of the form `` `Discount(value) ``:
+To invoke `onApply`, we can add a `useEffect` hook that invokes `onApply` when
+`discount` has a value of the form `` `Discount(value) ``:
 
 <<< Promo.re#use-effect
 
@@ -209,16 +214,17 @@ the function indicates how many dependencies this function is supposed to take.
 Accordingly, there are also `React.useEffect0`, `React.useEffect2`, etc, all the
 way up to `React.useEffect7`[^1].
 
-All `React.useEffect*` functions accept a callback as their first argument, the
-type of which is:
+All `React.useEffect*` functions accept a [setup
+callback](https://react.dev/reference/react/useEffect#reference) as their first
+argument, the type of which is:
 
 ```reason
 unit => option(unit => unit)
 ```
 
-The callback's return type is `option(unit => unit)` so that you can return a
-cleanup function encased in `Some`. When you don't need to return a cleanup
-function, you can just return `None`.
+The setup callback's return type is `option(unit => unit)`, which allows you to
+return a cleanup function encased in `Some`. When you don't need to return a
+cleanup function, you can just return `None`.
 
 ## `useEffect*` dependencies
 
@@ -236,11 +242,6 @@ And the type of `React.useEffect3` is:
 (unit => option(unit => unit), ('a, 'b, 'c)) => unit
 ```
 
-You see that they both take a tuple as their dependencies argument. That's
-because the elements of OCaml tuples can be of different types (unlike OCaml
-arrays, whose elements must all be of the same type). In the JS runtime, though,
-tuples just get turned into JS arrays.
-
 ::: tip
 
 Every time you add or remove a dependency from your `useEffect` hook, you'll
@@ -249,28 +250,72 @@ how many dependencies you now have).
 
 :::
 
+## Tuples vs arrays
+
+Both functions take their dependencies as a tuple instead of an array (as would
+be the case in ReactJS). To understand why, we need to understand the type
+properties of tuples and arrays:
+
+- The elements of tuples can have different types, e.g. `(1, "a", 23.5)`
+- The elements of arrays must all be of the same type, e.g. `[|1, 2, 3|]`,
+  `[|"a", "b", "c"|]`
+
+Therefore, we must use tuples to express the dependencies of `useEffect` hooks,
+otherwise our dependencies would all have to be of the same type.
+
+## Tuples become arrays in JS
+
+Even though we use tuples for dependencies in our OCaml code, they are turned
+into JS arrays in the runtime. So the generated code will run the same as in any
+ReactJS app.
+
 ## Why does `useEffect1` accept an array?
 
 As you've seen, `React.useEffect2`, `React.useEffect3`, etc all accept a tuple
-argument for their dependencies. However, `React.useEffect1` is the odd man out,
-because it accepts an array! The reason is that one-element OCaml tuples don't
+argument for their dependencies. But `React.useEffect1` is the odd man out,
+because it accepts an array. The reason is that one-element OCaml tuples don't
 become arrays in the JS runtime, they instead take on the value of their single
 element. So in this case, `React.useEffect1` must take an array so that the
-generated JS code does the right thing. However, this creates the unfortunate
-possibility that you accidentally pass in an empty array as the dependency for
-`React.useEffect1`.
+generated JS code does the right thing.
 
 ## `RR.useEffect1` helper function
 
-You can sidestep this possibility by adding a helper function to your `RR`
-module:
+`React.useEffect1` taking an array means that you could accidentally pass in an
+empty array as the dependency for `React.useEffect1`. You can sidestep this
+possibility by adding a helper function to your `RR` module:
 
 <<< RR.re#use-effect-1
 
-You can refactor `Promo` to use your new helper function:
+Refactor `Promo` to use your new helper function:
 
 <<< Promo.re#use-effect-helper{1,11}
 
+You may be wondering why ReasonReact doesn't provide this helper function for
+you. The reason is that its bindings to React functions are supposed to be
+zero-cost, without any additional abstractions on top. This is the same reason
+that something like our `RR.useStateValue` helper function is also not included
+with ReasonReact.
+
+## Add styling for promo code row
+
+Execute `npm run serve` to see your app in action. Verify that it behaves as
+expected:
+
+- Type "FREE" into the input and press Enter. It should deduct the price of
+  every other burger (ordered by price descending).
+- Type "HALF" into the input and press Enter. It should deduct half of the
+  entire order.
+- Change the date to something other than May 28. It should an error saying
+  "Expired promo code"
+
+However, the styling is a little bit off. Add the following class variable to
+`Order.Style`:
+
+<<< Order.re#promo-class
+
+Then set the `className` of the promo code row to `Style.promo`:
+
+<<< Order.re#set-promo-class{1}
 
 ---
 
