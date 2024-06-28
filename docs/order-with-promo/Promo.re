@@ -70,3 +70,24 @@ let _ =
     // #endregion log
     ();
   };
+
+let _ =
+  (discount, submittedCode, onApply) => {
+    // #region submitted-code-dep
+    RR.useEffect1(
+      () => {
+        switch (discount) {
+        | `NoSubmittedCode
+        | `CodeError(_)
+        | `DiscountError(_) => ()
+        | `Discount(value) =>
+          Js.log2("useEffect1 depending on discount", value);
+          onApply(value);
+        };
+        None;
+      },
+      submittedCode,
+    );
+    // #endregion submitted-code-dep
+    ();
+  };

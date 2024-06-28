@@ -54,7 +54,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       };
       None;
     },
-    discount,
+    submittedCode,
   );
 
   <form

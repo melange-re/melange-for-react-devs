@@ -335,6 +335,26 @@ even though its contents didn't necessary change, the [hook treats it as having
 changed because the object is no longer the same one as
 before](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies).
 
+## Use `submittedCode` as dependency
+
+The easiest fix is to simply change the dependency to `submittedCode` instead of
+`discount`:
+
+<<< Promo.re#submitted-code-dep{13}
+
+This seems to do the trick---the Effect only runs once every time you submit a
+new promo code. But wait! Why does it behave differently when `submittedCode` is
+a `option`, and `option` is just another variant type?[^2]
+
+Although `option` is a variant type, its [runtime representation is a special
+case](../burger-discounts/#runtime-representation-of-option):
+
+- `None` becomes `undefined`
+- `Some(value)` becomes `value`
+
+Therefore, an `option` value is never an object, and can be safely used as a
+dependency for React hooks.
+
 ---
 
 summary
@@ -365,3 +385,6 @@ and [demo](https://react-book.melange.re/demo/src/order-with-promo/) for this ch
    binding function based on the [current binding
    functions](https://github.com/reasonml/reason-react/blob/713ab6cdb1644fb44e2c0c8fdcbef31007b37b8d/src/React.rei#L248-L255).
    We'll cover bindings in more detail [later](/todo).
+
+[^2]: Recall that variant constructors with arguments also get turned into
+    objects in the JS runtime.
