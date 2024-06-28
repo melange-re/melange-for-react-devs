@@ -317,6 +317,24 @@ Then set the `className` of the promo code row to `Style.promo`:
 
 <<< Order.re#set-promo-class{1}
 
+## How often does the Effect run?
+
+Everything seems to be working correctly, but let's see how often our
+`useEffect` hook fires by adding a little logging:
+
+<<< Promo.re#log{8}
+
+You see that every time a promo code is successfully applied, it logs twice to
+the console. That doesn't seem right, because the value of `discount` only
+changes once when you submit a new promo code.
+
+The reason lies in the runtime representation of `discount`---recall that
+polymorphic tags with arguments are turned into objects in the JS runtime.
+Because `discount` is a reactive value, it gets recreated on every render, and
+even though its contents didn't necessary change, the [hook treats it as having
+changed because the object is no longer the same one as
+before](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies).
+
 ---
 
 summary

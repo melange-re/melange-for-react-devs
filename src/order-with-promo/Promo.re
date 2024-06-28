@@ -48,7 +48,9 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       | `NoSubmittedCode
       | `CodeError(_)
       | `DiscountError(_) => ()
-      | `Discount(value) => onApply(value)
+      | `Discount(value) =>
+        Js.log2("useEffect1 depending on discount", value);
+        onApply(value);
       };
       None;
     },

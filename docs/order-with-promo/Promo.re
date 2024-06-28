@@ -49,3 +49,24 @@ let _ =
     // #endregion use-effect-helper
     ();
   };
+
+let _ =
+  (discount, onApply) => {
+    // #region log
+    RR.useEffect1(
+      () => {
+        switch (discount) {
+        | `NoSubmittedCode
+        | `CodeError(_)
+        | `DiscountError(_) => ()
+        | `Discount(value) =>
+          Js.log2("useEffect1 depending on discount", value);
+          onApply(value);
+        };
+        None;
+      },
+      discount,
+    );
+    // #endregion log
+    ();
+  };
