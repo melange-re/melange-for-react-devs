@@ -116,4 +116,24 @@ let datasets': list((string, list(Item.t))) = [
   },
   // #endregion burger-expression
 ];
-*/;
+*/
+ignore(make);
+
+// #region refactor
+[@react.component]
+let make = () => {
+  let (date, setDate) =
+    RR.useStateValue(Js.Date.fromString("2024-05-28T00:00"));
+
+  <div>
+    <h1> {RR.s("Order Confirmation")} </h1>
+    <DateInput date onChange=setDate />
+    <h2> {RR.s("Order")} </h2>
+    {datasets
+     |> List.map(((label, items)) => {
+          <div key=label> <h3> {RR.s(label)} </h3> <Order items date /> </div>
+        })
+     |> RR.list}
+  </div>;
+};
+// #endregion refactor

@@ -398,9 +398,19 @@ OCaml makes it easy to  move variables closer to where their used. Unlike in
 
 :::
 
+## Refactor `Demo`
+
+Refactor `Demo` to render a different `Order` for each collection of items:
+
+<<< Demo.re#refactor
+
+You can delete the unused `items` value in `Order`.
+
 ---
 
-summary
+Hot diggity! You've added the promo codes to your order confirmation widget,
+just in time for Madame Jellobutter's International Burger Day promotions. In
+the next chapter, we'll further polish the sandwich promotion logic.
 
 ## Overview
 

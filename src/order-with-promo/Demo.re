@@ -1,16 +1,3 @@
-let items: Order.t = [
-  Sandwich(Portabello),
-  Sandwich(Unicorn),
-  Sandwich(Ham),
-  Sandwich(Turducken),
-  Hotdog,
-  Burger({lettuce: true, tomatoes: true, onions: 3, cheese: 2, bacon: 6}),
-  Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 0, bacon: 0}),
-  Burger({lettuce: true, tomatoes: false, onions: 1, cheese: 1, bacon: 1}),
-  Burger({lettuce: false, tomatoes: false, onions: 1, cheese: 0, bacon: 0}),
-  Burger({lettuce: false, tomatoes: false, onions: 0, cheese: 1, bacon: 0}),
-];
-
 let datasets = {
   [
     (
@@ -79,9 +66,13 @@ let make = () => {
     RR.useStateValue(Js.Date.fromString("2024-05-28T00:00"));
 
   <div>
-    <h1> {RR.s("Order confirmation")} </h1>
+    <h1> {RR.s("Order Confirmation")} </h1>
     <DateInput date onChange=setDate />
     <h2> {RR.s("Order")} </h2>
-    <Order items date />
+    {datasets
+     |> List.map(((label, items)) => {
+          <div key=label> <h3> {RR.s(label)} </h3> <Order items date /> </div>
+        })
+     |> RR.list}
   </div>;
 };
