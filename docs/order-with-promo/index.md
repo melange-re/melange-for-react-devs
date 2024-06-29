@@ -6,24 +6,17 @@ on their orders.
 
 ## Add `discount` type
 
-But first, let's see how to create an explicit type for the `discount` reactive
-value inside `Promo`. We do so not because we have to, but because it will give
-us some more insight into OCaml's type system.
+But first, let's see how to create an explicit (normal) variant type for the
+`discount` reactive value inside `Promo`. We do so not because we have to, but
+because it will give us some more insight into OCaml's type system.
 
 When we hover over the `discount` variable, we see this:
 
-```reason
-[> `CodeError(Discount.error)
- | `Discount(float)
- | `DiscountError([> `MissingSandwichTypes
-                   | `NeedMegaBurger
-                   | `NeedOneBurger
-                   | `NeedTwoBurgers ])
- | `NoSubmittedCode ]
-```
+<<< Types.re#inferred-type
 
 The easiest thing to do is to create a new `discount` type and assign it to that
-type expression:
+type expression, then delete the `` ` `` from the variant tags to turn them into
+variant constructors[^1]:
 
 <<< Types.re#bad-discount-type
 
@@ -31,43 +24,32 @@ However, this results in a compilation error:
 
 ```text
 Error: A type variable is unbound in this type declaration.
-       In type
-         [> `CodeError of Melange.Discount.error
-          | `Discount of float
-          | `DiscountError of
-              [> `MissingSandwichTypes
-               | `NeedMegaBurger
-               | `NeedOneBurger
-               | `NeedTwoBurgers ]
-          | `NoSubmittedCode ]
-         as 'a the variable 'a is unbound
+       In case
+         DiscountError of ([> `MissingSandwichTypes
+                            | `NeedMegaBurger
+                            | `NeedOneBurger
+                            | `NeedTwoBurgers ]
+                           as 'a) the variable 'a is unbound
 ```
 
 We'll come back to this error message later. For now, observe that the error
-disappears if we simply delete all the instances of `>`:
+disappears if we simply delete `>`:
 
 <<< Types.re#delete-refinement
 
-This fixes the syntax error so that we now have a correctly-defined polymorphic
-variant type.
+This fixes the syntax error so that we now have a correctly-defined variant
+type.
 
-## Type annotate `discount` variable
+## Refactor `discount`
 
-We just defined a new type, but our `discount` variable doesn't know anything
-about it. Since polymorphic variants can be used without explicitly defining
-them, type inference works differently for them. In particular, our `discount`
-variable continues to use its own inferred type, despite there being a perfectly
-good type within scope that uses the same variant tags.
+Refactor the `discount` reactive value to use our new variant type by deleting
+all instances of `` ` ``:
 
-Type annotate the `discount` variable with the newly-created `discount` type:
+<<< Promo.re#discount-variant
 
-```reason
-let discount = // [!code --]
-let discount: discount = // [!code ++]
-```
+You can likewise refactor the switch expression inside the render logic:
 
-Now when you hover over the `discount` variable, you see that its type is just
-`discount`.
+<<< Promo.re#discount-render
 
 ## Type constructor and type variable
 
@@ -77,26 +59,15 @@ Change the `discount` type to this:
 
 Now `discount` is a *type constructor* that takes a *type variable* named `'a`.
 A type constructor is not a fixed type---you can think of it as function that
-takes a type and outputs a new type. This is reinforced by the compilation error
-we get:
+takes a type and outputs a new type.
 
-```text
-31 |   let discount: discount =
-                     ^^^^^^^^
-Error: The type constructor discount expects 1 argument(s),
-       but is here applied to 0 argument(s)
-```
+The advantage of doing this is that the variant tags inside `DiscountError` are
+no longer constrained by our `discount` type. This makes sense because they are
+used primarily in the `Discount` module, and if any variant tags are renamed,
+added, or deleted, it will happen in there.
 
-You can fix it like so:
-
-```reason
-let discount: discount = // [!code --]
-let discount: discount(_) = // [!code ++]
-```
-
-We use `discount(_)` to tell the compiler that it should use the `discount` type
-constructor, but the value of its argument should be inferred. Now if you hover
-over the `discount` variable, you see that its type is:
+Using a type variable does not sacrifice type safety, if you hover over the
+`discount` variable, you see that its type is:
 
 ```reason
 discount([> `MissingSandwichTypes
@@ -105,11 +76,14 @@ discount([> `MissingSandwichTypes
           | `NeedTwoBurgers ])
 ```
 
+OCaml can figure out the type of `discount` from its usage.
+
 ## `>` = "allow more than"
 
-Once again, we see `>`. In polymorphic variant type expressions, it means "allow
-more than". In this case, it means that tags other than the four that are listed
-are allowed. For example, this type would be allowed:
+Once again, we see `>` in an inferred type, so let's see what it means. In
+polymorphic variant type expressions, it means "allow more than". In this case,
+it means that tags other than the four that are listed are allowed. For example,
+this type would be allowed:
 
 ```reason{5-6}
 discount([| `MissingSandwichTypes
@@ -148,13 +122,13 @@ type constructor. Once it's added, it compiles:
 This is somewhat like accidentally using a variable in a function but forgetting
 to add that variable to the function's argument list.
 
-## Do you need to make a type for `discount`?
+## Normal variants vs polymorphicr variants
 
-When using a polymorphic variant, you don't generally need to explicitly define
-a type. But it doesn't hurt to do so, and can serve as a sort of "documentation"
-by showing all your variant tags in one place. [Later](/todo), we'll show you an
-example of when you must define types to take advantage of the more advanced
-features of polymorphic variants.
+Actually, we are not ready to settle the debate of when to use normal variants
+and when to use polymorphic variants, because polymorphic variants have features
+that we have yet to explore. But in the case of the `discount` reactive value,
+we can say that either would be fine. Still, the version using normal variants
+is a little more explicit and self-documenting, which is never a bad thing.
 
 ## Add `DateInput` component
 
@@ -199,6 +173,13 @@ successfully submitted and results in a discount:
 
 <<< Promo.re#add-on-apply{3}
 
+::: tip
+
+You don't have to type annotate your component props, but it's a good idea to at
+least type annotate your component's callback props as a form of documentation.
+
+:::
+
 ## Add `React.useEffect1`
 
 To invoke `onApply`, we can add a `useEffect` hook that invokes `onApply` when
@@ -206,13 +187,16 @@ To invoke `onApply`, we can add a `useEffect` hook that invokes `onApply` when
 
 <<< Promo.re#use-effect
 
+Note that when `discount` has an error value, we return `()` from the switch
+expression, which is essentially a no-op.
+
 ## `useEffect*` functions
 
 `React.useEffect1` is a one of the binding functions for React's [useEffect
 hook](https://react.dev/reference/react/useEffect). The number `1` at the end of
 the function indicates how many dependencies this function is supposed to take.
-Accordingly, there are also `React.useEffect0`, `React.useEffect2`, etc, all the
-way up to `React.useEffect7`[^1].
+Accordingly, we also have `React.useEffect0`, `React.useEffect2`, etc, all the
+way up to `React.useEffect7`[^2].
 
 All `React.useEffect*` functions accept a [setup
 callback](https://react.dev/reference/react/useEffect#reference) as their first
@@ -224,7 +208,7 @@ unit => option(unit => unit)
 
 The setup callback's return type is `option(unit => unit)`, which allows you to
 return a cleanup function encased in `Some`. When you don't need to return a
-cleanup function, you can just return `None`.
+cleanup function, you just return `None`.
 
 ## `useEffect*` dependencies
 
@@ -252,8 +236,8 @@ how many dependencies you now have).
 
 ## Tuples vs arrays
 
-Both functions take their dependencies as a tuple instead of an array (as would
-be the case in ReactJS). To understand why, we need to understand the type
+Both `React.useEffect2` and `React.useEffect3` take their dependencies as a
+tuple instead of an array. To understand why, we need to understand the type
 properties of tuples and arrays:
 
 - The elements of tuples can have different types, e.g. `(1, "a", 23.5)`
@@ -275,8 +259,9 @@ As you've seen, `React.useEffect2`, `React.useEffect3`, etc all accept a tuple
 argument for their dependencies. But `React.useEffect1` is the odd man out,
 because it accepts an array. The reason is that one-element OCaml tuples don't
 become arrays in the JS runtime, they instead take on the value of their single
-element. So in this case, `React.useEffect1` must take an array so that the
-generated JS code does the right thing.
+element. So in this case, `React.useEffect1` [must take an
+array](https://reasonml.github.io/reason-react/docs/en/components#hooks) so that
+the generated JS code does the right thing.
 
 ## `RR.useEffect1` helper function
 
@@ -303,12 +288,12 @@ expected:
 
 - Type "FREE" into the input and press Enter. It should deduct the price of
   every other burger (ordered by price descending).
-- Type "HALF" into the input and press Enter. It should deduct half of the
+- Type "HALF" into the input and press Enter. It should deduct half off the
   entire order.
-- Change the date to something other than May 28. It should an error saying
+- Change the date to something other than May 28. It should show an error saying
   "Expired promo code"
 
-However, the styling is a little bit off. Add the following class variable to
+However, the styling is a little bit off. Add the following value to
 `Order.Style`:
 
 <<< Order.re#promo-class
@@ -329,10 +314,10 @@ the console. That doesn't seem right, because the value of `discount` only
 changes once when you submit a new promo code.
 
 The reason lies in the runtime representation of `discount`---recall that
-polymorphic tags with arguments are turned into objects in the JS runtime.
-Because `discount` is a reactive value, it gets recreated on every render, and
-even though its contents didn't necessary change, the [hook treats it as having
-changed because the object is no longer the same one as
+variant tags with arguments are turned into objects in the JS runtime. Because
+`discount` is a reactive value, it gets recreated on every render, and even if
+its contents didn't change, the [hook will always treat it as having changed
+because the object is no longer the same one as
 before](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies).
 
 ## Use `submittedCode` as dependency
@@ -342,9 +327,9 @@ The easiest fix is to simply change the dependency to `submittedCode` instead of
 
 <<< Promo.re#submitted-code-dep{13}
 
-This seems to do the trick---the Effect only runs once every time you submit a
-new promo code. But wait! Why does it behave differently when `submittedCode` is
-a `option`, and `option` is just another variant type?[^2]
+This does the trick---the Effect only runs once every time you submit a new
+promo code. But wait! Why does it behave differently when `submittedCode` is an
+`option`, and `option` is just another variant type?[^3]
 
 Although `option` is a variant type, its [runtime representation is a special
 case](../burger-discounts/#runtime-representation-of-option):
@@ -352,13 +337,13 @@ case](../burger-discounts/#runtime-representation-of-option):
 - `None` becomes `undefined`
 - `Some(value)` becomes `value`
 
-Therefore, an `option` value is never an object, and can be safely used as a
-dependency for React hooks.
+Therefore, an `option` value is never an object, and can always be used as a
+dependency for React hooks as long as it wraps a primitive value.
 
 ## You don't need an Effect
 
-The above discussion was academic, because we [don't actually need an Effect to
-handle user
+The above discussion about Effects was somewhat academic, because we [don't
+actually need Effects to handle user
 events](https://react.dev/learn/you-might-not-need-an-effect#how-to-remove-unnecessary-effects).
 Let's delete the call to `RR.useEffect1` and start over.
 
@@ -393,12 +378,12 @@ inside that expression:
 
 ::: tip
 
-OCaml makes it easy to  move variables closer to where their used. Unlike in
-`JavaScript`, you can use `let` anywhere, even inside an expression.
+OCaml makes it easy to  move variables closer to where they are actually used.
+Unlike in JavaScript, you can use `let` anywhere, even inside an expression.
 
 :::
 
-## Refactor `Demo`
+## Refactor `Demo` to render multiple orders
 
 Refactor `Demo` to render a different `Order` for each collection of items:
 
@@ -434,10 +419,14 @@ and [demo](https://react-book.melange.re/demo/src/order-with-promo/) for this ch
 
 -----
 
-[^1]: If you happen to need more than 7 dependencies, you can define your own
+[^1]: In OCaml terminology, variant tags start with `` ` `` and correspond to
+    polymorphic variant types, while variant constructors correspond to normal
+    variant types.
+
+[^2]: If you happen to need more than 7 dependencies, you can define your own
    binding function based on the [current binding
    functions](https://github.com/reasonml/reason-react/blob/713ab6cdb1644fb44e2c0c8fdcbef31007b37b8d/src/React.rei#L248-L255).
    We'll cover bindings in more detail [later](/todo).
 
-[^2]: Recall that variant constructors with arguments also get turned into
+[^3]: Recall that variant constructors with arguments also get turned into
     objects in the JS runtime.

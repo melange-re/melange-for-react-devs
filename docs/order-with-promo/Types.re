@@ -1,10 +1,24 @@
 /**
 
+// #region inferred-type
+[> `CodeError(Discount.error)
+ | `Discount(float)
+ | `DiscountError([> `MissingSandwichTypes
+                   | `NeedMegaBurger
+                   | `NeedOneBurger
+                   | `NeedTwoBurgers ])
+ | `NoSubmittedCode ]
+// #endregion inferred-type
+
+ */
+
+/**
+
 // #region bad-discount-type
-type discount = [>
-  | `CodeError(Discount.error)
-  | `Discount(float)
-  | `DiscountError(
+type discount =
+  | CodeError(Discount.error)
+  | Discount(float)
+  | DiscountError(
       [>
         | `MissingSandwichTypes
         | `NeedMegaBurger
@@ -12,16 +26,16 @@ type discount = [>
         | `NeedTwoBurgers
       ],
     )
-  | `NoSubmittedCode
-];
+  | NoSubmittedCode;
 // #endregion bad-discount-type
+
 */
 
 // #region delete-refinement
-type discount = [
-  | `CodeError(Discount.error)
-  | `Discount(float)
-  | `DiscountError(
+type discount =
+  | CodeError(Discount.error)
+  | Discount(float)
+  | DiscountError(
       [
         | `MissingSandwichTypes
         | `NeedMegaBurger
@@ -29,54 +43,50 @@ type discount = [
         | `NeedTwoBurgers
       ],
     )
-  | `NoSubmittedCode
-];
+  | NoSubmittedCode;
 // #endregion delete-refinement
 
 module TypeVar = {
   // #region type-variable
-  type discount('a) = [
-    | `CodeError(Discount.error)
-    | `Discount(float)
-    | `DiscountError('a)
-    | `NoSubmittedCode
-  ];
+  type discount('a) =
+    | CodeError(Discount.error)
+    | Discount(float)
+    | DiscountError('a)
+    | NoSubmittedCode;
   // #endregion type-variable
 };
 
 /**
+
 // #region explicit-type-var
 type discount =
-  [>
-    | `CodeError(Discount.error)
-    | `Discount(float)
-    | `DiscountError(
+  | CodeError(Discount.error)
+  | Discount(float)
+  | DiscountError(
+      [>
+        | `MissingSandwichTypes
+        | `NeedMegaBurger
+        | `NeedOneBurger
+        | `NeedTwoBurgers
+      ] as 'a,
+    )
+  | NoSubmittedCode;
+// #endregion explicit-type-var
+
+*/
+module AddTypeArg = {
+  // #region add-type-arg
+  type discount('a) =
+    | CodeError(Discount.error)
+    | Discount(float)
+    | DiscountError(
         [>
           | `MissingSandwichTypes
           | `NeedMegaBurger
           | `NeedOneBurger
           | `NeedTwoBurgers
-        ],
+        ] as 'a,
       )
-    | `NoSubmittedCode
-  ] as 'a;
-// #endregion explicit-type-var
-*/
-module AddTypeArg = {
-  // #region add-type-arg
-  type discount('a) =
-    [>
-      | `CodeError(Discount.error)
-      | `Discount(float)
-      | `DiscountError(
-          [>
-            | `MissingSandwichTypes
-            | `NeedMegaBurger
-            | `NeedOneBurger
-            | `NeedTwoBurgers
-          ],
-        )
-      | `NoSubmittedCode
-    ] as 'a;
+    | NoSubmittedCode;
   // #endregion add-type-arg
 };
