@@ -6,9 +6,9 @@ on their orders.
 
 ## Add `discount` type
 
-But first, let's see how to create an explicit type for the `discount` derived
-variable inside `Promo`. We do so not because we have to, but because it will
-give us some more insight into OCaml's type system.
+But first, let's see how to create an explicit type for the `discount` reactive
+value inside `Promo`. We do so not because we have to, but because it will give
+us some more insight into OCaml's type system.
 
 When we hover over the `discount` variable, we see this:
 
@@ -172,7 +172,7 @@ But don't worry, it will still say `type` in the generated JS output.
 Move the contents of `Index.App` into a new file called `Demo.re`. In the
 process, add our newly-created `DateInput` component:
 
-<<< Demo.re{16-17,21}
+<<< Demo.re#initial{16-17,21}
 
 Change `Index` to use the new `Demo` component:
 
@@ -378,6 +378,25 @@ Inside the render logic, change the input of the switch expression from
 {switch (discount) { // [!code --]
 {switch (getDiscount(submittedCode)) { // [!code ++]
 ```
+
+## Add `datasets` to `Demo`
+
+To make it easier to see the different promo-related error messages, you can
+create different collections of items. Add a `datasets` variable to `Demo`:
+
+<<< Demo.re#datasets
+
+Since the `burgers` value is only used in a single expression, we can move it
+inside that expression:
+
+<<< Demo.re#burger-expression
+
+::: tip
+
+OCaml makes it easy to  move variables closer to where their used. Unlike in
+`JavaScript`, you can use `let` anywhere, even inside an expression.
+
+:::
 
 ---
 
