@@ -442,9 +442,72 @@ the next chapter, we'll further polish the sandwich promotion logic.
 
 ## Exercises
 
-<b>1.</b> tbd
+<b>1.</b> The following code
+([playground](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGdldE5hbWUgPSAoYW5pbWFsOiBbfCBgQ2F0IHwgYERvZyhpbnQpIHwgYFVuaWNvcm4oc3RyaW5nKV0pID0%2BCiAgc3dpdGNoIChhbmltYWwpIHsKICB8IGBDYXQgPT4gIk1yIFdoaXNrZXJzIgogIHwgYERvZyhuKSA9PiAiQmFuZGl0ICIgKysgc3RyaW5nX29mX2ludChuKQogIHwgYFVuaWNvcm4obmFtZSkgPT4gIlNpciAiICsrIG5hbWUKICB9Ow%3D%3D&live=off))
+doesn’t compile. Fix it by adding a single character.
 
-<b>2.</b> tbd
+```reason
+let getName = (animal: [| `Cat | `Dog(int) | `Unicorn(string)]) =>
+  switch (animal) {
+  | `Cat => "Mr Whiskers"
+  | `Dog(n) => "Bandit " ++ string_of_int(n)
+  | `Unicorn(name) => "Sir " ++ name
+  };
+```
+
+::: details Hint
+
+Find a place where you can insert a space.
+
+:::
+
+::: details Solution
+
+```reason{1}
+let getName = (animal: [ | `Cat | `Dog(int) | `Unicorn(string)]) =>
+  switch (animal) {
+  | `Cat => "Mr Whiskers"
+  | `Dog(n) => "Bandit " ++ string_of_int(n)
+  | `Unicorn(name) => "Sir " ++ name
+  };
+```
+
+A common mistake when writing polymorphic variant type definitions is forgetting
+to put a space between the `[` and the `|` characters. Note that you don't need
+to add the implicit type variable in type annotations.
+
+:::
+
+<b>2.</b> The following code
+([playground](https://melange.re/v4.0.0/playground/?language=Reason&code=bGV0IGdldE5hbWUgPSAoYW5pbWFsOiBbIHwgYENhdCB8IGBEb2coaW50KSB8IGBVbmljb3JuKHN0cmluZyldKSA9PgogIHN3aXRjaCAoYW5pbWFsKSB7CiAgfCBgQ2F0ID0%2BICJNciBXaGlza2VycyIKICB8IGBEb2cobikgPT4gIkJhbmRpdCAiICsrIHN0cmluZ19vZl9pbnQobikKICB8IGBVbmljb3JuKG5hbWUpID0%2BICJTaXIgIiArKyBuYW1lCiAgfCBgRHJhZ29uID0%2BICJQdWZmIHRoZSBNYWdpYyIKICB9Ow%3D%3D&live=off))
+doesn’t compile. Fix it by adding a single character.
+
+```reason
+let getName = (animal: [| `Cat | `Dog(int) | `Unicorn(string)]) =>
+  switch (animal) {
+  | `Cat => "Mr Whiskers"
+  | `Dog(n) => "Bandit " ++ string_of_int(n)
+  | `Unicorn(name) => "Sir " ++ name
+  | `Dragon => "Puff the Magic"
+  };
+```
+
+::: details Solution
+
+```reason{1}
+let getName = (animal: [> | `Cat | `Dog(int) | `Unicorn(string)]) =>
+  switch (animal) {
+  | `Cat => "Mr Whiskers"
+  | `Dog(n) => "Bandit " ++ string_of_int(n)
+  | `Unicorn(name) => "Sir " ++ name
+  | `Dragon => "Puff the Magic"
+  };
+```
+
+Adding a `>` to the polymorphic variant type definition allows it to accept more
+than the listed variant tags.
+
+:::
 
 <b>3.</b> tbd
 
