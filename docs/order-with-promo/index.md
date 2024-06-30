@@ -562,7 +562,27 @@ inferred type would be the same as type annotation above.
 :::
 
 
-<b>4.</b> tbd
+<b>4.</b> Change the render logic so that a `DateInput` is rendered above each
+`Order`. Changing the date on a `DateInput` changes the date for the `Order`
+below it.
+
+::: details Hint
+
+Define a `DateAndOrder` helper component.
+
+:::
+
+::: details Solution
+
+Add `Demo.DateAndOrder` subcomponent:
+
+<<< Demo.re#date-and-order
+
+Then refactor `Demo.make` to use the new component:
+
+<<< Demo.re#make
+
+:::
 
 -----
 

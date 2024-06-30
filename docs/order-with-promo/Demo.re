@@ -137,3 +137,31 @@ let make = () => {
   </div>;
 };
 // #endregion refactor
+
+// #region date-and-order
+module DateAndOrder = {
+  [@react.component]
+  let make = (~label: string, ~items: list(Item.t)) => {
+    let (date, setDate) =
+      RR.useStateValue(Js.Date.fromString("2024-05-28T00:00"));
+
+    <div>
+      <h2> {RR.s(label)} </h2>
+      <DateInput date onChange=setDate />
+      <Order items date />
+    </div>;
+  };
+};
+// #endregion date-and-order
+
+// #region make
+[@react.component]
+let make = () => {
+  <div>
+    <h1> {RR.s("Order Confirmation")} </h1>
+    {datasets
+     |> List.map(((label, items)) => <DateAndOrder key=label label items />)
+     |> RR.list}
+  </div>;
+};
+// #endregion make
