@@ -138,6 +138,8 @@ let make = () => {
 };
 // #endregion refactor
 
+ignore(make);
+
 // #region date-and-order
 module DateAndOrder = {
   [@react.component]

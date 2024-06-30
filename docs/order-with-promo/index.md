@@ -584,6 +584,28 @@ Then refactor `Demo.make` to use the new component:
 
 :::
 
+<b>5.</b> Make the message for `Discount.getSandwichHalfOff`'s
+`` `MissingSandwichTypes`` error more friendly by listing the sandwiches you still
+need to buy to fulfill the conditions of the promotion.
+
+::: details Hint 1
+
+Add a `list(string)` argument to the `` `MissingSandwichTypes`` variant tag.
+
+:::
+
+::: details Hint 2
+
+tbd
+
+:::
+
+::: details Solution
+
+tbd
+
+:::
+
 -----
 
 View [source

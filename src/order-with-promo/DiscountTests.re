@@ -148,7 +148,7 @@ module SandwichHalfOff = {
              Sandwich(Ham),
            ],
          ),
-         Error(`MissingSandwichTypes),
+         Error(`MissingSandwichTypes(["turducken"])),
        )
   );
 
