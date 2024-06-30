@@ -95,8 +95,8 @@ discount([| `MissingSandwichTypes
 ```
 
 Generally, you won't need to use `>` in your own type definitions, but it often
-appears when the compiler is allowed to infer the type of a variable or function
-that uses polymorphic variants.
+appears when the compiler is infers the type of a variable or function that uses
+polymorphic variants.
 
 ## Implicit type variable
 
@@ -105,8 +105,8 @@ is syntactically invalid:
 
 <<< Types.re#bad-discount-type
 
-The reason is that whenever you have `>`, you implicitly have a type variable.
-So the above code is equivalent to this:
+The reason is that there's an implicit type variable around the `>`. So the
+above code is equivalent to this:
 
 <<< Types.re#explicit-type-var{14}
 
@@ -314,10 +314,10 @@ the console. That doesn't seem right, because the value of `discount` only
 changes once when you submit a new promo code.
 
 The reason lies in the runtime representation of `discount`---recall that
-variant tags with arguments are turned into objects in the JS runtime. Because
-`discount` is a reactive value, it gets recreated on every render, and even if
-its contents didn't change, the [hook will always treat it as having changed
-because the object is no longer the same one as
+variant constructors with arguments are turned into objects in the JS runtime.
+Because `discount` is a reactive value, it gets recreated on every render, and
+even if its contents didn't change, the [hook will always treat it as having
+changed because the object is no longer the same one as
 before](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies).
 
 ## Use `submittedCode` as dependency
@@ -378,8 +378,9 @@ inside that expression:
 
 ::: tip
 
-OCaml makes it easy to  move variables closer to where they are actually used.
-Unlike in JavaScript, you can use `let` anywhere, even inside an expression.
+OCaml makes it easy to  move variable definitions closer to where they are
+actually used. Unlike in JavaScript, you can use `let` anywhere, even inside an
+expression.
 
 :::
 
@@ -399,7 +400,35 @@ the next chapter, we'll further polish the sandwich promotion logic.
 
 ## Overview
 
-- tbd
+- A type constructor takes a type and outputs another type
+- A type variable is a variable that stands in a for a type and often appears in
+  type constructors or type signatures
+- In polymorphic variant type expressions, `>` means to that the polymorphic
+  variant can accept more than the tags that are listed
+  - Inferred type definitions that contain `>` also have an implicit type
+    variable
+  - You rarely need to use `>` in your own type definitions, but it often
+    appears in inferred types (that appear when you hover over variables and
+    functions)
+- Some component props have names that aren't legal as function arguments in
+  OCaml, and we must add an underscore after them. A common example is `type`,
+  which must be rewritten as `type_`.
+- ReasonReact has several binding functions for React's useEffect hook, e.g.
+  `React.useEffect0`, `React.useEffect1`, etc
+  - The number at the end indicates how many dependencies the function takes
+  - `React.useEffect1` takes an array for its one dependency
+  - `React.useEffect2` and above take tuples for their dependencies
+- The elements of a tuple can be different types
+- Tuples become arrays in the JavaScript runtime
+- The elements of an array must all be the same type
+- Be careful about using variants as hook dependencies, because they often get
+  turned into objects in the runtime and cause Effects to run more often than
+  you want
+- It's often safe to use `option` as a hook dependency, because even though it's
+  a variant, it's a special case and does not become an object in the JavaScript
+  runtime
+- You can use `let` inside expressions, which allows you define variables closer
+  to where they're used
 
 ## Exercises
 
