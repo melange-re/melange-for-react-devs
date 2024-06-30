@@ -509,7 +509,58 @@ than the listed variant tags.
 
 :::
 
-<b>3.</b> tbd
+<b>3.</b> Fix the following code (playground) which fails to compile:
+
+```reason
+/** Only invoke [f] when [o1] and [o2] are [Some] */
+let map2: (option('a), option('a), ('a, 'a) => 'a) => option('a) =
+  (o1, o2, f) =>
+    switch (o1, o2) {
+    | (None, None)
+    | (None, Some(_))
+    | (Some(_), None) => None
+    | (Some(v1), Some(v2)) => Some(f(v1, v2))
+    };
+
+Js.log(map2(Some(11), Some(33), (+)));
+Js.log(map2(Some("ABC"), Some(123), (a, b) => (a, b)));
+```
+
+::: details Hint 1
+
+Fix the type annotation.
+
+:::
+
+::: details Hint 2
+
+Delete the type annotation and see what happens.
+
+:::
+
+::: details Solution
+
+```reason
+/** Only invoke [f] when [o1] and [o2] are [Some] */
+let map2: (option('a), option('b), ('a, 'b) => 'c) => option('c) =
+  (o1, o2, f) =>
+    switch (o1, o2) {
+    | (None, None)
+    | (None, Some(_))
+    | (Some(_), None) => None
+    | (Some(v1), Some(v2)) => Some(f(v1, v2))
+    };
+
+Js.log(map2(Some(11), Some(33), (+)));
+Js.log(map2(Some("ABC"), Some(123), (a, b) => (a, b)));
+```
+
+We have to use different type variables if we expect that the types might be
+different. Note that we could have deleted the type annotation and then OCaml's
+inferred type would be the same as type annotation above.
+
+:::
+
 
 <b>4.</b> tbd
 
