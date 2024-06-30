@@ -19,7 +19,7 @@ module Style = {
 type discount('a) =
   | CodeError(Discount.error)
   | Discount(float)
-  | DiscountError('a)
+  | DiscountError([> ] as 'a)
   | NoSubmittedCode;
 
 [@react.component]

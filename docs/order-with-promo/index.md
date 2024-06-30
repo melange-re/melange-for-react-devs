@@ -122,13 +122,23 @@ type constructor. Once it's added, it compiles:
 This is somewhat like accidentally using a variable in a function but forgetting
 to add that variable to the function's argument list.
 
-## Normal variants vs polymorphicr variants
+## Normal variants vs polymorphic variants
 
 Actually, we are not ready to settle the debate of when to use normal variants
 and when to use polymorphic variants, because polymorphic variants have features
 that we have yet to explore. But in the case of the `discount` reactive value,
 we can say that either would be fine. Still, the version using normal variants
 is a little more explicit and self-documenting, which is never a bad thing.
+
+## Force `DiscountError` argument to be polymorphic variant
+
+Right now the argument of the `DiscountError` constructor can be any type at
+all, but we can force it to be polymorphic constructor:
+
+<<< Types.re#must-be-poly{4}
+
+The `[> ]` type expression means a polymorphic variant that has no tags, but
+allows more tags, which basically means any polymorphic variant.
 
 ## Add `DateInput` component
 

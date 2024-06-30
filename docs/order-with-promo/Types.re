@@ -90,3 +90,13 @@ module AddTypeArg = {
     | NoSubmittedCode;
   // #endregion add-type-arg
 };
+
+module MustBePoly = {
+  // #region must-be-poly
+  type discount('a) =
+    | CodeError(Discount.error)
+    | Discount(float)
+    | DiscountError([> ] as 'a)
+    | NoSubmittedCode;
+  // #endregion must-be-poly
+};
