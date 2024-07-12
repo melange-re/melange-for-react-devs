@@ -145,11 +145,20 @@ allows more tags, which basically means any polymorphic variant.
 To see different promotions in action, we want to be able to easily change the
 date in our demo, so add a new file `DateInput.re`:
 
-<<< DateInput.re
+<<< DateInput.re{7,16}
 
-Note how the `type` prop of `input` has been renamed to `type_`, because in
-OCaml, `type` is a reserved keyword and can't be used as an argument name.
-But don't worry, it will still say `type` in the generated JS output.
+A few notes:
+
+- We use `Printf.sprintf` to give us more control over how the `float`
+  components of a Date[^2] are converted to strings:
+  - The [float conversion
+    specification](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
+    `%4.0f` sets a minimum width of 4 and 0 numbers after the decimal
+  - The float conversion specification `%02.0f` sets a minimum width of 2
+    (left padded with 0) and 0 numbers after the decimal
+- The `type` prop of `input` has been renamed to `type_`, because in OCaml,
+  `type` is a reserved keyword and can't be used as an argument name. But don't
+  worry, it will still say `type` in the generated JS output.
 
 ## Add `Demo` component
 
@@ -206,7 +215,7 @@ expression, which is essentially a no-op.
 hook](https://react.dev/reference/react/useEffect). The number `1` at the end of
 the function indicates how many dependencies this function is supposed to take.
 Accordingly, we also have `React.useEffect0`, `React.useEffect2`, etc, all the
-way up to `React.useEffect7`[^2].
+way up to `React.useEffect7`[^3].
 
 All `React.useEffect*` functions accept a [setup
 callback](https://react.dev/reference/react/useEffect#reference) as their first
@@ -339,7 +348,7 @@ The easiest fix is to simply change the dependency to `submittedCode` instead of
 
 This does the trick---the Effect only runs once every time you submit a new
 promo code. But wait! Why does it behave differently when `submittedCode` is an
-`option`, and `option` is just another variant type?[^3]
+`option`, and `option` is just another variant type?[^4]
 
 Although `option` is a variant type, its [runtime representation is a special
 case](../burger-discounts/#runtime-representation-of-option):
@@ -618,10 +627,17 @@ and [demo](https://react-book.melange.re/demo/src/order-with-promo/) for this ch
     polymorphic variant types, while variant constructors correspond to normal
     variant types.
 
-[^2]: If you happen to need more than 7 dependencies, you can define your own
+[^2]: It might be a little confusing that `Js.Date.get*` functions all return
+    `float` instead of `int`. The reason is that these functions [must return
+    `NaN` if the input Date is
+    invalid](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getFullYear#return_value),
+    and in OCaml, only `float` is capable of representing
+    [`NaN`](https://melange.re/v4.0.0/api/re/melange/Js/Float/#val-_NaN).
+
+[^3]: If you happen to need more than 7 dependencies, you can define your own
    binding function based on the [current binding
    functions](https://github.com/reasonml/reason-react/blob/713ab6cdb1644fb44e2c0c8fdcbef31007b37b8d/src/React.rei#L248-L255).
    We'll cover bindings in more detail [later](/todo).
 
-[^3]: Recall that variant constructors with arguments also get turned into
+[^4]: Recall that variant constructors with arguments also get turned into
     objects in the JS runtime.
