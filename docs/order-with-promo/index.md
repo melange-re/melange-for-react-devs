@@ -6,9 +6,12 @@ on their orders.
 
 ## Add `discount` type
 
-But first, let's see how to create an explicit (normal) variant type for the
-`discount` reactive value inside `Promo`. We do so not because we have to, but
-because it will give us some more insight into OCaml's type system.
+But first, let's see how to create a normal variant type for the `discount`
+reactive value inside `Promo`. We do not have to do this, because it works fine
+the way it is now, but the process of creating this new type should give us more
+insight into OCaml's type system. Additionally, normal variants are better than
+polymorphic variants at "documenting" the types that will be used in your
+program, since they must always be explicitly defined before you can use them.
 
 When we hover over the `discount` variable, we see this:
 
@@ -122,18 +125,10 @@ type constructor. Once it's added, it compiles:
 This is somewhat like accidentally using a variable in a function but forgetting
 to add that variable to the function's argument list.
 
-## Normal variants vs polymorphic variants
-
-Actually, we are not ready to settle the debate of when to use normal variants
-and when to use polymorphic variants, because polymorphic variants have features
-that we have yet to explore. But in the case of the `discount` reactive value,
-we can say that either would be fine. Still, the version using normal variants
-is a little more explicit and self-documenting, which is never a bad thing.
-
 ## Force `DiscountError` argument to be polymorphic variant
 
 Right now the argument of the `DiscountError` constructor can be any type at
-all, but we can force it to be polymorphic constructor:
+all, but we can force it to be a polymorphic variant:
 
 <<< Types.re#must-be-poly{4}
 
