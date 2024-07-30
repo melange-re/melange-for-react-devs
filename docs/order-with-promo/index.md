@@ -210,8 +210,9 @@ To invoke `onApply`, we can add a `useEffect` hook that invokes `onApply` when
 
 <<< Promo.re#use-effect
 
-Note that when `discount` has an error value, we return `()` from the switch
-expression, which is essentially a no-op.
+Note that when `discount` has an error value, we return
+[`()`](https://ocaml.org/docs/basic-data-types#unit) from the switch expression,
+which essentially means "do nothing".
 
 ## `useEffect*` functions
 
