@@ -13,27 +13,19 @@ insight into OCaml's type system. Additionally, normal variants are better than
 polymorphic variants at "documenting" the types that will be used in your
 program, since they must always be explicitly defined before you can use them.
 
-When we hover over the `discount` variable, we see this:
+When we hover over the `discount` variable, we see this type expression:
 
 <<< Types.re#inferred-type
 
-The easiest thing to do is to create a new `discount` type and assign it to that
-type expression, then delete the `` ` `` from the variant tags to turn them into
-variant constructors[^1]:
+The easiest thing to do is to create a new `discount` type and assign it to the
+above type expression, then delete the `` ` `` from the top-level variant tags
+to turn them into variant constructors[^1]:
 
 <<< Types.re#bad-discount-type
 
 However, this results in a compilation error:
 
-```text
-Error: A type variable is unbound in this type declaration.
-       In case
-         DiscountError of ([> `MissingSandwichTypes
-                            | `NeedMegaBurger
-                            | `NeedOneBurger
-                            | `NeedTwoBurgers ]
-                           as 'a) the variable 'a is unbound
-```
+<<< type-error.txt
 
 We'll come back to this error message later. For now, observe that the error
 disappears if we simply delete `>`:
@@ -45,8 +37,8 @@ type.
 
 ## Refactor `discount`
 
-Refactor the `discount` reactive value to use our new variant type by deleting
-all instances of `` ` ``:
+Refactor the `discount` reactive value inside `Promo.make` to use our new
+variant type by deleting all occurrences of `` ` ``:
 
 <<< Promo.re#discount-variant
 
@@ -67,7 +59,7 @@ takes a type and outputs a new type.
 The advantage of doing this is that the variant tags inside `DiscountError` are
 no longer constrained by our `discount` type. This makes sense because they are
 used primarily in the `Discount` module, and if any variant tags are renamed,
-added, or deleted, it will happen in there.
+added, or deleted, those changes will and should happen in `Discount`.
 
 Using a type variable does not sacrifice type safety, if you hover over the
 `discount` variable, you see that its type is:
@@ -79,14 +71,15 @@ discount([> `MissingSandwichTypes
           | `NeedTwoBurgers ])
 ```
 
-OCaml can figure out the type of `discount` from its usage.
+Based on its usage, OCaml can figure out the exact type of the `discount`
+variable and automatically fill in the value of the type variable.
 
 ## `>` = "allow more than"
 
-Once again, we see `>` in an inferred type, so let's see what it means. In
-polymorphic variant type expressions, it means "allow more than". In this case,
-it means that tags other than the four that are listed are allowed. For example,
-this type would be allowed:
+In the type expression above, we once again see `>`, so let's see what it means.
+In polymorphic variant type expressions, it means "allow more than". In this
+case, it means that tags other than the four that are listed are allowed. For
+example, this type would be allowed:
 
 ```reason{5-6}
 discount([| `MissingSandwichTypes
@@ -97,28 +90,36 @@ discount([| `MissingSandwichTypes
           | `KewpieMayo ])
 ```
 
-Generally, you won't need to use `>` in your own type definitions, but it often
-appears when the compiler infers the type of a variable or function that uses
-polymorphic variants.
+When defining your own types, you will most often used *fixed* polymormorphic
+variants, i.e. those that don't have `>` in their type expressions. But it is
+still useful to know what `>` does, since it appears when the compiler
+infers the type of a variable or function that uses polymorphic variants.
+
+::: tip
+
+Fixed polymorphic variants and normal variants are roughly equivalent and can be
+used interchangeably.
+
+:::
 
 ## Implicit type variable
 
-Let's come back to the question of why the original attempt at a type definition
-is syntactically invalid:
+Let's come back to the question of why the original attempt at a variant type
+definition was syntactically invalid:
 
 <<< Types.re#bad-discount-type
 
-The reason is that there's an implicit type variable around the `>`. So the
-above code is equivalent to this:
+The reason is that there's an implicit type variable around the `>`. The
+above type expression is equivalent to:
 
 <<< Types.re#explicit-type-var{14}
 
 Now the error message makes a bit more sense:
 
-> Error: A type variable is unbound in this type declaration.
+<<< type-error.txt{7}
 
-The type variable exists, but it doesn't appear as an argument of the `discount`
-type constructor. Once it's added, it compiles:
+The type variable exists, but it's pointless unless it appears as an argument of
+the `discount` type constructor. Once it's added, it compiles:
 
 <<< Types.re#add-type-arg{1}
 
