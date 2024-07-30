@@ -61,7 +61,7 @@ Change the `discount` type to this:
 <<< Types.re#type-variable
 
 Now `discount` is a *type constructor* that takes a *type variable* named `'a`.
-A type constructor is not a fixed type---you can think of it as function that
+A type constructor is not a fixed type---you can think of it as a function that
 takes a type and outputs a new type.
 
 The advantage of doing this is that the variant tags inside `DiscountError` are
@@ -98,7 +98,7 @@ discount([| `MissingSandwichTypes
 ```
 
 Generally, you won't need to use `>` in your own type definitions, but it often
-appears when the compiler is infers the type of a variable or function that uses
+appears when the compiler infers the type of a variable or function that uses
 polymorphic variants.
 
 ## Implicit type variable
@@ -206,7 +206,7 @@ expression, which is essentially a no-op.
 
 ## `useEffect*` functions
 
-`React.useEffect1` is a one of the binding functions for React's [useEffect
+`React.useEffect1` is one of the binding functions for React's [useEffect
 hook](https://react.dev/reference/react/useEffect). The number `1` at the end of
 the function indicates how many dependencies this function is supposed to take.
 Accordingly, we also have `React.useEffect0`, `React.useEffect2`, etc, all the
@@ -221,8 +221,8 @@ unit => option(unit => unit)
 ```
 
 The setup callback's return type is `option(unit => unit)`, which allows you to
-return a cleanup function encased in `Some`. When you don't need to return a
-cleanup function, you just return `None`.
+return a cleanup function encased in `Some`. When the effect doesn't need a
+cleanup function, just return `None`.
 
 ## `useEffect*` dependencies
 
@@ -441,8 +441,8 @@ the next chapter, we'll further polish the sandwich promotion logic.
 - It's often safe to use `option` as a hook dependency, because even though it's
   a variant, it's a special case and does not become an object in the JavaScript
   runtime
-- You can use `let` inside expressions, which allows you define variables closer
-  to where they're used
+- You can use `let` inside expressions, which allows you to define variables
+  closer to where they're used
 
 ## Exercises
 
