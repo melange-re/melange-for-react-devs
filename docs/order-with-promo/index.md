@@ -136,6 +136,14 @@ all, but we can force it to be a polymorphic variant:
 The `[> ]` type expression means a polymorphic variant that has no tags, but
 allows more tags, which basically means any polymorphic variant.
 
+## Quick summary
+
+You've refactored the `discount` reactive variable to use a normal variant
+instead of a polymorphic variant. There weren't so many changes to the code, but
+a basic knowledge of type constructors and type variables is needed to
+understand them. In the next sections, we'll set types aside and cover the
+UI-related changes you must make to add promo support to the `Order` component.
+
 ## Add `DateInput` component
 
 To see different promotions in action, we want to be able to easily change the
