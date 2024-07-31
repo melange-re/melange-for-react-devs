@@ -7,7 +7,7 @@ on their orders.
 ## Add `discount` type
 
 But first, let's see how to create a normal variant type for the `discount`
-reactive value inside `Promo`. We do not have to do this, because it works fine
+derived variable inside `Promo`. We do not have to do this, because it works fine
 the way it is now, but the process of creating this new type should give us more
 insight into OCaml's type system. Additionally, normal variants are better than
 polymorphic variants at "documenting" the types that will be used in your
@@ -37,7 +37,7 @@ type.
 
 ## Refactor `discount`
 
-Refactor the `discount` reactive value inside `Promo.make` to use our new
+Refactor the `discount` derived variable inside `Promo.make` to use our new
 variant type by deleting all occurrences of `` ` ``:
 
 <<< Promo.re#discount-variant
@@ -339,7 +339,7 @@ changes once when you submit a new promo code.
 
 The reason lies in the runtime representation of `discount`---recall that
 variant constructors with arguments are turned into objects in the JS runtime.
-Because `discount` is a reactive value, it gets recreated on every render, and
+Because `discount` is a derived variable, it gets recreated on every render, and
 even if its contents didn't change, the [hook will always treat it as having
 changed because the object is no longer the same one as
 before](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies).
@@ -372,7 +372,7 @@ events](https://react.dev/learn/you-might-not-need-an-effect#how-to-remove-unnec
 Let's delete the call to `RR.useEffect1` and start over.
 
 A better place to call `onApply` is from within the `form`'s `onSubmit`
-callback. Replace the `discount` reactive value with a `getDiscount` function:
+callback. Replace the `discount` derived variable with a `getDiscount` function:
 
 <<< Promo.re#get-discount
 
