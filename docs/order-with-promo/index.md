@@ -129,20 +129,25 @@ to add that variable to the function's argument list.
 ## Force `DiscountError` argument to be polymorphic variant
 
 Right now the argument of the `DiscountError` constructor can be any type at
-all, but we can force it to be a polymorphic variant:
+all, but to be explicit, we can force it to be a polymorphic variant:
 
 <<< Types.re#must-be-poly{4}
 
 The `[> ]` type expression means a polymorphic variant that has no tags, but
-allows more tags, which basically means any polymorphic variant.
+allows more tags, which basically means any polymorphic variant. Note that
+adding this small restriction to the type doesn't make a real difference in this
+program---it's just a way to make it clear that `DiscountError`'s argument
+should be a polymorphic variant. It's an optional embellishment that you can
+feel free to leave out.
 
 ## Quick summary
 
-You've refactored the `discount` reactive variable to use a normal variant
-instead of a polymorphic variant. There weren't so many changes to the code, but
-a basic knowledge of type constructors and type variables is needed to
-understand them. In the next sections, we'll set types aside and cover the
-UI-related changes you must make to add promo support to the `Order` component.
+You refactored the `discount` reactive variable to use a normal variant instead
+of a polymorphic variant. The code changes were fairly minimal, but to
+understand what was happening, it was necessary to learn the basics of type
+constructors and type variables. In the next sections, we'll set types and other
+theoretical considerations aside and get into the nitty-gritty of the UI changes
+you must make to add promo support to the `Order` component.
 
 ## Add `DateInput` component
 
