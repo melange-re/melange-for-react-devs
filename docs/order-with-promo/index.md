@@ -188,7 +188,8 @@ Add the `Promo` component to the `Order` component:
 
 A breakdown:
 
-- Create a new state variable called `discount`
+- Create a new state variable called `discount` (along with its attendant
+  `setDiscount` function)
 - Set the value of `discount` through `Promo`'s `onApply` callback prop (we'll
   add this prop in the next step)
 - Subtract `discount` from `subtotal` when rendering the total price of the
@@ -208,8 +209,6 @@ least type annotate your component's callback props as a form of documentation.
 
 :::
 
-## Add `React.useEffect1`
-
 To invoke `onApply`, we can add a `useEffect` hook that invokes `onApply` when
 `discount` has a value of the form `` `Discount(value) ``:
 
@@ -219,7 +218,7 @@ Note that when `discount` has an error value, we return
 [`()`](https://ocaml.org/docs/basic-data-types#unit) from the switch expression,
 which essentially means "do nothing".
 
-## `useEffect*` functions
+## `React.useEffect*` functions
 
 `React.useEffect1` is one of the binding functions for React's [useEffect
 hook](https://react.dev/reference/react/useEffect). The number `1` at the end of
@@ -239,10 +238,8 @@ The setup callback's return type is `option(unit => unit)`, which allows you to
 return a cleanup function encased in `Some`. When the effect doesn't need a
 cleanup function, just return `None`.
 
-## `useEffect*` dependencies
-
-The second argument for all `React.useEffect*` functions except
-`React.useEffect0` is for the dependencies. For example, the type of
+The second argument for all `React.useEffect*` functions (except
+`React.useEffect0`) is for the dependencies. For example, the type of
 `React.useEffect2` is:
 
 ```reason
@@ -263,34 +260,30 @@ how many dependencies you now have).
 
 :::
 
-## Tuples vs arrays
+## Why does `React.useEffect2` accept a tuple?
 
-Both `React.useEffect2` and `React.useEffect3` take their dependencies as a
-tuple instead of an array. To understand why, we need to understand the type
-properties of tuples and arrays:
+`React.useEffect2` takes its dependencies as a tuple instead of an array. To
+understand why, we need to understand the type properties of tuples and arrays:
 
 - The elements of tuples can have different types, e.g. `(1, "a", 23.5)`
 - The elements of arrays must all be of the same type, e.g. `[|1, 2, 3|]`,
   `[|"a", "b", "c"|]`
 
 Therefore, we must use tuples to express the dependencies of `useEffect` hooks,
-otherwise our dependencies would all have to be of the same type.
-
-## Tuples become arrays in JS
+otherwise our dependencies would all have to be of the same type. This applies
+to all `React.useEffect*` functions which take 2 or more dependencies.
 
 Even though we use tuples for dependencies in our OCaml code, they are turned
 into JS arrays in the runtime. So the generated code will run the same as in any
 ReactJS app.
 
-## Why does `useEffect1` accept an array?
-
-As you've seen, `React.useEffect2`, `React.useEffect3`, etc all accept a tuple
-argument for their dependencies. But `React.useEffect1` is the odd man out,
-because it accepts an array. The reason is that one-element OCaml tuples don't
-become arrays in the JS runtime, they instead take on the value of their single
-element. So in this case, `React.useEffect1` [must take an
+However, you might have noticed that `React.useEffect1` is the odd man out,
+because it accepts an array for its single dependency. The reason is that
+one-element OCaml tuples don't become arrays in the JS runtime, they instead
+take on the value of their single element. So in this case, `React.useEffect1`
+[must take an
 array](https://reasonml.github.io/reason-react/docs/en/components#hooks) so that
-the generated JS code does the right thing.
+it respects the API of the underlying `useEffect` function.
 
 ## `RR.useEffect1` helper function
 
@@ -315,9 +308,9 @@ with ReasonReact.
 Execute `npm run serve` to see your app in action. Verify that it behaves as
 expected:
 
-- Type "FREE" into the input and press Enter. It should deduct the price of
+- Type `FREE` into the input and press Enter. It should deduct the price of
   every other burger (ordered by price descending).
-- Type "HALF" into the input and press Enter. It should deduct half off the
+- Type `HALF` into the input and press Enter. It should deduct half off the
   entire order.
 - Change the date to something other than May 28. It should show an error saying
   "Expired promo code"
@@ -349,8 +342,6 @@ even if its contents didn't change, the [hook will always treat it as having
 changed because the object is no longer the same one as
 before](https://react.dev/reference/react/useEffect#removing-unnecessary-object-dependencies).
 
-## Use `submittedCode` as dependency
-
 The easiest fix is to simply change the dependency to `submittedCode` instead of
 `discount`:
 
@@ -366,8 +357,9 @@ case](../burger-discounts/#runtime-representation-of-option):
 - `None` becomes `undefined`
 - `Some(value)` becomes `value`
 
-Therefore, an `option` value is never an object, and can always be used as a
-dependency for React hooks as long as it wraps a primitive value.
+Therefore, an `option` value that wraps a primitive value doesn't ever turn into
+an object in the JS runtime, and therefore can be used as a dependency for React
+hooks.
 
 ## You don't need an Effect
 
@@ -403,7 +395,7 @@ create different collections of items. Add a `datasets` variable to `Demo`:
 Since the `burgers` value is only used in a single expression, we can move it
 inside that expression:
 
-<<< Demo.re#burger-expression
+<<< Demo.re#burger-expression{2-9}
 
 ::: tip
 
@@ -413,13 +405,12 @@ expression.
 
 :::
 
-## Refactor `Demo` to render multiple orders
-
-Refactor `Demo` to render a different `Order` for each collection of items:
+Now we can refactor `Demo` to render a different `Order` for each collection of
+items:
 
 <<< Demo.re#refactor
 
-You can delete the unused `items` value in `Order`.
+Remember to delete the now-unused `Demo.items` variable.
 
 ---
 
@@ -432,18 +423,18 @@ the next chapter, we'll further polish the sandwich promotion logic.
 - A type constructor takes a type and outputs another type
 - A type variable is a variable that stands in a for a type and often appears in
   type constructors or type signatures
-- In polymorphic variant type expressions, `>` means to that the polymorphic
-  variant can accept more than the tags that are listed
+- In polymorphic variant type expressions, `>` means that the polymorphic
+  variant can accept more than the variant tags that are listed
+  - You rarely need to use `>` in your own type definitions, but it often
+    appears in inferred type definitions (that appear when you hover over
+    variables and functions)
   - Inferred type definitions that contain `>` also have an implicit type
     variable
-  - You rarely need to use `>` in your own type definitions, but it often
-    appears in inferred types (that appear when you hover over variables and
-    functions)
 - Some component props have names that aren't legal as function arguments in
   OCaml, and we must add an underscore after them. A common example is `type`,
-  which must be rewritten as `type_`.
-- ReasonReact has several binding functions for React's useEffect hook, e.g.
-  `React.useEffect0`, `React.useEffect1`, etc
+  which must be rewritten as `type_`[^5].
+- ReasonReact has several binding functions for React's `useEffect` hook, e.g.
+  `React.useEffect0`, `React.useEffect1`, ...., `React.useEffect7`
   - The number at the end indicates how many dependencies the function takes
   - `React.useEffect1` takes an array for its one dependency
   - `React.useEffect2` and above take tuples for their dependencies
@@ -651,3 +642,6 @@ and [demo](https://react-book.melange.re/demo/src/order-with-promo/) for this ch
 
 [^4]: Recall that variant constructors with arguments also get turned into
     objects in the JS runtime.
+
+[^5]: Some other prop names which cannot be used in their original form are:
+    `as_`, `open_`, `begin_`, `end_`, `in_`, and `to_`.
