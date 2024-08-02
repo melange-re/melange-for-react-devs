@@ -486,6 +486,11 @@ A common mistake when writing polymorphic variant type definitions is forgetting
 to put a space between the `[` and the `|` characters. Note that you don't need
 to add the implicit type variable in type annotations.
 
+::: warning
+
+In the next version of Melange, polymorphic variant definitions no longer
+require a space between `[` and `|`.
+
 :::
 
 <b>2.</b> The following code
@@ -519,7 +524,7 @@ than the listed variant tags.
 
 :::
 
-<b>3.</b> Fix the following code (playground) which fails to compile:
+<b>3.</b> Fix the following code ([playground](https://melange.re/v4.0.0/playground/?language=Reason&code=LyoqIE9ubHkgaW52b2tlIFtmXSB3aGVuIFtvMV0gYW5kIFtvMl0gYXJlIFtTb21lXSAqLwpsZXQgbWFwMjogKG9wdGlvbignYSksIG9wdGlvbignYSksICgnYSwgJ2EpID0%2BICdhKSA9PiBvcHRpb24oJ2EpID0KICAobzEsIG8yLCBmKSA9PgogICAgc3dpdGNoIChvMSwgbzIpIHsKICAgIHwgKE5vbmUsIE5vbmUpCiAgICB8IChOb25lLCBTb21lKF8pKQogICAgfCAoU29tZShfKSwgTm9uZSkgPT4gTm9uZQogICAgfCAoU29tZSh2MSksIFNvbWUodjIpKSA9PiBTb21lKGYodjEsIHYyKSkKICAgIH07CgpKcy5sb2cobWFwMihTb21lKDExKSwgU29tZSgzMyksICgrKSkpOwpKcy5sb2cobWFwMihTb21lKCJBQkMiKSwgU29tZSgxMjMpLCAoYSwgYikgPT4gKGEsIGIpKSk7&live=off)) which fails to compile:
 
 ```reason
 /** Only invoke [f] when [o1] and [o2] are [Some] */
@@ -544,7 +549,7 @@ Fix the type annotation.
 
 ::: details Hint 2
 
-Delete the type annotation and see what happens.
+Delete the type annotation.
 
 :::
 
@@ -567,7 +572,7 @@ Js.log(map2(Some("ABC"), Some(123), (a, b) => (a, b)));
 
 We have to use different type variables if we expect that the types might be
 different. Note that we could have deleted the type annotation and then OCaml's
-inferred type would be the same as type annotation above.
+inferred type would be the same as the type annotation above.
 
 :::
 
@@ -594,25 +599,64 @@ Then refactor `Demo.make` to use the new component:
 
 :::
 
-<b>5.</b> Make the message for `Discount.getSandwichHalfOff`'s
-`` `MissingSandwichTypes`` error more friendly by listing the sandwiches you still
-need to buy to fulfill the conditions of the promotion.
+<b>5.</b> Make the message for `Discount.getSandwichHalfOff`'s ``
+`MissingSandwichTypes`` error more friendly by listing the sandwiches you still
+need to buy to fulfill the conditions of the promotion. As a start, change the
+"Not all sandwiches, return Error" test in `DiscountTests.SandwichHalfOff`:
+
+<<< DiscountTests.re#not-all-sandwiches{13}
+
+Note that the `` `MissingSandwichTypes`` variant tag now has an argument which
+is a list of strings.
 
 ::: details Hint 1
 
-Add a `list(string)` argument to the `` `MissingSandwichTypes`` variant tag.
+Inside `Discount.getSandwichHalfOff`, use
+[List.filter](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-filter)
+to filter out sandwich types that don't appear in `items`.
 
 :::
 
 ::: details Hint 2
 
-tbd
+In `Promo.make`, use
+[Stdlib.Array.of_list](https://melange.re/v4.0.0/api/re/melange/Stdlib/Array/#val-of_list)
+and
+[Js.Array.join](https://melange.re/v4.0.0/api/re/melange/Js/Array/index.html#val-join)
+to create a comma-delimited string.
 
 :::
 
 ::: details Solution
 
-tbd
+Change the switch expression inside `Discount.getSandwichHalfOff` so that when
+there are missing sandwich types, they are collected in a list and returned as
+the argument of `` `MissingSandwichTypes`` error tag:
+
+<<< Discount.re#missing-sandwich-types{9-18}
+
+Note that instead of using partial application in
+
+```reason
+|> List.filter((!=)(""));
+```
+
+We could have instead written
+
+```reason
+|> List.filter(s => s != "")
+```
+
+which is a little more verbose and arguably easier to understand.
+
+Then change the render logic inside `Promo.make`'s `` `MissingSandwichTypes``
+branch to convert the list of missing sandwich types to a comma-delimited
+string:
+
+<<< Promo.re#show-missing-sandwich-types{7-9}
+
+Recall that we have to use `Stdlib.Array.of_list` instead of `Array.of_list`
+because our custom `Array` module takes precedence.
 
 :::
 

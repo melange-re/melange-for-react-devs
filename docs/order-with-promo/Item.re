@@ -21,6 +21,6 @@ type t =
   | Burger(Burger.t)
   | Hotdog;
 
-let toPrice = (_t: t) => 0.;
+let toPrice = (~date as _: Js.Date.t, _t: t) => 0.;
 
 let toEmoji = (_t: t) => "";

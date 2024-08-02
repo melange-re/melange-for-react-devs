@@ -28,7 +28,7 @@ let make = (~items: t, ~date: Js.Date.t) => {
   let subtotal =
     items
     |> ListLabels.fold_left(~init=0., ~f=(acc, order) =>
-         acc +. Item.toPrice(order)
+         acc +. Item.toPrice(order, ~date)
        );
 
   <table className=Style.order>

@@ -194,3 +194,24 @@ let _ =
       // #endregion on-submit
     />;
   };
+
+let _ =
+  (~thing) => {
+    switch (thing) {
+    // #region show-missing-sandwich-types
+    | `DiscountError(code) =>
+      let buyWhat =
+        switch (code) {
+        | `NeedOneBurger => "at least 1 more burger"
+        | `NeedTwoBurgers => "at least 2 burgers"
+        | `NeedMegaBurger => "a burger with every topping"
+        | `MissingSandwichTypes(missing) =>
+          (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
+          ++ " sandwiches"
+        };
+      <div className=Style.discountError>
+        {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}
+      </div>;
+    // #endregion show-missing-sandwich-types
+    };
+  };
