@@ -1,0 +1,7 @@
+Error: A type variable is unbound in this type declaration.
+       In case
+         DiscountError of ([> `MissingSandwichTypes
+                            | `NeedMegaBurger
+                            | `NeedOneBurger
+                            | `NeedTwoBurgers ]
+                           as 'a) the variable 'a is unbound
