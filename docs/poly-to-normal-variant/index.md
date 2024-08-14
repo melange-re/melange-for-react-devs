@@ -16,9 +16,17 @@ expression:
 
 The easiest thing to do is to create a new `discount` type and assign it to the
 above type expression, then delete the `` ` `` from the top-level variant tags
-to turn them into variant constructors[^1]:
+to turn them into variant constructors:
 
 <<< Types.re#bad-discount-type
+
+::: tip
+
+The alternative forms of a normal variant are called *variant constructors*,
+while the forms of a polymorphic variant are called *variant tags* (and always
+start with `` ` ``).
+
+:::
 
 However, this results in a compilation error:
 
@@ -32,18 +40,28 @@ disappears if we simply delete `>`:
 This fixes the syntax error so that we now have a correctly-defined variant
 type.
 
-## Refactor `discount` to use normal variant
+## Refactor `discount` variable to use normal variant
 
 Refactor the `discount` derived variable inside `Promo.make` to use our new
-variant type by deleting all occurrences of `` ` ``:
+variant type by deleting all occurrences of `` ` `` in the switch expression:
 
 <<< Promo.re#discount-variant{3,6,9-10}
 
-You can likewise refactor the switch expression inside the render logic:
+Likewise, the render logic can be fixed by removing all the `` ` `` occurrences:
 
 <<< Promo.re#discount-render{2-4,13}
 
 ## Type constructor and type variable
+
+The current definition of the `discount` type works fine, but it is more verbose
+than necessary. In particular, the `DiscountError` constructor's polymorphic
+tags don't need to be fully specified:
+
+<<< Types.re#delete-refinement{4-11}
+
+The variant tags inside `DiscountError` originate from our `Discount` module, so
+they shouldn't be needlessly constrained by the `discount` type defined inside
+the `Promo` module.
 
 Change the `discount` type to this:
 
@@ -53,13 +71,8 @@ Now `discount` is a *type constructor* that takes a *type variable* named `'a`.
 A type constructor is not a fixed type---you can think of it as a function that
 takes a type and outputs a new type.
 
-The advantage of doing this is that the variant tags inside `DiscountError` are
-no longer constrained by our `discount` type. This makes sense because they are
-used primarily in the `Discount` module, and if any variant tags are renamed,
-added, or deleted, those changes will and should happen in `Discount`.
-
 Using a type variable does not sacrifice type safety, if you hover over the
-`discount` variable, you see that its type is:
+`discount` variable, you see that its type is now:
 
 ```reason
 discount([> `MissingSandwichTypes
@@ -68,8 +81,14 @@ discount([> `MissingSandwichTypes
           | `NeedTwoBurgers ])
 ```
 
-Based on its usage, OCaml can figure out the exact type of the `discount`
-variable and automatically fill in the value of the type variable.
+This is essentially the same type as before (other than the `>` symbol,
+explained in the next section), just written differently. By looking at the
+usage of the `discount` variable, OCaml can infer how to fill in the type
+variable and produce the fixed type shown above.
+
+The advantage of using a type variable for the definition of the
+`Promo.discount` type is that when you add, rename, or delete variant tags in
+`Discount`, you won't have to make corresponding edits to `Promo.discount`[^1].
 
 ## `>` = "allow more than"
 
@@ -289,10 +308,11 @@ inferred type would be the same as the type annotation above.
 
 View [source
 code](https://github.com/melange-re/melange-for-react-devs/blob/main/src/poly-to-normal-variant/)
-and [demo](https://react-book.melange.re/demo/src/poly-to-normal-variant/) for this chapter.
+and [demo](https://react-book.melange.re/demo/src/poly-to-normal-variant/) for
+this chapter.
 
 -----
 
-[^1]: In OCaml terminology, variant tags start with `` ` `` and correspond to
-    polymorphic variant types, while variant constructors correspond to normal
-    variant types.
+[^1]: Admittedly, this is a small advantage, because you still must handle any
+    changes to `Discount`'s variant tags inside the `Promo.make` function's
+    switch expression.
