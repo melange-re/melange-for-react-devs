@@ -4,170 +4,36 @@ Now that you have a `Promo` component, you can add it to your `Order` component.
 With that in place, customers can finally enter promo codes and enjoy discounts
 on their orders.
 
-## Add `discount` type
-
-But first, let's see how to create a normal variant type for the `discount`
-derived variable inside `Promo`. We do not have to do this, because it works fine
-the way it is now, but the process of creating this new type should give us more
-insight into OCaml's type system. Additionally, normal variants are better than
-polymorphic variants at "documenting" the types that will be used in your
-program, since they must always be explicitly defined before you can use them.
-
-When we hover over the `discount` variable, we see this type expression:
-
-<<< Types.re#inferred-type
-
-The easiest thing to do is to create a new `discount` type and assign it to the
-above type expression, then delete the `` ` `` from the top-level variant tags
-to turn them into variant constructors[^1]:
-
-<<< Types.re#bad-discount-type
-
-However, this results in a compilation error:
-
-<<< type-error.txt
-
-We'll come back to this error message later. For now, observe that the error
-disappears if we simply delete `>`:
-
-<<< Types.re#delete-refinement
-
-This fixes the syntax error so that we now have a correctly-defined variant
-type.
-
-## Refactor `discount`
-
-Refactor the `discount` derived variable inside `Promo.make` to use our new
-variant type by deleting all occurrences of `` ` ``:
-
-<<< Promo.re#discount-variant
-
-You can likewise refactor the switch expression inside the render logic:
-
-<<< Promo.re#discount-render
-
-## Type constructor and type variable
-
-Change the `discount` type to this:
-
-<<< Types.re#type-variable
-
-Now `discount` is a *type constructor* that takes a *type variable* named `'a`.
-A type constructor is not a fixed type---you can think of it as a function that
-takes a type and outputs a new type.
-
-The advantage of doing this is that the variant tags inside `DiscountError` are
-no longer constrained by our `discount` type. This makes sense because they are
-used primarily in the `Discount` module, and if any variant tags are renamed,
-added, or deleted, those changes will and should happen in `Discount`.
-
-Using a type variable does not sacrifice type safety, if you hover over the
-`discount` variable, you see that its type is:
-
-```reason
-discount([> `MissingSandwichTypes
-          | `NeedMegaBurger
-          | `NeedOneBurger
-          | `NeedTwoBurgers ])
-```
-
-Based on its usage, OCaml can figure out the exact type of the `discount`
-variable and automatically fill in the value of the type variable.
-
-## `>` = "allow more than"
-
-In the type expression above, we once again see `>`, so let's see what it means.
-In polymorphic variant type expressions, it means "allow more than". In this
-case, it means that tags other than the four that are listed are allowed. For
-example, this type would be allowed:
-
-```reason{5-6}
-discount([| `MissingSandwichTypes
-          | `NeedMegaBurger
-          | `NeedOneBurger
-          | `NeedTwoBurgers
-          | `HoneyButter
-          | `KewpieMayo ])
-```
-
-When defining your own types, you will most often used *fixed* polymormorphic
-variants, i.e. those that don't have `>` in their type expressions. But it is
-still useful to know what `>` does, since it appears when the compiler
-infers the type of a variable or function that uses polymorphic variants.
-
-::: tip
-
-Fixed polymorphic variants and normal variants are roughly equivalent and can be
-used interchangeably.
-
-:::
-
-## Implicit type variable
-
-Let's come back to the question of why the original attempt at a variant type
-definition was syntactically invalid:
-
-<<< Types.re#bad-discount-type
-
-The reason is that there's an implicit type variable around the `>`. The
-above type expression is equivalent to:
-
-<<< Types.re#explicit-type-var{14}
-
-Now the error message makes a bit more sense:
-
-<<< type-error.txt{7}
-
-The type variable exists, but it's pointless unless it appears as an argument of
-the `discount` type constructor. Once it's added, it compiles:
-
-<<< Types.re#add-type-arg{1}
-
-This is somewhat like accidentally using a variable in a function but forgetting
-to add that variable to the function's argument list.
-
-## Force `DiscountError` argument to be polymorphic variant
-
-Right now the argument of the `DiscountError` constructor can be any type at
-all, but to be explicit, we can force it to be a polymorphic variant:
-
-<<< Types.re#must-be-poly{4}
-
-The `[> ]` type expression means a polymorphic variant that has no tags, but
-allows more tags, which basically means any polymorphic variant. Note that
-adding this small restriction to the type doesn't make a real difference in this
-program---it's just a way to make it clear that `DiscountError`'s argument
-should be a polymorphic variant. It's an optional embellishment that you can
-feel free to leave out.
-
-## Quick summary
-
-You refactored the `discount` reactive variable to use a normal variant instead
-of a polymorphic variant. The code changes were fairly minimal, but to
-understand what was happening, it was necessary to learn the basics of type
-constructors and type variables. In the next sections, we'll set types and other
-theoretical considerations aside and get into the nitty-gritty of the UI changes
-you must make to add promo support to the `Order` component.
-
 ## Add `DateInput` component
 
-To see different promotions in action, we want to be able to easily change the
-date in our demo, so add a new file `DateInput.re`:
+We need a widget to interactively change the date in `Demo` because different
+promos are active during different periods of time. Add a new file
+`DateInput.re`:
 
 <<< DateInput.re{7,16}
 
 A few notes:
 
 - We use `Printf.sprintf` to give us more control over how the `float`
-  components of a Date[^2] are converted to strings:
+  components of a Date[^1] are converted to strings:
   - The [float conversion
     specification](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
-    `%4.0f` sets a minimum width of 4 and 0 numbers after the decimal
+    `%4.0f` sets a minimum width of 4, with 0 numbers after the decimal
   - The float conversion specification `%02.0f` sets a minimum width of 2
-    (left padded with 0) and 0 numbers after the decimal
+    (left padded with 0), with 0 numbers after the decimal
 - The `type` prop of `input` has been renamed to `type_`, because in OCaml,
-  `type` is a reserved keyword and can't be used as an argument name. But don't
-  worry, it will still say `type` in the generated JS output.
+  `type` is a reserved keyword and can't be used as an identifier.
+
+::: tip
+
+Even though the prop `type` has been renamed to `type_`, the [generated JS
+output will say `type`](https://melange.re/v4.0.0/playground/?language=Reason&code=W0ByZWFjdC5jb21wb25lbnRdCmxldCBtYWtlID0gKCkgPT4gPGlucHV0IHR5cGVfPSJkYXRlIiAvPjs%3D&live=off).
+
+Some other prop names also clash with OCaml reserved keywords and must be
+suffixed with an underscore, such as: `as_`, `open_`, `begin_`, `end_`, `in_`,
+and `to_`.
+
+:::
 
 ## Add `Demo` component
 
@@ -224,7 +90,7 @@ which essentially means "do nothing".
 hook](https://react.dev/reference/react/useEffect). The number `1` at the end of
 the function indicates how many dependencies this function is supposed to take.
 Accordingly, we also have `React.useEffect0`, `React.useEffect2`, etc, all the
-way up to `React.useEffect7`[^3].
+way up to `React.useEffect7`[^2].
 
 All `React.useEffect*` functions accept a [setup
 callback](https://react.dev/reference/react/useEffect#reference) as their first
@@ -349,7 +215,7 @@ The easiest fix is to simply change the dependency to `submittedCode` instead of
 
 This does the trick---the Effect only runs once every time you submit a new
 promo code. But wait! Why does it behave differently when `submittedCode` is an
-`option`, and `option` is just another variant type?[^4]
+`option`, and `option` is just another variant type?[^3]
 
 Although `option` is a variant type, its [runtime representation is a special
 case](../burger-discounts/#runtime-representation-of-option):
@@ -430,9 +296,9 @@ the next chapter, we'll further polish the sandwich promotion logic.
     variables and functions)
   - Inferred type definitions that contain `>` also have an implicit type
     variable
-- Some component props have names that aren't legal as function arguments in
-  OCaml, and we must add an underscore after them. A common example is `type`,
-  which must be rewritten as `type_`[^5].
+- Some component props have names that aren't legal as identifiers in OCaml, and
+  we must add an underscore after them, e.g. `type`, which must be rewritten as
+  `type_`.
 - ReasonReact has several binding functions for React's `useEffect` hook, e.g.
   `React.useEffect0`, `React.useEffect1`, ...., `React.useEffect7`
   - The number at the end indicates how many dependencies the function takes
@@ -668,24 +534,17 @@ and [demo](https://react-book.melange.re/demo/src/order-with-promo/) for this ch
 
 -----
 
-[^1]: In OCaml terminology, variant tags start with `` ` `` and correspond to
-    polymorphic variant types, while variant constructors correspond to normal
-    variant types.
-
-[^2]: It might be a little confusing that `Js.Date.get*` functions all return
+[^1]: It might be a little confusing that `Js.Date.get*` functions all return
     `float` instead of `int`. The reason is that these functions [must return
     `NaN` if the input Date is
     invalid](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getFullYear#return_value),
     and in OCaml, only `float` is capable of representing
     [`NaN`](https://melange.re/v4.0.0/api/re/melange/Js/Float/#val-_NaN).
 
-[^3]: If you happen to need more than 7 dependencies, you can define your own
+[^2]: If you happen to need more than 7 dependencies, you can define your own
    binding function based on the [current binding
    functions](https://github.com/reasonml/reason-react/blob/713ab6cdb1644fb44e2c0c8fdcbef31007b37b8d/src/React.rei#L248-L255).
    We'll cover bindings in more detail [later](/todo).
 
-[^4]: Recall that variant constructors with arguments also get turned into
+[^3]: Recall that variant constructors with arguments also get turned into
     objects in the JS runtime.
-
-[^5]: Some other prop names which cannot be used in their original form are:
-    `as_`, `open_`, `begin_`, `end_`, `in_`, and `to_`.
