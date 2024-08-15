@@ -45,7 +45,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
     className=Style.form
     onSubmit={evt => {
       evt |> React.Event.Form.preventDefault;
-      setSubmittedCode(Some(code));
+      setSubmittedCode(Js.String.trim(code) == "" ? None : Some(code));
     }}>
     <input
       className=Style.input

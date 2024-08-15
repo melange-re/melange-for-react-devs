@@ -226,7 +226,7 @@ require a space between `[` and `|`.
 doesn’t compile. Fix it by adding a single character.
 
 ```reason
-let getName = (animal: [| `Cat | `Dog(int) | `Unicorn(string)]) =>
+let getName = (animal: [ | `Cat | `Dog(int) | `Unicorn(string)]) =>
   switch (animal) {
   | `Cat => "Mr Whiskers"
   | `Dog(n) => "Bandit " ++ string_of_int(n)
@@ -283,7 +283,7 @@ Delete the type annotation.
 
 ::: details Solution
 
-```reason
+```reason{2}
 /** Only invoke [f] when [o1] and [o2] are [Some] */
 let map2: (option('a), option('b), ('a, 'b) => 'c) => option('c) =
   (o1, o2, f) =>
@@ -301,6 +301,33 @@ Js.log(map2(Some("ABC"), Some(123), (a, b) => (a, b)));
 We have to use different type variables if we expect that the types might be
 different. Note that we could have deleted the type annotation and then OCaml's
 inferred type would be the same as the type annotation above.
+
+:::
+
+<b>4.</b> When you enter a promo code that is blank (empty or consists of only
+spaces) and hit Enter, it will still show the “Invalid promo code” error. Fix it
+so that it shows no error in this case.
+
+::: details Hint
+
+Use
+[Js.String.trim](https://melange.re/v4.0.0/api/re/melange/Js/String/#val-trim)
+to help you check whether a string is blank.
+
+:::
+
+::: details Solution
+
+One way to do it is to add a new branch with a `when` guard in `Promo.make`'s
+first switch expression:
+
+<<< Promo.re#when-solution{4}
+
+A better solution is to modify the `form` element's `onSubmit` callback:
+
+<<< Promo.re#onsubmit-solution{4}
+
+The second solution is simpler and more direct, but both work.
 
 :::
 

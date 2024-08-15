@@ -65,3 +65,37 @@ let _ =
       // #endregion discount-render
     </>;
   };
+
+let _ =
+  (submittedCode, date, items) => {
+    // #region when-solution
+    let discount =
+      switch (submittedCode) {
+      | None => NoSubmittedCode
+      | Some(code) when Js.String.trim(code) == "" => NoSubmittedCode
+      | Some(code) =>
+        switch (Discount.getDiscountFunction(code, date)) {
+        | Error(error) => CodeError(error)
+        | Ok(discountFunction) =>
+          switch (discountFunction(items)) {
+          | Error(error) => DiscountError(error)
+          | Ok(value) => Discount(value)
+          }
+        }
+      };
+    // #endregion when-solution
+
+    ignore(discount);
+  };
+
+let _ =
+  (code, setSubmittedCode) => {
+    // #region onsubmit-solution
+    <form
+      onSubmit={evt => {
+        evt |> React.Event.Form.preventDefault;
+        setSubmittedCode(Js.String.trim(code) == "" ? None : Some(code));
+      }}>
+      // #endregion onsubmit-solution
+       {RR.s("")} </form>;
+  };
