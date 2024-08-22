@@ -11,12 +11,27 @@ let getVoices = () => {
      );
 };
 
+let speak = (voice, text) => {
+  module Utterance = SpeechSynthesis.Utterance;
+  let utterance = Utterance.make(text);
+  utterance |> Utterance.setVoice(voice);
+  SpeechSynthesis.speak(utterance);
+};
+
 module Inner = {
   [@react.component]
   let make = (~voice as initVoice: Voice.t, ~voices: list(Voice.t)) => {
     let (counter, setCounter) = React.useState(() => 30);
     let (voice, setVoice) = RR.useStateValue(initVoice);
     let (intervalId, setIntervalId) = RR.useStateValue(None);
+
+    let speakAndDecrement = () => {
+      setCounter(value => {
+        let newValue = value - 1;
+        speak(voice, string_of_int(newValue));
+        newValue;
+      });
+    };
 
     React.useEffect1(
       () => {
@@ -25,6 +40,7 @@ module Inner = {
           |> Option.iter(intervalId => {
                Js.Global.clearInterval(intervalId);
                setIntervalId(None);
+               speak(voice, "Time's up!");
              });
         };
         None;
@@ -60,7 +76,7 @@ module Inner = {
             Js.Global.clearInterval(intervalId);
             setIntervalId(None);
           | None =>
-            Js.Global.setInterval(1000, ~f=() => setCounter(v => v - 1))
+            Js.Global.setInterval(1000, ~f=speakAndDecrement)
             |> Option.some
             |> setIntervalId
           }

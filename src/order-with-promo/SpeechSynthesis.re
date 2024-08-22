@@ -13,7 +13,7 @@ module Utterance = {
   type t;
   [@mel.new] external make: string => t = "SpeechSynthesisUtterance";
 
-  [@mel.set] external setVoice: (t, Voice.t) => unit = "voice";
+  [@mel.set] external setVoice: (Voice.t, t) => unit = "voice";
 };
 
 // could also use @mel.scope
