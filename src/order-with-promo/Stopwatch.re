@@ -25,28 +25,26 @@ module Inner = {
     let (voice, setVoice) = RR.useStateValue(initVoice);
     let (intervalId, setIntervalId) = RR.useStateValue(None);
 
+    // Need to use a ref inside speakAndDecrement function
+    let intervalRef = React.useRef(None);
+    intervalRef.current = intervalId;
+
     let speakAndDecrement = () => {
       setCounter(value => {
         let newValue = value - 1;
-        speak(voice, string_of_int(newValue));
-        newValue;
-      });
-    };
-
-    React.useEffect1(
-      () => {
-        if (counter == 0) {
-          intervalId
+        if (newValue > 0) {
+          speak(voice, string_of_int(newValue));
+        } else {
+          speak(voice, "Time's up!");
+          intervalRef.current
           |> Option.iter(intervalId => {
                Js.Global.clearInterval(intervalId);
                setIntervalId(None);
-               speak(voice, "Time's up!");
              });
         };
-        None;
-      },
-      [|counter|],
-    );
+        newValue;
+      });
+    };
 
     <div>
       <NumberInput
