@@ -7,3 +7,5 @@ let iter = (f, p) =>
        Js.Promise.resolve();
      })
   |> ignore;
+
+let map = (f, p) => p |> Js.Promise.then_(v => v |> f |> Js.Promise.resolve);

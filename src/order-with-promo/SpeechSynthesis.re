@@ -7,7 +7,6 @@ module Voice = {
 
   [@mel.get] external getLang: t => string = "lang";
   [@mel.get] external getName: t => string = "name";
-  [@mel.get] external getUri: t => string = "voiceURI";
 };
 
 module Utterance = {
@@ -34,8 +33,9 @@ external speak: Utterance.t => unit = "speechSynthesis.speak";
 let getVoices = () => {
   Js.Promise.make((~resolve, ~reject as _) =>
     switch (getVoices()) {
-    | [||] => addVoicesChangedListener(() => resolve(. getVoices()))
-    | voices => resolve(. voices)
+    | [||] =>
+      addVoicesChangedListener(() => resolve(. Array.toList(getVoices())))
+    | voices => resolve(. Array.toList(voices))
     }
   );
 };
