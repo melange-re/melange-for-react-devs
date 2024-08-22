@@ -77,8 +77,8 @@ module DateAndOrder = {
 [@react.component]
 let make = () => {
   <div>
-    <Stopwatch />
     <h1> {RR.s("Order Confirmation")} </h1>
+    <Stopwatch />
     {datasets
      |> List.map(((label, items)) => <DateAndOrder key=label label items />)
      |> RR.list}

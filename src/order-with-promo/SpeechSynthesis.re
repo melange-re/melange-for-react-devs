@@ -33,9 +33,8 @@ external speak: Utterance.t => unit = "speechSynthesis.speak";
 let getVoices = () => {
   Js.Promise.make((~resolve, ~reject as _) =>
     switch (getVoices()) {
-    | [||] =>
-      addVoicesChangedListener(() => resolve(. Array.toList(getVoices())))
-    | voices => resolve(. Array.toList(voices))
+    | [||] => addVoicesChangedListener(() => resolve(. getVoices()))
+    | voices => resolve(. voices)
     }
   );
 };
