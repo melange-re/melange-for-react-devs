@@ -42,53 +42,93 @@ let getVoices = () => {
 };
 
 let speak = (voice, text) => {
-  SpeechSynthesis.cancel(); // interrupt any active utterances
+  Js.Promise.make((~resolve, ~reject as _) => {
+    SpeechSynthesis.cancel(); // cancel active utterance
 
-  module Utterance = SpeechSynthesis.Utterance;
-  let utterance = Utterance.make(text);
-  Utterance.setVoice(utterance, voice);
-  SpeechSynthesis.speak(utterance);
+    module Utterance = SpeechSynthesis.Utterance;
+    let utterance = Utterance.make(text);
+    Utterance.setVoice(utterance, voice);
+    utterance
+    |> Utterance.addOnEndListener(() => {
+         let unitValue = (); // refmt bug forces you to do this
+         resolve(. unitValue);
+       });
+    SpeechSynthesis.speak(utterance);
+  });
 };
 
 module Inner = {
+  type timerState =
+    | Stopped
+    | Running(int)
+    | Alarm;
+
   type state = {
-    counter: int,
+    duration: int,
+    timerState,
     voice: Voice.t,
-    intervalId: option(Js.Global.intervalId),
+  };
+
+  type action =
+    | ChangeDuration(int)
+    | ChangeVoice(Voice.t)
+    | Start
+    | Stop
+    | Tick
+    | SoundAlarm;
+
+  let reducer = (state, action) => {
+    switch (action) {
+    | ChangeDuration(duration) => {...state, duration}
+    | ChangeVoice(voice) => {...state, voice}
+    | Start => {...state, timerState: Running(state.duration)}
+    | Tick => {
+        ...state,
+        timerState:
+          switch (state.timerState) {
+          | (Stopped | Alarm) as t => t
+          | Running(counter) when counter <= 0 => Alarm
+          | Running(counter) => Running(counter - 1)
+          },
+      }
+    | Stop => {...state, timerState: Stopped}
+    | SoundAlarm => {...state, timerState: Alarm}
+    };
   };
 
   [@react.component]
   let make = (~voice as initialVoice: Voice.t, ~voices: list(Voice.t)) => {
-    let (state, setState) =
-      React.useState(() =>
-        {counter: 30, voice: initialVoice, intervalId: None}
+    let (state, dispatch) =
+      React.useReducer(
+        reducer,
+        {duration: 10, timerState: Stopped, voice: initialVoice},
       );
 
-    let speakAndDecrement = () => {
-      setState(({counter, voice, intervalId} as oldState) => {
-        let newCounter = counter - 1;
-        let newIntervalId =
-          if (newCounter > 0) {
-            speak(voice, string_of_int(newCounter));
-            intervalId;
-          } else {
-            speak(voice, "Time's up!");
-            intervalId |> Option.iter(Js.Global.clearInterval);
-            None;
-          };
-        {...oldState, counter: newCounter, intervalId: newIntervalId};
-      });
-    };
+    let intervalId = React.useRef(None);
 
-    React.useEffect0(() =>
-      Some(() => state.intervalId |> Option.iter(Js.Global.clearInterval))
-    );
+    // let soundAlarm = () => {
+    //   speak(state.voice, "Time's up!") |> ignore;
+    // };
+
+    let tick = () => dispatch @@ Tick;
 
     <div>
       <NumberInput
-        disabled={state.intervalId |> Option.is_some}
-        value={state.counter}
-        onChange={counter => setState(_ => {...state, counter})}
+        disabled={
+          switch (state.timerState) {
+          | Running(_)
+          | Alarm => true
+          | Stopped => false
+          }
+        }
+        value={
+          switch (state.timerState) {
+          | Alarm => 0
+          | Stopped => state.duration
+          | Running(counter) => counter
+          }
+        }
+        onChange={duration => dispatch @@ ChangeDuration(duration)}
       />
       <select
         value={Voice.getName(state.voice)}
@@ -96,7 +136,7 @@ module Inner = {
           let name = RR.getValueFromEvent(evt);
           voices
           |> List.find_opt(v => Voice.getName(v) == name)
-          |> Option.iter(voice => setState(_ => {...state, voice}));
+          |> Option.iter(voice => dispatch @@ ChangeVoice(voice));
         }}>
         {voices
          |> List.map(v => {
@@ -107,17 +147,26 @@ module Inner = {
       </select>
       <button
         onClick={_evt =>
-          switch (state.intervalId) {
-          | Some(intervalId) =>
-            Js.Global.clearInterval(intervalId);
-            setState(_ => {...state, intervalId: None});
-          | None =>
-            let intervalId =
-              Js.Global.setInterval(1000, ~f=speakAndDecrement) |> Option.some;
-            setState(_ => {...state, intervalId});
+          switch (state.timerState) {
+          | Stopped =>
+            dispatch @@ Start;
+            intervalId.current =
+              Js.Global.setInterval(1000, ~f=tick) |> Option.some;
+          | Alarm
+          | Running(_) =>
+            dispatch @@ Stop;
+            intervalId.current |> Option.iter(Js.Global.clearInterval);
+            intervalId.current = None;
           }
         }>
-        {(state.intervalId == None ? "Start" : "Stop") |> RR.s}
+        {(
+           switch (state.timerState) {
+           | Running(_)
+           | Alarm => "Stop"
+           | Stopped => "Start"
+           }
+         )
+         |> RR.s}
       </button>
     </div>;
   };

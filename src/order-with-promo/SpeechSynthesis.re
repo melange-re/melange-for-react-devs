@@ -11,9 +11,14 @@ module Voice = {
 
 module Utterance = {
   type t;
+
   [@mel.new] external make: string => t = "SpeechSynthesisUtterance";
 
   [@mel.set] external setVoice: (t, Voice.t) => unit = "voice";
+
+  [@mel.send.pipe: t]
+  external addOnEndListener: ([@mel.as "end"] _, unit => unit) => unit =
+    "addEventListener";
 };
 
 // could also use @mel.scope
