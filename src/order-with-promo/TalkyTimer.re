@@ -2,13 +2,26 @@ module Voice = SpeechSynthesis.Voice;
 
 let getVoices = () => {
   SpeechSynthesis.getVoices()
-  |> Promise.map(voices =>
+  |> Promise.map(voices => {
+       let voices =
+         voices
+         |> Array.toList
+         |> List.filter(v =>
+              v |> Voice.getLang |> Js.String.startsWith(~prefix="en-")
+            );
+
+       // Move my favorite voice to the front
+       let favName = "Zarvox";
        voices
-       |> Array.toList
-       |> List.filter(v =>
-            v |> Voice.getLang |> Js.String.startsWith(~prefix="en-")
-          )
-     );
+       |> List.find_opt(v => Voice.getName(v) == favName)
+       |> Option.map(fav => {
+            Js.log(fav);
+            let withoutFav =
+              voices |> List.filter(v => Voice.getName(v) != favName);
+            [fav, ...withoutFav];
+          })
+       |> Option.value(~default=voices);
+     });
 };
 
 let speak = (voice, text) => {
