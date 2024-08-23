@@ -30,6 +30,8 @@ external addVoicesChangedListener:
 
 external speak: Utterance.t => unit = "speechSynthesis.speak";
 
+[@mel.scope "speechSynthesis"] external cancel: unit => unit = "cancel";
+
 let getVoices = () => {
   Js.Promise.make((~resolve, ~reject as _) =>
     switch (getVoices()) {

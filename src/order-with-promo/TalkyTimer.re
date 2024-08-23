@@ -42,6 +42,8 @@ let getVoices = () => {
 };
 
 let speak = (voice, text) => {
+  SpeechSynthesis.cancel(); // interrupt any active utterances
+
   module Utterance = SpeechSynthesis.Utterance;
   let utterance = Utterance.make(text);
   Utterance.setVoice(utterance, voice);
