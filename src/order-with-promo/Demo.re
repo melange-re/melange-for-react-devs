@@ -78,7 +78,13 @@ module DateAndOrder = {
 let make = () => {
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
-    <TalkyTimer />
+    {let (show, setShow) = React.useState(() => true);
+     <>
+       <button onClick={_ => setShow(v => !v)}>
+         {(show ? "Hide" : "Show") |> RR.s}
+       </button>
+       {show ? <TalkyTimer /> : React.null}
+     </>}
     {datasets
      |> List.map(((label, items)) => <DateAndOrder key=label label items />)
      |> RR.list}

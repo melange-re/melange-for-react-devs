@@ -41,15 +41,16 @@ module Inner = {
             intervalId;
           } else {
             speak(voice, "Time's up!");
-            intervalId
-            |> Option.iter(intervalId => {
-                 Js.Global.clearInterval(intervalId)
-               });
+            intervalId |> Option.iter(Js.Global.clearInterval);
             None;
           };
         {...oldState, counter: newCounter, intervalId: newIntervalId};
       });
     };
+
+    React.useEffect0(() =>
+      Some(() => state.intervalId |> Option.iter(Js.Global.clearInterval))
+    );
 
     <div>
       <NumberInput
