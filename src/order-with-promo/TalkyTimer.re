@@ -1,26 +1,43 @@
 module Voice = SpeechSynthesis.Voice;
 
+let moveToFront = (pred, lst) => {
+  lst
+  |> List.find_opt(pred)
+  |> Option.map(element => {
+       [element, ...lst |> List.filter(e => !pred(e))]
+     })
+  |> Option.value(~default=lst);
+};
+
+let moveToFrontUsingRef = (pred, lst) => {
+  let element = ref(None);
+
+  let withoutElement =
+    lst
+    |> List.filter(e =>
+         pred(e)
+           ? {
+             element := Some(e);
+             false;
+           }
+           : true
+       );
+
+  switch (element^) {
+  | None => lst
+  | Some(element) => [element, ...withoutElement]
+  };
+};
+
 let getVoices = () => {
   SpeechSynthesis.getVoices()
   |> Promise.map(voices => {
-       let voices =
-         voices
-         |> Array.toList
-         |> List.filter(v =>
-              v |> Voice.getLang |> Js.String.startsWith(~prefix="en-")
-            );
-
-       // Move my favorite voice to the front
-       let favName = "Zarvox";
        voices
-       |> List.find_opt(v => Voice.getName(v) == favName)
-       |> Option.map(fav => {
-            Js.log(fav);
-            let withoutFav =
-              voices |> List.filter(v => Voice.getName(v) != favName);
-            [fav, ...withoutFav];
-          })
-       |> Option.value(~default=voices);
+       |> Array.toList
+       |> List.filter(v =>
+            v |> Voice.getLang |> Js.String.startsWith(~prefix="en-")
+          )
+       |> moveToFrontUsingRef(v => Voice.getName(v) == "Zarvox")
      });
 };
 
