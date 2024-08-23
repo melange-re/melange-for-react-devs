@@ -78,7 +78,7 @@ module DateAndOrder = {
 let make = () => {
   <div>
     <h1> {RR.s("Order Confirmation")} </h1>
-    <Stopwatch />
+    <TalkyTimer />
     {datasets
      |> List.map(((label, items)) => <DateAndOrder key=label label items />)
      |> RR.list}
