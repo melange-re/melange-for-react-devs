@@ -13,6 +13,3 @@ let currency = value => value |> Js.Float.toFixed(~digits=2) |> React.string;
 /** Like [React.useState] but doesn't use callback functions */
 let useStateValue = initial =>
   React.useReducer((_state, newState) => newState, initial);
-
-/** Helper for [React.useEffect1] */
-let useEffect1 = (func, dep) => React.useEffect1(func, [|dep|]);

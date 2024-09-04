@@ -23,7 +23,7 @@ type discount('a) =
   | NoSubmittedCode;
 
 [@react.component]
-let make = (~items: list(Item.t), ~date: Js.Date.t) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
@@ -45,7 +45,21 @@ let make = (~items: list(Item.t), ~date: Js.Date.t) => {
     className=Style.form
     onSubmit={evt => {
       evt |> React.Event.Form.preventDefault;
-      setSubmittedCode(Js.String.trim(code) == "" ? None : Some(code));
+      let newSubmittedCode = Js.String.trim(code) == "" ? None : Some(code);
+      setSubmittedCode(newSubmittedCode);
+
+      switch (newSubmittedCode) {
+      | None => ()
+      | Some(code) =>
+        switch (Discount.getDiscountFunction(code, date)) {
+        | Error(_) => ()
+        | Ok(discountFunction) =>
+          switch (discountFunction(items)) {
+          | Error(_) => ()
+          | Ok(value) => onApply(value)
+          }
+        }
+      };
     }}>
     <input
       className=Style.input

@@ -8,9 +8,53 @@ type discount('a) =
   | DiscountError('a)
   | NoSubmittedCode;
 
+module Style = {
+  let codeError = "";
+  let discountError = "";
+  let form = "";
+};
+
+[@warning "-27"]
+module AddOnApply = {
+  // #region add-on-apply
+  [@react.component]
+  let make =
+      (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) =>
+    // #endregion add-on-apply
+    <div />;
+};
+
+let _ =
+  (setSubmittedCode, onApply, code, date, items) => {
+    // #region switch-in-on-submit
+    <form
+      className=Style.form
+      onSubmit={evt => {
+        evt |> React.Event.Form.preventDefault;
+        let newSubmittedCode =
+          Js.String.trim(code) == "" ? None : Some(code);
+        setSubmittedCode(newSubmittedCode);
+
+        switch (newSubmittedCode) {
+        | None => ()
+        | Some(code) =>
+          switch (Discount.getDiscountFunction(code, date)) {
+          | Error(_) => ()
+          | Ok(discountFunction) =>
+            switch (discountFunction(items)) {
+            | Error(_) => ()
+            | Ok(value) => onApply(value)
+            }
+          }
+        };
+      }}>
+      // #endregion switch-in-on-submit
+       React.null </form>;
+  };
+
 let _ =
   (submittedCode, date, items) => {
-    // #region discount-variant
+    // #region discount-derived-variable
     let discount =
       switch (submittedCode) {
       | None => NoSubmittedCode
@@ -24,136 +68,8 @@ let _ =
           }
         }
       };
-    // #endregion discount-variant
-
+    // #endregion discount-derived-variable
     ignore(discount);
-  };
-
-module Style = {
-  let codeError = "";
-  let discountError = "";
-};
-
-let _ =
-  discount => {
-    <>
-      // #region discount-render
-      {switch (discount) {
-       | NoSubmittedCode => React.null
-       | Discount(discount) => discount |> Float.neg |> RR.currency
-       | CodeError(error) =>
-         <div className=Style.codeError>
-           {let errorType =
-              switch (error) {
-              | Discount.InvalidCode => "Invalid"
-              | ExpiredCode => "Expired"
-              };
-            {j|$errorType promo code|j} |> RR.s}
-         </div>
-       | DiscountError(code) =>
-         let buyWhat =
-           switch (code) {
-           | `NeedOneBurger => "at least 1 more burger"
-           | `NeedTwoBurgers => "at least 2 burgers"
-           | `NeedMegaBurger => "a burger with every topping"
-           | `MissingSandwichTypes => "every sandwich"
-           };
-         <div className=Style.discountError>
-           {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}
-         </div>;
-       }}
-      // #endregion discount-render
-    </>;
-  };
-
-[@warning "-27"]
-module AddOnApply = {
-  // #region add-on-apply
-  [@react.component]
-  let make =
-      (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) =>
-    // #endregion add-on-apply
-    <div />;
-};
-
-let _ =
-  (discount, onApply) => {
-    // #region use-effect
-    React.useEffect1(
-      () => {
-        switch (discount) {
-        | NoSubmittedCode
-        | CodeError(_)
-        | DiscountError(_) => ()
-        | Discount(value) => onApply(value)
-        };
-        None;
-      },
-      [|discount|],
-    );
-    // #endregion use-effect
-    ();
-  };
-
-let _ =
-  (discount, onApply) => {
-    // #region use-effect-helper
-    RR.useEffect1(
-      () => {
-        switch (discount) {
-        | NoSubmittedCode
-        | CodeError(_)
-        | DiscountError(_) => ()
-        | Discount(value) => onApply(value)
-        };
-        None;
-      },
-      discount,
-    );
-    // #endregion use-effect-helper
-    ();
-  };
-
-let _ =
-  (discount, onApply) => {
-    // #region log
-    RR.useEffect1(
-      () => {
-        switch (discount) {
-        | NoSubmittedCode
-        | CodeError(_)
-        | DiscountError(_) => ()
-        | Discount(value) =>
-          Js.log2("useEffect1 depending on discount", value);
-          onApply(value);
-        };
-        None;
-      },
-      discount,
-    );
-    // #endregion log
-    ();
-  };
-
-let _ =
-  (discount, submittedCode, onApply) => {
-    // #region submitted-code-dep
-    RR.useEffect1(
-      () => {
-        switch (discount) {
-        | NoSubmittedCode
-        | CodeError(_)
-        | DiscountError(_) => ()
-        | Discount(value) =>
-          Js.log2("useEffect1 depending on discount", value);
-          onApply(value);
-        };
-        None;
-      },
-      submittedCode,
-    );
-    // #endregion submitted-code-dep
-    ();
   };
 
 let _ =
@@ -179,7 +95,7 @@ let _ =
 let _ =
   (getDiscount, onApply, code, setSubmittedCode) => {
     <form
-      // #region on-submit
+      // #region on-submit-using-get-discount
       onSubmit={evt => {
         evt |> React.Event.Form.preventDefault;
         let newSubmittedCode = Some(code);
@@ -191,8 +107,19 @@ let _ =
         | Discount(value) => onApply(value)
         };
       }}
-      // #endregion on-submit
+      // #endregion on-submit-using-get-discount
     />;
+  };
+
+let _ =
+  (getDiscount, submittedCode) => {
+    // #region get-discount-in-render
+    switch (getDiscount(submittedCode)) {
+    | NoSubmittedCode => React.null
+    // ...
+    // #endregion get-discount-in-render
+    | _ => React.null
+    };
   };
 
 let _ =
