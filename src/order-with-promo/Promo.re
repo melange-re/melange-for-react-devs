@@ -27,19 +27,18 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
-  let discount =
-    switch (submittedCode) {
+  let getDiscount =
+    fun
     | None => NoSubmittedCode
     | Some(code) =>
       switch (Discount.getDiscountFunction(code, date)) {
       | Error(error) => CodeError(error)
-      | Ok(discountFunction) =>
-        switch (discountFunction(items)) {
+      | Ok(discountFunc) =>
+        switch (discountFunc(items)) {
         | Error(error) => DiscountError(error)
         | Ok(value) => Discount(value)
         }
-      }
-    };
+      };
 
   <form
     className=Style.form
@@ -48,17 +47,11 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
       let newSubmittedCode = Js.String.trim(code) == "" ? None : Some(code);
       setSubmittedCode(newSubmittedCode);
 
-      switch (newSubmittedCode) {
-      | None => ()
-      | Some(code) =>
-        switch (Discount.getDiscountFunction(code, date)) {
-        | Error(_) => ()
-        | Ok(discountFunction) =>
-          switch (discountFunction(items)) {
-          | Error(_) => ()
-          | Ok(value) => onApply(value)
-          }
-        }
+      switch (getDiscount(newSubmittedCode)) {
+      | NoSubmittedCode
+      | CodeError(_)
+      | DiscountError(_) => ()
+      | Discount(value) => onApply(value)
       };
     }}>
     <input
@@ -69,7 +62,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
         setSubmittedCode(None);
       }}
     />
-    {switch (discount) {
+    {switch (getDiscount(submittedCode)) {
      | NoSubmittedCode => React.null
      | Discount(discount) => discount |> Float.neg |> RR.currency
      | CodeError(error) =>

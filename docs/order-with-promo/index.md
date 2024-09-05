@@ -15,8 +15,8 @@ A breakdown:
 - Create a new state variable called `discount` (along with its attendant
   `setDiscount` function)
 - Rename the `total` variable to `subtotal`
-- Add a new table row labeld "Subtotal" to display the value of `subtotal`
-- Add a new table row labeled "Promo" to render the `Promo` component
+- Add a new table row with label "Subtotal" to display the value of `subtotal`
+- Add a new table row with label "Promo" to render the `Promo` component
 - Set the value of `discount` through `Promo`'s `onApply` callback prop (we'll
   add this prop in the next step)
 - Subtract `discount` from `subtotal` when rendering the total price of the
@@ -47,8 +47,8 @@ switch expression used to define the `discount` derived variable:
 
 <<< Promo.re#discount-derived-variable
 
-The branches in the two switch expressions are exactly the same and only the
-return values are different. You wonder if there's some way to reduce the
+The branches in the two switch expressions are exactly the same with only the
+return values being different. You wonder if there's some way to reduce the
 redundancy. There is! You can replace the definition of `discount` with a
 `getDiscount` function:
 
@@ -62,22 +62,33 @@ And also use it in the render logic's switch expression:
 
 <<< Promo.re#get-discount-in-render{1}
 
-## Move `App` into its own file
+Take a little time to verify that `Order` is able to accept promo codes.
+
+- Type `FREE` into the input and press Enter. It should deduct the price of
+  every other burger (ordered by price descending).
+- Type `HALF` into the input and press Enter. It should show an error saying
+  "Expired promo code".
+
+## Add datasets to `App`
 
 It was OK to keep our `App` component inside of `Index.re` because it was always
-very small. But now we'd like to add much more to it, so it makes sense to move
-it into its own file. Create a new file called `App.re` and move the contents of
-`Index.App` into it.
+very small. But if we want to add more to it, it makes sense for `App` to be
+inside its own file. Create a new file called `App.re` and move the contents of
+`Index.App` into it (deleting `Index.App` in the process).
 
-To make it easier to see the different promo-related error messages, you can
-create different collections of items. Add a `datasets` variable to `App`:
+Promo behavior tightly depends on what items are in an order, so it would be
+nice to render multiple `Order` components containing different sets of items.
+Add a `datasets` variable to `App`:
 
 <<< App.re#datasets
 
-Since the `burgers` value is only used the "5 burgers" expression, we can move
-it inside that expression:
+Since the `burgers` value is only used in the "5 burgers" expression, we can
+move it inside that expression:
 
 <<< App.re#burger-expression{2-9}
+
+Note that we need to add curly braces (`{}`) around the expression because
+multi-line expressions must be surrounded by curly braces.
 
 ::: tip
 
@@ -94,6 +105,12 @@ items:
 
 You can delete the now-unused `App.items` variable.
 
+Enter the promo code "HALF" into different `Order`s to see different messages:
+
+- In the "No burgers" order, you'll get the error message "Buy a burger with
+  every topping to enjoy this promotion"
+- In the "1 burger with at least one of every topping" order, you'll get a
+  discount of 15.97.
 
 ## Add `DateInput` component
 
@@ -101,15 +118,15 @@ Currently, the date in `App` is static, but it would be very convenient to be
 able to change it interactively in order to see the behavior of `Promo` on
 different dates. Let's add a new file `DateInput.re`:
 
-<<< DateInput.re{7,16}
+<<< DateInput.re{9,18}
 
 A few notes:
 
-- We use `Printf.sprintf` to give us more control over how the `float`
-  components of a Date[^1] are converted to strings:
-  - The [float conversion
-    specification](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
-    `%4.0f` sets a minimum width of 4, with 0 numbers after the decimal
+- `Printf.sprintf` accepts a string containing [float conversion
+    specifications](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
+  which can convert the float components of a Date[^1] into strings:
+  - The float conversion specification `%4.0f` sets a minimum width of 4, with 0
+    numbers after the decimal
   - The float conversion specification `%02.0f` sets a minimum width of 2
     (left padded with 0), with 0 numbers after the decimal
 - The `type` prop of `input` has been renamed to `type_`, because in OCaml,
@@ -121,9 +138,8 @@ Even though the prop `type` has been renamed to `type_` in OCaml, the [generated
 JS output will say
 `type`](https://melange.re/v4.0.0/playground/?language=Reason&code=W0ByZWFjdC5jb21wb25lbnRdCmxldCBtYWtlID0gKCkgPT4gPGlucHV0IHR5cGVfPSJkYXRlIiAvPjs%3D&live=off).
 
-Some other prop names also clash with OCaml reserved keywords and must be
-suffixed with an underscore, such as: `as_`, `open_`, `begin_`, `end_`, `in_`,
-and `to_`.
+Some other prop names that clash with OCaml reserved keywords and must also be
+suffixed with an underscore: `as_`, `open_`, `begin_`, `end_`, `in_`, `to_`.
 
 :::
 
@@ -131,15 +147,8 @@ Add `DateInput` to `App.make`:
 
 <<< App.re#add-date-input{3-4,8}
 
-Execute `npm run serve` to see your app in action. Verify that it behaves as
-expected:
-
-- Type `FREE` into the input and press Enter. It should deduct the price of
-  every other burger (ordered by price descending).
-- Type `HALF` into the input and press Enter. It should deduct half off the
-  entire order.
-- Change the date to something other than May 28. It should show an error saying
-  "Expired promo code"
+Try changing the date to November 3 and enter the promo code "HALF" into the
+"All sandwiches" order. You should see a discount of 65.00.
 
 ## Add styling for promo code row
 
@@ -155,15 +164,19 @@ Then set the `className` of the promo code row to `Style.promo`:
 
 Hot diggity! You've added the promo codes to your order confirmation widget,
 just in time for Madame Jellobutter's International Burger Day promotions. In
-the next chapter, we'll start writing a completely new app.
+the next chapter, we'll start writing a completely new app. Before that, cap off
+what you've learned by doing some exercises.
 
 ## Overview
 
+- When a nested module starts to get big, it's a good idea to put it into its
+  own file
 - Some component props have names that aren't legal as identifiers in OCaml, and
   we must add an underscore after them, e.g. `type`, which must be rewritten as
   `type_`.
 - You can use `let` inside expressions, which allows you to define variables
   closer to where they're used
+
 
 ## Exercises
 
