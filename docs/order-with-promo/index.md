@@ -118,17 +118,16 @@ Currently, the date in `App` is static, but it would be very convenient to be
 able to change it interactively in order to see the behavior of `Promo` on
 different dates. Let's add a new file `DateInput.re`:
 
-<<< DateInput.re{9,18}
+<<< DateInput.re#initial{9,18}
 
 A few notes:
 
-- `Printf.sprintf` accepts a string containing [float conversion
+- This invocation of `Printf.sprintf` contains [float conversion
     specifications](https://melange.re/v4.0.0/api/re/melange/Stdlib/Printf/index.html#val-fprintf)
   which can convert the float components of a Date[^1] into strings:
-  - The float conversion specification `%4.0f` sets a minimum width of 4, with 0
-    numbers after the decimal
-  - The float conversion specification `%02.0f` sets a minimum width of 2
-    (left padded with 0), with 0 numbers after the decimal
+  - The float conversion specification `%04.0f` sets a minimum width of 4,
+    left-padded with 0, with 0 numbers after the decimal. It converts the year
+    part of the given date.
 - The `type` prop of `input` has been renamed to `type_`, because in OCaml,
   `type` is a reserved keyword and can't be used as an identifier.
 
@@ -176,6 +175,8 @@ what you've learned by doing some exercises.
   `type_`.
 - You can use `let` inside expressions, which allows you to define variables
   closer to where they're used
+- Float conversion specifications, in conjunction with `Printf.sprintf`, gives
+  you fine-grained control over how to convert a `float` value to a string.
 
 
 ## Exercises
@@ -186,7 +187,7 @@ below it, but doesn't affect the dates of the other `Order`s.
 
 ::: details Hint
 
-Define a `DateAndOrder` helper component.
+Define a `DateAndOrder` helper component inside `App`.
 
 :::
 
@@ -198,27 +199,48 @@ Add `App.DateAndOrder` subcomponent:
 
 Then refactor `App.make` to use the new component:
 
-<<< App.re#make
+<<< App.re#make{6}
 
 :::
 
-<b>2.</b> The `DateInput` component has a pretty serious bug. Try to manually enter the day of the month and it will likely crash the entire program. Fix the bug inside `DateInput` without using exceptions.
+<b>2.</b> The `DateInput` component has a pretty annoying bug. Focus on
+`DateInput`'s `input` element and press the `0` key. The `input` element will go
+into an "invalid date" state. Refactor `DateInput` so that the user can no
+longer enter invalid dates.
 
 ::: details Hint 1
 
-Use `option`
+Use
+[Js.Date.valueOf](https://melange.re/v4.0.0/api/re/melange/Js/Date/index.html#val-valueOf)
+and
+[Js.Float.isNaN](https://melange.re/v4.0.0/api/re/melange/Js/Float/#val-isNaN)
+to check the validity of a date.
 
 :::
 
 ::: details Hint 2
 
-tbd
+Use [Option.iter](https://melange.re/v4.0.0/api/re/melange/Stdlib/Option/#val-iter).
 
 :::
 
 ::: details Solution
 
-tbd
+First, modify `DateInput.stringToDate` so that it returns `Some(date)` when the date
+is valid and `None` otherwise:
+
+<<< DateInput.re#string-to-date-option{4}
+
+Then modify the `input` element's `onChange` callback so that `onChange` is only
+invoked when the return value of `stringToDate` is `Some(date)`:
+
+<<< DateInput.re#on-change-switch
+
+A shorter but equivalent way to write the `onChange` callback is to use the
+[Option.iter](https://melange.re/v4.0.0/api/re/melange/Stdlib/Option/#val-iter)
+function:
+
+<<< DateInput.re#on-change-option-iter
 
 :::
 
