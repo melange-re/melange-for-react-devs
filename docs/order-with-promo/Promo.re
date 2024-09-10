@@ -123,22 +123,31 @@ let _ =
   };
 
 let _ =
-  (~thing) => {
-    switch (thing) {
+  code => {
+    // #region missing-sandwich-types-wildcard
+    let buyWhat =
+      switch (code) {
+      | `NeedOneBurger => "at least 1 more burger"
+      | `NeedTwoBurgers => "at least 2 burgers"
+      | `NeedMegaBurger => "a burger with every topping"
+      | `MissingSandwichTypes(_missing) => "every sandwich"
+      };
+    // #endregion missing-sandwich-types-wildcard
+    ignore(buyWhat);
+  };
+
+let _ =
+  code => {
     // #region show-missing-sandwich-types
-    | `DiscountError(code) =>
-      let buyWhat =
-        switch (code) {
-        | `NeedOneBurger => "at least 1 more burger"
-        | `NeedTwoBurgers => "at least 2 burgers"
-        | `NeedMegaBurger => "a burger with every topping"
-        | `MissingSandwichTypes(missing) =>
-          (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
-          ++ " sandwiches"
-        };
-      <div className=Style.discountError>
-        {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}
-      </div>;
+    let buyWhat =
+      switch (code) {
+      | `NeedOneBurger => "at least 1 more burger"
+      | `NeedTwoBurgers => "at least 2 burgers"
+      | `NeedMegaBurger => "a burger with every topping"
+      | `MissingSandwichTypes(missing) =>
+        (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
+        ++ " sandwiches"
+      };
     // #endregion show-missing-sandwich-types
-    };
+    ignore(buyWhat);
   };

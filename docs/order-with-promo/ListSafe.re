@@ -1,6 +1,4 @@
-/** Return the nth element encased in Some; if it doesn't exist, return None */
-let nth = (n, list) => n < 0 ? None : List.nth_opt(list, n);
-
+// #region humanize
 /** Take a list of strings and return a human-readable string */
 let humanize =
   fun
@@ -13,3 +11,15 @@ let humanize =
     |> List.mapi((i, s) => i == 0 ? "and " ++ s : s)
     |> List.rev
     |> List.fold_left((acc, s) => acc ++ ", " ++ s, first);
+// #endregion humanize
+
+let _ =
+  (rest, first) => {
+    // #region alternate
+    rest
+    |> List.rev
+    |> List.mapi((i, s) => ", " ++ (i == 0 ? "and " ++ s : s))
+    |> List.rev
+    |> List.fold_left((++), first);
+                                   // #endregion alternate
+  };

@@ -244,33 +244,35 @@ function:
 
 :::
 
-<b>3.</b> (split this into two exercises)
+<b>3.</b> Improve `Discount.getSandwichHalfOff` so that it returns a list of
+missing sandwich types when the discount can't be applied. Start by changing the
+"Not all sandwiches, return Error" test in `DiscountTests` to this:
 
-Make the message for `Discount.getSandwichHalfOff`'s ``
-`MissingSandwichTypes`` error more friendly by listing the sandwiches you still
-need to buy to fulfill the conditions of the promotion. As a start, change the
-"Not all sandwiches, return Error" test in `DiscountTests.SandwichHalfOff`:
+<<< DiscountTests.re#not-all-sandwiches{6,8}
 
-<<< DiscountTests.re#not-all-sandwiches{13}
+Note that the `` `MissingSandwichTypes`` variant tag now contains an argument of
+`list(string)`. Make this test pass, and fix any incidental compilation errors.
+(Don't worry about changing the render logic, that's the next exercise.)
 
-Note that the `` `MissingSandwichTypes`` variant tag now has an argument which
-is a list of strings.
 
 ::: details Hint 1
 
-Inside `Discount.getSandwichHalfOff`, use
-[List.filter](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-filter)
-to filter out sandwich types that don't appear in `items`.
+To create a list of strings from the `tracker` record, try this:
+
+```reason
+[
+  tracker.portabello ? "portabello" : "",
+  //...
+]
+```
 
 :::
 
 ::: details Hint 2
 
-In `Promo.make`, use
-[Stdlib.Array.of_list](https://melange.re/v4.0.0/api/re/melange/Stdlib/Array/#val-of_list)
-and
-[Js.Array.join](https://melange.re/v4.0.0/api/re/melange/Js/Array/index.html#val-join)
-to create a comma-delimited string.
+Use
+[List.filter](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-filter)
+to filter out empty strings.
 
 :::
 
@@ -294,7 +296,78 @@ We could have instead written
 |> List.filter(s => s != "")
 ```
 
-which is a little more verbose and arguably easier to understand.
+which is a little more verbose but arguably easier to understand.
+
+In order to fix the compilation error in `Promo`, add a wildcard variable to the
+`` `MissingSandwichTypes`` branch:
+
+<<< Promo.re#missing-sandwich-types-wildcard{6}
+
+:::
+
+<b>4.</b> Add a new helper function `ListSafe.humanize`, which takes a list of
+strings and returns a human-readable string. The logic should look something
+like this:
+
+```reason
+/** Take a list of strings and return a human-readable string */
+let humanize =
+  fun
+  | [] => ""
+  | [x] => x
+  | [x, y] => x ++ " and " ++ y
+  | [first, ...rest] => {
+    // fill in this part
+```
+
+To test this function, add a new file `ListSafeTests.re`:
+
+<<< @/../src/order-with-promo/ListSafeTests.re
+
+Also add a test command to `tests.t`:
+
+```text
+ListSafe tests
+  $ node ./output/src/order-confirmation/ListSafeTests.mjs | sed '/duration_ms/d'
+```
+
+Recall that you can run all your tests by running `npm run test`.
+
+::: details Hint 1
+
+You may want to use
+[List.fold_left](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-fold_left),
+[List.mapi](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-mapi), and
+[List.rev](https://melange.re/v4.0.0/api/re/melange/Stdlib/List/#val-mapi).
+
+:::
+
+::: details Hint 2
+
+Use `List.rev` in conjunction with `List.mapi` to prefix the last element with
+"and ".
+
+:::
+
+::: details Hint 3
+
+Use `List.fold_left` to add ", " in front of each element of `rest`.
+
+:::
+
+::: details Solution
+
+<<< ListSafe.re#humanize{8-12}
+
+An alternate solution would have been to add the commas in the callback to
+`List.mapi`, which simplifies the call to `List.fold_left`:
+
+<<< ListSafe.re#alternate{3,5}
+
+:::
+
+<b>5.</b> Use `ListSafe.humanize` in `Promo.make` to make the ``
+`MissingSandwichTypes`` error message more human-readable.
 
 Then change the render logic inside `Promo.make`'s `` `MissingSandwichTypes``
 branch to convert the list of missing sandwich types to a comma-delimited
@@ -305,7 +378,6 @@ string:
 Recall that we have to use `Stdlib.Array.of_list` instead of `Array.of_list`
 because our custom `Array` module takes precedence.
 
-:::
 
 -----
 

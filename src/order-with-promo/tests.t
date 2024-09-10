@@ -121,3 +121,23 @@ Discount tests
   # cancelled 0
   # skipped 0
   # todo 0
+
+ListSafe tests
+  $ node ./output/src/order-with-promo/ListSafeTests.mjs | sed '/duration_ms/d'
+  TAP version 13
+  # Subtest: Zero, one, and two elements
+  ok 1 - Zero, one, and two elements
+    ---
+    ...
+  # Subtest: Three, four, and five elements
+  ok 2 - Three, four, and five elements
+    ---
+    ...
+  1..2
+  # tests 2
+  # suites 0
+  # pass 2
+  # fail 0
+  # cancelled 0
+  # skipped 0
+  # todo 0
