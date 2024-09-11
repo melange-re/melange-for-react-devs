@@ -163,8 +163,7 @@ Then set the `className` of the promo code row to `Style.promo`:
 
 Hot diggity! You've added the promo codes to your order confirmation widget,
 just in time for Madame Jellobutter's International Burger Day promotions. In
-the next chapter, we'll start writing a completely new app. Before that, cap off
-what you've learned by doing some exercises.
+the next chapter, we'll learn how to test our components.
 
 ## Overview
 
@@ -252,7 +251,8 @@ missing sandwich types when the discount can't be applied. Start by changing the
 
 Note that the `` `MissingSandwichTypes`` variant tag now contains an argument of
 `list(string)`. Make this test pass, and fix any incidental compilation errors.
-(Don't worry about changing the render logic, that's the next exercise.)
+(Don't worry about changing the render logic, that's a subject for the next
+chapter.)
 
 
 ::: details Hint 1
@@ -316,7 +316,7 @@ let humanize =
   | [] => ""
   | [x] => x
   | [x, y] => x ++ " and " ++ y
-  | [first, ...rest] => {
+  | [first, ...rest] =>
     // fill in this part
 ```
 
@@ -365,19 +365,6 @@ An alternate solution would have been to add the commas in the callback to
 <<< ListSafe.re#alternate{3,5}
 
 :::
-
-<b>5.</b> Use `ListSafe.humanize` in `Promo.make` to make the ``
-`MissingSandwichTypes`` error message more human-readable.
-
-Then change the render logic inside `Promo.make`'s `` `MissingSandwichTypes``
-branch to convert the list of missing sandwich types to a comma-delimited
-string:
-
-<<< Promo.re#show-missing-sandwich-types{7-9}
-
-Recall that we have to use `Stdlib.Array.of_list` instead of `Array.of_list`
-because our custom `Array` module takes precedence.
-
 
 -----
 

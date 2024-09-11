@@ -135,19 +135,3 @@ let _ =
     // #endregion missing-sandwich-types-wildcard
     ignore(buyWhat);
   };
-
-let _ =
-  code => {
-    // #region show-missing-sandwich-types
-    let buyWhat =
-      switch (code) {
-      | `NeedOneBurger => "at least 1 more burger"
-      | `NeedTwoBurgers => "at least 2 burgers"
-      | `NeedMegaBurger => "a burger with every topping"
-      | `MissingSandwichTypes(missing) =>
-        (missing |> Stdlib.Array.of_list |> Js.Array.join(~sep=", "))
-        ++ " sandwiches"
-      };
-    // #endregion show-missing-sandwich-types
-    ignore(buyWhat);
-  };

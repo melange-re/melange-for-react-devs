@@ -158,7 +158,7 @@ feel free to leave out.
 
 ---
 
-Phew! You refactored the `discount` reactive variable to use a normal variant
+Phew! You refactored the `discount` derived variable to use a normal variant
 instead of a polymorphic variant. The code changes were fairly minimal, but to
 understand what was happening, it was necessary to learn the basics of type
 constructors and type variables. In the next sections, we'll set types and other
