@@ -2,7 +2,7 @@
 
 The `Promo` component works fine now, but let's take a moment to explore how to
 implement it with a normal variant instead of a polymorphic variant. This small
-refactor should give us more insight into OCaml's type system. Additionally,
+refactor will give us more insight into OCaml's type system. Additionally,
 normal variants are better than polymorphic variants at "documenting" the types
 that will be used in your program, since they must always be explicitly defined
 before you can use them.
@@ -15,8 +15,8 @@ expression:
 <<< Types.re#inferred-type
 
 The easiest thing to do is to create a new `discount` type and assign it to the
-above type expression, then delete the `` ` `` from the top-level variant tags
-to turn them into variant constructors:
+above type expression, then delete the top-level backticks (`` ` ``) and
+brackets (`[]`) to turn them into variant constructors:
 
 <<< Types.re#bad-discount-type
 
@@ -24,7 +24,7 @@ to turn them into variant constructors:
 
 The alternative forms of a normal variant are called *variant constructors*,
 while the forms of a polymorphic variant are called *variant tags* (and always
-start with `` ` ``).
+start with a backtick).
 
 :::
 
@@ -37,8 +37,8 @@ disappears if we simply delete `>`:
 
 <<< Types.re#delete-refinement
 
-This fixes the syntax error so that we now have a correctly-defined variant
-type.
+This fixes the syntax error so that we now have a correctly-defined normal
+variant type.
 
 ## Refactor `discount` variable to use normal variant
 
@@ -106,22 +106,15 @@ discount([| `MissingSandwichTypes
           | `KewpieMayo ])
 ```
 
-When defining your own types, you will most often used *fixed* polymormorphic
+When defining your own types, you will most often used *exact* polymorphic
 variants, i.e. those that don't have `>` in their type expressions. But it is
-still useful to know what `>` does, since it appears when the compiler
-infers the type of a variable or function that uses polymorphic variants.
-
-::: tip
-
-Fixed polymorphic variants and normal variants are roughly equivalent and can be
-used interchangeably.
-
-:::
+still useful to know what `>` does, since it appears when the compiler infers
+the type of a variable or function that uses polymorphic variants.
 
 ## Implicit type variable
 
 Let's come back to the question of why the original attempt at a variant type
-definition was syntactically invalid:
+definition was semantically invalid:
 
 <<< Types.re#bad-discount-type
 
@@ -153,8 +146,7 @@ The `[> ]` type expression means a polymorphic variant that has no tags, but
 allows more tags, which basically means any polymorphic variant. Note that
 adding this small restriction to the type doesn't make a real difference in this
 program---it's just a way to make it clear that `DiscountError`'s argument
-should be a polymorphic variant. It's an optional embellishment that you can
-feel free to leave out.
+should be a polymorphic variant.
 
 ---
 
