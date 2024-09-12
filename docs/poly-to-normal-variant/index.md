@@ -90,12 +90,13 @@ The advantage of using a type variable for the definition of the
 `Promo.discount` type is that when you add, rename, or delete variant tags in
 `Discount`, you won't have to make corresponding edits to `Promo.discount`[^1].
 
-## `>` = "allow more than"
+## `>` means open variant type
 
-In the type expression above, we once again see `>`, so let's see what it means.
-In polymorphic variant type expressions, it means "allow more than". In this
-case, it means that tags other than the four that are listed are allowed. For
-example, this type would be allowed:
+In the type expression above, we once again see `>`, which means that it's an
+*open variant type*. In polymorphic variant type expressions, it means "allow
+more tags than the ones listed here". In this case, it means that tags other
+than the four that are listed are allowed. To illustrate, this type (which has
+two extra tags) is compatible:
 
 ```reason{5-6}
 discount([| `MissingSandwichTypes
@@ -106,10 +107,40 @@ discount([| `MissingSandwichTypes
           | `KewpieMayo ])
 ```
 
-When defining your own types, you will most often used *exact* polymorphic
-variants, i.e. those that don't have `>` in their type expressions. But it is
-still useful to know what `>` does, since it appears when the compiler infers
-the type of a variable or function that uses polymorphic variants.
+This type (which is missing one of the tags) is not compatible:
+
+```reason{5-6}
+discount([| `MissingSandwichTypes
+          | `NeedMegaBurger
+          | `NeedOneBurger ])
+```
+
+For reference, there are also *closed variant types*, denoted by `<`, which
+define all possible tags, but compatible types don't need to have all of those
+tags. An example:
+
+```reason{1,9}
+let getNoise = (animal: [< | `cat | `dog | `fox | `snake]) =>
+  switch (animal) {
+  | `cat => "meow"
+  | `dog => "woof"
+  | `snake => "sss"
+  | `fox => "wowza"
+  };
+
+let fox: [ | `fox] = `fox;
+Js.log(getNoise(fox));
+```
+
+The `getNoise` function accepts a type with as many as four tags, but it will
+happily accept types that only have one tag (as long as that one tag is one of the
+four tags).
+
+When defining your own polymorphic variant types, you will most often use *exact
+variant types*, which define all their tags, with no flexibility to add or
+remove tags. Exact variant types don't have `>` or `<` in their type
+expressions.
+
 
 ## Implicit type variable
 
