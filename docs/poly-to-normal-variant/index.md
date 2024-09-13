@@ -23,8 +23,8 @@ brackets (`[]`) to turn them into variant constructors:
 ::: tip
 
 The alternative forms of a normal variant are called *variant constructors*,
-while the forms of a polymorphic variant are called *variant tags* (and always
-start with a backtick).
+while the forms of a polymorphic variant are called *variant tags*. They are
+easy to tell apart because variant tags always start with a backtick (`` ` ``).
 
 :::
 
@@ -193,13 +193,16 @@ you must make to add promo support to the `Order` component.
 - A type constructor takes a type and outputs another type
 - A type variable is a variable that stands in a for a type and often appears in
   type constructors or type signatures
-- In polymorphic variant type expressions, `>` means that the polymorphic
-  variant can accept more than the variant tags that are listed
-  - You rarely need to use `>` in your own type definitions, but it often
-    appears in inferred type definitions (that appear when you hover over
-    variables and functions)
-  - Inferred type definitions that contain `>` also have an implicit type
-    variable
+- In polymorphic variant type expressions,
+  - `>` means it's an open variant type that can accept more than the variant
+    tags that are listed
+  - `<` means it's a closed variant type that can accept fewer than the variant
+    tags that are listed
+- You rarely need to use `>` or `<` in your own type definitions, but they
+  appear in inferred type definitions which you'll see in compiler error
+  messages or when you hover over variables/functions
+- Inferred type definitions that contain `>` or `<` also have an implicit type
+  variable
 
 ## Exercises
 
@@ -239,8 +242,8 @@ to add the implicit type variable in type annotations.
 
 ::: warning
 
-In the next version of Melange, polymorphic variant definitions no longer
-require a space between `[` and `|`.
+In the next version of [Reason](https://reasonml.github.io/), polymorphic
+variant definitions no longer require a space between `[` and `|`.
 
 :::
 
