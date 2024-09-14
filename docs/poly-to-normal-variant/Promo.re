@@ -99,3 +99,13 @@ let _ =
       // #endregion onsubmit-solution
        {RR.s("")} </form>;
   };
+
+// #region model-module
+module Model = {
+  type t('a) =
+    | CodeError(Discount.error)
+    | Discount(float)
+    | DiscountError([> ] as 'a)
+    | NoSubmittedCode;
+};
+// #endregion model-module
