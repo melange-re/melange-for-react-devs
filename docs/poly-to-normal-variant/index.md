@@ -3,11 +3,14 @@
 The `Promo` component works fine now, but let's take a moment to explore how to
 implement it with a normal variant instead of a polymorphic variant. This small
 refactor will give us more insight into OCaml's type system. Additionally,
-normal variants are better than polymorphic variants at "documenting" the types
-that will be used in your program, since they must always be explicitly defined
-before you can use them.
+you'll learn about the pros and cons of normal variants versus polymorphic
+variants.
 
 ## Add `discount` type
+
+Make a copy of your `Promo.re` file and rename that copy to `PolyPromo.re`.
+We'll make use of `PolyPromo.re` later, but for most of this chapter, we'll
+focus our attention on `Promo.re`.
 
 When we hover over the `discount` variable in `Promo.make`, we see this type
 expression:
@@ -22,8 +25,8 @@ brackets (`[]`) to turn them into variant constructors:
 
 ::: tip
 
-The alternative forms of a normal variant are called *variant constructors*,
-while the forms of a polymorphic variant are called *variant tags*. They are
+The alternate forms of a normal variant are called *variant constructors*, while
+the alternate forms of a polymorphic variant are called *variant tags*. They are
 easy to tell apart because variant tags always start with a backtick (`` ` ``).
 
 :::
@@ -33,21 +36,21 @@ However, this results in a compilation error:
 <<< type-error.txt
 
 We'll come back to this error message later. For now, observe that the error
-disappears if we simply delete `>`:
+disappears if we simply delete the remaining `>`:
 
-<<< Types.re#delete-refinement
+<<< Types.re#delete-refinement{5}
 
 This fixes the syntax error so that we now have a correctly-defined normal
 variant type.
 
 ## Refactor `discount` variable to use normal variant
 
-Refactor the `discount` derived variable inside `Promo.make` to use our new
-variant type by deleting all occurrences of `` ` `` in the switch expression:
+Inside `Promo.make`, refactor the `discount` derived variable to use our new
+variant type by deleting all backticks in the switch expression:
 
 <<< Promo.re#discount-variant{3,6,9-10}
 
-Likewise, the render logic can be fixed by removing all the `` ` `` occurrences:
+Likewise, the render logic can be fixed by removing all backticks:
 
 <<< Promo.re#discount-render{2-4,13}
 
@@ -59,13 +62,13 @@ tags don't need to be fully specified:
 
 <<< Types.re#delete-refinement{4-11}
 
-The variant tags inside `DiscountError` originate from our `Discount` module, so
+The variant tags inside `DiscountError` originate from the `Discount` module, so
 they shouldn't be needlessly constrained by the `discount` type defined inside
 the `Promo` module.
 
 Change the `discount` type to this:
 
-<<< Types.re#type-variable
+<<< Types.re#type-variable{4}
 
 Now `discount` is a *type constructor* that takes a *type variable* named `'a`.
 A type constructor is not a fixed type---you can think of it as a function that
@@ -84,11 +87,18 @@ discount([> `MissingSandwichTypes
 This is essentially the same type as before (other than the `>` symbol,
 explained in the next section), just written differently. By looking at the
 usage of the `discount` variable, OCaml can infer how to fill in the type
-variable and produce the fixed type shown above.
+variable and produce the type shown above.
 
 The advantage of using a type variable for the definition of the
 `Promo.discount` type is that when you add, rename, or delete variant tags in
-`Discount`, you won't have to make corresponding edits to `Promo.discount`[^1].
+`Discount`, you won't have to make corresponding edits to the `Promo.discount`
+type[^1].
+
+::: tip
+
+Type variable names must start with apostrophe (`'`).
+
+:::
 
 ## `>` means open variant type
 
@@ -133,14 +143,18 @@ Js.log(getNoise(fox));
 ```
 
 The `getNoise` function accepts a type with as many as four tags, but it will
-happily accept types that only have one tag (as long as that one tag is one of the
-four tags).
+happily accept types that only have one tag (as long as that one tag is one of
+the four tags).
 
 When defining your own polymorphic variant types, you will most often use *exact
 variant types*, which define all their tags, with no flexibility to add or
 remove tags. Exact variant types don't have `>` or `<` in their type
 expressions.
 
+Now that you know about open and closed variants, you might have intuited that
+polymorphic variants are quite complex. The OCaml compiler agrees with you! Code
+containing polymorphic variants takes a little longer to compile and run,
+although for most programs the difference is not noticeable.
 
 ## Implicit type variable
 
@@ -149,10 +163,11 @@ definition was semantically invalid:
 
 <<< Types.re#bad-discount-type
 
-The reason is that there's an implicit type variable around the `>`. The
-above type expression is equivalent to:
+The reason is that there's an implicit type variable around the open variant
+(the part that starts with `[>` and ends with `]`). The above type expression is
+equivalent to:
 
-<<< Types.re#explicit-type-var{14}
+<<< Types.re#explicit-type-var{10}
 
 Now the error message makes a bit more sense:
 
@@ -173,11 +188,143 @@ all, but to be explicit, we can force it to be a polymorphic variant:
 
 <<< Types.re#must-be-poly{4}
 
-The `[> ]` type expression means a polymorphic variant that has no tags, but
-allows more tags, which basically means any polymorphic variant. Note that
-adding this small restriction to the type doesn't make a real difference in this
-program---it's just a way to make it clear that `DiscountError`'s argument
-should be a polymorphic variant.
+The `[> ]` type expression denotes an open variant type with no tags. Since open
+variant types allow more tags, this expression is compatible with any
+polymorphic variant. Adding this small restriction is just a way to make it
+clear that `DiscountError`'s argument must be a polymorphic variant.
+
+## Type-related error messages
+
+Let's introduce some type errors and compare the error messages between the
+normal variant and polymorphic variant versions of the code.
+
+In `Promo.re`, change the `NoSubmittedCode` branch of the
+`getDiscount(submittedCode)` switch expression to introduce a misspelling:
+
+```reason{2}
+{switch (getDiscount(submittedCode)) {
+ | NoSubmittedCo => React.null
+ | Discount(discount) => discount |> Float.neg |> RR.currency
+```
+
+Change the equivalent line in `PolyPromo.re` in the same way. You should see
+these error messages (the order might be different):
+
+```text{25-26}
+File "src/order-confirmation/PolyPromo.re", lines 52-75, characters 4-7:
+52 | ....{switch (discount) {
+53 |      | `NoSubmittedCo => React.null
+54 |      | `Discount(discount) => discount |> Float.neg |> RR.currency
+55 |      | `CodeError(error) =>
+56 |        <div className=Style.codeError>
+...
+72 |        <div className=Style.discountError>
+73 |          {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}
+74 |        </div>;
+75 |      }}
+Error (warning 8 [partial-match]): this pattern-matching is not exhaustive.
+Here is an example of a case that is not matched:
+`NoSubmittedCode
+
+File "src/order-confirmation/Promo.re", line 66, characters 7-20:
+66 |      | NoSubmittedCo => React.null
+            ^^^^^^^^^^^^^
+Error: This variant pattern is expected to have type
+         [> `MissingSandwichTypes of string list
+          | `NeedMegaBurger
+          | `NeedOneBurger
+          | `NeedTwoBurgers ]
+         discount
+       There is no constructor NoSubmittedCo within type discount
+Hint: Did you mean NoSubmittedCode?
+Had 2 errors, waiting for filesystem changes...
+```
+
+The two error messages are very similar, but the normal variant error is a
+little nicer. It points out that there's no `NoSubmittedCo` constructor in type
+`discount`, and it gives you a friendly hint that maybe you meant to use
+`NoSubmittedCode` instead (which is the case).
+
+Restore your code to its previous state so that there are no compilation errors.
+Then add a new `FooBar` branch to the `getDiscount(submittedCode)` switch
+expression:
+
+```reason{2}
+{switch (getDiscount(submittedCode)) {
+ | FooBar => React.null
+ | NoSubmittedCode => React.null
+```
+
+Make the equivalent change in `PolyPromo.re`, and you should see a single
+compilation error:
+
+```text{10}
+File "src/order-confirmation/Promo.re", line 66, characters 7-13:
+66 |      | FooBar => React.null
+            ^^^^^^
+Error: This variant pattern is expected to have type
+         [> `MissingSandwichTypes of string list
+          | `NeedMegaBurger
+          | `NeedOneBurger
+          | `NeedTwoBurgers ]
+         discount
+       There is no constructor FooBar within type discount
+Had 1 error, waiting for filesystem changes...
+```
+
+OCaml knows that the `Promo.discount` type doesn't have a `FooBar` constructor,
+but it doesn't know that the polymorphic variant used in `PolyPromo` doesn't
+have a `` `FooBar`` tag.
+
+In general, error messages involving polymorphic variants are a bit less
+helpful, and some type-related mistakes won't lead to compilation errors. For
+simple use cases, it's often better to use normal variants, as they force you to
+be more disciplined.
+
+## `discount` type inside a module
+
+Let's refactor the `discount` type so that it's inside a submodule named
+`Model`:
+
+<<< Promo2.re#model-module
+
+This will cause the following compilation error:
+
+```text
+File "src/order-with-promo/Promo.re", line 34, characters 14-29:
+34 |     | None => NoSubmittedCode
+                   ^^^^^^^^^^^^^^^
+Error: Unbound constructor NoSubmittedCode
+```
+
+OCaml no longer knows where to find the `NoSubmittedCode` constructor, because
+it's no longer accessible within the scope of the `Promo.make` function. One way
+to tell the compiler where to find the `NoSubmittedCode` constructor is to
+namespace it with the module name:
+
+<<< Promo2.re#namespace-constructor{3}
+
+Note that you only need to namespace a single constructor, since type inference
+will figure out that the other constructors must come from the same module.
+Another way to solve the problem is to type-annotate the `NoSubmittedCode`
+constructor:
+
+<<< Promo2.re#annotate-constructor{3}
+
+Note that we don't need to provide a concrete type. We can use `Model.t('a)`, a
+type expression containing a type variable, because type inference can look at
+the usage to figure out the exact type. Yet another way to skin this cat is to
+type-annotate the `discount` variable:
+
+<<< Promo2.re#annotate-variable{1}
+
+When you use variant constructors that are defined in another module, you often
+have to reference them by using namespacing or type annotation. Variant tags
+don't have this restriction, because they don't belong to any module or type.
+
+Feel free to delete the `Model` submodule and move the `discount` type back to
+the top-level of `Promo`. That was a just temporary edit to demonstrate a point
+but isn't really needed for this program.
 
 ---
 
