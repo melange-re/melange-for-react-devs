@@ -41,12 +41,12 @@ Open `melange-for-react-devs.opam` and add a corresponding entry in the
 
 ```
 depends: [
-  "ocaml" {>= "5.1.1"}
-  "reason" {>= "3.10.0"}
+  "ocaml" {>= "5.2.0"}
+  "reason" {>= "3.13.0"}
   "dune" {>= "3.8"}
-  "melange" {>= "4.0.0-51"}
-  "reason-react" {>= "0.14.0"}
-  "reason-react-ppx" {>= "0.14.0"}
+  "melange" {>= "4.0.1-52"}
+  "reason-react" {>= "0.15.0"}
+  "reason-react-ppx" {>= "0.15.0"}
   "melange-fest" {>= "0.1.0"} // [!code ++]
   "opam-check-npm-deps" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
@@ -79,7 +79,7 @@ The output will look something like this:
 
 ```
 #  switch                     compiler                   description
-→  ~/melange-for-react-devs   ocaml-base-compiler.5.1.1  ~/melange-for-react-devs
+→  ~/melange-for-react-devs   ocaml-base-compiler.5.2.0  ~/melange-for-react-devs
    default                    ocaml.5.1.0                default
 
 [NOTE] Current switch has been selected based on the current directory.

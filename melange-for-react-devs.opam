@@ -7,14 +7,14 @@ license: "MIT"
 homepage: "https://github.com/melange-re/melange-for-react-devs"
 bug-reports: "https://github.com/melange-re/melange-for-react-devs"
 depends: [
-  "ocaml" {>= "5.1.1"}
-  "reason" {>= "3.10.0"}
+  "ocaml" {>= "5.2.0"}
+  "reason" {>= "3.13.0"}
   "dune" {>= "3.8"}
-  "melange" {>= "4.0.0-51"}
-  "reason-react" {>= "0.14.0"}
-  "reason-react-ppx" {>= "0.14.0"}
+  "melange" {>= "4.0.1-52"}
+  "reason-react" {>= "0.15.0"}
+  "reason-react-ppx" {>= "0.15.0"}
   "melange-fest" {>= "0.1.0"}
-  "styled-ppx" {>= "0.56.0"}
+  "styled-ppx" {>= "0.59.1"}
   "opam-check-npm-deps" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "dot-merlin-reader" {with-test} # todo: use with-dev-setup once opam 2.2 is out
