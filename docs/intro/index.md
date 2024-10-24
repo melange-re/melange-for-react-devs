@@ -4,25 +4,92 @@
 
 This is a work in progress.
 
+We'd love to hear your feedback! If you find any errors or have suggestions for
+the book, please [file an
+issue](https://github.com/ahrefs/melange-for-react-devs/issues) or ping @feihong
+on the [#melange channel in the Reason Discord](https://discord.gg/reasonml).
+
 :::
 
-## Motivation
+## What is Melange?
 
-This is a project-based, guided introduction to Melange and its ecosystem.
+Melange is a collection of tools that bring the robustness of a mature,
+statically-typed multi-paradigm programming language to the JavaScript
+ecosystem. That language is OCaml, a language invented in the 1990s which has
+been battle-tested by industry stalwarts. The heart of Melange is a compiler
+that translates OCaml to human-readable JavaScript and built-in language
+constructs for zero-cost interoperation with JavaScript.
+
+## Why OCaml?
+
+OCaml codebases scale well both in terms of quantity of lines and number of
+contributors. The sound type system helps to prevent ambiguous behavior in your
+program---if it compiles, it runs. OCaml and React (via
+[ReasonReact][reasonreact]) are an effective, FP-friendly combination for
+building frontend UIs using JSX syntax. If the backend is also written in OCaml,
+you can share types between the frontend and backend, ensuring that they stay in
+sync[^1]. In the near future, it will be possible to write [universal React
+components](https://github.com/ml-in-barcelona/server-reason-react) that are
+performantly rendered on the server using OCaml.
+
+All that said, how does OCaml compare against other prominent compile-to-JS
+languages?
+
+**TypeScript** is a gradually-typed superset of JavaScript. It is easier to
+learn and adopt, but is less type-safe than OCaml and all other langues on this
+list. TypeScript doesn't support pattern matching at the language level.
+
+**ReScript** is very similar to OCaml, even at the syntax level. Its
+RescriptReact library is roughly equivalent to our ReasonReact library. The main
+differences are that ReScript's only compilation target is JS, and it lacks the
+metaprogramming features of OCaml, so you lose the ability to, say, [embed CSS
+styles directly into your code](https://styled-ppx.vercel.app/).
+
+**Elm** is similar to OCaml but leans much more strongly towards pure functional
+programming. It cannot use React but comes with its own framework. It has many
+fewer options for JS interop. Even though Elm compiles to JS, it can't be used
+for backend development, even on Node.
+
+**F#** is a fullstack language similar to OCaml and is strongly aligned with the
+.NET ecosystem. F# has good support for functional programming and zero-cost
+interop with C#. Feliz is an F# wrapper library for React that doesn't support
+JSX.
+
+**Kotlin** is a type-safe fullstack language strongly associated with the
+Compose Multiplatform UI framework. Kotlin-react is a Kotlin wrapper library for
+React which doesn't support JSX. Kotlin has some features in common with OCaml,
+but doesn't have pattern matching.
+
+**Dart** is a type-safe fullstack language strongly associated with the Flutter
+UI framework, which supports compiling UI apps to mobile, desktop, and browser
+environments. There's no Dart wrapper library for modern, functional React
+components.
+
+**OCaml** has another JS transpiler called js_of_ocaml. Unlike Melange,
+js_of_ocaml prioritizes OCaml compatibility over JavaScript interop.
+
+As you can see, each compile-to-JS language has its own design goals, which
+dictate its strengths and weaknesses relative to OCaml and Melange.
+
+## This book
+
+This is a project-based, guided introduction to Melange and its ecosystem,
+including ReasonReact, the dune build system, and various useful libraries.
 Because Melange uses both OCaml and JavaScript ecosystems, there are quite a few
 tools and concepts to learn. Therefore we try to make each chapter small and
-digestible, not introducing too many things at once.
+digestible, not introducing too many things at once. At the end of each chapter,
+you'll find exercises with solutions.
 
 ## Audience
 
 You should already know how to make frontend applications in JavaScript, in
 particular with [React](https://react.dev/). You should be interested in
 learning how to leverage your existing knowledge to build apps using
-[ReasonReact](https://reasonml.github.io/reason-react/). You do not need to know
-OCaml[^1]---we'll slowly introduce the basics of the language throughout the
-tutorial. That said, a good complement to this guide is [OCaml Programming:
-Correct + Efficient + Beautiful](https://cs3110.github.io/textbook/), which
-teaches the language from the ground up and goes much deeper into its features.
+[ReasonReact][reasonreact]. You do not need to know OCaml[^2]---we'll slowly
+introduce the basics of the language throughout the tutorial. That said, a good
+complement to this guide is [OCaml Programming: Correct + Efficient +
+Beautiful](https://cs3110.github.io/textbook/), which teaches the language from
+the ground up and goes much deeper into its features.
 
 ## Chapters and topics
 
@@ -46,8 +113,13 @@ teaches the language from the ground up and goes much deeper into its features.
 
 ...and much more to come!
 
-[^1]:
-    Because of the focus on ReasonReact, we won't cover traditional OCaml
+[reasonreact]: https://reasonml.github.io/reason-react/
+
+[^1]: If the backend language isn't OCaml, you can still share types between
+    frontend and backend through a third-party tool like
+    [atd](https://github.com/ahrefs/atd).
+
+[^2]: Because of the focus on ReasonReact, we won't cover traditional OCaml
     syntax in this guide. Instead, we'll cover the [Reason
     syntax](https://reasonml.github.io/) which works great with ReasonReact
     because of its first-class support for JSX.
