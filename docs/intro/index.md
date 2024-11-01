@@ -38,7 +38,7 @@ languages?
 **TypeScript** is a gradually-typed superset of JavaScript. It's easier to learn
 and adopt because its design highly emphasizes compatibility with JavaScript.
 This brings a few footguns, such as `any`, `as` casting, `ts-nocheck` etc,
-making it less type-safe than OCaml (and all the other languages on this list).
+making it less type-safe than OCaml (and all the other languages on this list)[^3].
 
 - Zero-cost JS interop? Yes
 - Can use with React? Yes
@@ -132,7 +132,7 @@ you'll find exercises with solutions.
 You should already know how to make frontend applications in JavaScript, in
 particular with [React](https://react.dev/). You should be interested in
 learning how to leverage your existing knowledge to build apps using
-[ReasonReact][reasonreact]. You do not need to know OCaml[^3]---we'll slowly
+[ReasonReact][reasonreact]. You do not need to know OCaml[^6]---we'll slowly
 introduce the basics of the language throughout the tutorial. That said, a good
 complement to this guide is [OCaml Programming: Correct + Efficient +
 Beautiful](https://cs3110.github.io/textbook/), which teaches the language from
@@ -171,13 +171,16 @@ the ground up and goes much deeper into its features.
     is not yet polished. However, the parts of its API that are more stable are
     already used in production by [Ahrefs](https://ahrefs.com/).
 
-[^3]: Because of the focus on ReasonReact, we won't cover traditional OCaml
-    syntax in this guide. Instead, we'll cover the [Reason
-    syntax](https://reasonml.github.io/) which works great with ReasonReact
-    because of its first-class support for JSX.
+[^3]: For a more detailed comparison of Melange and TypeScript, see [Melange
+    docs](https://melange.re/v4.0.0/melange-for-x-developers#for-typescript-developers).
 
 [^4]: For a more detailed comparison of Melange and ReScript, see [Melange
     docs](https://melange.re/v4.0.0/melange-for-x-developers.html#for-rescript-developers).
 
 [^5]: For a more detailed comparison of Melange and js_of_ocaml, see [Melange
     docs](https://melange.re/v4.0.0/melange-for-x-developers.html#for-js-of-ocaml-developers).
+
+[^6]: Because of the focus on ReasonReact, we won't cover traditional OCaml
+    syntax in this guide. Instead, we'll cover the [Reason
+    syntax](https://reasonml.github.io/) which works great with ReasonReact
+    because of its first-class support for JSX.
