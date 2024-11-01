@@ -16,62 +16,109 @@ on the [#melange channel in the Reason Discord](https://discord.gg/reasonml).
 Melange is a collection of tools that bring the robustness of a mature,
 statically-typed multi-paradigm programming language to the JavaScript
 ecosystem. That language is OCaml, a language invented in the 1990s which has
-been battle-tested by industry stalwarts. The heart of Melange is a compiler
-that translates OCaml to human-readable JavaScript and built-in language
+been battle-tested by industry stalwarts. The heart of Melange is (1) a compiler
+that translates OCaml to human-readable JavaScript and (2) built-in language
 constructs for zero-cost interoperation with JavaScript.
 
 ## Why OCaml?
 
 OCaml codebases scale well both in terms of quantity of lines and number of
 contributors. The sound type system helps to prevent ambiguous behavior in your
-program---if it compiles, it runs. OCaml and React (via
+program---if it compiles, it runs without runtime errors. OCaml and React (via
 [ReasonReact][reasonreact]) are an effective, FP-friendly combination for
 building frontend UIs using JSX syntax. If the backend is also written in OCaml,
 you can share types between the frontend and backend, ensuring that they stay in
-sync[^1]. In the near future, it will be possible to write [universal React
+sync[^1].  It's even possible to write [universal React
 components](https://github.com/ml-in-barcelona/server-reason-react) that are
-performantly rendered on the server using OCaml.
+rendered on the server with the performance of native code[^2].
 
 All that said, how does OCaml compare against other prominent compile-to-JS
 languages?
 
-**TypeScript** is a gradually-typed superset of JavaScript. It is easier to
-learn and adopt, but is less type-safe than OCaml and all other langues on this
-list. TypeScript doesn't support pattern matching at the language level.
+**TypeScript** is a gradually-typed superset of JavaScript. It's easier to learn
+and adopt because its design highly emphasizes compatibility with JavaScript.
+This brings a few footguns, such as `any`, `as` casting, `ts-nocheck` etc,
+making it less type-safe than OCaml (and all the other languages on this list).
 
-**ReScript** is very similar to OCaml, even at the syntax level. Its
-RescriptReact library is roughly equivalent to our ReasonReact library. The main
-differences are that ReScript's only compilation target is JS, and it lacks the
-metaprogramming features of OCaml, so you lose the ability to, say, [embed CSS
-styles directly into your code](https://styled-ppx.vercel.app/).
+- Zero-cost JS interop? Yes
+- Can use with React? Yes
+- Supports JSX? Yes
+- Pattern matching? No
+- Can use on server? Yes, via Node.
 
-**Elm** is similar to OCaml but leans much more strongly towards pure functional
-programming. It cannot use React but comes with its own framework. It has many
-fewer options for JS interop. Even though Elm compiles to JS, it can't be used
-for backend development, even on Node.
+**ReScript** is very similar to OCaml, even at the syntax level. The main
+difference is that ReScript's only compilation target is JS[^4].
+
+- Zero-cost JS interop? Yes
+- Can use with React? Yes, via [@rescript/react](https://github.com/rescript-lang/rescript-react), which is roughly equivalent to
+  Melange's ReasonReact bindings.
+- Supports JSX? Yes
+- Pattern matching? Yes
+- Can use on server? Yes, via Node.
+
+**Elm** is similar to OCaml. It leans strongly towards pure functional
+programming.
+
+- Zero-cost JS interop? No. Elm treats JavaScript as unsafe, interacting with JS
+  via ports (more like message passing than traditional FFI). Ergonomic
+  integration with React and other libraries isn't possible.
+- Can use with React? No. Elm has its own framework with some similar concepts.
+- Supports JSX? No
+- Pattern matching? Yes
+- Can use on server? No
 
 **F#** is a fullstack language similar to OCaml and is strongly aligned with the
-.NET ecosystem. F# has good support for functional programming and zero-cost
-interop with C#. Feliz is an F# wrapper library for React that doesn't support
-JSX.
+.NET ecosystem. F# has good support for functional programming.
+
+- Zero-cost JS interop? Probably
+- Can use with React? Yes. [Feliz](https://github.com/Zaid-Ajaj/Feliz) is an F#
+  wrapper library for React.
+- Supports JSX? No. Feliz uses ordinary function call syntax for render logic.
+- Pattern matching? Yes
+- Can use on server? Yes, via .NET or Node.
 
 **Kotlin** is a type-safe fullstack language strongly associated with the
-Compose Multiplatform UI framework. Kotlin-react is a Kotlin wrapper library for
-React which doesn't support JSX. Kotlin has some features in common with OCaml,
-but doesn't have pattern matching.
+Compose Multiplatform UI framework.
+
+- Zero-cost JS interop? Unknown
+- Can use with React? Yes.
+  [Kotlin-react](https://github.com/JetBrains/kotlin-wrappers/blob/master/kotlin-react/README.md)
+  is a Kotlin wrapper library for React.
+- Supports JSX? No. Kotlin-react doesn't support JSX, but it does provide a
+  declarative syntax that is somewhat similar.
+- Pattern matching? No
+- Can use on server? Yes, via JVM or compiled to native code.
 
 **Dart** is a type-safe fullstack language strongly associated with the Flutter
 UI framework, which supports compiling UI apps to mobile, desktop, and browser
 environments. There's no Dart wrapper library for modern, functional React
 components.
 
-**OCaml** has another JS transpiler called js_of_ocaml. Unlike Melange,
-js_of_ocaml prioritizes OCaml compatibility over JavaScript interop.
+- Zero-cost JS interop? Unknown
+- Can use with React? Not really. There's no Dart wrapper library for functional
+  React components (only [class-based
+  components](https://github.com/Workiva/react-dart)). Dart users are encouraged
+  to use [Flutter Web](https://flutter.dev/multi-platform/web) for SPAs.
+- Supports JSX? No
+- Pattern matching? Yes
+- Can use on server? Yes, via Dart VM
+
+**OCaml** has another JS transpiler called
+[js_of_ocaml](https://github.com/ocsigen/js_of_ocaml). Unlike Melange,
+js_of_ocaml prioritizes OCaml compatibility over JavaScript interop[^5].
+
+- Zero-cost JS interop? No. Interop with JavaScript involes some overhead.
+- Can use with React? Yes, via
+  [jsoo-react](https://github.com/ml-in-barcelona/jsoo-react), which is roughly
+  equivalent to Melange's ReasonReact.
+- Supports JSX? No
+- Pattern matching? Yes
+- Can use on server? Yes, via native compilation or Node
 
 As you can see, each compile-to-JS language has its own design goals, which
 dictate its strengths and weaknesses relative to OCaml and Melange.
 
-## This book
+## What's in this book
 
 This is a project-based, guided introduction to Melange and its ecosystem,
 including ReasonReact, the dune build system, and various useful libraries.
@@ -85,7 +132,7 @@ you'll find exercises with solutions.
 You should already know how to make frontend applications in JavaScript, in
 particular with [React](https://react.dev/). You should be interested in
 learning how to leverage your existing knowledge to build apps using
-[ReasonReact][reasonreact]. You do not need to know OCaml[^2]---we'll slowly
+[ReasonReact][reasonreact]. You do not need to know OCaml[^3]---we'll slowly
 introduce the basics of the language throughout the tutorial. That said, a good
 complement to this guide is [OCaml Programming: Correct + Efficient +
 Beautiful](https://cs3110.github.io/textbook/), which teaches the language from
@@ -119,7 +166,18 @@ the ground up and goes much deeper into its features.
     frontend and backend through a third-party tool like
     [atd](https://github.com/ahrefs/atd).
 
-[^2]: Because of the focus on ReasonReact, we won't cover traditional OCaml
+[^2]: Note that
+    [server-reason-react](https://github.com/ml-in-barcelona/server-reason-react)
+    is not yet polished. However, the parts of its API that are more stable are
+    already used in production by [Ahrefs](https://ahrefs.com/).
+
+[^3]: Because of the focus on ReasonReact, we won't cover traditional OCaml
     syntax in this guide. Instead, we'll cover the [Reason
     syntax](https://reasonml.github.io/) which works great with ReasonReact
     because of its first-class support for JSX.
+
+[^4]: For a more detailed comparison of Melange and ReScript, see [Melange
+    docs](https://melange.re/v4.0.0/melange-for-x-developers.html#for-rescript-developers).
+
+[^5]: For a more detailed comparison of Melange and js_of_ocaml, see [Melange
+    docs](https://melange.re/v4.0.0/melange-for-x-developers.html#for-js-of-ocaml-developers).
