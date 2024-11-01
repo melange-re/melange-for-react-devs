@@ -110,7 +110,8 @@ js_of_ocaml prioritizes OCaml compatibility over JavaScript interop[^5].
 - Zero-cost JS interop? No. Interop with JavaScript involes some overhead.
 - Can use with React? Yes, via
   [jsoo-react](https://github.com/ml-in-barcelona/jsoo-react), which is roughly
-  equivalent to Melange's ReasonReact.
+  equivalent to Melange's ReasonReact, although it's not as stable and
+  battle-tested as ReasonReact.
 - Supports JSX? No
 - Pattern matching? Yes
 - Can use on server? Yes, via native compilation or Node
