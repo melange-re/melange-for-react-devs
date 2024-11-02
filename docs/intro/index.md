@@ -68,7 +68,7 @@ programming.
 - Can use on server? No
 
 **F#** is a fullstack language similar to OCaml and is strongly aligned with the
-.NET ecosystem. F# has good support for functional programming.
+.NET ecosystem.
 
 - Zero-cost JS interop? Probably
 - Can use with React? Yes. [Feliz](https://github.com/Zaid-Ajaj/Feliz) is an F#
@@ -76,6 +76,15 @@ programming.
 - Supports JSX? No. Feliz uses ordinary function call syntax for render logic.
 - Pattern matching? Yes
 - Can use on server? Yes, via .NET or Node.
+
+**Gleam** is a fullstack language similar to OCaml which is aligned with the
+BEAM ecosystem.
+
+- Zero-cost JS interop? ?
+- Can use with React? Yes, via [gleam-react](https://github.com/gleam-lang/gleam-react).
+- Supports JSX? No
+- Pattern matching? Yes
+- Can use on server? Yes, via BEAM or Node.
 
 **Kotlin** is a type-safe fullstack language strongly associated with the
 Compose Multiplatform UI framework.
@@ -87,7 +96,7 @@ Compose Multiplatform UI framework.
 - Supports JSX? No. Kotlin-react doesn't support JSX, but it does provide a
   declarative syntax that is somewhat similar.
 - Pattern matching? No
-- Can use on server? Yes, via JVM or compiled to native code.
+- Can use on server? Yes, via JVM, compiled to native code, or Node.
 
 **Dart** is a type-safe fullstack language strongly associated with the Flutter
 UI framework, which supports compiling UI apps to mobile, desktop, and browser
@@ -101,7 +110,7 @@ components.
   to use [Flutter Web](https://flutter.dev/multi-platform/web) for SPAs.
 - Supports JSX? No
 - Pattern matching? Yes
-- Can use on server? Yes, via Dart VM
+- Can use on server? Yes, via Dart VM or Node.
 
 **OCaml** has another JS transpiler called
 [js_of_ocaml](https://github.com/ocsigen/js_of_ocaml). Unlike Melange,
