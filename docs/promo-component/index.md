@@ -410,8 +410,10 @@ Here is an example of a case that is not matched:
 
 Muy bueno! You've created a `Promo` component that can be used to submit promo
 codes and see the discounts they produce, along with any errors that might
-occur. In the next chapter, we'll integrate this `Promo` component into your
-`Order` component.
+occur. You also saw how to use a polymorphic variant to streamline the render
+logic in `Promo`. In the next chapter, we'll explore how to implement `Promo`
+using a normal variant, and in the process, learn more about OCaml's type
+system.
 
 ## Overview
 
@@ -482,7 +484,6 @@ You should do some cleanup:
   there are no more `.css` files to copy into the build directory.
 
 :::
-
 
 <b>3.</b> Right now, `Item.toPrice` is a nondeterministic function---it returns
 a different price for a turducken sandwich depending on the day of the week[^4].

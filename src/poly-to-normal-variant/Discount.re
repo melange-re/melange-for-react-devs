@@ -94,17 +94,7 @@ let getSandwichHalfOff = (items: list(Item.t), ~date: Js.Date.t) => {
            total +. Item.toPrice(item, ~date)
          );
     Ok(total /. 2.0);
-  | tracker =>
-    let missing =
-      [
-        tracker.portabello ? "" : "portabello",
-        tracker.ham ? "" : "ham",
-        tracker.unicorn ? "" : "unicorn",
-        tracker.turducken ? "" : "turducken",
-      ]
-      |> List.filter((!=)(""));
-
-    Error(`MissingSandwichTypes(missing));
+  | _ => Error(`MissingSandwichTypes)
   };
 };
 

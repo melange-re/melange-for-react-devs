@@ -1,0 +1,6 @@
+(melange.emit
+ (target output)
+ (libraries reason-react melange-fest styled-ppx.emotion)
+ (preprocess
+  (pps melange.ppx reason-react-ppx styled-ppx))
+ (module_systems es6))

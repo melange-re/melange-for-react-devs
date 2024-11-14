@@ -141,9 +141,14 @@ module SandwichHalfOff = {
     |> deepEqual(
          Discount.getSandwichHalfOff(
            ~date=june3,
-           [Sandwich(Portabello), Hotdog, Sandwich(Ham)],
+           [
+             Sandwich(Unicorn),
+             Hotdog,
+             Sandwich(Portabello),
+             Sandwich(Ham),
+           ],
          ),
-         Error(`MissingSandwichTypes(["unicorn", "turducken"])),
+         Error(`MissingSandwichTypes),
        )
   );
 

@@ -31,6 +31,7 @@ export default defineConfig({
         'discounts-lists': resolve(__dirname, 'src/discounts-lists/index.html'),
         'promo-codes': resolve(__dirname, 'src/promo-codes/index.html'),
         'promo-component': resolve(__dirname, 'src/promo-component/index.html'),
+        'poly-to-normal-variant': resolve(__dirname, 'src/poly-to-normal-variant/index.html'),
         'order-with-promo': resolve(__dirname, 'src/order-with-promo/index.html'),
       },
     },

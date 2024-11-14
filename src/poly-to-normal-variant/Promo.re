@@ -23,36 +23,29 @@ type discount('a) =
   | NoSubmittedCode;
 
 [@react.component]
-let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => {
+let make = (~items: list(Item.t), ~date: Js.Date.t) => {
   let (code, setCode) = RR.useStateValue("");
   let (submittedCode, setSubmittedCode) = RR.useStateValue(None);
 
-  let getDiscount =
-    fun
+  let discount =
+    switch (submittedCode) {
     | None => NoSubmittedCode
     | Some(code) =>
       switch (Discount.getDiscountFunction(code, date)) {
       | Error(error) => CodeError(error)
-      | Ok(discountFunc) =>
-        switch (discountFunc(items)) {
+      | Ok(discountFunction) =>
+        switch (discountFunction(items)) {
         | Error(error) => DiscountError(error)
         | Ok(value) => Discount(value)
         }
-      };
+      }
+    };
 
   <form
     className=Style.form
     onSubmit={evt => {
       evt |> React.Event.Form.preventDefault;
-      let newSubmittedCode = Js.String.trim(code) == "" ? None : Some(code);
-      setSubmittedCode(newSubmittedCode);
-
-      switch (getDiscount(newSubmittedCode)) {
-      | NoSubmittedCode
-      | CodeError(_)
-      | DiscountError(_) => ()
-      | Discount(value) => onApply(value)
-      };
+      setSubmittedCode(Js.String.trim(code) == "" ? None : Some(code));
     }}>
     <input
       className=Style.input
@@ -62,7 +55,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
         setSubmittedCode(None);
       }}
     />
-    {switch (getDiscount(submittedCode)) {
+    {switch (discount) {
      | NoSubmittedCode => React.null
      | Discount(discount) => discount |> Float.neg |> RR.currency
      | CodeError(error) =>
@@ -80,7 +73,7 @@ let make = (~items: list(Item.t), ~date: Js.Date.t, ~onApply: float => unit) => 
          | `NeedOneBurger => "at least 1 more burger"
          | `NeedTwoBurgers => "at least 2 burgers"
          | `NeedMegaBurger => "a burger with every topping"
-         | `MissingSandwichTypes(_missing) => "every sandwich"
+         | `MissingSandwichTypes => "every sandwich"
          };
        <div className=Style.discountError>
          {RR.s({j|Buy $buyWhat to enjoy this promotion|j})}

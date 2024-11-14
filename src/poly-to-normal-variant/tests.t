@@ -1,5 +1,5 @@
 Sandwich tests
-  $ node ./output/src/order-with-promo/SandwichTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/poly-to-normal-variant/SandwichTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: Item.Sandwich.toEmoji
   ok 1 - Item.Sandwich.toEmoji
@@ -23,7 +23,7 @@ Sandwich tests
   # todo 0
 
 Burger tests
-  $ node ./output/src/order-with-promo/BurgerTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/poly-to-normal-variant/BurgerTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: A fully-loaded burger
   ok 1 - A fully-loaded burger
@@ -55,7 +55,7 @@ Burger tests
   # todo 0
 
 Discount tests
-  $ node ./output/src/order-with-promo/DiscountTests.mjs | sed '/duration_ms/d'
+  $ node ./output/src/poly-to-normal-variant/DiscountTests.mjs | sed '/duration_ms/d'
   TAP version 13
   # Subtest: 0 burgers, no discount
   ok 1 - 0 burgers, no discount
@@ -117,26 +117,6 @@ Discount tests
   # tests 14
   # suites 0
   # pass 14
-  # fail 0
-  # cancelled 0
-  # skipped 0
-  # todo 0
-
-ListSafe tests
-  $ node ./output/src/order-with-promo/ListSafeTests.mjs | sed '/duration_ms/d'
-  TAP version 13
-  # Subtest: Zero, one, and two elements
-  ok 1 - Zero, one, and two elements
-    ---
-    ...
-  # Subtest: Three, four, and five elements
-  ok 2 - Three, four, and five elements
-    ---
-    ...
-  1..2
-  # tests 2
-  # suites 0
-  # pass 2
   # fail 0
   # cancelled 0
   # skipped 0
