@@ -80,7 +80,8 @@ programming.
 **Gleam** is a fullstack language similar to OCaml which is aligned with the
 BEAM ecosystem.
 
-- Zero-cost JS interop? No
+- Zero-cost JS interop? No, but Gleam's JS compilation target is relatively new,
+  so it may become more optimized in the future.
 - Can use with React? Yes, via [redraw](https://github.com/ghivert/redraw) and [react-gleam](https://github.com/brettkolodny/react-gleam).
 - Supports JSX? No
 - Pattern matching? Yes
@@ -127,6 +128,9 @@ js_of_ocaml prioritizes OCaml compatibility over JavaScript interop[^5].
 
 As you can see, each compile-to-JS language has its own design goals, which
 dictate its strengths and weaknesses relative to OCaml and Melange.
+
+If you spot any inaccuracies in this language comparison, please [file an
+issue](https://github.com/melange-re/melange-for-react-devs/issues).
 
 ## What's in this book
 
