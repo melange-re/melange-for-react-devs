@@ -14,7 +14,7 @@ depends: [
   "reason-react" {>= "0.14.0"}
   "reason-react-ppx" {>= "0.14.0"}
   "melange-fest" {>= "0.1.0"}
-  "styled-ppx" {>= "0.56.0"}
+  "styled-ppx" {>= "0.59.0"}
   "opam-check-npm-deps" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "ocaml-lsp-server" {with-test} # todo: use with-dev-setup once opam 2.2 is out
   "dot-merlin-reader" {with-test} # todo: use with-dev-setup once opam 2.2 is out
