@@ -23,11 +23,28 @@ let datasets = {
         "5 burgers",
         {
           [
-            Burger({...burger, tomatoes: true}),
-            Burger({...burger, lettuce: true}),
-            Burger({...burger, bacon: 2}),
-            Burger({...burger, cheese: 3, onions: 9, tomatoes: true}),
-            Burger({...burger, onions: 2}),
+            Burger({
+              ...burger,
+              tomatoes: true,
+            }),
+            Burger({
+              ...burger,
+              lettuce: true,
+            }),
+            Burger({
+              ...burger,
+              bacon: 2,
+            }),
+            Burger({
+              ...burger,
+              cheese: 3,
+              onions: 9,
+              tomatoes: true,
+            }),
+            Burger({
+              ...burger,
+              onions: 2,
+            }),
           ];
         },
       );

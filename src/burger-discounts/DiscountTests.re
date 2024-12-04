@@ -47,9 +47,15 @@ module FreeBurger = {
     |> equal(
          Discount.getFreeBurger([|
            Hotdog,
-           Burger({...burger, tomatoes: true}), // 15.05
+           Burger({
+             ...burger,
+             tomatoes: true,
+           }), // 15.05
            Sandwich(Ham),
-           Burger({...burger, bacon: 2}) // 16.00
+           Burger({
+             ...burger,
+             bacon: 2,
+           }) // 16.00
          |]),
          Some(15.05),
        )
@@ -58,9 +64,15 @@ module FreeBurger = {
   test("Input array isn't changed", () => {
     let items = [|
       Item.Hotdog,
-      Burger({...burger, tomatoes: true}),
+      Burger({
+        ...burger,
+        tomatoes: true,
+      }),
       Sandwich(Ham),
-      Burger({...burger, bacon: 2}),
+      Burger({
+        ...burger,
+        bacon: 2,
+      }),
     |];
 
     Discount.getFreeBurger(items) |> ignore;
@@ -70,9 +82,15 @@ module FreeBurger = {
          items,
          [|
            Item.Hotdog,
-           Burger({...burger, tomatoes: true}),
+           Burger({
+             ...burger,
+             tomatoes: true,
+           }),
            Sandwich(Ham),
-           Burger({...burger, bacon: 2}),
+           Burger({
+             ...burger,
+             bacon: 2,
+           }),
          |],
        );
   });
@@ -83,9 +101,16 @@ module FreeBurger = {
          Discount.getFreeBurger([|
            Burger(burger), // 15
            Hotdog,
-           Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+           Burger({
+             ...burger,
+             tomatoes: true,
+             cheese: 1,
+           }), // 15.15
            Sandwich(Ham),
-           Burger({...burger, bacon: 2}) // 16.00
+           Burger({
+             ...burger,
+             bacon: 2,
+           }) // 16.00
          |]),
          Some(15.15),
        )
@@ -115,7 +140,13 @@ module HalfOff = {
     let items = [|
       Item.Hotdog,
       Sandwich(Portabello),
-      Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 2}),
+      Burger({
+        lettuce: true,
+        tomatoes: true,
+        cheese: 1,
+        onions: 1,
+        bacon: 2,
+      }),
     |];
     expect
     |> equal(

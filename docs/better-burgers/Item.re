@@ -207,7 +207,12 @@ module ItemV3 = {
       *. 0.1;
     // #endregion record-wildcard
 
-    toPrice({lettuce: false, onions: 0, cheese: 0}) |> ignore;
+    toPrice({
+      lettuce: false,
+      onions: 0,
+      cheese: 0,
+    })
+    |> ignore;
 
     // #region record-lettuce-wildcard
     let toPrice = ({onions, cheese, lettuce: _}) =>
@@ -238,7 +243,12 @@ module ItemV3 = {
     };
     // #endregion ternary
 
-    toEmoji({lettuce: false, onions: 0, cheese: 0}) |> ignore;
+    toEmoji({
+      lettuce: false,
+      onions: 0,
+      cheese: 0,
+    })
+    |> ignore;
 
     // #region match-tuple
     let toEmoji = ({lettuce, onions, cheese}) => {
@@ -262,7 +272,12 @@ module ItemV3 = {
     };
     // #endregion match-tuple
 
-    toEmoji({lettuce: false, onions: 0, cheese: 0}) |> ignore;
+    toEmoji({
+      lettuce: false,
+      onions: 0,
+      cheese: 0,
+    })
+    |> ignore;
 
     // #region match-record
     let toEmoji = t => {
@@ -342,7 +357,13 @@ module BurgerTomatoBacon = {
     *. 0.5;
   // #endregion to-price-tomato-bacon
 
-  toPrice({lettuce: false, onions: 0, cheese: 0, tomatoes: false, bacon: 0})
+  toPrice({
+    lettuce: false,
+    onions: 0,
+    cheese: 0,
+    tomatoes: false,
+    bacon: 0,
+  })
   |> ignore;
 
   // #region to-price-topping-cost
