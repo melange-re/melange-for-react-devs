@@ -96,9 +96,15 @@ test("2 burgers of different price, discount of cheaper one", () =>
   |> equal(
        Discount.getFreeBurger([|
          Hotdog,
-         Burger({...burger, tomatoes: true}), // 15.05
+         Burger({
+           ...burger,
+           tomatoes: true,
+         }), // 15.05
          Sandwich(Ham),
-         Burger({...burger, bacon: 2}) // 16.00
+         Burger({
+           ...burger,
+           bacon: 2,
+         }) // 16.00
        |]),
        Some(15.05),
      )
@@ -112,9 +118,16 @@ test("3 burgers of different price, return Some(15.15)", () =>
        Discount.getFreeBurger([|
          Burger(burger), // 15
          Hotdog,
-         Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+         Burger({
+           ...burger,
+           tomatoes: true,
+           cheese: 1,
+         }), // 15.15
          Sandwich(Ham),
-         Burger({...burger, bacon: 2}) // 16.00
+         Burger({
+           ...burger,
+           bacon: 2,
+         }) // 16.00
        |]),
        Some(15.15),
      )
@@ -144,7 +157,13 @@ test("One burger has 1 of every topping, return Some", () => {
   let items = [|
     Item.Hotdog,
     Sandwich(Portabello),
-    Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 1}),
+    Burger({
+      lettuce: true,
+      tomatoes: true,
+      cheese: 1,
+      onions: 1,
+      bacon: 1,
+    }),
   |];
   expect
   |> equal(
@@ -185,7 +204,13 @@ module HalfOff = {
     let items = [|
       Item.Hotdog,
       Sandwich(Portabello),
-      Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 2}),
+      Burger({
+        lettuce: true,
+        tomatoes: true,
+        cheese: 1,
+        onions: 1,
+        bacon: 2,
+      }),
     |];
     expect
     |> equal(
