@@ -4,9 +4,37 @@
 
 This is a work in progress.
 
+We'd love to hear your feedback! If you find any errors or have suggestions for
+the book, please [file an
+issue](https://github.com/ahrefs/melange-for-react-devs/issues) or ping @feihong
+on the [#melange channel in the Reason Discord](https://discord.gg/reasonml).
+
 :::
 
-## Motivation
+## What is Melange?
+
+Melange is a collection of tools that bring the robustness of a mature,
+statically-typed multi-paradigm programming language to the JavaScript
+ecosystem. That language is OCaml, a language invented in the 1990s which has
+been battle-tested by industry stalwarts. The heart of Melange is (1) a compiler
+that translates OCaml to human-readable JavaScript and (2) built-in language
+constructs for zero-cost interoperation with JavaScript.
+
+## Why OCaml?
+
+OCaml codebases scale well both in terms of quantity of lines and number of
+contributors. The sound type system helps to prevent ambiguous behavior in your
+program---if it compiles, it runs without runtime errors. OCaml and React (via
+[ReasonReact][reasonreact]) are an effective, FP-friendly combination for
+building frontend UIs using JSX syntax. If the backend is also written in OCaml,
+you can share types between the frontend and backend, ensuring that they stay in
+sync[^1]. It's even possible to write [universal React
+components](https://github.com/ml-in-barcelona/server-reason-react) that are
+rendered on the server with the performance of native code[^2].
+
+[reasonreact]: https://reasonml.github.io/reason-react/
+
+## What's in this book
 
 This is a project-based, guided introduction to Melange and its ecosystem.
 Because Melange uses both OCaml and JavaScript ecosystems, there are quite a few
@@ -18,11 +46,11 @@ digestible, not introducing too many things at once.
 You should already know how to make frontend applications in JavaScript, in
 particular with [React](https://react.dev/). You should be interested in
 learning how to leverage your existing knowledge to build apps using
-[ReasonReact](https://reasonml.github.io/reason-react/). You do not need to know
-OCaml[^1]---we'll slowly introduce the basics of the language throughout the
-tutorial. That said, a good complement to this guide is [OCaml Programming:
-Correct + Efficient + Beautiful](https://cs3110.github.io/textbook/), which
-teaches the language from the ground up and goes much deeper into its features.
+[ReasonReact][reasonreact]. You do not need to know OCaml[^3]---we'll slowly
+introduce the basics of the language throughout the tutorial. That said, a good
+complement to this guide is [OCaml Programming: Correct + Efficient +
+Beautiful](https://cs3110.github.io/textbook/), which teaches the language from
+the ground up and goes much deeper into its features.
 
 ## Chapters and topics
 
@@ -46,8 +74,16 @@ teaches the language from the ground up and goes much deeper into its features.
 
 ...and much more to come!
 
-[^1]:
-    Because of the focus on ReasonReact, we won't cover traditional OCaml
+[^1]: If the backend language isn't OCaml, you can still share types between
+    frontend and backend through a third-party tool like
+    [atd](https://github.com/ahrefs/atd).
+
+[^2]: Note that
+    [server-reason-react](https://github.com/ml-in-barcelona/server-reason-react)
+    is not yet polished. However, the parts of its API that are more stable are
+    already used in production by [Ahrefs](https://ahrefs.com/).
+
+[^3]: Because of the focus on ReasonReact, we won't cover traditional OCaml
     syntax in this guide. Instead, we'll cover the [Reason
     syntax](https://reasonml.github.io/) which works great with ReasonReact
     because of its first-class support for JSX.

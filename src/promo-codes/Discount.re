@@ -79,10 +79,22 @@ let getSandwichHalfOff = (items: list(Item.t)) => {
          },
          ~f=(tracker, sandwich: Item.Sandwich.t) =>
          switch (sandwich) {
-         | Portabello => {...tracker, portabello: true}
-         | Ham => {...tracker, ham: true}
-         | Unicorn => {...tracker, unicorn: true}
-         | Turducken => {...tracker, turducken: true}
+         | Portabello => {
+             ...tracker,
+             portabello: true,
+           }
+         | Ham => {
+             ...tracker,
+             ham: true,
+           }
+         | Unicorn => {
+             ...tracker,
+             unicorn: true,
+           }
+         | Turducken => {
+             ...tracker,
+             turducken: true,
+           }
          }
        );
 

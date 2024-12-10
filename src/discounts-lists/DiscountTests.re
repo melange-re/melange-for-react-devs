@@ -47,9 +47,15 @@ module FreeBurger = {
     |> equal(
          Discount.getFreeBurgers([
            Hotdog,
-           Burger({...burger, tomatoes: true}), // 15.05
+           Burger({
+             ...burger,
+             tomatoes: true,
+           }), // 15.05
            Sandwich(Ham),
-           Burger({...burger, bacon: 2}) // 16.00
+           Burger({
+             ...burger,
+             bacon: 2,
+           }) // 16.00
          ]),
          Some(15.05),
        )
@@ -61,9 +67,16 @@ module FreeBurger = {
          Discount.getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
-           Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+           Burger({
+             ...burger,
+             tomatoes: true,
+             cheese: 1,
+           }), // 15.15
            Sandwich(Ham),
-           Burger({...burger, bacon: 2}) // 16.00
+           Burger({
+             ...burger,
+             bacon: 2,
+           }) // 16.00
          ]),
          Some(15.15),
        )
@@ -75,15 +88,34 @@ module FreeBurger = {
          Discount.getFreeBurgers([
            Burger(burger), // 15
            Hotdog,
-           Burger({...burger, cheese: 5}), // 15.50
+           Burger({
+             ...burger,
+             cheese: 5,
+           }), // 15.50
            Sandwich(Unicorn),
-           Burger({...burger, bacon: 4}), // 17.00
-           Burger({...burger, tomatoes: true, cheese: 1}), // 15.15
+           Burger({
+             ...burger,
+             bacon: 4,
+           }), // 17.00
+           Burger({
+             ...burger,
+             tomatoes: true,
+             cheese: 1,
+           }), // 15.15
            Sandwich(Ham),
-           Burger({...burger, bacon: 2}), // 16.00
-           Burger({...burger, onions: 6}), // 16.20
+           Burger({
+             ...burger,
+             bacon: 2,
+           }), // 16.00
+           Burger({
+             ...burger,
+             onions: 6,
+           }), // 16.20
            Sandwich(Portabello),
-           Burger({...burger, tomatoes: true}) // 15.05
+           Burger({
+             ...burger,
+             tomatoes: true,
+           }) // 15.05
          ]),
          Some(46.75),
        )
@@ -113,7 +145,13 @@ module HalfOff = {
     let items = [
       Item.Hotdog,
       Sandwich(Portabello),
-      Burger({lettuce: true, tomatoes: true, cheese: 1, onions: 1, bacon: 2}),
+      Burger({
+        lettuce: true,
+        tomatoes: true,
+        cheese: 1,
+        onions: 1,
+        bacon: 2,
+      }),
     ];
     expect
     |> equal(

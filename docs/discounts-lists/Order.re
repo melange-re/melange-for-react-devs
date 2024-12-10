@@ -9,7 +9,10 @@ module OrderItem = {
   let make = (~item as _: Item.t) => <div />;
 };
 
-let css = {"order": "", "total": ""};
+let css = {
+  "order": "",
+  "total": "",
+};
 
 // #region make
 [@react.component]
