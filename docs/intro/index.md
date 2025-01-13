@@ -6,7 +6,7 @@ This is a work in progress.
 
 We'd love to hear your feedback! If you find any errors or have suggestions for
 the book, please [file an
-issue](https://github.com/ahrefs/melange-for-react-devs/issues) or ping @feihong
+issue](https://github.com/melange-re/melange-for-react-devs/issues) or ping @feihong
 on the [#melange channel in the Reason Discord](https://discord.gg/reasonml).
 
 :::
