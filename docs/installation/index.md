@@ -86,8 +86,8 @@ npm run serve
 While `npm run init` is running, consider grabbing some coffee or other
 beverage, as it might take a while to fetch all the dependencies and build them.
 The last command, `npm run serve`, should open a tab in your default browser which
-points to <a href="http://localhost:5174/" target="_blank" rel="noreferrer
-noopener">http://localhost:5174/</a> and shows you a typical "Hello World" page.
+points to <a href="http://localhost:5173/" target="_blank" rel="noreferrer
+noopener">http://localhost:5173/</a> and shows you a typical "Hello World" page.
 If you see this page, then the project was successfully installed!
 
 ## Visual Studio Code Extension

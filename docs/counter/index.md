@@ -10,8 +10,8 @@ project
 1. Run `npm run watch` to start the Melange compiler in watch mode.
 1. In another terminal window, start the Vite dev server by running `npm run
 serve`. As a side effect, it will open a browser tab pointed to
-<a href="http://localhost:5174/" target="_blank" rel="noreferrer
-noopener">http://localhost:5174/</a>.
+<a href="http://localhost:5173/" target="_blank" rel="noreferrer
+noopener">http://localhost:5173/</a>.
 
 ## The `App` component
 
